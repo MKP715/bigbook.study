@@ -188,6 +188,11 @@ class App {
                 id: 'aa-comes-of-age',
                 path: 'data/aa_comes_of_age.json',
                 shortTitle: 'AA Comes of Age'
+            },
+            {
+                id: 'language-of-the-heart',
+                path: 'data/language_of_the_heart_final.json',
+                shortTitle: 'Language of the Heart'
             }
         ];
 
@@ -329,6 +334,61 @@ class App {
                     }
 
                     console.log(`AA Comes of Age chapters built: ${chapters.length} total`);
+                } else if (book.table_of_contents && book.articles) {
+                    // Language of the Heart format - has table_of_contents with parts/segments and articles array
+                    console.log('Language of the Heart format detected');
+
+                    // Build chapters from table of contents sections (Parts)
+                    book.table_of_contents.sections.forEach(section => {
+                        if (section.type === 'part') {
+                            // Add part as a section header
+                            chapters.push({
+                                id: `part-${section.title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`,
+                                title: `── ${section.title} ──`,
+                                isSection: true
+                            });
+
+                            // Add segments and articles
+                            if (section.segments) {
+                                section.segments.forEach(segment => {
+                                    // Add segment as subsection
+                                    chapters.push({
+                                        id: `segment-${segment.title.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}`,
+                                        title: segment.title,
+                                        isSubSection: true
+                                    });
+
+                                    // Add articles from this segment
+                                    if (segment.articles) {
+                                        segment.articles.forEach(article => {
+                                            const articleId = article.article_id || `article-page-${article.page}`;
+                                            chapters.push({
+                                                id: articleId,
+                                                title: article.title,
+                                                date: article.date,
+                                                page: article.page
+                                            });
+                                        });
+                                    }
+                                });
+                            }
+
+                            // Handle parts without segments but with direct articles
+                            if (section.articles && !section.segments) {
+                                section.articles.forEach(article => {
+                                    const articleId = article.article_id || `article-page-${article.page}`;
+                                    chapters.push({
+                                        id: articleId,
+                                        title: article.title,
+                                        date: article.date,
+                                        page: article.page
+                                    });
+                                });
+                            }
+                        }
+                    });
+
+                    console.log(`Language of the Heart chapters built: ${chapters.length} total`);
                 } else if (book.content) {
                     chapters = book.content.map(c => ({
                         id: c.number || c.id,
@@ -512,6 +572,23 @@ class App {
                 await reader.displayAAComesOfAgeContent(book, chapterId);
                 sidebar.setActive(bookId, chapterId);
                 reader.saveProgress(bookId, chapterId);
+                return;
+            }
+
+            // Handle Language of the Heart format (articles)
+            if (book.articles && Array.isArray(book.articles)) {
+                console.log('Handling Language of the Heart format, chapterId:', chapterId);
+                const article = book.articles.find(a => a.id === chapterId);
+                if (article) {
+                    reader.showLoading();
+                    reader.currentBook = book;
+                    await reader.displayArticle(book, article);
+                    sidebar.setActive(bookId, chapterId);
+                    reader.saveProgress(bookId, chapterId);
+                    return;
+                }
+                console.error(`Article not found: ${chapterId}`);
+                toast.error('Article not found');
                 return;
             }
 

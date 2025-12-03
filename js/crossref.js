@@ -164,6 +164,9 @@ class CrossReferences {
             { regex: /12\s*&\s*12/gi, type: 'book', bookId: 'twelve-and-twelve' },
             { regex: /As Bill Sees It/gi, type: 'book', bookId: 'as-bill-sees-it' },
             { regex: /Daily Reflections/gi, type: 'book', bookId: 'daily-reflections' },
+            { regex: /Language of the Heart/gi, type: 'book', bookId: 'language-of-the-heart' },
+            { regex: /AA Grapevine/gi, type: 'book', bookId: 'language-of-the-heart' },
+            { regex: /Grapevine/gi, type: 'book', bookId: 'language-of-the-heart' },
 
             // Step references
             { regex: /Step\s+(\d+)/gi, type: 'step' },
@@ -207,6 +210,7 @@ class PageCrossRefIndex {
         this.bigBookIndex = new Map();
         this.twelveAndTwelveIndex = new Map();
         this.aaComesOfAgeIndex = new Map();
+        this.languageOfTheHeartIndex = new Map();
         this.books = new Map();
         this.initialized = false;
     }
@@ -232,7 +236,8 @@ class PageCrossRefIndex {
         console.log('Page cross-reference index built:', {
             bigBookPages: this.bigBookIndex.size,
             twelveAndTwelvePages: this.twelveAndTwelveIndex.size,
-            aaComesOfAgePages: this.aaComesOfAgeIndex.size
+            aaComesOfAgePages: this.aaComesOfAgeIndex.size,
+            languageOfTheHeartPages: this.languageOfTheHeartIndex.size
         });
     }
 
@@ -273,6 +278,10 @@ class PageCrossRefIndex {
                        sourceBook.includes('TWELVE AND TWELVE')) {
                 pages.forEach(page => {
                     this.addToIndex(this.twelveAndTwelveIndex, page, refEntry);
+                });
+            } else if (sourceBook.includes('GRAPEVINE') || sourceBook.includes('LANGUAGE OF THE HEART')) {
+                pages.forEach(page => {
+                    this.addToIndex(this.languageOfTheHeartIndex, page, refEntry);
                 });
             }
         });
@@ -316,6 +325,10 @@ class PageCrossRefIndex {
                 } else if (sourceStr.includes('TWELVE AND TWELVE') || sourceStr.includes('12 AND 12')) {
                     pages.forEach(page => {
                         this.addToIndex(this.twelveAndTwelveIndex, page, refEntry);
+                    });
+                } else if (sourceStr.includes('GRAPEVINE') || sourceStr.includes('LANGUAGE OF THE HEART')) {
+                    pages.forEach(page => {
+                        this.addToIndex(this.languageOfTheHeartIndex, page, refEntry);
                     });
                 }
             });
@@ -417,6 +430,8 @@ class PageCrossRefIndex {
             index = this.bigBookIndex;
         } else if (bookType === 'aa-comes-of-age') {
             index = this.aaComesOfAgeIndex;
+        } else if (bookType === 'language-of-the-heart') {
+            index = this.languageOfTheHeartIndex;
         } else {
             index = this.twelveAndTwelveIndex;
         }
@@ -444,6 +459,8 @@ class PageCrossRefIndex {
         let index;
         if (bookType === 'big-book') {
             index = this.bigBookIndex;
+        } else if (bookType === 'language-of-the-heart') {
+            index = this.languageOfTheHeartIndex;
         } else if (bookType === 'aa-comes-of-age') {
             index = this.aaComesOfAgeIndex;
         } else {

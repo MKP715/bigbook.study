@@ -216,6 +216,31 @@ class Search {
                     });
                 });
             }
+        } else if (book.articles && Array.isArray(book.articles)) {
+            // Language of the Heart format
+            book.articles.forEach(article => {
+                // Extract text from paragraph elements
+                const paragraphTexts = article.paragraphs ? article.paragraphs.map(para => {
+                    if (para.elements && Array.isArray(para.elements)) {
+                        return para.elements.map(el => el.content || '').join('');
+                    }
+                    return '';
+                }).join(' ') : '';
+
+                entries.push({
+                    id: article.id,
+                    type: 'article',
+                    title: article.title,
+                    articleId: article.id,
+                    publicationDate: article.publication_date,
+                    text: `${article.title} ${article.publication_date || ''} ${paragraphTexts}`.toLowerCase(),
+                    location: {
+                        articleId: article.id,
+                        page: article.page_number
+                    },
+                    snippet: paragraphTexts.slice(0, 150) || article.title
+                });
+            });
         } else if (book.content) {
             // Standard book format
             book.content.forEach(chapter => {

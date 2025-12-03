@@ -653,6 +653,114 @@
     margin-right: var(--spacing-xs);
 }
 
+/* Language of the Heart Article View */
+.article-view {
+    padding: var(--spacing-lg);
+}
+
+.article-main-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.article-header {
+    margin-bottom: var(--spacing-xl);
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 2px solid var(--border-color);
+}
+
+.article-meta {
+    display: flex;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-sm);
+    flex-wrap: wrap;
+}
+
+.article-part {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--accent-color);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.article-segment {
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+}
+
+.article-title {
+    font-size: 1.75rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    margin: 0 0 var(--spacing-sm) 0;
+    line-height: 1.3;
+}
+
+.article-info {
+    display: flex;
+    gap: var(--spacing-md);
+    align-items: center;
+}
+
+.article-date {
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    font-style: italic;
+}
+
+.article-page {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    background-color: var(--bg-secondary);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
+}
+
+.article-content {
+    margin-bottom: var(--spacing-xl);
+}
+
+.article-paragraph {
+    position: relative;
+    padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-xl);
+    margin-bottom: var(--spacing-md);
+    line-height: 1.8;
+}
+
+.article-paragraph.blockquote {
+    background-color: var(--bg-secondary);
+    border-left: 4px solid var(--accent-color);
+    border-radius: 0 8px 8px 0;
+}
+
+.article-paragraph .paragraph-number {
+    position: absolute;
+    left: 0;
+    top: var(--spacing-md);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    opacity: 0.6;
+}
+
+.article-paragraph p {
+    margin: 0;
+}
+
+.article-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: var(--spacing-xl);
+    padding-top: var(--spacing-lg);
+    border-top: 1px solid var(--border-color);
+    gap: var(--spacing-sm);
+}
+
+.article-nav .btn {
+    flex: 1;
+    max-width: 200px;
+}
+
 /* Auto Cross-References */
 .auto-ref {
     cursor: pointer;
@@ -1885,6 +1993,16 @@
 .source-ref-sidebar[data-book="aa-comes-of-age"] .source-content-header {
     background: linear-gradient(135deg, rgba(0, 121, 107, 0.1) 0%, rgba(0, 150, 136, 0.1) 100%);
     color: #00796b;
+}
+
+/* Language of the Heart specific styling */
+.loth-badge {
+    background-color: #5d4037;
+}
+
+.source-ref-sidebar[data-book="language-of-the-heart"] .source-content-header {
+    background: linear-gradient(135deg, rgba(93, 64, 55, 0.1) 0%, rgba(141, 110, 99, 0.1) 100%);
+    color: #5d4037;
 }
 
 /* Active page button */

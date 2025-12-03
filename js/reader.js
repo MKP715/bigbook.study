@@ -203,6 +203,9 @@ class Reader {
         } else if (book.structure && book.structure.chapters) {
             // AA Comes of Age format
             await this.displayAAComesOfAge(book);
+        } else if (book.articles && Array.isArray(book.articles)) {
+            // Language of the Heart format
+            await this.displayLanguageOfTheHeart(book);
         } else if (book.content) {
             // Standard book format
             await this.displayStandardBook(book);
@@ -1443,6 +1446,8 @@ class Reader {
             return this.getTwelveAndTwelvePageContent(pageNumber);
         } else if (bookType === 'aa-comes-of-age') {
             return this.getAAComesOfAgePageContent(pageNumber);
+        } else if (bookType === 'language-of-the-heart') {
+            return this.getLanguageOfTheHeartContent(pageNumber);
         }
         return null;
     }
@@ -1505,6 +1510,66 @@ class Reader {
         return {
             title: contextTitle || `Page ${pageNumber}`,
             type: contextType,
+            pageNumber,
+            paragraphs
+        };
+    }
+
+    /**
+     * Get Language of the Heart article content
+     * Since LOTH uses articles, we try to find by page number from table of contents
+     */
+    getLanguageOfTheHeartContent(pageNumber) {
+        const book = window.app?.books?.get('language-of-the-heart');
+        if (!book?.articles) return null;
+
+        let article = null;
+        let contextTitle = '';
+
+        // First, try to find article by page number in table_of_contents
+        if (book.table_of_contents && book.table_of_contents.sections) {
+            for (const section of book.table_of_contents.sections) {
+                if (section.type === 'part' && section.segments) {
+                    for (const segment of section.segments) {
+                        if (segment.articles) {
+                            for (const tocArticle of segment.articles) {
+                                if (tocArticle.page === pageNumber ||
+                                    (tocArticle.page && pageNumber >= tocArticle.page && pageNumber <= tocArticle.page + 5)) {
+                                    article = book.articles.find(a => a.id === tocArticle.article_id);
+                                    if (article) break;
+                                }
+                            }
+                        }
+                        if (article) break;
+                    }
+                }
+                if (article) break;
+            }
+        }
+
+        // If no match found, return first article as fallback
+        if (!article && book.articles.length > 0) {
+            article = book.articles[0];
+        }
+
+        if (!article) return null;
+
+        // Extract paragraph text
+        const paragraphs = [];
+        if (article.paragraphs) {
+            article.paragraphs.slice(0, 3).forEach(para => {
+                if (para.elements && Array.isArray(para.elements)) {
+                    const text = para.elements.map(el => el.content || '').join('');
+                    if (text) paragraphs.push(text);
+                }
+            });
+        }
+
+        return {
+            title: article.title,
+            type: 'article',
+            articleId: article.id,
+            publicationDate: article.publication_date,
             pageNumber,
             paragraphs
         };
@@ -1750,6 +1815,9 @@ class Reader {
         } else if (bookType === 'aa-comes-of-age') {
             badgeClass = 'aacoa-badge';
             displayName = 'AA Comes of Age';
+        } else if (bookType === 'language-of-the-heart') {
+            badgeClass = 'loth-badge';
+            displayName = 'Language of the Heart';
         } else {
             badgeClass = 'default-badge';
             displayName = bookName || 'Unknown';
@@ -1892,6 +1960,9 @@ class Reader {
             bookType = 'twelve-and-twelve';
         } else if (upperName.includes('COMES OF AGE') || upperName.includes('A.A. COMES OF AGE')) {
             bookType = 'aa-comes-of-age';
+        } else if (upperName.includes('GRAPEVINE') || upperName.includes('LANGUAGE OF THE HEART') ||
+                   upperName.includes('GV') || upperName.includes('AA GRAPEVINE')) {
+            bookType = 'language-of-the-heart';
         } else {
             // Not a recognized book reference
             return null;
@@ -2108,6 +2179,29 @@ class Reader {
             } else {
                 window.location.hash = '/book/aa-comes-of-age';
             }
+        } else if (bookType === 'language-of-the-heart') {
+            // Find the article by page number
+            const lothBook = window.app?.books?.get('language-of-the-heart');
+            if (lothBook?.table_of_contents?.sections) {
+                for (const section of lothBook.table_of_contents.sections) {
+                    if (section.type === 'part' && section.segments) {
+                        for (const segment of section.segments) {
+                            if (segment.articles) {
+                                for (const tocArticle of segment.articles) {
+                                    if (tocArticle.page === pageNumber ||
+                                        (tocArticle.page && pageNumber >= tocArticle.page && pageNumber <= tocArticle.page + 5)) {
+                                        sessionStorage.setItem('navigateToArticle', tocArticle.article_id);
+                                        window.location.hash = '/book/language-of-the-heart';
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            // Default: go to book
+            window.location.hash = '/book/language-of-the-heart';
         }
     }
 
@@ -2695,6 +2789,198 @@ class Reader {
 
         // Setup source reference sidebar
         this.setupSourceRefSidebar();
+    }
+
+    /**
+     * Display Language of the Heart book
+     */
+    async displayLanguageOfTheHeart(book) {
+        // Check if we're navigating to a specific article from search
+        const navigateToArticle = sessionStorage.getItem('navigateToArticle');
+        let article;
+
+        if (navigateToArticle) {
+            sessionStorage.removeItem('navigateToArticle');
+            article = book.articles.find(a => a.id === navigateToArticle);
+        }
+
+        if (!article && book.articles && book.articles.length > 0) {
+            // Show first article by default
+            article = book.articles[0];
+        }
+
+        if (article) {
+            await this.displayArticle(book, article);
+        }
+
+        // Hide page navigation
+        if (this.pageNavEl) this.pageNavEl.classList.add('hidden');
+    }
+
+    /**
+     * Display a single Language of the Heart article
+     */
+    async displayArticle(book, article) {
+        const bookAnnotations = await annotations.loadForBook(book.metadata.id);
+        const articleIndex = book.articles.findIndex(a => a.id === article.id);
+
+        // Build paragraphs HTML with proper formatting
+        const paragraphsHtml = article.paragraphs.map((para, idx) => {
+            const paraId = `loth-${article.id}-p${idx + 1}`;
+            let text = this.formatArticleParagraph(para);
+
+            // Apply annotations
+            text = annotations.applyToContent(text, bookAnnotations, paraId);
+
+            // Apply automatic cross-references
+            text = this.applyAutoCrossReferences(text);
+
+            const isBlockquote = para.type === 'blockquote';
+            return `
+                <div class="article-paragraph paragraph ${isBlockquote ? 'blockquote' : ''}" data-paragraph-id="${paraId}">
+                    <span class="paragraph-number">${idx + 1}</span>
+                    <p>${text}</p>
+                </div>
+            `;
+        }).join('');
+
+        // Find the part/segment this article belongs to (for context)
+        let partInfo = '';
+        let segmentInfo = '';
+        if (book.table_of_contents && book.table_of_contents.sections) {
+            for (const section of book.table_of_contents.sections) {
+                if (section.type === 'part' && section.segments) {
+                    for (const segment of section.segments) {
+                        if (segment.articles) {
+                            const found = segment.articles.find(a => a.article_id === article.id);
+                            if (found) {
+                                partInfo = section.title;
+                                segmentInfo = segment.title;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        this.contentEl.innerHTML = `
+            <div class="article-view">
+                <div class="article-main-content">
+                    <div class="article-header">
+                        <div class="article-meta">
+                            ${partInfo ? `<span class="article-part">${partInfo}</span>` : ''}
+                            ${segmentInfo ? `<span class="article-segment">${segmentInfo}</span>` : ''}
+                        </div>
+                        <h2 class="article-title">${article.title}</h2>
+                        <div class="article-info">
+                            <span class="article-date">${article.publication_date || ''}</span>
+                            ${article.page_number ? `<span class="article-page">p. ${article.page_number}</span>` : ''}
+                        </div>
+                    </div>
+
+                    <div class="article-content">
+                        ${paragraphsHtml}
+                    </div>
+
+                    ${this.getCrossRefLegendHtml()}
+
+                    <div class="article-nav">
+                        <button class="btn btn-secondary" id="prev-article">Previous Article</button>
+                        <button class="btn btn-secondary" id="article-picker-btn">Go to Article</button>
+                        <button class="btn btn-secondary" id="next-article">Next Article</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Navigation buttons
+        const prevBtn = this.contentEl.querySelector('#prev-article');
+        const nextBtn = this.contentEl.querySelector('#next-article');
+        const pickerBtn = this.contentEl.querySelector('#article-picker-btn');
+
+        prevBtn.addEventListener('click', () => {
+            const prevIndex = articleIndex > 0 ? articleIndex - 1 : book.articles.length - 1;
+            this.displayArticle(book, book.articles[prevIndex]);
+        });
+
+        nextBtn.addEventListener('click', () => {
+            const nextIndex = articleIndex < book.articles.length - 1 ? articleIndex + 1 : 0;
+            this.displayArticle(book, book.articles[nextIndex]);
+        });
+
+        pickerBtn.addEventListener('click', async () => {
+            // Build article list grouped by part/segment
+            let groupedOptions = '';
+            if (book.table_of_contents && book.table_of_contents.sections) {
+                for (const section of book.table_of_contents.sections) {
+                    if (section.type === 'part' && section.segments) {
+                        groupedOptions += `<optgroup label="${section.title}">`;
+                        for (const segment of section.segments) {
+                            if (segment.articles) {
+                                for (const tocArticle of segment.articles) {
+                                    const fullArticle = book.articles.find(a => a.id === tocArticle.article_id);
+                                    if (fullArticle) {
+                                        const selected = fullArticle.id === article.id ? 'selected' : '';
+                                        groupedOptions += `<option value="${fullArticle.id}" ${selected}>${tocArticle.title}</option>`;
+                                    }
+                                }
+                            }
+                        }
+                        groupedOptions += '</optgroup>';
+                    }
+                }
+            }
+
+            const result = await modal.open({
+                title: 'Go to Article',
+                body: `
+                    <div class="form-group">
+                        <label class="form-label">Select Article</label>
+                        <select class="form-input" name="articleSelect" style="max-height: 300px;">
+                            <option value="">-- Select Article --</option>
+                            ${groupedOptions}
+                        </select>
+                    </div>
+                `,
+                confirmText: 'Go'
+            });
+
+            if (result && result.articleSelect) {
+                const target = book.articles.find(a => a.id === result.articleSelect);
+                if (target) {
+                    this.displayArticle(book, target);
+                }
+            }
+        });
+
+        // Save reading progress
+        this.saveProgress('language-of-the-heart', article.id);
+    }
+
+    /**
+     * Format article paragraph with text formatting (italic, bold, etc.)
+     */
+    formatArticleParagraph(paragraph) {
+        if (!paragraph.elements || !Array.isArray(paragraph.elements)) {
+            return '';
+        }
+
+        return paragraph.elements.map(element => {
+            let text = element.content || '';
+
+            switch (element.type) {
+                case 'italic':
+                    return `<em>${text}</em>`;
+                case 'bold':
+                    return `<strong>${text}</strong>`;
+                case 'underline':
+                    return `<u>${text}</u>`;
+                case 'text':
+                default:
+                    return text;
+            }
+        }).join('');
     }
 
     /**
@@ -3335,6 +3621,10 @@ class Reader {
                         // For As Bill Sees It, navigate to book and set entry
                         const entryNum = entryId.replace('absit-', '');
                         sessionStorage.setItem('navigateToEntry', entryNum);
+                        window.location.hash = `/book/${bookId}`;
+                    } else if (bookId === 'language-of-the-heart' && entryId.startsWith('article_')) {
+                        // For Language of the Heart, navigate to book and set article
+                        sessionStorage.setItem('navigateToArticle', entryId);
                         window.location.hash = `/book/${bookId}`;
                     } else if (entryId.startsWith('step-') || entryId.startsWith('tradition-') ||
                                entryId.startsWith('chapter-') || entryId.startsWith('story-') ||
