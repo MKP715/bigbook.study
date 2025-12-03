@@ -1,0 +1,383 @@
+/* AA Literature Study - Annotation Styles */
+
+/* Annotation Toolbar */
+.annotation-toolbar {
+    position: fixed;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+    flex-wrap: wrap;
+    max-width: 450px;
+}
+
+.toolbar-section {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+}
+
+.toolbar-label {
+    font-size: var(--font-size-sm);
+    color: var(--text-muted);
+    margin-right: var(--spacing-xs);
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 24px;
+    background-color: var(--border-color);
+    margin: 0 var(--spacing-xs);
+}
+
+/* Color Buttons */
+.color-btn {
+    width: 24px;
+    height: 24px;
+    border: 2px solid transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.color-btn:hover {
+    transform: scale(1.2);
+}
+
+.color-btn.active {
+    border-color: var(--text-primary);
+}
+
+/* Underline Buttons */
+.underline-btn {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.underline-btn:hover {
+    background-color: var(--bg-tertiary);
+}
+
+.underline-btn.active {
+    border-color: var(--accent-color);
+    background-color: var(--bg-tertiary);
+}
+
+/* Action Buttons */
+.action-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    padding: var(--spacing-xs) var(--spacing-sm);
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: 4px;
+    font-size: var(--font-size-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.action-btn:hover {
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+}
+
+.action-btn svg {
+    flex-shrink: 0;
+}
+
+/* Highlight Styles */
+.highlight {
+    padding: 2px 0;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: filter var(--transition-fast);
+}
+
+.highlight:hover {
+    filter: brightness(0.9);
+}
+
+.highlight-yellow {
+    background-color: var(--highlight-yellow);
+}
+
+.highlight-green {
+    background-color: var(--highlight-green);
+}
+
+.highlight-blue {
+    background-color: var(--highlight-blue);
+}
+
+.highlight-pink {
+    background-color: var(--highlight-pink);
+}
+
+.highlight-orange {
+    background-color: var(--highlight-orange);
+}
+
+.highlight-purple {
+    background-color: var(--highlight-purple);
+}
+
+/* Underline Styles */
+.underline {
+    cursor: pointer;
+    transition: opacity var(--transition-fast);
+}
+
+.underline:hover {
+    opacity: 0.7;
+}
+
+.underline-solid {
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: var(--accent-color);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+.underline-dashed {
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: var(--accent-color);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 3px;
+}
+
+.underline-wavy {
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: var(--accent-color);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+.underline-double {
+    text-decoration: underline;
+    text-decoration-style: double;
+    text-decoration-color: var(--accent-color);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+}
+
+/* Comment Annotation */
+.has-comment {
+    background-color: rgba(255, 193, 7, 0.15);
+    border-bottom: 2px solid #ffc107;
+    cursor: pointer;
+}
+
+.has-comment:hover {
+    background-color: rgba(255, 193, 7, 0.25);
+}
+
+/* Question Annotation */
+.has-question {
+    background-color: rgba(33, 150, 243, 0.15);
+    border-bottom: 2px solid #2196f3;
+    cursor: pointer;
+}
+
+.has-question:hover {
+    background-color: rgba(33, 150, 243, 0.25);
+}
+
+/* Definition Annotation */
+.has-definition {
+    background-color: rgba(156, 39, 176, 0.1);
+    border-bottom: 2px dotted #9c27b0;
+    cursor: help;
+}
+
+.has-definition:hover {
+    background-color: rgba(156, 39, 176, 0.2);
+}
+
+/* Cross Reference */
+.has-crossref {
+    color: var(--accent-color);
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    cursor: pointer;
+}
+
+.has-crossref:hover {
+    text-decoration-style: solid;
+}
+
+/* Annotation Popover */
+.annotation-popover {
+    position: absolute;
+    z-index: 150;
+    max-width: 300px;
+    padding: var(--spacing-md);
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: var(--shadow-lg);
+}
+
+.popover-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-sm);
+    padding-bottom: var(--spacing-sm);
+    border-bottom: 1px solid var(--border-color);
+}
+
+.popover-type {
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.popover-type.comment {
+    color: #f57c00;
+}
+
+.popover-type.question {
+    color: #1976d2;
+}
+
+.popover-type.definition {
+    color: #7b1fa2;
+}
+
+.popover-actions {
+    display: flex;
+    gap: var(--spacing-xs);
+}
+
+.popover-btn {
+    padding: 4px;
+    background: none;
+    border: none;
+    border-radius: 4px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.popover-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.popover-content {
+    font-size: var(--font-size-sm);
+    color: var(--text-primary);
+    line-height: 1.5;
+}
+
+.popover-selected {
+    font-style: italic;
+    color: var(--text-secondary);
+    padding: var(--spacing-sm);
+    background-color: var(--bg-primary);
+    border-radius: 4px;
+    margin-bottom: var(--spacing-sm);
+}
+
+/* Definition Tooltip */
+.definition-tooltip {
+    position: absolute;
+    z-index: 160;
+    max-width: 280px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background-color: var(--text-primary);
+    color: var(--bg-primary);
+    border-radius: 6px;
+    font-size: var(--font-size-sm);
+    box-shadow: var(--shadow-lg);
+    pointer-events: none;
+}
+
+.definition-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px 6px 0;
+    border-style: solid;
+    border-color: var(--text-primary) transparent transparent;
+}
+
+/* Combined Annotations */
+.highlight.has-comment,
+.highlight.has-question,
+.highlight.has-definition {
+    position: relative;
+}
+
+.highlight.has-comment::after,
+.highlight.has-question::after,
+.highlight.has-definition::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+}
+
+.highlight.has-comment::after {
+    background-color: #f57c00;
+}
+
+.highlight.has-question::after {
+    background-color: #1976d2;
+}
+
+.highlight.has-definition::after {
+    background-color: #7b1fa2;
+}
+
+/* Remove Annotation Button */
+.annotation-remove {
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    width: 18px;
+    height: 18px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 12px;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.highlight:hover .annotation-remove,
+.underline:hover .annotation-remove {
+    display: flex;
+}
+
+/* Selection Styling */
+::selection {
+    background-color: var(--accent-color);
+    color: white;
+}
