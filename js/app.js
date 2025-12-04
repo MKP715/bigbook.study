@@ -587,8 +587,11 @@ class App {
                     reader.saveProgress(bookId, chapterId);
                     return;
                 }
-                console.error(`Article not found: ${chapterId}`);
-                toast.error('Article not found');
+                // Article not found in data - show graceful error in reader
+                console.warn(`Article not found in data: ${chapterId}`);
+                reader.currentBook = book;
+                reader.showArticleNotFound(chapterId, book);
+                sidebar.setActive(bookId, chapterId);
                 return;
             }
 

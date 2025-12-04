@@ -234,39 +234,56 @@ class Reader {
         const isStep = type === 'step';
         const typeLabel = isStep ? 'Step' : 'Tradition';
 
-        // Build paragraphs HTML from content array
-        const paragraphsHtml = chapter.content && chapter.content.length > 0
-            ? chapter.content.map((para, idx) => {
-                const paraId = `${type}-${chapter.number}-p${idx + 1}`;
-                let text = para.text || '';
-
-                // Apply formatting if present
-                if (para.formatting && Array.isArray(para.formatting)) {
-                    para.formatting.forEach(fmt => {
-                        if (fmt.type === 'bold' && fmt.text) {
-                            text = text.replace(fmt.text, `<strong>${fmt.text}</strong>`);
-                        }
-                        if (fmt.type === 'italic' && fmt.text) {
-                            text = text.replace(fmt.text, `<em>${fmt.text}</em>`);
-                        }
-                    });
+        // Group paragraphs by page for book-like display
+        let paragraphsHtml = '';
+        if (chapter.content && chapter.content.length > 0) {
+            const pageGroups = new Map();
+            chapter.content.forEach((para, idx) => {
+                const pageNum = para.pdfPage || 0;
+                if (!pageGroups.has(pageNum)) {
+                    pageGroups.set(pageNum, []);
                 }
+                pageGroups.get(pageNum).push({ para, idx });
+            });
 
-                // Apply annotations
-                text = annotations.applyToContent(text, bookAnnotations, paraId);
+            const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
 
-                // Apply automatic cross-references
-                text = this.applyAutoCrossReferences(text);
+            for (const pageNum of sortedPages) {
+                const pageParagraphs = pageGroups.get(pageNum);
+                const pageContent = pageParagraphs.map(({ para, idx }) => {
+                    const paraId = `${type}-${chapter.number}-p${idx + 1}`;
+                    let text = para.text || '';
 
-                return `
-                    <div class="step-paragraph paragraph" data-paragraph-id="${paraId}" data-page="${para.pdfPage || ''}">
-                        <span class="paragraph-number">${idx + 1}</span>
-                        <p>${text}</p>
-                        ${para.pdfPage ? `<span class="page-marker">[p.${para.pdfPage}]</span>` : ''}
-                    </div>
-                `;
-            }).join('')
-            : '<p class="empty-content">Content not yet available.</p>';
+                    // Apply formatting if present
+                    if (para.formatting && Array.isArray(para.formatting)) {
+                        para.formatting.forEach(fmt => {
+                            if (fmt.type === 'bold' && fmt.text) {
+                                text = text.replace(fmt.text, `<strong>${fmt.text}</strong>`);
+                            }
+                            if (fmt.type === 'italic' && fmt.text) {
+                                text = text.replace(fmt.text, `<em>${fmt.text}</em>`);
+                            }
+                        });
+                    }
+
+                    // Apply annotations
+                    text = annotations.applyToContent(text, bookAnnotations, paraId);
+
+                    // Apply automatic cross-references
+                    text = this.applyAutoCrossReferences(text);
+
+                    return `<div class="step-paragraph paragraph" data-paragraph-id="${paraId}" data-page="${para.pdfPage || ''}"><p>${text}</p></div>`;
+                }).join('');
+
+                if (pageNum > 0) {
+                    paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+                } else {
+                    paragraphsHtml += pageContent;
+                }
+            }
+        } else {
+            paragraphsHtml = '<p class="empty-content">Content not yet available.</p>';
+        }
 
         // Get steps and traditions arrays
         const steps = book.theSteps || [];
@@ -522,17 +539,34 @@ class Reader {
     async displayBigBookPreface(book, bookAnnotations) {
         const preface = book.content.frontMatter.preface;
 
-        const paragraphsHtml = preface.paragraphs.map((para, idx) => {
-            const paraId = `bb-preface-p${idx + 1}`;
-            const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-            const blockClass = para.isBlockQuote ? 'block-quote' : '';
+        // Group paragraphs by page
+        const pageGroups = new Map();
+        preface.paragraphs.forEach((para, idx) => {
+            const pageNum = para.pageNumber || 0;
+            if (!pageGroups.has(pageNum)) {
+                pageGroups.set(pageNum, []);
+            }
+            pageGroups.get(pageNum).push({ para, idx });
+        });
 
-            return `
-                <div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}">
-                    <p>${text}</p>
-                </div>
-            `;
-        }).join('');
+        let paragraphsHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const pageContent = pageParagraphs.map(({ para, idx }) => {
+                const paraId = `bb-preface-p${idx + 1}`;
+                const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
+                const blockClass = para.isBlockQuote ? 'block-quote' : '';
+                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}"><p>${text}</p></div>`;
+            }).join('');
+
+            if (pageNum > 0) {
+                paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+            } else {
+                paragraphsHtml += pageContent;
+            }
+        }
 
         this.contentEl.innerHTML = `
             <div class="bb-content-view">
@@ -556,17 +590,34 @@ class Reader {
         const foreword = book.content.frontMatter.forewords.find(fw => fw.year === year);
         if (!foreword) return;
 
-        const paragraphsHtml = foreword.paragraphs.map((para, idx) => {
-            const paraId = `bb-foreword-${year}-p${idx + 1}`;
-            const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-            const blockClass = para.isBlockQuote ? 'block-quote' : '';
+        // Group paragraphs by page
+        const pageGroups = new Map();
+        foreword.paragraphs.forEach((para, idx) => {
+            const pageNum = para.pageNumber || 0;
+            if (!pageGroups.has(pageNum)) {
+                pageGroups.set(pageNum, []);
+            }
+            pageGroups.get(pageNum).push({ para, idx });
+        });
 
-            return `
-                <div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}">
-                    <p>${text}</p>
-                </div>
-            `;
-        }).join('');
+        let paragraphsHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const pageContent = pageParagraphs.map(({ para, idx }) => {
+                const paraId = `bb-foreword-${year}-p${idx + 1}`;
+                const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
+                const blockClass = para.isBlockQuote ? 'block-quote' : '';
+                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}"><p>${text}</p></div>`;
+            }).join('');
+
+            if (pageNum > 0) {
+                paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+            } else {
+                paragraphsHtml += pageContent;
+            }
+        }
 
         this.contentEl.innerHTML = `
             <div class="bb-content-view">
@@ -590,19 +641,34 @@ class Reader {
     async displayBigBookDoctorsOpinion(book, bookAnnotations) {
         const doctorsOpinion = book.content.frontMatter.doctorsOpinion;
 
-        const paragraphsHtml = doctorsOpinion.paragraphs.map((para, idx) => {
-            const paraId = `bb-doctors-opinion-p${idx + 1}`;
-            const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-            const blockClass = para.isBlockQuote ? 'block-quote' : '';
-            const pageMarker = para.pageNumber ? `<span class="page-marker">[p.${para.pageNumber}]</span>` : '';
+        // Group paragraphs by page
+        const pageGroups = new Map();
+        doctorsOpinion.paragraphs.forEach((para, idx) => {
+            const pageNum = para.pageNumber || 0;
+            if (!pageGroups.has(pageNum)) {
+                pageGroups.set(pageNum, []);
+            }
+            pageGroups.get(pageNum).push({ para, idx });
+        });
 
-            return `
-                <div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}">
-                    <p>${text}</p>
-                    ${pageMarker}
-                </div>
-            `;
-        }).join('');
+        let paragraphsHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const pageContent = pageParagraphs.map(({ para, idx }) => {
+                const paraId = `bb-doctors-opinion-p${idx + 1}`;
+                const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
+                const blockClass = para.isBlockQuote ? 'block-quote' : '';
+                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
+            }).join('');
+
+            if (pageNum > 0) {
+                paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+            } else {
+                paragraphsHtml += pageContent;
+            }
+        }
 
         this.contentEl.innerHTML = `
             <div class="bb-content-view">
@@ -627,20 +693,35 @@ class Reader {
         const chapter = book.content.mainText.chapters.find(ch => ch.chapterNumber === chapterNum);
         if (!chapter) return;
 
-        const paragraphsHtml = chapter.paragraphs.map((para, idx) => {
-            const paraId = `bb-ch${chapterNum}-p${idx + 1}`;
-            const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-            const blockClass = para.isBlockQuote ? 'block-quote' : '';
-            const pageMarker = para.pageNumber ? `<span class="page-marker">[p.${para.pageNumber}]</span>` : '';
+        // Group paragraphs by page for book-like display
+        const pageGroups = new Map();
+        chapter.paragraphs.forEach((para, idx) => {
+            const pageNum = para.pageNumber || 0;
+            if (!pageGroups.has(pageNum)) {
+                pageGroups.set(pageNum, []);
+            }
+            pageGroups.get(pageNum).push({ para, idx });
+        });
 
-            return `
-                <div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}">
-                    <span class="paragraph-number">${idx + 1}</span>
-                    <p>${text}</p>
-                    ${pageMarker}
-                </div>
-            `;
-        }).join('');
+        // Build HTML with paragraphs grouped by page
+        let paragraphsHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const pageContent = pageParagraphs.map(({ para, idx }) => {
+                const paraId = `bb-ch${chapterNum}-p${idx + 1}`;
+                const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
+                const blockClass = para.isBlockQuote ? 'block-quote' : '';
+                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
+            }).join('');
+
+            if (pageNum > 0) {
+                paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+            } else {
+                paragraphsHtml += pageContent;
+            }
+        }
 
         // Get cross-references for this chapter's page range
         const startPage = chapter.pageStart || 1;
@@ -690,20 +771,34 @@ class Reader {
         const story = part.stories.find(s => s.storyNumber === storyNum);
         if (!story) return;
 
-        const paragraphsHtml = story.paragraphs.map((para, idx) => {
-            const paraId = `bb-story-${partNum}-${storyNum}-p${idx + 1}`;
-            const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-            const blockClass = para.isBlockQuote ? 'block-quote' : '';
-            const pageMarker = para.pageNumber ? `<span class="page-marker">[p.${para.pageNumber}]</span>` : '';
+        // Group paragraphs by page
+        const pageGroups = new Map();
+        story.paragraphs.forEach((para, idx) => {
+            const pageNum = para.pageNumber || 0;
+            if (!pageGroups.has(pageNum)) {
+                pageGroups.set(pageNum, []);
+            }
+            pageGroups.get(pageNum).push({ para, idx });
+        });
 
-            return `
-                <div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}">
-                    <span class="paragraph-number">${idx + 1}</span>
-                    <p>${text}</p>
-                    ${pageMarker}
-                </div>
-            `;
-        }).join('');
+        let paragraphsHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const pageContent = pageParagraphs.map(({ para, idx }) => {
+                const paraId = `bb-story-${partNum}-${storyNum}-p${idx + 1}`;
+                const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
+                const blockClass = para.isBlockQuote ? 'block-quote' : '';
+                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
+            }).join('');
+
+            if (pageNum > 0) {
+                paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+            } else {
+                paragraphsHtml += pageContent;
+            }
+        }
 
         this.contentEl.innerHTML = `
             <div class="bb-content-view">
@@ -731,19 +826,34 @@ class Reader {
         const appendix = book.content.appendices.find(app => app.appendixNumber === appendixNum);
         if (!appendix) return;
 
-        const paragraphsHtml = appendix.paragraphs.map((para, idx) => {
-            const paraId = `bb-appendix-${appendixNum}-p${idx + 1}`;
-            const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-            const blockClass = para.isBlockQuote ? 'block-quote' : '';
-            const pageMarker = para.pageNumber ? `<span class="page-marker">[p.${para.pageNumber}]</span>` : '';
+        // Group paragraphs by page
+        const pageGroups = new Map();
+        appendix.paragraphs.forEach((para, idx) => {
+            const pageNum = para.pageNumber || 0;
+            if (!pageGroups.has(pageNum)) {
+                pageGroups.set(pageNum, []);
+            }
+            pageGroups.get(pageNum).push({ para, idx });
+        });
 
-            return `
-                <div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}">
-                    <p>${text}</p>
-                    ${pageMarker}
-                </div>
-            `;
-        }).join('');
+        let paragraphsHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const pageContent = pageParagraphs.map(({ para, idx }) => {
+                const paraId = `bb-appendix-${appendixNum}-p${idx + 1}`;
+                const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
+                const blockClass = para.isBlockQuote ? 'block-quote' : '';
+                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
+            }).join('');
+
+            if (pageNum > 0) {
+                paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+            } else {
+                paragraphsHtml += pageContent;
+            }
+        }
 
         this.contentEl.innerHTML = `
             <div class="bb-content-view">
@@ -999,22 +1109,31 @@ class Reader {
         const startPage = chapter.startPage || 1;
         const paragraphsPerPage = 6; // Approximate paragraphs per page
 
-        const paragraphsHtml = chapter.content
-            .filter(para => para.plainText && para.plainText.trim() !== '')
-            .map((para, idx) => {
+        // Group paragraphs by approximate page
+        const pageGroups = new Map();
+        const filteredContent = chapter.content.filter(para => para.plainText && para.plainText.trim() !== '');
+
+        filteredContent.forEach((para, idx) => {
+            const approxPage = startPage + Math.floor(idx / paragraphsPerPage);
+            if (!pageGroups.has(approxPage)) {
+                pageGroups.set(approxPage, []);
+            }
+            pageGroups.get(approxPage).push({ para, idx });
+        });
+
+        let paragraphsHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const pageContent = pageParagraphs.map(({ para, idx }) => {
                 const paraId = `aacoa-ch${chapterNum}-p${idx + 1}`;
                 const text = this.formatAAComesOfAgeParagraph(para, paraId, bookAnnotations);
-                const approxPage = startPage + Math.floor(idx / paragraphsPerPage);
-                const pageMarker = `<span class="page-marker">[p.${approxPage}]</span>`;
-
-                return `
-                    <div class="aacoa-paragraph paragraph" data-paragraph-id="${paraId}" data-page="${approxPage}">
-                        <span class="paragraph-number">${idx + 1}</span>
-                        <p>${text}</p>
-                        ${pageMarker}
-                    </div>
-                `;
+                return `<div class="aacoa-paragraph paragraph" data-paragraph-id="${paraId}" data-page="${pageNum}"><p>${text}</p></div>`;
             }).join('');
+
+            paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+        }
 
         // Get cross-references for this chapter's page range
         const endPage = startPage + 30; // Approximate page range
@@ -1066,22 +1185,31 @@ class Reader {
         const startPage = appendix.startPage || 250;
         const paragraphsPerPage = 6; // Approximate paragraphs per page
 
-        const paragraphsHtml = appendix.content
-            .filter(para => para.plainText && para.plainText.trim() !== '')
-            .map((para, idx) => {
+        // Group paragraphs by approximate page
+        const pageGroups = new Map();
+        const filteredContent = appendix.content.filter(para => para.plainText && para.plainText.trim() !== '');
+
+        filteredContent.forEach((para, idx) => {
+            const approxPage = startPage + Math.floor(idx / paragraphsPerPage);
+            if (!pageGroups.has(approxPage)) {
+                pageGroups.set(approxPage, []);
+            }
+            pageGroups.get(approxPage).push({ para, idx });
+        });
+
+        let paragraphsHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const pageContent = pageParagraphs.map(({ para, idx }) => {
                 const paraId = `aacoa-app${appendixLetter}-p${idx + 1}`;
                 const text = this.formatAAComesOfAgeParagraph(para, paraId, bookAnnotations);
-                const approxPage = startPage + Math.floor(idx / paragraphsPerPage);
-                const pageMarker = `<span class="page-marker">[p.${approxPage}]</span>`;
-
-                return `
-                    <div class="aacoa-paragraph paragraph" data-paragraph-id="${paraId}" data-page="${approxPage}">
-                        <span class="paragraph-number">${idx + 1}</span>
-                        <p>${text}</p>
-                        ${pageMarker}
-                    </div>
-                `;
+                return `<div class="aacoa-paragraph paragraph" data-paragraph-id="${paraId}"><p>${text}</p></div>`;
             }).join('');
+
+            paragraphsHtml += `<div class="book-page" data-page="p. ${pageNum}">${pageContent}</div>`;
+        }
 
         // Get cross-references for this appendix's page range
         const endPage = startPage + 30; // Approximate page range
@@ -1760,6 +1888,7 @@ class Reader {
 
         const bookType = contentArea.dataset.bookType;
         const currentPage = parseInt(contentArea.dataset.currentPage, 10);
+        const allPages = contentArea.dataset.allPages?.split(',').map(p => parseInt(p, 10)) || [];
 
         const content = this.getPageContent(bookType, currentPage);
 
@@ -1773,18 +1902,75 @@ class Reader {
             return;
         }
 
+        // Apply auto cross-references to the content
         const paragraphsHtml = content.paragraphs.map((text, idx) => `
-            <p class="source-paragraph">${text}</p>
+            <p class="source-paragraph">${this.applyAutoCrossReferences(text)}</p>
         `).join('');
+
+        // Determine chapter route for "View Chapter" button
+        let chapterRoute = '';
+        if (bookType === 'big-book' && content.chapterNumber) {
+            chapterRoute = `/book/big-book/chapter/chapter-${content.chapterNumber}`;
+        } else if (bookType === 'twelve-and-twelve' && content.itemNumber) {
+            if (content.type === 'step') {
+                chapterRoute = `/book/twelve-and-twelve/chapter/step-${content.itemNumber}`;
+            } else if (content.type === 'tradition') {
+                chapterRoute = `/book/twelve-and-twelve/chapter/tradition-${content.itemNumber}`;
+            }
+        } else if (bookType === 'aa-comes-of-age' && content.chapterNumber) {
+            chapterRoute = `/book/aa-comes-of-age/chapter/chapter-${content.chapterNumber}`;
+        }
+
+        // Find prev/next pages in the referenced pages
+        const currentIdx = allPages.indexOf(currentPage);
+        const prevPage = currentIdx > 0 ? allPages[currentIdx - 1] : null;
+        const nextPage = currentIdx < allPages.length - 1 ? allPages[currentIdx + 1] : null;
 
         contentArea.innerHTML = `
             <div class="source-content-header">
                 <strong>${content.title}</strong>
+                <span class="source-page-indicator">p. ${currentPage}</span>
             </div>
             <div class="source-content-text">
                 ${paragraphsHtml}
             </div>
+            <div class="source-inline-nav">
+                <button class="btn btn-sm source-inline-prev" ${!prevPage ? 'disabled' : ''} data-page="${prevPage || ''}">
+                    ← Prev
+                </button>
+                <span class="source-page-label">Page ${currentPage}</span>
+                <button class="btn btn-sm source-inline-next" ${!nextPage ? 'disabled' : ''} data-page="${nextPage || ''}">
+                    Next →
+                </button>
+            </div>
+            ${chapterRoute ? `
+                <div class="source-view-chapter">
+                    <button class="btn btn-primary btn-sm source-view-chapter-btn" data-route="${chapterRoute}">
+                        View Full Chapter
+                    </button>
+                </div>
+            ` : ''}
         `;
+
+        // Add event listeners for inline nav
+        const prevBtn = contentArea.querySelector('.source-inline-prev');
+        const nextBtn = contentArea.querySelector('.source-inline-next');
+        const viewChapterBtn = contentArea.querySelector('.source-view-chapter-btn');
+
+        prevBtn?.addEventListener('click', () => {
+            const page = parseInt(prevBtn.dataset.page, 10);
+            if (page) this.updateSourceSidebarPage(page);
+        });
+
+        nextBtn?.addEventListener('click', () => {
+            const page = parseInt(nextBtn.dataset.page, 10);
+            if (page) this.updateSourceSidebarPage(page);
+        });
+
+        viewChapterBtn?.addEventListener('click', () => {
+            const route = viewChapterBtn.dataset.route;
+            if (route) window.location.hash = route;
+        });
     }
 
     /**
@@ -2818,6 +3004,132 @@ class Reader {
     }
 
     /**
+     * Show "Article not found" message for missing articles
+     */
+    showArticleNotFound(articleId, book) {
+        // Try to find article info from TOC
+        let articleTitle = 'Unknown Article';
+        let articlePage = '';
+
+        if (book.table_of_contents && book.table_of_contents.sections) {
+            for (const section of book.table_of_contents.sections) {
+                if (section.segments) {
+                    for (const segment of section.segments) {
+                        if (segment.articles) {
+                            const found = segment.articles.find(a =>
+                                a.article_id === articleId ||
+                                `article-page-${a.page}` === articleId
+                            );
+                            if (found) {
+                                articleTitle = found.title;
+                                articlePage = found.page ? `p. ${found.page}` : '';
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (section.articles) {
+                    const found = section.articles.find(a =>
+                        a.article_id === articleId ||
+                        `article-page-${a.page}` === articleId
+                    );
+                    if (found) {
+                        articleTitle = found.title;
+                        articlePage = found.page ? `p. ${found.page}` : '';
+                    }
+                }
+            }
+        }
+
+        this.contentEl.innerHTML = `
+            <div class="article-view">
+                <div class="article-main-content">
+                    <div class="article-header">
+                        <h2 class="article-title">${articleTitle}</h2>
+                        ${articlePage ? `<div class="article-info"><span class="article-page">${articlePage}</span></div>` : ''}
+                    </div>
+
+                    <div class="article-not-found">
+                        <div class="not-found-icon">📖</div>
+                        <h3>Article Content Not Available</h3>
+                        <p>The full text for this article is not yet available in the digital edition.</p>
+                        <p class="not-found-hint">This article can be found in the printed edition of "Language of the Heart"${articlePage ? ` on ${articlePage}` : ''}.</p>
+                    </div>
+
+                    <div class="article-nav">
+                        <button class="btn btn-secondary" id="prev-article">Previous Article</button>
+                        <button class="btn btn-secondary" id="article-picker-btn">Go to Article</button>
+                        <button class="btn btn-secondary" id="next-article">Next Article</button>
+                    </div>
+                </div>
+            </div>
+        `;
+
+        // Navigation buttons still work
+        const prevBtn = this.contentEl.querySelector('#prev-article');
+        const nextBtn = this.contentEl.querySelector('#next-article');
+        const pickerBtn = this.contentEl.querySelector('#article-picker-btn');
+
+        prevBtn?.addEventListener('click', () => {
+            // Find current position in articles list and go to previous
+            if (book.articles && book.articles.length > 0) {
+                this.displayArticle(book, book.articles[book.articles.length - 1]);
+            }
+        });
+
+        nextBtn?.addEventListener('click', () => {
+            // Go to first available article
+            if (book.articles && book.articles.length > 0) {
+                this.displayArticle(book, book.articles[0]);
+            }
+        });
+
+        pickerBtn?.addEventListener('click', async () => {
+            // Build article list grouped by part/segment
+            let groupedOptions = '';
+            if (book.table_of_contents && book.table_of_contents.sections) {
+                for (const section of book.table_of_contents.sections) {
+                    if (section.type === 'part' && section.segments) {
+                        groupedOptions += `<optgroup label="${section.title}">`;
+                        for (const segment of section.segments) {
+                            if (segment.articles) {
+                                for (const tocArticle of segment.articles) {
+                                    const fullArticle = book.articles.find(a => a.id === tocArticle.article_id);
+                                    if (fullArticle) {
+                                        groupedOptions += `<option value="${fullArticle.id}">${tocArticle.title}</option>`;
+                                    }
+                                }
+                            }
+                        }
+                        groupedOptions += '</optgroup>';
+                    }
+                }
+            }
+
+            const result = await modal.open({
+                title: 'Go to Article',
+                body: `
+                    <div class="form-group">
+                        <label class="form-label">Select Article</label>
+                        <select class="form-input" name="articleSelect" style="max-height: 300px;">
+                            <option value="">-- Select Article --</option>
+                            ${groupedOptions}
+                        </select>
+                    </div>
+                `,
+                confirmText: 'Go'
+            });
+
+            if (result && result.articleSelect) {
+                const target = book.articles.find(a => a.id === result.articleSelect);
+                if (target) {
+                    this.displayArticle(book, target);
+                }
+            }
+        });
+    }
+
+    /**
      * Display a single Language of the Heart article
      */
     async displayArticle(book, article) {
@@ -3134,17 +3446,37 @@ class Reader {
         this.currentChapter = chapter;
         const bookAnnotations = await annotations.loadForBook(book.metadata.id);
 
-        const paragraphsHtml = chapter.paragraphs.map(para => {
-            const annotatedText = annotations.applyToContent(para.text, bookAnnotations, para.id);
+        // Group paragraphs by page for book-like display
+        const pageGroups = new Map();
+        chapter.paragraphs.forEach(para => {
+            const pageNum = para.pageNumber || 0;
+            if (!pageGroups.has(pageNum)) {
+                pageGroups.set(pageNum, []);
+            }
+            pageGroups.get(pageNum).push(para);
+        });
 
-            return `
-                <div class="paragraph" data-paragraph-id="${para.id}" data-page="${para.pageNumber}">
-                    <span class="paragraph-number">${para.id.split('-').pop()}</span>
-                    ${annotatedText}
-                    ${para.pageNumber ? `<span class="page-marker" title="Page ${para.pageNumber}">[p.${para.pageNumber}]</span>` : ''}
-                </div>
-            `;
-        }).join('');
+        // Build HTML with paragraphs grouped by page
+        let contentHtml = '';
+        const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+
+        for (const pageNum of sortedPages) {
+            const pageParagraphs = pageGroups.get(pageNum);
+            const paragraphsHtml = pageParagraphs.map(para => {
+                const annotatedText = annotations.applyToContent(para.text, bookAnnotations, para.id);
+                return `<div class="paragraph" data-paragraph-id="${para.id}" data-page="${para.pageNumber}">${annotatedText}</div>`;
+            }).join('');
+
+            if (pageNum > 0) {
+                contentHtml += `
+                    <div class="book-page" data-page="p. ${pageNum}">
+                        ${paragraphsHtml}
+                    </div>
+                `;
+            } else {
+                contentHtml += paragraphsHtml;
+            }
+        }
 
         this.contentEl.innerHTML = `
             <div class="chapter-header">
@@ -3153,7 +3485,7 @@ class Reader {
                 ${chapter.pageStart ? `<div class="chapter-page-range">Pages ${chapter.pageStart} - ${chapter.pageEnd}</div>` : ''}
             </div>
             <div class="chapter-content">
-                ${paragraphsHtml}
+                ${contentHtml}
             </div>
         `;
 

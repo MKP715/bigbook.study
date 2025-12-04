@@ -32,8 +32,8 @@
     --spacing-xl: 32px;
 
     /* Layout */
-    --header-height: 56px;
-    --sidebar-width: 280px;
+    --header-height: 48px;
+    --sidebar-width: 260px;
 
     /* Typography */
     --font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
@@ -224,17 +224,20 @@ body {
 /* Sidebar */
 .sidebar {
     width: var(--sidebar-width);
+    min-width: var(--sidebar-width);
     background-color: var(--bg-secondary);
     border-right: 1px solid var(--border-color);
     overflow-y: auto;
-    transition: transform var(--transition-normal);
+    transition: width var(--transition-normal), min-width var(--transition-normal);
     flex-shrink: 0;
 }
 
 .sidebar.collapsed {
-    transform: translateX(-100%);
-    position: absolute;
-    height: calc(100vh - var(--header-height));
+    width: 0;
+    min-width: 0;
+    padding: 0;
+    border-right: none;
+    overflow: hidden;
 }
 
 .sidebar-nav {
@@ -601,25 +604,4 @@ body {
     color: var(--text-secondary);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .sidebar {
-        position: absolute;
-        z-index: 50;
-        height: calc(100vh - var(--header-height));
-        transform: translateX(-100%);
-    }
-
-    .sidebar.visible {
-        transform: translateX(0);
-    }
-
-    .header-center {
-        display: none;
-    }
-
-    .modal {
-        width: 95%;
-        max-height: 85vh;
-    }
-}
+/* Desktop-only layout - no mobile breakpoints needed */
