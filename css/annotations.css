@@ -1,140 +1,230 @@
-/* AA Literature Study - Annotation Styles */
+/* Big Book Study - Annotation Styles */
+/* Desktop-optimized annotation toolbar and highlights */
 
-/* Annotation Toolbar */
+/* ==================== ANNOTATION TOOLBAR ==================== */
 .annotation-toolbar {
     position: fixed;
-    z-index: 200;
+    z-index: 500;
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-sm);
-    background-color: var(--bg-secondary);
+    gap: var(--spacing-sm);
+    padding: 10px 14px;
+    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
-    box-shadow: var(--shadow-lg);
-    flex-wrap: wrap;
-    max-width: 450px;
+    border-radius: 10px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    animation: toolbar-appear 0.15s ease-out;
 }
 
-.toolbar-section {
+@keyframes toolbar-appear {
+    from {
+        opacity: 0;
+        transform: translateY(4px) scale(0.96);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.annotation-toolbar.hidden {
+    display: none;
+}
+
+/* Toolbar Groups */
+.toolbar-group {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
+    gap: 6px;
 }
 
 .toolbar-label {
-    font-size: var(--font-size-sm);
+    font-size: 10px;
+    font-weight: 700;
     color: var(--text-muted);
-    margin-right: var(--spacing-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-right: 4px;
+    white-space: nowrap;
 }
 
-.toolbar-divider {
+.toolbar-separator {
     width: 1px;
-    height: 24px;
+    height: 28px;
     background-color: var(--border-color);
-    margin: 0 var(--spacing-xs);
+    margin: 0 6px;
 }
 
-/* Color Buttons */
+/* Color Picker Section */
+.toolbar-colors {
+    display: flex;
+    gap: 4px;
+}
+
 .color-btn {
     width: 24px;
     height: 24px;
-    border: 2px solid transparent;
-    border-radius: 50%;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.12s ease;
+    padding: 0;
+    /* Ensure browser default button styles don't override backgrounds */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none;
 }
 
 .color-btn:hover {
-    transform: scale(1.2);
+    transform: scale(1.12);
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .color-btn.active {
     border-color: var(--text-primary);
+    box-shadow: 0 0 0 2px var(--bg-primary), 0 0 0 3px var(--text-primary);
 }
 
-/* Underline Buttons */
+/* Color buttons use inline styles set by JavaScript from settings */
+.color-btn[data-color="yellow"] { background-color: var(--highlight-yellow, #fef08a); }
+.color-btn[data-color="green"] { background-color: var(--highlight-green, #bbf7d0); }
+.color-btn[data-color="blue"] { background-color: var(--highlight-blue, #bfdbfe); }
+.color-btn[data-color="pink"] { background-color: var(--highlight-pink, #fbcfe8); }
+.color-btn[data-color="orange"] { background-color: var(--highlight-orange, #fed7aa); }
+.color-btn[data-color="purple"] { background-color: var(--highlight-purple, #ddd6fe); }
+
+/* Underline Section */
+.toolbar-underlines {
+    display: flex;
+    gap: 4px;
+}
+
 .underline-btn {
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background-color: var(--bg-primary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: 14px;
+    border-radius: 6px;
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.12s ease;
+    /* Ensure browser default button styles don't override */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
 
 .underline-btn:hover {
     background-color: var(--bg-tertiary);
+    border-color: var(--accent-color);
+    transform: scale(1.05);
 }
 
 .underline-btn.active {
+    background-color: var(--accent-light);
     border-color: var(--accent-color);
-    background-color: var(--bg-tertiary);
 }
 
-/* Action Buttons */
+.underline-preview {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.underline-solid-preview {
+    text-decoration: underline;
+    text-decoration-style: solid;
+    text-decoration-color: var(--underline-solid, #2563eb);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+}
+
+.underline-dashed-preview {
+    text-decoration: underline;
+    text-decoration-style: dashed;
+    text-decoration-color: var(--underline-dashed, #16a34a);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 2px;
+}
+
+.underline-wavy-preview {
+    text-decoration: underline;
+    text-decoration-style: wavy;
+    text-decoration-color: var(--underline-wavy, #dc2626);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+.underline-double-preview {
+    text-decoration: underline;
+    text-decoration-style: double;
+    text-decoration-color: var(--underline-double, #7c3aed);
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+}
+
+/* Action Buttons Section */
+.toolbar-actions {
+    display: flex;
+    gap: 4px;
+}
+
 .action-btn {
     display: flex;
     align-items: center;
-    gap: var(--spacing-xs);
-    padding: var(--spacing-xs) var(--spacing-sm);
-    background-color: var(--bg-primary);
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    padding: 0;
+    background-color: var(--bg-secondary);
     border: 1px solid var(--border-color);
-    border-radius: 4px;
-    font-size: var(--font-size-sm);
+    border-radius: 8px;
     color: var(--text-secondary);
     cursor: pointer;
-    transition: all var(--transition-fast);
+    transition: all 0.12s ease;
 }
 
 .action-btn:hover {
-    background-color: var(--accent-color);
-    border-color: var(--accent-color);
+    transform: scale(1.08);
     color: white;
 }
 
-.action-btn svg {
-    flex-shrink: 0;
-}
+.action-btn[data-action="comment"] { color: #d97706; }
+.action-btn[data-action="question"] { color: #2563eb; }
+.action-btn[data-action="definition"] { color: #7c3aed; }
+.action-btn[data-action="crossref"] { color: #059669; }
 
-/* Highlight Styles */
+.action-btn[data-action="comment"]:hover { background-color: #f59e0b; border-color: #f59e0b; color: white; }
+.action-btn[data-action="question"]:hover { background-color: #3b82f6; border-color: #3b82f6; color: white; }
+.action-btn[data-action="definition"]:hover { background-color: #8b5cf6; border-color: #8b5cf6; color: white; }
+.action-btn[data-action="crossref"]:hover { background-color: #10b981; border-color: #10b981; color: white; }
+
+/* ==================== HIGHLIGHT STYLES ==================== */
 .highlight {
-    padding: 2px 0;
-    border-radius: 2px;
+    padding: 2px 1px;
+    margin: 0 -1px;
+    border-radius: 3px;
     cursor: pointer;
     transition: filter var(--transition-fast);
 }
 
 .highlight:hover {
-    filter: brightness(0.9);
+    filter: brightness(0.92);
 }
 
-.highlight-yellow {
-    background-color: var(--highlight-yellow);
-}
+.highlight-yellow { background-color: var(--highlight-yellow); }
+.highlight-green { background-color: var(--highlight-green); }
+.highlight-blue { background-color: var(--highlight-blue); }
+.highlight-pink { background-color: var(--highlight-pink); }
+.highlight-orange { background-color: var(--highlight-orange); }
+.highlight-purple { background-color: var(--highlight-purple); }
 
-.highlight-green {
-    background-color: var(--highlight-green);
-}
-
-.highlight-blue {
-    background-color: var(--highlight-blue);
-}
-
-.highlight-pink {
-    background-color: var(--highlight-pink);
-}
-
-.highlight-orange {
-    background-color: var(--highlight-orange);
-}
-
-.highlight-purple {
-    background-color: var(--highlight-purple);
-}
-
-/* Underline Styles */
+/* ==================== UNDERLINE STYLES ==================== */
 .underline {
     cursor: pointer;
     transition: opacity var(--transition-fast);
@@ -147,7 +237,7 @@
 .underline-solid {
     text-decoration: underline;
     text-decoration-style: solid;
-    text-decoration-color: var(--accent-color);
+    text-decoration-color: var(--underline-solid, #2563eb);
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
 }
@@ -155,7 +245,7 @@
 .underline-dashed {
     text-decoration: underline;
     text-decoration-style: dashed;
-    text-decoration-color: var(--accent-color);
+    text-decoration-color: var(--underline-dashed, #16a34a);
     text-decoration-thickness: 2px;
     text-underline-offset: 3px;
 }
@@ -163,7 +253,7 @@
 .underline-wavy {
     text-decoration: underline;
     text-decoration-style: wavy;
-    text-decoration-color: var(--accent-color);
+    text-decoration-color: var(--underline-wavy, #dc2626);
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
 }
@@ -171,42 +261,43 @@
 .underline-double {
     text-decoration: underline;
     text-decoration-style: double;
-    text-decoration-color: var(--accent-color);
+    text-decoration-color: var(--underline-double, #7c3aed);
     text-decoration-thickness: 1px;
     text-underline-offset: 3px;
 }
 
+/* ==================== SPECIAL ANNOTATIONS ==================== */
 /* Comment Annotation */
 .has-comment {
-    background-color: rgba(255, 193, 7, 0.15);
-    border-bottom: 2px solid #ffc107;
+    background-color: rgba(245, 158, 11, 0.15);
+    border-bottom: 2px solid #f59e0b;
     cursor: pointer;
 }
 
 .has-comment:hover {
-    background-color: rgba(255, 193, 7, 0.25);
+    background-color: rgba(245, 158, 11, 0.25);
 }
 
 /* Question Annotation */
 .has-question {
-    background-color: rgba(33, 150, 243, 0.15);
-    border-bottom: 2px solid #2196f3;
+    background-color: rgba(59, 130, 246, 0.15);
+    border-bottom: 2px solid #3b82f6;
     cursor: pointer;
 }
 
 .has-question:hover {
-    background-color: rgba(33, 150, 243, 0.25);
+    background-color: rgba(59, 130, 246, 0.25);
 }
 
 /* Definition Annotation */
 .has-definition {
-    background-color: rgba(156, 39, 176, 0.1);
-    border-bottom: 2px dotted #9c27b0;
+    background-color: rgba(139, 92, 246, 0.1);
+    border-bottom: 2px dotted #8b5cf6;
     cursor: help;
 }
 
 .has-definition:hover {
-    background-color: rgba(156, 39, 176, 0.2);
+    background-color: rgba(139, 92, 246, 0.2);
 }
 
 /* Cross Reference */
@@ -221,15 +312,16 @@
     text-decoration-style: solid;
 }
 
-/* Annotation Popover */
+/* ==================== ANNOTATION POPOVER ==================== */
 .annotation-popover {
-    position: absolute;
-    z-index: 150;
-    max-width: 300px;
-    padding: var(--spacing-md);
-    background-color: var(--bg-secondary);
+    position: fixed;
+    z-index: 550;
+    width: 320px;
+    max-width: 90vw;
+    padding: var(--spacing-lg);
+    background-color: var(--bg-primary);
     border: 1px solid var(--border-color);
-    border-radius: 8px;
+    border-radius: 12px;
     box-shadow: var(--shadow-lg);
 }
 
@@ -237,28 +329,62 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
     padding-bottom: var(--spacing-sm);
     border-bottom: 1px solid var(--border-color);
 }
 
 .popover-type {
-    font-size: var(--font-size-sm);
-    font-weight: 600;
+    font-size: var(--font-size-xs);
+    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: 4px;
 }
 
 .popover-type.comment {
-    color: #f57c00;
+    background-color: rgba(245, 158, 11, 0.15);
+    color: #d97706;
 }
 
 .popover-type.question {
-    color: #1976d2;
+    background-color: rgba(59, 130, 246, 0.15);
+    color: #2563eb;
 }
 
 .popover-type.definition {
-    color: #7b1fa2;
+    background-color: rgba(139, 92, 246, 0.15);
+    color: #7c3aed;
+}
+
+.popover-type.highlight {
+    background-color: rgba(34, 197, 94, 0.15);
+    color: #16a34a;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.popover-type.underline {
+    background-color: rgba(37, 99, 235, 0.15);
+    color: #2563eb;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.popover-color-badge {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    display: inline-block;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.popover-underline-badge {
+    font-weight: 600;
+    font-size: 11px;
 }
 
 .popover-actions {
@@ -267,10 +393,15 @@
 }
 
 .popover-btn {
-    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
     background: none;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     color: var(--text-muted);
     cursor: pointer;
     transition: all var(--transition-fast);
@@ -281,47 +412,44 @@
     color: var(--text-primary);
 }
 
+.popover-btn.delete-btn:hover {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+}
+
 .popover-content {
-    font-size: var(--font-size-sm);
+    font-size: var(--font-size-base);
     color: var(--text-primary);
-    line-height: 1.5;
+    line-height: 1.6;
 }
 
 .popover-selected {
     font-style: italic;
     color: var(--text-secondary);
-    padding: var(--spacing-sm);
-    background-color: var(--bg-primary);
-    border-radius: 4px;
-    margin-bottom: var(--spacing-sm);
-}
-
-/* Definition Tooltip */
-.definition-tooltip {
-    position: absolute;
-    z-index: 160;
-    max-width: 280px;
     padding: var(--spacing-sm) var(--spacing-md);
-    background-color: var(--text-primary);
-    color: var(--bg-primary);
+    background-color: var(--bg-secondary);
     border-radius: 6px;
+    margin-bottom: var(--spacing-md);
     font-size: var(--font-size-sm);
-    box-shadow: var(--shadow-lg);
-    pointer-events: none;
+    border-left: 3px solid var(--accent-color);
 }
 
-.definition-tooltip::after {
-    content: '';
-    position: absolute;
-    bottom: -6px;
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 6px 6px 0;
-    border-style: solid;
-    border-color: var(--text-primary) transparent transparent;
+.popover-note {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background-color: var(--bg-secondary);
+    border-radius: 8px;
 }
 
-/* Combined Annotations */
+.popover-note-label {
+    font-size: var(--font-size-xs);
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: var(--spacing-xs);
+    text-transform: uppercase;
+}
+
+/* ==================== COMBINED ANNOTATION INDICATORS ==================== */
 .highlight.has-comment,
 .highlight.has-question,
 .highlight.has-definition {
@@ -333,51 +461,26 @@
 .highlight.has-definition::after {
     content: '';
     position: absolute;
-    top: -4px;
-    right: -4px;
-    width: 8px;
-    height: 8px;
+    top: -6px;
+    right: -6px;
+    width: 10px;
+    height: 10px;
     border-radius: 50%;
+    border: 2px solid var(--bg-primary);
+    box-shadow: var(--shadow-sm);
 }
 
-.highlight.has-comment::after {
-    background-color: #f57c00;
-}
+.highlight.has-comment::after { background-color: #f59e0b; }
+.highlight.has-question::after { background-color: #3b82f6; }
+.highlight.has-definition::after { background-color: #8b5cf6; }
 
-.highlight.has-question::after {
-    background-color: #1976d2;
-}
-
-.highlight.has-definition::after {
-    background-color: #7b1fa2;
-}
-
-/* Remove Annotation Button */
-.annotation-remove {
-    position: absolute;
-    top: -8px;
-    right: -8px;
-    width: 18px;
-    height: 18px;
-    display: none;
-    align-items: center;
-    justify-content: center;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    font-size: 12px;
-    cursor: pointer;
-    z-index: 10;
-}
-
-.highlight:hover .annotation-remove,
-.underline:hover .annotation-remove {
-    display: flex;
-}
-
-/* Selection Styling */
+/* ==================== TEXT SELECTION ==================== */
 ::selection {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+::-moz-selection {
     background-color: var(--accent-color);
     color: white;
 }

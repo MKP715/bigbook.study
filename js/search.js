@@ -287,23 +287,55 @@ class Search {
 
     /**
      * Search across all indexed books
+     * @param {string} query - The search query
+     * @param {Object} options - Search options
+     * @param {string|string[]|null} options.bookIds - Book ID(s) to search in (null for all)
+     * @param {number} options.limit - Maximum results to return
+     * @param {boolean} options.caseSensitive - Case sensitive search
+     * @param {boolean} options.exactPhrase - Search for exact phrase match
      */
     search(query, options = {}) {
         const {
-            bookId = null,
+            bookIds = null,
             limit = 50,
-            caseSensitive = false
+            caseSensitive = false,
+            exactPhrase = false
         } = options;
 
         const searchQuery = caseSensitive ? query : query.toLowerCase();
-        const words = searchQuery.split(/\s+/).filter(w => w.length > 0);
 
-        if (words.length === 0) return [];
+        // For exact phrase, keep the full query; otherwise split into words
+        let searchTerms;
+        let isExactSearch = exactPhrase;
+
+        // Auto-detect quoted phrases like "higher power"
+        const quotedMatch = query.match(/^["'](.+)["']$/);
+        if (quotedMatch) {
+            searchTerms = [caseSensitive ? quotedMatch[1] : quotedMatch[1].toLowerCase()];
+            isExactSearch = true;
+        } else if (isExactSearch) {
+            searchTerms = [searchQuery];
+        } else {
+            searchTerms = searchQuery.split(/\s+/).filter(w => w.length > 0);
+        }
+
+        if (searchTerms.length === 0) return [];
 
         const results = [];
-        const indicesToSearch = bookId
-            ? [[bookId, this.indices.get(bookId)]]
-            : Array.from(this.indices.entries());
+
+        // Determine which indices to search
+        let indicesToSearch;
+        if (bookIds === null) {
+            indicesToSearch = Array.from(this.indices.entries());
+        } else if (Array.isArray(bookIds)) {
+            indicesToSearch = bookIds
+                .filter(id => this.indices.has(id))
+                .map(id => [id, this.indices.get(id)]);
+        } else {
+            indicesToSearch = this.indices.has(bookIds)
+                ? [[bookIds, this.indices.get(bookIds)]]
+                : [];
+        }
 
         for (const [bId, entries] of indicesToSearch) {
             if (!entries) continue;
@@ -312,14 +344,22 @@ class Search {
             const bookTitle = book?.metadata?.shortTitle || book?.metadata?.title || bId;
 
             for (const entry of entries) {
-                // Check if all words are present
-                const matches = words.every(word => entry.text.includes(word));
+                let matches;
+
+                if (isExactSearch) {
+                    // Exact phrase matching
+                    matches = entry.text.includes(searchTerms[0]);
+                } else {
+                    // All words must be present (indexed search)
+                    matches = searchTerms.every(word => entry.text.includes(word));
+                }
 
                 if (matches) {
                     // Find context around first match
-                    const firstWordIndex = entry.text.indexOf(words[0]);
+                    const searchTerm = isExactSearch ? searchTerms[0] : searchTerms[0];
+                    const firstWordIndex = entry.text.indexOf(searchTerm);
                     const start = Math.max(0, firstWordIndex - 40);
-                    const end = Math.min(entry.text.length, firstWordIndex + words[0].length + 100);
+                    const end = Math.min(entry.text.length, firstWordIndex + searchTerm.length + 100);
 
                     let snippet = entry.text.slice(start, end);
                     if (start > 0) snippet = '...' + snippet;
@@ -333,7 +373,7 @@ class Search {
                         title: entry.title || entry.chapterTitle,
                         location: entry.location,
                         snippet,
-                        relevance: this.calculateRelevance(entry.text, words)
+                        relevance: this.calculateRelevance(entry.text, searchTerms, isExactSearch)
                     });
 
                     if (results.length >= limit) break;
@@ -350,24 +390,48 @@ class Search {
     }
 
     /**
+     * Get list of all available books for filtering
+     */
+    getAvailableBooks() {
+        const books = [];
+        for (const [bookId, book] of this.books) {
+            books.push({
+                id: bookId,
+                title: book?.metadata?.shortTitle || book?.metadata?.title || bookId
+            });
+        }
+        return books;
+    }
+
+    /**
      * Calculate relevance score
      */
-    calculateRelevance(text, words) {
+    calculateRelevance(text, searchTerms, isExactSearch = false) {
         let score = 0;
 
-        for (const word of words) {
-            // Count occurrences
-            const regex = new RegExp(word, 'gi');
+        if (isExactSearch) {
+            // For exact phrase, count occurrences of the phrase
+            const phrase = searchTerms[0];
+            const regex = new RegExp(phrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
             const matches = text.match(regex);
             if (matches) {
-                score += matches.length;
+                score += matches.length * 5; // Each exact match is worth 5 points
             }
-        }
+        } else {
+            // For indexed search, count word occurrences
+            for (const word of searchTerms) {
+                const regex = new RegExp(word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi');
+                const matches = text.match(regex);
+                if (matches) {
+                    score += matches.length;
+                }
+            }
 
-        // Bonus for exact phrase match
-        const phrase = words.join(' ');
-        if (text.includes(phrase)) {
-            score += 10;
+            // Bonus for exact phrase match (all words together)
+            const phrase = searchTerms.join(' ');
+            if (text.includes(phrase)) {
+                score += 10;
+            }
         }
 
         return score;

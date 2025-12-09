@@ -6,6 +6,8 @@ import { annotations } from './annotations.js';
 import { pageCrossRef } from './crossref.js';
 import { toolbar } from './ui/toolbar.js';
 import { modal } from './ui/modal.js';
+import { toast } from './ui/toast.js';
+import { dictionaryPopup } from './ui/dictionaryPopup.js';
 import * as db from './db.js';
 
 class Reader {
@@ -46,6 +48,13 @@ class Reader {
             const annotationEl = e.target.closest('[data-annotation-id]');
             if (annotationEl) {
                 this.handleAnnotationClick(annotationEl, e);
+                return;
+            }
+
+            // Handle auto cross-reference clicks
+            const autoRefEl = e.target.closest('.auto-ref');
+            if (autoRefEl) {
+                this.handleAutoRefClick(autoRefEl, e);
             }
         });
 
@@ -114,20 +123,13 @@ class Reader {
         });
 
         toolbar.on('definition', async (info) => {
-            if (info && info.text) {
-                const result = await modal.showDefinitionModal(info.text);
-                if (result && result.content) {
-                    await annotations.addDefinition(
-                        info.bookId,
-                        info.paragraphId,
-                        info.startOffset,
-                        info.endOffset,
-                        info.text,
-                        result.content,
-                        result.source
-                    );
-                    this.refreshContent();
-                }
+            if (info && info.text && info.range) {
+                // Get first word if multiple words selected
+                const word = info.text.split(/\s+/)[0];
+                const rect = info.range.getBoundingClientRect();
+
+                // Show dictionary popup with API lookup + custom definition
+                dictionaryPopup.show(word, rect.left, rect.bottom + window.scrollY);
             }
         });
     }
@@ -171,8 +173,9 @@ class Reader {
         const allAnnotations = await annotations.getAll();
         const annotation = allAnnotations.find(a => a.id === annotationId);
 
-        if (annotation && ['comment', 'question', 'definition'].includes(annotation.type)) {
+        if (annotation) {
             event.preventDefault();
+            event.stopPropagation();
             const rect = element.getBoundingClientRect();
             annotations.showPopover(annotation, rect.left, rect.bottom + window.scrollY + 5);
         }
@@ -206,6 +209,9 @@ class Reader {
         } else if (book.articles && Array.isArray(book.articles)) {
             // Language of the Heart format
             await this.displayLanguageOfTheHeart(book);
+        } else if (book.tableOfContents && book.content && book.content.sections) {
+            // Big Book Study Guide format
+            await this.displayStudyGuide(book);
         } else if (book.content) {
             // Standard book format
             await this.displayStandardBook(book);
@@ -253,6 +259,9 @@ class Reader {
                 const pageContent = pageParagraphs.map(({ para, idx }) => {
                     const paraId = `${type}-${chapter.number}-p${idx + 1}`;
                     let text = para.text || '';
+
+                    // Normalize quotes (convert curly quotes to straight quotes)
+                    text = this.normalizeQuotes(text);
 
                     // Apply formatting if present
                     if (para.formatting && Array.isArray(para.formatting)) {
@@ -312,7 +321,7 @@ class Reader {
                         <div class="step-number-badge">${chapter.number}</div>
                         <div class="step-header-content">
                             <h2 class="step-title">${typeLabel} ${chapter.number}</h2>
-                            <p class="step-text">${chapter.officialText || ''}</p>
+                            <p class="step-text">${this.normalizeQuotes(chapter.officialText) || ''}</p>
                         </div>
                         <div class="step-pages">pp. ${chapter.pageRange?.start || ''}-${chapter.pageRange?.end || ''}</div>
                     </div>
@@ -495,6 +504,20 @@ class Reader {
         } else if (contentId.startsWith('appendix-')) {
             const appendixNum = contentId.replace('appendix-', '');
             await this.displayBigBookAppendix(book, appendixNum, bookAnnotations);
+        } else if (contentId === 'study-passages') {
+            await this.displayStudyPassages(book);
+        } else if (contentId === 'study-steps') {
+            await this.displayStudySteps(book);
+        } else if (contentId === 'study-glossary') {
+            await this.displayStudyGlossary(book);
+        } else if (contentId === 'study-topics') {
+            await this.displayStudyTopics(book);
+        } else if (contentId === 'study-reading-plans') {
+            await this.displayStudyReadingPlans(book);
+        } else if (contentId === 'study-inventory') {
+            await this.displayStudyInventory(book);
+        } else if (contentId === 'study-history') {
+            await this.displayStudyHistory(book);
         } else {
             // Default to chapter 1
             await this.displayBigBookChapter(book, 1, bookAnnotations);
@@ -509,9 +532,20 @@ class Reader {
     formatBigBookParagraph(paragraph, paragraphId, bookAnnotations) {
         let text = '';
 
+        // Check if this is an ASCII table - use plainText and preserve formatting
+        if (this.isAsciiTable(paragraph)) {
+            text = paragraph.plainText || '';
+            // Escape HTML entities for safe display
+            text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            // Don't apply annotations or cross-references to tables
+            return text;
+        }
+
         if (paragraph.content && Array.isArray(paragraph.content)) {
             text = paragraph.content.map(segment => {
                 let segmentText = segment.text || '';
+                // Normalize quotes
+                segmentText = this.normalizeQuotes(segmentText);
                 if (segment.italic) {
                     segmentText = `<em>${segmentText}</em>`;
                 }
@@ -521,7 +555,7 @@ class Reader {
                 return segmentText;
             }).join('');
         } else if (paragraph.plainText) {
-            text = paragraph.plainText;
+            text = this.normalizeQuotes(paragraph.plainText);
         }
 
         // Apply annotations
@@ -531,6 +565,67 @@ class Reader {
         text = this.applyAutoCrossReferences(text);
 
         return text;
+    }
+
+    /**
+     * Get CSS classes for paragraph based on formatting properties
+     */
+    getParagraphClasses(paragraph) {
+        const classes = ['bb-paragraph', 'paragraph'];
+
+        if (paragraph.isBlockQuote) {
+            classes.push('block-quote');
+        }
+
+        // Detect ASCII tables (start with +-- or contain table borders)
+        if (this.isAsciiTable(paragraph)) {
+            classes.push('ascii-table');
+        }
+
+        if (paragraph.formatting) {
+            const fmt = paragraph.formatting;
+
+            if (fmt.isDropCap) {
+                classes.push('drop-cap');
+            }
+            if (fmt.isFootnote) {
+                classes.push('footnote');
+            }
+            if (fmt.isList) {
+                classes.push('list-item');
+                if (fmt.listType) {
+                    classes.push(`list-${fmt.listType.replace('_', '-')}`);
+                }
+            }
+            if (fmt.isStepNumber) {
+                classes.push('step-number');
+            }
+            if (fmt.isTraditionNumber) {
+                classes.push('tradition-number');
+            }
+            if (fmt.isConceptNumber) {
+                classes.push('concept-number');
+            }
+            if (fmt.alignment && fmt.alignment !== 'left') {
+                classes.push(`align-${fmt.alignment}`);
+            }
+            if (fmt.pageBreakBefore) {
+                classes.push('page-break-before');
+            }
+            if (fmt.isPageStart) {
+                classes.push('page-start');
+            }
+        }
+
+        return classes.join(' ');
+    }
+
+    /**
+     * Check if paragraph contains an ASCII table
+     */
+    isAsciiTable(paragraph) {
+        const plainText = paragraph.plainText || '';
+        return plainText.includes('+--') && plainText.includes('|');
     }
 
     /**
@@ -557,8 +652,8 @@ class Reader {
             const pageContent = pageParagraphs.map(({ para, idx }) => {
                 const paraId = `bb-preface-p${idx + 1}`;
                 const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-                const blockClass = para.isBlockQuote ? 'block-quote' : '';
-                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}"><p>${text}</p></div>`;
+                const classes = this.getParagraphClasses(para);
+                return `<div class="${classes}" data-paragraph-id="${paraId}"><p>${text}</p></div>`;
             }).join('');
 
             if (pageNum > 0) {
@@ -608,8 +703,8 @@ class Reader {
             const pageContent = pageParagraphs.map(({ para, idx }) => {
                 const paraId = `bb-foreword-${year}-p${idx + 1}`;
                 const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-                const blockClass = para.isBlockQuote ? 'block-quote' : '';
-                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}"><p>${text}</p></div>`;
+                const classes = this.getParagraphClasses(para);
+                return `<div class="${classes}" data-paragraph-id="${paraId}"><p>${text}</p></div>`;
             }).join('');
 
             if (pageNum > 0) {
@@ -659,8 +754,8 @@ class Reader {
             const pageContent = pageParagraphs.map(({ para, idx }) => {
                 const paraId = `bb-doctors-opinion-p${idx + 1}`;
                 const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-                const blockClass = para.isBlockQuote ? 'block-quote' : '';
-                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
+                const classes = this.getParagraphClasses(para);
+                return `<div class="${classes}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
             }).join('');
 
             if (pageNum > 0) {
@@ -670,11 +765,26 @@ class Reader {
             }
         }
 
+        // Get Study Guide section for Doctor's Opinion
+        const studyGuideSection = this.getStudyGuideSectionForBigBookChapter(null, 'doctors-opinion');
+
         this.contentEl.innerHTML = `
             <div class="bb-content-view">
                 <div class="bb-header">
                     <h2 class="bb-title">${doctorsOpinion.title}</h2>
-                    <span class="bb-author">by ${doctorsOpinion.author}</span>
+                    <div class="bb-header-meta">
+                        <span class="bb-author">by ${doctorsOpinion.author}</span>
+                        ${studyGuideSection ? `
+                            <a href="#/book/study-guide/chapter/${studyGuideSection}" class="btn btn-accent bb-study-guide-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"></circle>
+                                    <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                    <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                </svg>
+                                Study Guide
+                            </a>
+                        ` : ''}
+                    </div>
                 </div>
                 <div class="bb-content">
                     ${paragraphsHtml}
@@ -693,6 +803,10 @@ class Reader {
         const chapter = book.content.mainText.chapters.find(ch => ch.chapterNumber === chapterNum);
         if (!chapter) return;
 
+        // Debug: Log chapter page info
+        console.log(`[DEBUG] Chapter ${chapterNum}: pageStart=${chapter.pageStart}, pageEnd=${chapter.pageEnd}`);
+        console.log(`[DEBUG] First paragraph pageNumber:`, chapter.paragraphs[0]?.pageNumber);
+
         // Group paragraphs by page for book-like display
         const pageGroups = new Map();
         chapter.paragraphs.forEach((para, idx) => {
@@ -706,14 +820,15 @@ class Reader {
         // Build HTML with paragraphs grouped by page
         let paragraphsHtml = '';
         const sortedPages = Array.from(pageGroups.keys()).sort((a, b) => a - b);
+        console.log(`[DEBUG] Chapter ${chapterNum} page groups:`, sortedPages);
 
         for (const pageNum of sortedPages) {
             const pageParagraphs = pageGroups.get(pageNum);
             const pageContent = pageParagraphs.map(({ para, idx }) => {
                 const paraId = `bb-ch${chapterNum}-p${idx + 1}`;
                 const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-                const blockClass = para.isBlockQuote ? 'block-quote' : '';
-                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
+                const classes = this.getParagraphClasses(para);
+                return `<div class="${classes}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
             }).join('');
 
             if (pageNum > 0) {
@@ -729,13 +844,28 @@ class Reader {
         const crossRefs = pageCrossRef.getRefsForPageRange('big-book', startPage, endPage);
         const crossRefHtml = this.generateCrossRefSidebarHtml(crossRefs, 'big-book', startPage);
 
+        // Get Study Guide section for this chapter
+        const studyGuideSection = this.getStudyGuideSectionForBigBookChapter(chapterNum, 'chapter');
+
         this.contentEl.innerHTML = `
             <div class="bb-content-view with-crossrefs">
                 <div class="bb-main-content">
                     <div class="bb-header bb-chapter-header">
                         <div class="bb-chapter-number">Chapter ${chapter.chapterNumber}</div>
                         <h2 class="bb-title">${chapter.title}</h2>
-                        ${chapter.pageStart ? `<span class="bb-page-range">Pages ${chapter.pageStart}${chapter.pageEnd ? '-' + chapter.pageEnd : '+'}</span>` : ''}
+                        <div class="bb-header-meta">
+                            ${chapter.pageStart ? `<span class="bb-page-range">Pages ${chapter.pageStart}${chapter.pageEnd ? '-' + chapter.pageEnd : '+'}</span>` : ''}
+                            ${studyGuideSection ? `
+                                <a href="#/book/study-guide/chapter/${studyGuideSection}" class="btn btn-accent bb-study-guide-btn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"></circle>
+                                        <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                        <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                    </svg>
+                                    Study Guide
+                                </a>
+                            ` : ''}
+                        </div>
                     </div>
                     <div class="bb-content">
                         ${paragraphsHtml}
@@ -768,7 +898,9 @@ class Reader {
         const part = book.content.personalStories.parts.find(p => p.partNumber === partNum);
         if (!part) return;
 
-        const story = part.stories.find(s => s.storyNumber === storyNum);
+        // storyNum is 1-indexed position from TOC, convert to 0-indexed array access
+        const storyIndex = storyNum - 1;
+        const story = part.stories[storyIndex];
         if (!story) return;
 
         // Group paragraphs by page
@@ -789,8 +921,8 @@ class Reader {
             const pageContent = pageParagraphs.map(({ para, idx }) => {
                 const paraId = `bb-story-${partNum}-${storyNum}-p${idx + 1}`;
                 const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-                const blockClass = para.isBlockQuote ? 'block-quote' : '';
-                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
+                const classes = this.getParagraphClasses(para);
+                return `<div class="${classes}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
             }).join('');
 
             if (pageNum > 0) {
@@ -844,8 +976,8 @@ class Reader {
             const pageContent = pageParagraphs.map(({ para, idx }) => {
                 const paraId = `bb-appendix-${appendixNum}-p${idx + 1}`;
                 const text = this.formatBigBookParagraph(para, paraId, bookAnnotations);
-                const blockClass = para.isBlockQuote ? 'block-quote' : '';
-                return `<div class="bb-paragraph paragraph ${blockClass}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
+                const classes = this.getParagraphClasses(para);
+                return `<div class="${classes}" data-paragraph-id="${paraId}" data-page="${para.pageNumber || ''}"><p>${text}</p></div>`;
             }).join('');
 
             if (pageNum > 0) {
@@ -898,11 +1030,11 @@ class Reader {
             });
         }
 
-        // Personal Stories
+        // Personal Stories - use 1-indexed array position to match TOC links
         if (book.content.personalStories && book.content.personalStories.parts) {
             book.content.personalStories.parts.forEach(part => {
-                part.stories.forEach(story => {
-                    order.push(`story-${part.partNumber}-${story.storyNumber}`);
+                part.stories.forEach((_story, idx) => {
+                    order.push(`story-${part.partNumber}-${idx + 1}`);
                 });
             });
         }
@@ -979,18 +1111,39 @@ class Reader {
      * Show Big Book Table of Contents
      */
     async showBigBookTableOfContents(book) {
+        // Build a map of edition names to foreword years from the book data
+        const forewordYearMap = {};
+        if (book.content?.frontMatter?.forewords) {
+            book.content.frontMatter.forewords.forEach(fw => {
+                forewordYearMap[fw.edition] = fw.year;
+            });
+        }
+
         const tocHtml = book.tableOfContents.map(section => {
             let itemsHtml = '';
 
             if (section.items) {
                 itemsHtml = section.items.map(item => {
                     if (typeof item === 'string') {
-                        // Simple string item (front matter)
-                        const itemId = item.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-');
+                        // Front matter items need special handling to match displayBigBookContent IDs
+                        let itemId;
+                        if (item === 'Preface') {
+                            itemId = 'preface';
+                        } else if (item === "The Doctor's Opinion") {
+                            itemId = 'doctors-opinion';
+                        } else if (forewordYearMap[item]) {
+                            // Forewords use the year format (e.g., "First Edition" → "foreword-1939")
+                            itemId = `foreword-${forewordYearMap[item]}`;
+                        } else {
+                            // Fallback to slugified version
+                            itemId = item.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/-+/g, '-');
+                        }
                         return `<li><a href="#/book/big-book/chapter/${itemId}" class="toc-link">${item}</a></li>`;
                     } else {
-                        // Object with num and title
-                        return `<li><a href="#/book/big-book/chapter/chapter-${item.num}" class="toc-link">${item.num}. ${item.title}</a></li>`;
+                        // Object with num and title - check if it's an appendix (Roman numerals) or chapter
+                        const isAppendix = section.section === 'Appendices' || /^[IVXLCDM]+$/i.test(item.num);
+                        const prefix = isAppendix ? 'appendix' : 'chapter';
+                        return `<li><a href="#/book/big-book/chapter/${prefix}-${item.num}" class="toc-link">${item.num}. ${item.title}</a></li>`;
                     }
                 }).join('');
             }
@@ -1078,6 +1231,9 @@ class Reader {
                     });
                 }
 
+                // Normalize quotes
+                runText = this.normalizeQuotes(runText);
+
                 // Apply formatting
                 if (run.formatting) {
                     if (run.formatting.italic) {
@@ -1090,6 +1246,9 @@ class Reader {
 
                 return runText;
             }).join('');
+        } else {
+            // Normalize quotes in plain text
+            text = this.normalizeQuotes(text);
         }
 
         // Apply annotations
@@ -2655,12 +2814,12 @@ class Reader {
         const paragraphId = `dr-${reflection.dateKey}`;
 
         const quoteText = Array.isArray(reflection.quote)
-            ? reflection.quote.join('</p><p>')
-            : reflection.quote;
+            ? reflection.quote.map(q => this.normalizeQuotes(q)).join('</p><p>')
+            : this.normalizeQuotes(reflection.quote);
 
         const reflectionText = Array.isArray(reflection.reflection)
-            ? reflection.reflection.join('</p><p>')
-            : reflection.reflection;
+            ? reflection.reflection.map(r => this.normalizeQuotes(r)).join('</p><p>')
+            : this.normalizeQuotes(reflection.reflection);
 
         // Apply annotations to the text
         let annotatedQuote = annotations.applyToContent(quoteText, bookAnnotations, `${paragraphId}-quote`);
@@ -2859,6 +3018,9 @@ class Reader {
             const paragraphsHtml = section.paragraphs.map((para, pIdx) => {
                 const paraParagraphId = `${sectionParagraphId}-p${pIdx}`;
                 let text = para.text;
+
+                // Normalize quotes
+                text = this.normalizeQuotes(text);
 
                 // Apply annotations
                 text = annotations.applyToContent(text, bookAnnotations, paraParagraphId);
@@ -3280,6 +3442,8 @@ class Reader {
 
         return paragraph.elements.map(element => {
             let text = element.content || '';
+            // Normalize quotes
+            text = this.normalizeQuotes(text);
 
             switch (element.type) {
                 case 'italic':
@@ -3293,6 +3457,1007 @@ class Reader {
                     return text;
             }
         }).join('');
+    }
+
+    /**
+     * Display Big Book Study Guide - show first section by default
+     */
+    async displayStudyGuide(book) {
+        // Show first section by default
+        if (book.content.sections && book.content.sections.length > 0) {
+            await this.displayStudyGuideSection(book, book.content.sections[0].id);
+        }
+
+        // Hide page navigation
+        if (this.pageNavEl) this.pageNavEl.classList.add('hidden');
+    }
+
+    /**
+     * Display a Study Guide section
+     */
+    async displayStudyGuideSection(book, sectionId) {
+        console.log('[StudyGuide] Loading section:', sectionId);
+        const section = book.content.sections.find(s => s.id === sectionId);
+        if (!section) {
+            toast.error('Section not found');
+            console.error('[StudyGuide] Section not found:', sectionId);
+            return;
+        }
+
+        console.log('[StudyGuide] Section found:', section.title, '- Pages:', section.pages?.length);
+
+        const bookAnnotations = await annotations.loadForBook(book.metadata.id);
+        this.currentChapter = section;
+
+        // Find section info from table of contents
+        const tocEntry = book.tableOfContents.find(t => t.id === sectionId);
+
+        // Build content HTML from pages
+        let contentHtml = '';
+        let introHtml = '';
+        const seenPages = new Set(); // Track pages to prevent duplicates
+
+        // Render section-level introduction if present
+        if (section.introduction) {
+            const introText = this.formatStudyGuideText(section.introduction);
+            if (introText) {
+                introHtml += `<div class="sg-section-intro">${introText}</div>`;
+            }
+        }
+
+        if (section.pages && section.pages.length > 0) {
+            for (const page of section.pages) {
+                const pageLabel = page.bigBookPage || '';
+                const pageVariant = page.pageVariant || '';
+                const pageKey = `${pageLabel}|${pageVariant}`; // Include variant to prevent false duplicates
+
+                // Skip if we've already processed this exact page+variant (prevent duplicates)
+                if (seenPages.has(pageKey)) continue;
+                seenPages.add(pageKey);
+
+                // Separate intro entries from Q&A entries
+                const introEntries = [];
+                const qaEntries = [];
+
+                for (const entry of page.entries) {
+                    // Only treat as intro if it's the intro page or purely text without questions
+                    // Notes and comments with Q&A should go to qaEntries
+                    if (pageLabel === 'intro' && entry.entryType === 'text') {
+                        introEntries.push(entry);
+                    } else {
+                        qaEntries.push(entry);
+                    }
+                }
+
+                // Render intro entries in a compact format
+                if (introEntries.length > 0) {
+                    const introContent = introEntries.map(entry =>
+                        this.renderStudyGuideIntroEntry(entry, sectionId)
+                    ).join('');
+                    introHtml += introContent;
+                }
+
+                // Render Q&A entries normally
+                if (qaEntries.length > 0) {
+                    const pageContent = qaEntries.map(entry =>
+                        this.renderStudyGuideEntry(entry, sectionId, bookAnnotations)
+                    ).join('');
+
+                    if (pageLabel && pageLabel !== 'intro') {
+                        const pageMarkerText = pageVariant
+                            ? `Big Book p. ${pageLabel} – ${pageVariant}`
+                            : `Big Book p. ${pageLabel}`;
+                        contentHtml += `
+                            <div class="sg-page" data-bb-page="${pageLabel}" data-variant="${pageVariant}">
+                                <div class="sg-page-marker">${pageMarkerText}</div>
+                                ${pageContent}
+                            </div>
+                        `;
+                    } else {
+                        contentHtml += pageContent;
+                    }
+                }
+            }
+        }
+
+        // Combine intro and Q&A content
+        let fullContentHtml = '';
+        if (introHtml) {
+            fullContentHtml = `
+                <div class="sg-intro-section">
+                    <div class="sg-intro-header">Introduction</div>
+                    <div class="sg-intro-content">${introHtml}</div>
+                </div>
+            `;
+        }
+        fullContentHtml += contentHtml;
+
+        console.log('[StudyGuide] Content built - intro length:', introHtml.length, 'content length:', contentHtml.length);
+
+        // Get navigation info
+        const sections = book.content.sections;
+        const currentIndex = sections.findIndex(s => s.id === sectionId);
+        const prevSection = currentIndex > 0 ? sections[currentIndex - 1] : null;
+        const nextSection = currentIndex < sections.length - 1 ? sections[currentIndex + 1] : null;
+
+        // Get Big Book pages for side-by-side view
+        const bigBookPages = tocEntry?.bigBookPages || '';
+
+        // Get the corresponding Big Book chapter ID
+        const bigBookChapterId = this.getBigBookChapterForStudyGuideSection(sectionId);
+
+        this.contentEl.innerHTML = `
+            <div class="sg-view">
+                <div class="sg-header">
+                    <h2 class="sg-title">${section.title}</h2>
+                    <div class="sg-meta">
+                        ${bigBookPages ? `<span class="sg-bb-pages">Big Book pp. ${bigBookPages}</span>` : ''}
+                        ${tocEntry?.questionCount ? `<span class="sg-stat">${tocEntry.questionCount} Questions</span>` : ''}
+                        ${tocEntry?.commentCount ? `<span class="sg-stat">${tocEntry.commentCount} Comments</span>` : ''}
+                    </div>
+                    <div class="sg-actions">
+                        ${bigBookChapterId ? `
+                            <a href="#/book/big-book/chapter/${bigBookChapterId}" class="btn btn-primary sg-open-bb-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                </svg>
+                                Open in Big Book
+                            </a>
+                        ` : ''}
+                        <div class="sg-view-toggle">
+                            <button class="btn btn-secondary sg-toggle-btn active" data-view="study">Study View</button>
+                            <button class="btn btn-secondary sg-toggle-btn" data-view="sidebyside">Side by Side</button>
+                            <button class="btn btn-secondary sg-toggle-btn" data-view="crossrefs">Cross Refs</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sg-legend">
+                    <div class="sg-legend-item">
+                        <span class="sg-legend-color sg-blue"></span>
+                        <span>Big Book Quote</span>
+                    </div>
+                    <div class="sg-legend-item">
+                        <span class="sg-legend-color sg-teal"></span>
+                        <span>Study Comment</span>
+                    </div>
+                    <div class="sg-legend-item">
+                        <span class="sg-legend-color sg-red"></span>
+                        <span>Note/Attribution</span>
+                    </div>
+                    <div class="sg-legend-item">
+                        <span class="sg-legend-marker">(P)</span>
+                        <span>New Paragraph</span>
+                    </div>
+                </div>
+
+                <div class="sg-content-wrapper">
+                    <div class="sg-content">
+                        ${fullContentHtml}
+                    </div>
+                    <div class="sg-bigbook-panel hidden" id="sg-bigbook-panel">
+                        <div class="sg-bigbook-header">
+                            <h3>Big Book Text</h3>
+                            <button class="btn-icon sg-bigbook-close" title="Close side panel">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="sg-bigbook-content" id="sg-bigbook-content">
+                            <!-- Loaded dynamically -->
+                        </div>
+                    </div>
+                    <aside class="crossref-sidebar sg-crossref-sidebar hidden" id="sg-crossref-panel">
+                        <div class="crossref-sidebar-header">
+                            <h3>Study References</h3>
+                            <button class="btn-icon sg-crossref-close" title="Close references">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="6" x2="6" y2="18"></line>
+                                    <line x1="6" y1="6" x2="18" y2="18"></line>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="sg-crossref-content" id="sg-crossref-content">
+                            <!-- Loaded dynamically -->
+                        </div>
+                    </aside>
+                </div>
+
+                <div class="sg-nav">
+                    <button class="btn btn-secondary" id="sg-prev" ${!prevSection ? 'disabled' : ''}>
+                        ${prevSection ? `← ${prevSection.title.substring(0, 20)}...` : 'Previous'}
+                    </button>
+                    <button class="btn btn-secondary" id="sg-toc-btn">Table of Contents</button>
+                    <button class="btn btn-secondary" id="sg-next" ${!nextSection ? 'disabled' : ''}>
+                        ${nextSection ? `${nextSection.title.substring(0, 20)}... →` : 'Next'}
+                    </button>
+                </div>
+            </div>
+        `;
+
+        // Setup navigation
+        this.setupStudyGuideNavigation(book, section);
+
+        // Setup view toggle
+        this.setupStudyGuideViewToggle(book, tocEntry, sectionId);
+    }
+
+    /**
+     * Render a single study guide entry
+     */
+    renderStudyGuideEntry(entry, sectionId, bookAnnotations) {
+        const paraId = `sg-${sectionId}-${entry.id}`;
+
+        if (entry.entryType === 'question') {
+            const questionNum = entry.questionNumber || '';
+            const isParagraphStart = entry.isParagraphStart;
+            const questionText = this.formatStudyGuideText(entry.question);
+            const answerText = this.formatStudyGuideText(entry.answer);
+            const hasComment = entry.comment && entry.comment.plainText;
+
+            return `
+                <div class="sg-entry sg-question paragraph" data-paragraph-id="${paraId}">
+                    <div class="sg-question-header">
+                        ${isParagraphStart ? '<span class="sg-para-marker">(P)</span>' : ''}
+                        <span class="sg-question-num">${questionNum}</span>
+                        <span class="sg-question-text">${questionText}</span>
+                    </div>
+                    <div class="sg-answer">${answerText}</div>
+                    ${hasComment ? `<div class="sg-comment">${this.formatStudyGuideText(entry.comment)}</div>` : ''}
+                </div>
+            `;
+        } else if (entry.entryType === 'comment') {
+            const commentText = this.formatStudyGuideText(entry.comment);
+            return `
+                <div class="sg-entry sg-standalone-comment paragraph" data-paragraph-id="${paraId}">
+                    <div class="sg-comment">${commentText}</div>
+                </div>
+            `;
+        } else if (entry.entryType === 'note') {
+            const noteText = entry.note ? this.formatStudyGuideText(entry.note) : (entry.text ? this.formatStudyGuideText(entry.text) : '');
+            return `
+                <div class="sg-entry sg-note paragraph" data-paragraph-id="${paraId}">
+                    <div class="sg-note-content">${noteText}</div>
+                </div>
+            `;
+        } else if (entry.entryType === 'text' || !entry.entryType) {
+            const text = entry.text ? this.formatStudyGuideText(entry.text) : '';
+            return `
+                <div class="sg-entry sg-text paragraph" data-paragraph-id="${paraId}">
+                    <div class="sg-text-content">${text}</div>
+                </div>
+            `;
+        }
+
+        return '';
+    }
+
+    /**
+     * Render intro/text entry in compact format for Study Guide
+     */
+    renderStudyGuideIntroEntry(entry, sectionId) {
+        const paraId = `sg-${sectionId}-${entry.id}`;
+        let text = '';
+
+        if (entry.text) {
+            text = this.formatStudyGuideText(entry.text);
+        } else if (entry.comment) {
+            text = this.formatStudyGuideText(entry.comment);
+        } else if (entry.note) {
+            text = this.formatStudyGuideText(entry.note);
+        }
+
+        // Filter out header/footer artifacts like "Big Book Study Guide12"
+        if (text && text.match(/^Big Book Study Guide\d*$/)) {
+            return '';
+        }
+
+        if (!text || text.trim().length === 0) {
+            return '';
+        }
+
+        return `<p class="sg-intro-para" data-paragraph-id="${paraId}">${text}</p>`;
+    }
+
+    /**
+     * Format study guide text with colors and formatting
+     */
+    formatStudyGuideText(textObj) {
+        if (!textObj) return '';
+
+        // If it has segments, use them for color formatting
+        if (textObj.segments && textObj.segments.length > 0) {
+            return textObj.segments.map(seg => {
+                let text = seg.text || '';
+                text = this.normalizeQuotes(text);
+
+                // Filter out page artifacts
+                if (text.match(/^Big Book Study Guide\d*$/)) {
+                    return '';
+                }
+
+                // Apply formatting
+                if (seg.italic) text = `<em>${text}</em>`;
+                if (seg.bold) text = `<strong>${text}</strong>`;
+                if (seg.underline) text = `<u>${text}</u>`;
+
+                // Apply color class
+                const color = seg.color || 'black';
+                if (color === 'blue') {
+                    return `<span class="sg-text-blue">${text}</span>`;
+                } else if (color === 'teal') {
+                    return `<span class="sg-text-teal">${text}</span>`;
+                } else if (color === 'red') {
+                    return `<span class="sg-text-red">${text}</span>`;
+                }
+
+                return text;
+            }).join('');
+        }
+
+        // Fall back to plain text
+        return this.normalizeQuotes(textObj.plainText || '');
+    }
+
+    /**
+     * Setup study guide navigation
+     */
+    setupStudyGuideNavigation(book, currentSection) {
+        const sections = book.content.sections;
+        const currentIndex = sections.findIndex(s => s.id === currentSection.id);
+
+        const prevBtn = this.contentEl.querySelector('#sg-prev');
+        const nextBtn = this.contentEl.querySelector('#sg-next');
+        const tocBtn = this.contentEl.querySelector('#sg-toc-btn');
+
+        prevBtn?.addEventListener('click', () => {
+            if (currentIndex > 0) {
+                const prevSection = sections[currentIndex - 1];
+                window.location.hash = `/book/study-guide/chapter/${prevSection.id}`;
+            }
+        });
+
+        nextBtn?.addEventListener('click', () => {
+            if (currentIndex < sections.length - 1) {
+                const nextSection = sections[currentIndex + 1];
+                window.location.hash = `/book/study-guide/chapter/${nextSection.id}`;
+            }
+        });
+
+        tocBtn?.addEventListener('click', () => {
+            this.showStudyGuideTOC(book);
+        });
+    }
+
+    /**
+     * Setup study guide view toggle (study view vs side-by-side vs cross-refs)
+     */
+    setupStudyGuideViewToggle(book, tocEntry, sectionId) {
+        const toggleBtns = this.contentEl.querySelectorAll('.sg-toggle-btn');
+        const sgContent = this.contentEl.querySelector('.sg-content-wrapper');
+        const bigBookPanel = this.contentEl.querySelector('#sg-bigbook-panel');
+        const crossRefPanel = this.contentEl.querySelector('#sg-crossref-panel');
+        const closeBtn = this.contentEl.querySelector('.sg-bigbook-close');
+        const crossRefCloseBtn = this.contentEl.querySelector('.sg-crossref-close');
+
+        const resetPanels = () => {
+            sgContent.classList.remove('side-by-side', 'with-crossrefs');
+            bigBookPanel?.classList.add('hidden');
+            crossRefPanel?.classList.add('hidden');
+        };
+
+        toggleBtns.forEach(btn => {
+            btn.addEventListener('click', async () => {
+                toggleBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const view = btn.dataset.view;
+                resetPanels();
+
+                if (view === 'sidebyside') {
+                    sgContent.classList.add('side-by-side');
+                    bigBookPanel?.classList.remove('hidden');
+
+                    // Load Big Book content for this section
+                    if (tocEntry?.bigBookPages) {
+                        await this.loadBigBookForStudyGuide(tocEntry.bigBookPages, sectionId);
+                    }
+                } else if (view === 'crossrefs') {
+                    sgContent.classList.add('with-crossrefs');
+                    crossRefPanel?.classList.remove('hidden');
+
+                    // Load cross-references for this section
+                    if (tocEntry?.bigBookPages) {
+                        await this.loadCrossRefsForStudyGuide(tocEntry.bigBookPages);
+                    }
+                }
+            });
+        });
+
+        closeBtn?.addEventListener('click', () => {
+            resetPanels();
+            toggleBtns.forEach(b => {
+                b.classList.toggle('active', b.dataset.view === 'study');
+            });
+        });
+
+        crossRefCloseBtn?.addEventListener('click', () => {
+            resetPanels();
+            toggleBtns.forEach(b => {
+                b.classList.toggle('active', b.dataset.view === 'study');
+            });
+        });
+    }
+
+    /**
+     * Load cross-references for study guide section
+     */
+    async loadCrossRefsForStudyGuide(pageRange) {
+        const contentEl = document.getElementById('sg-crossref-content');
+        if (!contentEl) return;
+
+        contentEl.innerHTML = '<div class="crossref-loading">Loading references...</div>';
+
+        // Parse page range
+        const pageMatch = pageRange.match(/(\d+)(?:\s*[-–]\s*(\d+))?/);
+        if (!pageMatch) {
+            contentEl.innerHTML = '<div class="crossref-empty"><p>No page range available.</p></div>';
+            return;
+        }
+
+        const startPage = parseInt(pageMatch[1]);
+        const endPage = pageMatch[2] ? parseInt(pageMatch[2]) : startPage;
+
+        // Get cross-references for this page range
+        const crossRefs = pageCrossRef.getRefsForPageRange('big-book', startPage, endPage);
+        const crossRefHtml = this.generateCrossRefSidebarHtml(crossRefs, 'big-book', startPage);
+
+        contentEl.innerHTML = crossRefHtml;
+
+        // Setup cross-reference expand buttons
+        this.setupStudyGuideCrossRefInteractions();
+    }
+
+    /**
+     * Setup cross-reference interactions for study guide
+     */
+    setupStudyGuideCrossRefInteractions() {
+        const panel = this.contentEl.querySelector('#sg-crossref-panel');
+        if (!panel) return;
+
+        // Handle cross-reference link clicks
+        panel.querySelectorAll('.crossref-link').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const dateKey = link.dataset.date;
+                const entryNum = link.dataset.entry;
+
+                if (dateKey) {
+                    window.location.hash = `/book/daily-reflections`;
+                    setTimeout(() => {
+                        window.app?.reader?.navigateToDailyReflection(dateKey);
+                    }, 100);
+                } else if (entryNum) {
+                    window.location.hash = `/book/as-bill-sees-it`;
+                    setTimeout(() => {
+                        window.app?.reader?.navigateToAbsitEntry(parseInt(entryNum));
+                    }, 100);
+                }
+            });
+        });
+
+        // Handle expand buttons
+        panel.querySelectorAll('.crossref-expand-btn').forEach(btn => {
+            btn.addEventListener('click', async () => {
+                const type = btn.dataset.type;
+                const dateKey = btn.dataset.date;
+                const entryNum = btn.dataset.entry;
+                const listItem = btn.closest('.crossref-item');
+                const expandedContent = listItem?.querySelector('.crossref-expanded-content');
+
+                if (!expandedContent) return;
+
+                const isExpanded = expandedContent.style.display !== 'none';
+
+                if (isExpanded) {
+                    expandedContent.style.display = 'none';
+                    btn.classList.remove('expanded');
+                } else {
+                    expandedContent.style.display = 'block';
+                    btn.classList.add('expanded');
+                    if (!expandedContent.innerHTML || expandedContent.innerHTML.includes('Loading')) {
+                        this.loadExpandedCrossRefContent(type, dateKey, entryNum, expandedContent);
+                    }
+                }
+            });
+        });
+    }
+
+    /**
+     * Load Big Book content for side-by-side view
+     */
+    async loadBigBookForStudyGuide(pageRange, sectionId) {
+        const contentEl = document.getElementById('sg-bigbook-content');
+        if (!contentEl) return;
+
+        contentEl.innerHTML = '<div class="sg-loading">Loading Big Book text...</div>';
+
+        const bigBook = window.app?.books?.get('big-book');
+        if (!bigBook) {
+            contentEl.innerHTML = '<div class="sg-error">Big Book not loaded</div>';
+            return;
+        }
+
+        // Get content based on section type
+        const content = this.getBigBookContentForSection(bigBook, pageRange, sectionId);
+
+        if (content && content.length > 0) {
+            // Sort paragraphs by page order to ensure continuous flow
+            const romanToNum = { 'i': 1, 'ii': 2, 'iii': 3, 'iv': 4, 'v': 5, 'vi': 6, 'vii': 7, 'viii': 8, 'ix': 9, 'x': 10,
+                'xi': 11, 'xii': 12, 'xiii': 13, 'xiv': 14, 'xv': 15, 'xvi': 16, 'xvii': 17, 'xviii': 18, 'xix': 19, 'xx': 20,
+                'xxi': 21, 'xxii': 22, 'xxiii': 23, 'xxiv': 24, 'xxv': 25, 'xxvi': 26, 'xxvii': 27, 'xxviii': 28, 'xxix': 29, 'xxx': 30 };
+
+            const getPageOrder = (p) => {
+                if (!p) return 9999;
+                const cleanPage = String(p).toLowerCase().split('-')[0].trim();
+                if (romanToNum[cleanPage]) return romanToNum[cleanPage];
+                const num = parseInt(p, 10);
+                return isNaN(num) ? 1000 : num + 100;
+            };
+
+            // Sort content by page number while preserving paragraph order within pages
+            const sortedContent = [...content].sort((a, b) => {
+                const pageA = a.pageNumber || a.page;
+                const pageB = b.pageNumber || b.page;
+                return getPageOrder(pageA) - getPageOrder(pageB);
+            });
+
+            // Build continuous HTML with inline page markers
+            let html = '<div class="sg-bb-continuous">';
+            let currentPage = null;
+
+            for (const para of sortedContent) {
+                const page = para.pageNumber || para.page || '';
+
+                // Add page marker when page changes
+                if (page && page !== currentPage) {
+                    if (currentPage !== null) {
+                        // Add a subtle page break marker between pages
+                        html += `<div class="sg-bb-page-break"><span class="sg-bb-page-marker">— Page ${page} —</span></div>`;
+                    } else {
+                        // First page - add header
+                        html += `<div class="sg-bb-page-start"><span class="sg-bb-page-marker">Page ${page}</span></div>`;
+                    }
+                    currentPage = page;
+                }
+
+                // Add paragraph
+                html += `<p class="sg-bb-para" data-page="${page}">${para.text}</p>`;
+            }
+
+            html += '</div>';
+            contentEl.innerHTML = html;
+        } else {
+            // Provide a link to open the Big Book section
+            const bbChapterId = this.getBigBookChapterForStudyGuideSection(sectionId);
+            contentEl.innerHTML = `
+                <div class="sg-bb-placeholder">
+                    <p><strong>Big Book pages ${pageRange}</strong></p>
+                    <p class="sg-hint">Open the Big Book to read the full text for this section.</p>
+                    ${bbChapterId ? `<a href="#/book/big-book/chapter/${bbChapterId}" class="btn btn-primary" style="margin-top: 12px;">Open in Big Book</a>` : ''}
+                </div>
+            `;
+        }
+    }
+
+    /**
+     * Get Big Book content for a specific Study Guide section
+     */
+    getBigBookContentForSection(book, pageRange, sectionId) {
+        const content = [];
+
+        // Helper to extract paragraph text with formatting
+        const extractParagraph = (para, pageNum) => {
+            let text = '';
+            if (para.content && Array.isArray(para.content)) {
+                text = para.content.map(seg => {
+                    let t = seg.text || '';
+                    if (seg.italic) t = `<em>${t}</em>`;
+                    if (seg.bold) t = `<strong>${t}</strong>`;
+                    return t;
+                }).join('');
+            } else {
+                text = para.plainText || '';
+            }
+            if (text.trim()) {
+                // Support both pageNumber and page fields
+                const paragraphPage = para.pageNumber || para.page || pageNum;
+                content.push({
+                    text: this.normalizeQuotes(text),
+                    pageNumber: paragraphPage
+                });
+            }
+        };
+
+        // Determine section type from sectionId
+        if (sectionId?.includes('doctors-opinion')) {
+            // Doctor's Opinion
+            if (book.content.frontMatter?.doctorsOpinion?.paragraphs) {
+                book.content.frontMatter.doctorsOpinion.paragraphs.forEach(para => {
+                    extractParagraph(para, para.pageNumber);
+                });
+            }
+        } else if (sectionId === 'bb-preface') {
+            // Preface to Fourth Edition ONLY (not forewords)
+            if (book.content.frontMatter?.preface?.paragraphs) {
+                book.content.frontMatter.preface.paragraphs.forEach(para => {
+                    extractParagraph(para, para.pageNumber);
+                });
+            }
+        } else if (sectionId?.includes('foreword-first')) {
+            // Foreword to First Edition
+            const fw = book.content.frontMatter?.forewords?.find(f =>
+                f.title?.toLowerCase().includes('first') || f.edition?.toLowerCase().includes('first')
+            );
+            if (fw?.paragraphs) {
+                fw.paragraphs.forEach(para => extractParagraph(para, para.pageNumber));
+            }
+        } else if (sectionId?.includes('foreword-second')) {
+            // Foreword to Second Edition
+            const fw = book.content.frontMatter?.forewords?.find(f =>
+                f.title?.toLowerCase().includes('second') || f.edition?.toLowerCase().includes('second')
+            );
+            if (fw?.paragraphs) {
+                fw.paragraphs.forEach(para => extractParagraph(para, para.pageNumber));
+            }
+        } else if (sectionId?.includes('foreword-third')) {
+            // Foreword to Third Edition
+            const fw = book.content.frontMatter?.forewords?.find(f =>
+                f.title?.toLowerCase().includes('third') || f.edition?.toLowerCase().includes('third')
+            );
+            if (fw?.paragraphs) {
+                fw.paragraphs.forEach(para => extractParagraph(para, para.pageNumber));
+            }
+        } else if (sectionId?.includes('foreword-fourth')) {
+            // Foreword to Fourth Edition
+            const fw = book.content.frontMatter?.forewords?.find(f =>
+                f.title?.toLowerCase().includes('fourth') || f.edition?.toLowerCase().includes('fourth')
+            );
+            if (fw?.paragraphs) {
+                fw.paragraphs.forEach(para => extractParagraph(para, para.pageNumber));
+            }
+        } else if (sectionId?.startsWith('ch')) {
+            // Chapter - extract chapter number
+            const match = sectionId.match(/ch(\d+)/);
+            if (match) {
+                const chapterNum = parseInt(match[1], 10);
+                const chapter = book.content.mainText?.chapters?.find(ch => ch.chapterNumber === chapterNum);
+                if (chapter?.paragraphs) {
+                    chapter.paragraphs.forEach(para => {
+                        extractParagraph(para, para.pageNumber);
+                    });
+                }
+            }
+        } else if (sectionId === 'dr-bobs-nightmare') {
+            // Doctor Bob's Nightmare - Personal Story from Part 1
+            const stories = book.content.personalStories;
+            if (stories?.parts?.[0]?.stories?.[0]?.paragraphs) {
+                const story = stories.parts[0].stories[0];
+                story.paragraphs.forEach(para => {
+                    extractParagraph(para, para.pageNumber);
+                });
+            }
+        } else if (sectionId === 'twelve-traditions') {
+            // Twelve Traditions - Appendix I
+            const appendix = book.content.appendices?.find(app =>
+                app.appendixNumber === 'I' || app.title?.toLowerCase().includes('tradition')
+            );
+            if (appendix?.paragraphs) {
+                appendix.paragraphs.forEach(para => {
+                    extractParagraph(para, para.pageNumber);
+                });
+            }
+        } else {
+            // Try to find by page range - check personal stories and appendices too
+            const pages = this.parsePageRange(pageRange);
+            if (pages.length > 0) {
+                const startPage = parseInt(pages[0], 10);
+                const endPage = parseInt(pages[pages.length - 1], 10);
+
+                // Check main chapters
+                if (book.content.mainText?.chapters) {
+                    for (const chapter of book.content.mainText.chapters) {
+                        if (chapter.paragraphs) {
+                            chapter.paragraphs.forEach(para => {
+                                const pn = para.pageNumber;
+                                if (pn && pn >= startPage && pn <= endPage) {
+                                    extractParagraph(para, pn);
+                                }
+                            });
+                        }
+                    }
+                }
+
+                // Check personal stories
+                if (content.length === 0 && book.content.personalStories?.parts) {
+                    for (const part of book.content.personalStories.parts) {
+                        for (const story of part.stories || []) {
+                            if (story.paragraphs) {
+                                story.paragraphs.forEach(para => {
+                                    const pn = para.pageNumber;
+                                    if (pn && pn >= startPage && pn <= endPage) {
+                                        extractParagraph(para, pn);
+                                    }
+                                });
+                            }
+                        }
+                    }
+                }
+
+                // Check appendices
+                if (content.length === 0 && book.content.appendices) {
+                    for (const appendix of book.content.appendices) {
+                        if (appendix.paragraphs) {
+                            appendix.paragraphs.forEach(para => {
+                                const pn = para.pageNumber;
+                                if (pn && pn >= startPage && pn <= endPage) {
+                                    extractParagraph(para, pn);
+                                }
+                            });
+                        }
+                    }
+                }
+            }
+        }
+
+        return content;
+    }
+
+    /**
+     * Parse page range string into array of page numbers/numerals
+     */
+    parsePageRange(pageRange) {
+        if (!pageRange) return [];
+
+        // Handle ranges like "xi-xii", "1-16", "xxiii-xxx"
+        const parts = pageRange.split('-');
+        const pages = [];
+
+        if (parts.length === 2) {
+            const start = parts[0].trim();
+            const end = parts[1].trim();
+
+            // Check if Roman numerals or Arabic numbers
+            if (/^[ivxlcdm]+$/i.test(start)) {
+                // Roman numerals - expand common ranges
+                const romanToNum = { 'i': 1, 'ii': 2, 'iii': 3, 'iv': 4, 'v': 5, 'vi': 6, 'vii': 7, 'viii': 8, 'ix': 9, 'x': 10,
+                    'xi': 11, 'xii': 12, 'xiii': 13, 'xiv': 14, 'xv': 15, 'xvi': 16, 'xvii': 17, 'xviii': 18, 'xix': 19, 'xx': 20,
+                    'xxi': 21, 'xxii': 22, 'xxiii': 23, 'xxiv': 24, 'xxv': 25, 'xxvi': 26, 'xxvii': 27, 'xxviii': 28, 'xxix': 29, 'xxx': 30 };
+                const numToRoman = Object.fromEntries(Object.entries(romanToNum).map(([k, v]) => [v, k]));
+                const startNum = romanToNum[start.toLowerCase()];
+                const endNum = romanToNum[end.toLowerCase()];
+                if (startNum && endNum) {
+                    for (let i = startNum; i <= endNum; i++) {
+                        pages.push(numToRoman[i] || i.toString());
+                    }
+                } else {
+                    pages.push(start, end);
+                }
+            } else {
+                // Arabic numbers
+                const startNum = parseInt(start, 10);
+                const endNum = parseInt(end, 10);
+                for (let i = startNum; i <= endNum; i++) {
+                    pages.push(i.toString());
+                }
+            }
+        } else {
+            pages.push(pageRange.trim());
+        }
+
+        return pages;
+    }
+
+    /**
+     * Get Big Book page content for study guide side-by-side view
+     */
+    getBigBookPageContentForStudyGuide(book, pageNum) {
+        const paragraphs = [];
+        const numericPage = parseInt(pageNum, 10);
+        const isRoman = /^[ivxlcdm]+$/i.test(pageNum);
+
+        // Helper to extract paragraph text
+        const extractText = (para) => {
+            if (para.content && Array.isArray(para.content)) {
+                return para.content.map(seg => {
+                    let text = seg.text || '';
+                    if (seg.italic) text = `<em>${text}</em>`;
+                    if (seg.bold) text = `<strong>${text}</strong>`;
+                    return text;
+                }).join('');
+            }
+            return para.plainText || '';
+        };
+
+        // Search through chapters for numeric pages
+        if (!isRoman && book.content.mainText?.chapters) {
+            for (const ch of book.content.mainText.chapters) {
+                if (ch.paragraphs) {
+                    ch.paragraphs.forEach(para => {
+                        if (para.pageNumber === numericPage) {
+                            const text = extractText(para);
+                            if (text.trim()) {
+                                paragraphs.push(`<p>${this.normalizeQuotes(text)}</p>`);
+                            }
+                        }
+                    });
+                }
+            }
+        }
+
+        // Search front matter for Roman numeral pages
+        if (isRoman && book.content.frontMatter) {
+            const fm = book.content.frontMatter;
+
+            // Check preface
+            if (fm.preface?.paragraphs) {
+                fm.preface.paragraphs.forEach(para => {
+                    const text = extractText(para);
+                    if (text.trim()) {
+                        paragraphs.push(`<p>${this.normalizeQuotes(text)}</p>`);
+                    }
+                });
+            }
+
+            // Check forewords
+            if (fm.forewords) {
+                fm.forewords.forEach(fw => {
+                    if (fw.paragraphs) {
+                        fw.paragraphs.forEach(para => {
+                            const text = extractText(para);
+                            if (text.trim()) {
+                                paragraphs.push(`<p>${this.normalizeQuotes(text)}</p>`);
+                            }
+                        });
+                    }
+                });
+            }
+
+            // Check Doctor's Opinion
+            if (fm.doctorsOpinion?.paragraphs) {
+                fm.doctorsOpinion.paragraphs.forEach(para => {
+                    const text = extractText(para);
+                    if (text.trim()) {
+                        paragraphs.push(`<p>${this.normalizeQuotes(text)}</p>`);
+                    }
+                });
+            }
+        }
+
+        return paragraphs.join('');
+    }
+
+    /**
+     * Get Study Guide section ID for a given Big Book chapter
+     */
+    getStudyGuideSectionForBigBookChapter(chapterNum, contentType = 'chapter') {
+        // Mapping of Big Book chapters to Study Guide section IDs
+        const chapterMapping = {
+            1: 'ch1-bills-story',
+            2: 'ch2-there-is-a-solution',
+            3: 'ch3-more-about-alcoholism',
+            4: 'ch4-we-agnostics',
+            5: 'ch5-how-it-works',
+            6: 'ch6-into-action',
+            7: 'ch7-working-with-others',
+            8: 'ch8-to-wives',
+            9: 'ch9-the-family-afterward',
+            10: 'ch10-to-employers',
+            11: 'ch11-a-vision-for-you'
+        };
+
+        const frontMatterMapping = {
+            'preface': 'bb-preface',
+            'foreword-1939': 'foreword-first',
+            'foreword-1955': 'foreword-second',
+            'foreword-1976': 'foreword-third',
+            'foreword-2001': 'foreword-fourth',
+            'doctors-opinion': 'doctors-opinion'
+        };
+
+        if (contentType === 'chapter' && chapterMapping[chapterNum]) {
+            return chapterMapping[chapterNum];
+        }
+
+        if (frontMatterMapping[contentType]) {
+            return frontMatterMapping[contentType];
+        }
+
+        return null;
+    }
+
+    /**
+     * Get Big Book chapter ID for a given Study Guide section
+     */
+    getBigBookChapterForStudyGuideSection(sectionId) {
+        const mapping = {
+            'bb-preface': 'preface',
+            'foreword-first': 'foreword-1939',
+            'foreword-second': 'foreword-1955',
+            'foreword-third': 'foreword-1976',
+            'foreword-fourth': 'foreword-2001',
+            'doctors-opinion': 'doctors-opinion',
+            'ch1-bills-story': 'chapter-1',
+            'ch2-there-is-a-solution': 'chapter-2',
+            'ch3-more-about-alcoholism': 'chapter-3',
+            'ch4-we-agnostics': 'chapter-4',
+            'ch5-how-it-works': 'chapter-5',
+            'ch6-into-action': 'chapter-6',
+            'ch7-working-with-others': 'chapter-7',
+            'ch8-to-wives': 'chapter-8',
+            'ch9-family-afterward': 'chapter-9',
+            'ch10-to-employers': 'chapter-10',
+            'ch11-vision-for-you': 'chapter-11',
+            'dr-bobs-nightmare': 'story-1-1',
+            'twelve-traditions': 'appendix-I'
+        };
+
+        return mapping[sectionId] || null;
+    }
+
+    /**
+     * Show Study Guide Table of Contents
+     */
+    async showStudyGuideTOC(book) {
+        const tocHtml = book.tableOfContents.map((section, idx) => {
+            const isChapter = section.sectionType === 'chapter';
+            const chapterNum = isChapter ? section.title.match(/Chapter (\d+)/i)?.[1] : null;
+
+            return `
+                <div class="sg-toc-item ${isChapter ? 'sg-toc-chapter' : ''}">
+                    <a href="#/book/study-guide/chapter/${section.id}" class="sg-toc-link">
+                        ${chapterNum ? `<span class="sg-toc-num">${chapterNum}</span>` : ''}
+                        <span class="sg-toc-title">${section.title}</span>
+                        ${section.bigBookPages ? `<span class="sg-toc-pages">pp. ${section.bigBookPages}</span>` : ''}
+                    </a>
+                    <div class="sg-toc-stats">
+                        ${section.questionCount ? `<span>${section.questionCount} Q</span>` : ''}
+                        ${section.commentCount ? `<span>${section.commentCount} C</span>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        this.contentEl.innerHTML = `
+            <div class="sg-toc-view">
+                <div class="sg-toc-header">
+                    <h2>Big Book Study Guide</h2>
+                    <p class="sg-toc-subtitle">${book.metadata.title}</p>
+                </div>
+
+                <div class="sg-stats-bar">
+                    <div class="sg-stat-item">
+                        <span class="sg-stat-num">${book.metadata.statistics?.totalQuestions || 0}</span>
+                        <span class="sg-stat-label">Questions</span>
+                    </div>
+                    <div class="sg-stat-item">
+                        <span class="sg-stat-num">${book.metadata.statistics?.totalComments || 0}</span>
+                        <span class="sg-stat-label">Comments</span>
+                    </div>
+                    <div class="sg-stat-item">
+                        <span class="sg-stat-num">${book.metadata.statistics?.totalSections || 0}</span>
+                        <span class="sg-stat-label">Sections</span>
+                    </div>
+                </div>
+
+                <div class="sg-toc-list">
+                    ${tocHtml}
+                </div>
+            </div>
+        `;
     }
 
     /**
@@ -3322,7 +4487,7 @@ class Reader {
                     // Build complete entry content with all sections
                     const sectionsHtml = entry.sections ? entry.sections.map(section => {
                         const paragraphsHtml = section.paragraphs ? section.paragraphs.map(para =>
-                            `<p class="${para.is_quote ? 'quote-text' : ''}">${this.applyAutoCrossReferences(para.text)}</p>`
+                            `<p class="${para.is_quote ? 'quote-text' : ''}">${this.applyAutoCrossReferences(this.normalizeQuotes(para.text))}</p>`
                         ).join('') : '';
 
                         return `
@@ -3416,6 +4581,25 @@ class Reader {
         for (const pattern of patterns) {
             result = result.replace(pattern.regex, `<span class="${pattern.class}" title="Cross Reference">$1</span>`);
         }
+
+        return result;
+    }
+
+    /**
+     * Normalize quotes in text - converts curly/smart quotes to regular quotes
+     * and wraps quoted content in italic styling
+     */
+    normalizeQuotes(text) {
+        if (!text) return text;
+
+        // Replace curly double quotes with regular quotes
+        let result = text.replace(/[\u201C\u201D]/g, '"');
+        // Replace curly single quotes with regular apostrophes
+        result = result.replace(/[\u2018\u2019]/g, "'");
+        // Replace em-dash with regular dash
+        result = result.replace(/[\u2014]/g, '—');
+        // Replace en-dash with regular dash
+        result = result.replace(/[\u2013]/g, '–');
 
         return result;
     }
@@ -3559,6 +4743,78 @@ class Reader {
     }
 
     /**
+     * Handle click on auto cross-reference
+     */
+    handleAutoRefClick(element, event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const text = element.textContent.trim();
+        const currentBookId = this.currentBook?.metadata?.id;
+
+        // Page references: "p. 58", "page 58", "pages 58-60"
+        if (element.classList.contains('auto-ref-page')) {
+            const pageMatch = text.match(/(\d+)/);
+            if (pageMatch) {
+                const pageNum = parseInt(pageMatch[1], 10);
+                // Navigate to page in current book
+                if (currentBookId) {
+                    this.navigateToSourcePage(currentBookId, pageNum);
+                    toast.info(`Navigating to page ${pageNum}`);
+                }
+            }
+            return;
+        }
+
+        // Step references: "Step 3", "Steps 4 and 5"
+        if (element.classList.contains('auto-ref-step')) {
+            const stepMatch = text.match(/(\d+)/);
+            if (stepMatch) {
+                const stepNum = parseInt(stepMatch[1], 10);
+                window.location.hash = `/book/twelve-and-twelve/chapter/step-${stepNum}`;
+                toast.info(`Opening Step ${stepNum}`);
+            }
+            return;
+        }
+
+        // Tradition references: "Tradition 5", "Traditions 1 and 2"
+        if (element.classList.contains('auto-ref-tradition')) {
+            const tradMatch = text.match(/(\d+)/);
+            if (tradMatch) {
+                const tradNum = parseInt(tradMatch[1], 10);
+                window.location.hash = `/book/twelve-and-twelve/chapter/tradition-${tradNum}`;
+                toast.info(`Opening Tradition ${tradNum}`);
+            }
+            return;
+        }
+
+        // Book references
+        if (element.classList.contains('auto-ref-book')) {
+            const lowerText = text.toLowerCase();
+            if (lowerText.includes('big book') || lowerText.includes('alcoholics anonymous')) {
+                window.location.hash = '/book/big-book';
+                toast.info('Opening Big Book');
+            } else if (lowerText.includes('twelve and twelve') || lowerText.includes('12') || lowerText.includes('twelve steps')) {
+                window.location.hash = '/book/twelve-and-twelve';
+                toast.info('Opening Twelve Steps and Twelve Traditions');
+            } else if (lowerText.includes('as bill sees it')) {
+                window.location.hash = '/book/as-bill-sees-it';
+                toast.info('Opening As Bill Sees It');
+            } else if (lowerText.includes('daily reflections')) {
+                window.location.hash = '/book/daily-reflections';
+                toast.info('Opening Daily Reflections');
+            } else if (lowerText.includes('comes of age')) {
+                window.location.hash = '/book/aa-comes-of-age';
+                toast.info('Opening A.A. Comes of Age');
+            } else if (lowerText.includes('grapevine')) {
+                window.location.hash = '/book/language-of-the-heart';
+                toast.info('Opening Language of the Heart');
+            }
+            return;
+        }
+    }
+
+    /**
      * Refresh content (re-render with updated annotations)
      */
     async refreshContent() {
@@ -3631,37 +4887,43 @@ class Reader {
         this.currentChapter = null;
         if (this.pageNavEl) this.pageNavEl.classList.add('hidden');
 
-        // Get recent reading activity
-        let recentHtml = '';
+        // Show the welcome screen from index.html
+        const welcomeScreen = document.getElementById('welcome-screen');
+        if (welcomeScreen) {
+            // Use the existing welcome screen from HTML
+            this.contentEl.innerHTML = '';
+            this.contentEl.appendChild(welcomeScreen.cloneNode(true));
+            this.contentEl.querySelector('#welcome-screen').style.display = '';
+        }
+
+        // Populate continue reading section
         try {
             const recent = await db.getRecentReading(3);
-            if (recent && recent.length > 0) {
-                recentHtml = `
-                    <div class="continue-reading">
-                        <h3>Continue Reading</h3>
-                        <div class="recent-books">
-                            ${recent.map(r => `
-                                <a href="#/book/${r.bookId}/chapter/${r.chapterId}" class="recent-book-card">
-                                    <div class="recent-book-title">${r.bookTitle || r.bookId}</div>
-                                    <div class="recent-book-chapter">${this.formatChapterId(r.chapterId)}</div>
-                                    <div class="recent-book-time">${this.formatTimeAgo(r.lastRead)}</div>
-                                </a>
-                            `).join('')}
+            const continueSection = this.contentEl.querySelector('#continue-reading-section');
+            const continueList = this.contentEl.querySelector('#continue-reading-list');
+
+            if (recent && recent.length > 0 && continueSection && continueList) {
+                continueSection.style.display = '';
+                continueList.innerHTML = recent.map(r => `
+                    <a href="#/book/${r.bookId}/chapter/${r.chapterId}" class="quick-start-card">
+                        <div class="quick-start-icon" style="background: var(--accent-color);">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                            </svg>
                         </div>
-                    </div>
-                `;
+                        <div class="quick-start-text">
+                            <span class="quick-start-title">${r.bookTitle || r.bookId}</span>
+                            <span class="quick-start-subtitle">${this.formatChapterId(r.chapterId)} • ${this.formatTimeAgo(r.lastRead)}</span>
+                        </div>
+                    </a>
+                `).join('');
+            } else if (continueSection) {
+                continueSection.style.display = 'none';
             }
         } catch (error) {
             console.warn('Failed to get recent reading:', error);
         }
-
-        this.contentEl.innerHTML = `
-            <div class="welcome-screen">
-                <h2>Welcome to AA Literature Study</h2>
-                <p>Select a book from the sidebar to begin reading, or use the search to find specific content.</p>
-                ${recentHtml}
-            </div>
-        `;
     }
 
     /**
@@ -3804,9 +5066,93 @@ class Reader {
     }
 
     /**
-     * Show index view
+     * Show topic index view - alphabetical listing of AA literature topics
      */
     async showIndex() {
+        if (this.pageNavEl) this.pageNavEl.classList.add('hidden');
+
+        // Predefined index topics with references
+        const indexTopics = [
+            { term: 'Acceptance', refs: [{ book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }, { book: 'twelve-and-twelve', chapter: 'step-1', desc: 'Step One' }] },
+            { term: 'Alcoholism as a Disease', refs: [{ book: 'big-book', chapter: 'doctors-opinion', desc: "The Doctor's Opinion" }] },
+            { term: 'Amends', refs: [{ book: 'twelve-and-twelve', chapter: 'step-8', desc: 'Step Eight' }, { book: 'twelve-and-twelve', chapter: 'step-9', desc: 'Step Nine' }] },
+            { term: 'Character Defects', refs: [{ book: 'twelve-and-twelve', chapter: 'step-6', desc: 'Step Six' }, { book: 'twelve-and-twelve', chapter: 'step-7', desc: 'Step Seven' }] },
+            { term: 'Daily Reprieve', refs: [{ book: 'big-book', chapter: 'chapter-6', desc: 'Into Action' }] },
+            { term: 'Faith', refs: [{ book: 'twelve-and-twelve', chapter: 'step-2', desc: 'Step Two' }, { book: 'twelve-and-twelve', chapter: 'step-3', desc: 'Step Three' }] },
+            { term: 'Fear', refs: [{ book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }, { book: 'big-book', chapter: 'chapter-4', desc: 'We Agnostics' }] },
+            { term: 'Fourth Step Inventory', refs: [{ book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }, { book: 'twelve-and-twelve', chapter: 'step-4', desc: 'Step Four' }] },
+            { term: 'God / Higher Power', refs: [{ book: 'big-book', chapter: 'chapter-4', desc: 'We Agnostics' }, { book: 'twelve-and-twelve', chapter: 'step-2', desc: 'Step Two' }] },
+            { term: 'Gratitude', refs: [{ book: 'big-book', chapter: 'chapter-11', desc: 'A Vision For You' }] },
+            { term: 'Honesty', refs: [{ book: 'twelve-and-twelve', chapter: 'step-1', desc: 'Step One' }, { book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }] },
+            { term: 'Humility', refs: [{ book: 'twelve-and-twelve', chapter: 'step-7', desc: 'Step Seven' }] },
+            { term: 'Inventory', refs: [{ book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }, { book: 'twelve-and-twelve', chapter: 'step-4', desc: 'Step Four' }, { book: 'twelve-and-twelve', chapter: 'step-10', desc: 'Step Ten' }] },
+            { term: 'Meditation', refs: [{ book: 'twelve-and-twelve', chapter: 'step-11', desc: 'Step Eleven' }, { book: 'big-book', chapter: 'chapter-6', desc: 'Into Action' }] },
+            { term: 'Moral Inventory', refs: [{ book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }, { book: 'twelve-and-twelve', chapter: 'step-4', desc: 'Step Four' }] },
+            { term: 'Powerlessness', refs: [{ book: 'twelve-and-twelve', chapter: 'step-1', desc: 'Step One' }, { book: 'big-book', chapter: 'chapter-3', desc: 'More About Alcoholism' }] },
+            { term: 'Prayer', refs: [{ book: 'twelve-and-twelve', chapter: 'step-11', desc: 'Step Eleven' }, { book: 'big-book', chapter: 'chapter-6', desc: 'Into Action' }] },
+            { term: 'Promises (The)', refs: [{ book: 'big-book', chapter: 'chapter-6', desc: 'Into Action', page: '83-84' }] },
+            { term: 'Resentment', refs: [{ book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }, { book: 'twelve-and-twelve', chapter: 'step-4', desc: 'Step Four' }] },
+            { term: 'Sanity', refs: [{ book: 'twelve-and-twelve', chapter: 'step-2', desc: 'Step Two' }] },
+            { term: 'Self-Centeredness', refs: [{ book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }] },
+            { term: 'Serenity Prayer', refs: [{ book: 'twelve-and-twelve', chapter: 'step-11', desc: 'Step Eleven' }] },
+            { term: 'Service', refs: [{ book: 'twelve-and-twelve', chapter: 'step-12', desc: 'Step Twelve' }, { book: 'twelve-and-twelve', chapter: 'tradition-5', desc: 'Tradition Five' }] },
+            { term: 'Sponsorship', refs: [{ book: 'big-book', chapter: 'chapter-7', desc: 'Working With Others' }] },
+            { term: 'Spiritual Awakening', refs: [{ book: 'twelve-and-twelve', chapter: 'step-12', desc: 'Step Twelve' }, { book: 'big-book', chapter: 'appendix-II', desc: 'Appendix II: Spiritual Experience' }] },
+            { term: 'Surrender', refs: [{ book: 'twelve-and-twelve', chapter: 'step-1', desc: 'Step One' }, { book: 'twelve-and-twelve', chapter: 'step-3', desc: 'Step Three' }] },
+            { term: 'Third Step Prayer', refs: [{ book: 'big-book', chapter: 'chapter-5', desc: 'How It Works', page: '63' }] },
+            { term: 'Traditions (The 12)', refs: [{ book: 'twelve-and-twelve', chapter: 'tradition-1', desc: 'Tradition One' }] },
+            { term: 'Trust', refs: [{ book: 'twelve-and-twelve', chapter: 'step-3', desc: 'Step Three' }] },
+            { term: 'Willingness', refs: [{ book: 'twelve-and-twelve', chapter: 'step-6', desc: 'Step Six' }, { book: 'big-book', chapter: 'chapter-5', desc: 'How It Works' }] },
+            { term: 'Working With Others', refs: [{ book: 'big-book', chapter: 'chapter-7', desc: 'Working With Others' }, { book: 'twelve-and-twelve', chapter: 'step-12', desc: 'Step Twelve' }] }
+        ];
+
+        // Group by first letter
+        const grouped = {};
+        indexTopics.forEach(topic => {
+            const letter = topic.term[0].toUpperCase();
+            if (!grouped[letter]) grouped[letter] = [];
+            grouped[letter].push(topic);
+        });
+
+        const letters = Object.keys(grouped).sort();
+
+        this.contentEl.innerHTML = `
+            <div class="index-view">
+                <h2>Topic Index</h2>
+                <p class="index-description">Quick reference to key concepts in AA literature. Click any reference to navigate directly to that section.</p>
+
+                <div class="index-alphabet">
+                    ${letters.map(letter => `<a href="#index-${letter}" class="index-letter-link">${letter}</a>`).join('')}
+                </div>
+
+                <div class="index-topics">
+                    ${letters.map(letter => `
+                        <div class="index-letter-group" id="index-${letter}">
+                            <h3 class="index-letter-heading">${letter}</h3>
+                            ${grouped[letter].map(topic => `
+                                <div class="index-topic-item">
+                                    <span class="index-topic-term">${topic.term}</span>
+                                    <div class="index-topic-refs">
+                                        ${topic.refs.map(ref => `
+                                            <a href="#/book/${ref.book}/chapter/${ref.chapter}" class="index-ref-link">
+                                                <span class="index-ref-desc">${ref.desc}</span>
+                                                ${ref.page ? `<span class="index-ref-page">(p. ${ref.page})</span>` : ''}
+                                            </a>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Show my notes view - user annotations (highlights, comments, questions, definitions)
+     */
+    async showNotes() {
         const allAnnotations = await annotations.getAll();
         const byType = {
             highlight: allAnnotations.filter(a => a.type === 'highlight'),
@@ -3816,73 +5162,375 @@ class Reader {
             definition: allAnnotations.filter(a => a.type === 'definition')
         };
 
+        const totalCount = allAnnotations.length;
+
         if (this.pageNavEl) this.pageNavEl.classList.add('hidden');
 
         this.contentEl.innerHTML = `
-            <div class="index-view">
-                <h2>Index</h2>
+            <div class="notes-view">
+                <h2>My Notes</h2>
+                <p class="notes-description">Your personal annotations across all AA literature (${totalCount} total)</p>
 
-                <div class="index-section">
-                    <h3 class="index-section-title">Highlights (${byType.highlight.length})</h3>
-                    ${byType.highlight.length ? byType.highlight.slice(0, 20).map(a => `
-                        <div class="note-card">
-                            <div class="note-header">
-                                <span class="highlight highlight-${a.color}" style="padding: 2px 8px;">${a.color}</span>
-                                <span class="note-location">${a.bookId}</span>
-                            </div>
-                            <div class="note-selected-text">"${a.selectedText}"</div>
-                        </div>
-                    `).join('') : '<p style="color: var(--text-muted);">No highlights yet</p>'}
+                <div class="notes-filter-bar">
+                    <button class="notes-filter-btn active" data-filter="all">All (${totalCount})</button>
+                    <button class="notes-filter-btn" data-filter="highlight">Highlights (${byType.highlight.length})</button>
+                    <button class="notes-filter-btn" data-filter="comment">Comments (${byType.comment.length})</button>
+                    <button class="notes-filter-btn" data-filter="question">Questions (${byType.question.length})</button>
+                    <button class="notes-filter-btn" data-filter="definition">Definitions (${byType.definition.length})</button>
+                    <button class="notes-filter-btn" data-filter="underline">Underlines (${byType.underline.length})</button>
                 </div>
 
-                <div class="index-section">
-                    <h3 class="index-section-title">Comments (${byType.comment.length})</h3>
-                    ${byType.comment.length ? byType.comment.map(a => `
-                        <div class="note-card">
-                            <div class="note-header">
-                                <span class="note-type comment">Comment</span>
-                                <span class="note-location">${a.bookId}</span>
-                            </div>
-                            <div class="note-selected-text">"${a.selectedText}"</div>
-                            <div class="note-content">${a.content}</div>
-                        </div>
-                    `).join('') : '<p style="color: var(--text-muted);">No comments yet</p>'}
-                </div>
-
-                <div class="index-section">
-                    <h3 class="index-section-title">Questions (${byType.question.length})</h3>
-                    ${byType.question.length ? byType.question.map(a => `
-                        <div class="note-card">
-                            <div class="note-header">
-                                <span class="note-type question">Question</span>
-                                <span class="note-location">${a.bookId}</span>
-                            </div>
-                            <div class="note-selected-text">"${a.selectedText}"</div>
-                            <div class="note-content">${a.content}</div>
-                            ${a.answer ? `<div class="note-content" style="margin-top: 8px;"><strong>Answer:</strong> ${a.answer}</div>` : ''}
-                        </div>
-                    `).join('') : '<p style="color: var(--text-muted);">No questions yet</p>'}
-                </div>
-
-                <div class="index-section">
-                    <h3 class="index-section-title">Definitions (${byType.definition.length})</h3>
-                    ${byType.definition.length ? byType.definition.map(a => `
-                        <div class="note-card">
-                            <div class="note-header">
-                                <span class="note-type definition">Definition</span>
-                                <span class="note-location">${a.bookId}</span>
-                            </div>
-                            <div class="note-selected-text">"${a.selectedText}"</div>
-                            <div class="note-content">${a.content}</div>
-                        </div>
-                    `).join('') : '<p style="color: var(--text-muted);">No definitions yet</p>'}
+                <div class="notes-list" id="notes-list">
+                    ${this.renderNotesList(allAnnotations)}
                 </div>
             </div>
         `;
+
+        // Filter button handlers
+        this.contentEl.querySelectorAll('.notes-filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                this.contentEl.querySelectorAll('.notes-filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+                const filtered = filter === 'all'
+                    ? allAnnotations
+                    : allAnnotations.filter(a => a.type === filter);
+
+                document.getElementById('notes-list').innerHTML = this.renderNotesList(filtered);
+            });
+        });
     }
 
     /**
-     * Show search results
+     * Render notes list HTML
+     */
+    renderNotesList(notesList) {
+        if (notesList.length === 0) {
+            return '<p class="empty-state">No annotations yet. Select text while reading to add highlights, comments, or questions.</p>';
+        }
+
+        return notesList.map(a => {
+            let typeClass = a.type;
+            let typeLabel = a.type.charAt(0).toUpperCase() + a.type.slice(1);
+            let colorBadge = '';
+
+            if (a.type === 'highlight') {
+                colorBadge = `<span class="note-color-badge" style="background-color: var(--highlight-${a.color});"></span>`;
+            } else if (a.type === 'underline') {
+                typeLabel = `Underline (${a.underlineStyle})`;
+            }
+
+            return `
+                <div class="note-card" data-annotation-id="${a.id}">
+                    <div class="note-header">
+                        <span class="note-type ${typeClass}">${colorBadge}${typeLabel}</span>
+                        <span class="note-location">
+                            <a href="#/book/${a.bookId}/chapter/${a.paragraphId?.split('-')[0] || ''}">${a.bookId}</a>
+                        </span>
+                    </div>
+                    <div class="note-selected-text">"${this.escapeHtml(a.selectedText)}"</div>
+                    ${a.content ? `<div class="note-content">${this.escapeHtml(a.content)}</div>` : ''}
+                    ${a.answer ? `<div class="note-answer"><strong>Answer:</strong> ${this.escapeHtml(a.answer)}</div>` : ''}
+                    <div class="note-actions">
+                        <button class="btn-sm btn-delete-note" data-id="${a.id}" title="Delete">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    /**
+     * Escape HTML helper
+     */
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    /**
+     * Show comprehensive search view with filters
+     */
+    showSearchView(initialQuery = '', searchModule = null, availableBooks = []) {
+        if (this.pageNavEl) this.pageNavEl.classList.add('hidden');
+
+        // Use provided books list, fallback to search module
+        if (availableBooks.length === 0 && searchModule) {
+            availableBooks = searchModule.getAvailableBooks();
+        }
+
+        this.contentEl.innerHTML = `
+            <div class="search-view">
+                <h2>Search</h2>
+                <p class="search-description">Search across all AA literature with advanced filtering options</p>
+
+                <!-- Search Input -->
+                <div class="search-input-container">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-input-icon">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="advanced-search-input" class="advanced-search-input"
+                           placeholder="Enter search terms..." value="${this.escapeHtml(initialQuery)}">
+                    <button id="advanced-search-btn" class="btn btn-primary">Search</button>
+                </div>
+
+                <!-- Search Filters -->
+                <div class="search-filters-panel">
+                    <div class="search-filter-section">
+                        <h4 class="filter-section-title">Search Mode</h4>
+                        <div class="search-mode-toggle">
+                            <label class="search-mode-option">
+                                <input type="radio" name="searchMode" value="indexed" checked>
+                                <span class="mode-label">
+                                    <span class="mode-name">Keyword Search</span>
+                                    <span class="mode-desc">Find results containing all keywords</span>
+                                </span>
+                            </label>
+                            <label class="search-mode-option">
+                                <input type="radio" name="searchMode" value="exact">
+                                <span class="mode-label">
+                                    <span class="mode-name">Exact Phrase</span>
+                                    <span class="mode-desc">Find results with exact phrase match</span>
+                                </span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="search-filter-section">
+                        <h4 class="filter-section-title">Filter by Book</h4>
+                        <div class="book-filter-grid">
+                            <label class="book-filter-option">
+                                <input type="checkbox" value="all" id="filter-all-books" checked>
+                                <span>All Books</span>
+                            </label>
+                            ${availableBooks.map(book => `
+                                <label class="book-filter-option">
+                                    <input type="checkbox" value="${book.id}" class="book-filter-checkbox" checked>
+                                    <span>${book.title}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    <div class="search-filter-section">
+                        <h4 class="filter-section-title">Options</h4>
+                        <label class="search-option">
+                            <input type="checkbox" id="case-sensitive-option">
+                            <span>Case sensitive</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Search Results -->
+                <div id="search-results-container" class="search-results-container">
+                    <p class="search-hint">Enter a search term and click Search to find results</p>
+                </div>
+            </div>
+        `;
+
+        // Setup event handlers
+        this.setupSearchViewHandlers(searchModule);
+
+        // If there's an initial query, perform the search
+        if (initialQuery) {
+            this.performAdvancedSearch(searchModule);
+        }
+    }
+
+    /**
+     * Setup event handlers for search view
+     */
+    setupSearchViewHandlers(searchModule) {
+        const searchInput = document.getElementById('advanced-search-input');
+        const searchBtn = document.getElementById('advanced-search-btn');
+        const allBooksCheckbox = document.getElementById('filter-all-books');
+        const bookCheckboxes = document.querySelectorAll('.book-filter-checkbox');
+
+        // Search on enter or button click
+        searchBtn?.addEventListener('click', () => this.performAdvancedSearch(searchModule));
+        searchInput?.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                this.performAdvancedSearch(searchModule);
+            }
+        });
+
+        // "All Books" toggle logic
+        allBooksCheckbox?.addEventListener('change', (e) => {
+            bookCheckboxes.forEach(cb => {
+                cb.checked = e.target.checked;
+            });
+        });
+
+        // Individual book checkbox logic
+        bookCheckboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const allChecked = Array.from(bookCheckboxes).every(c => c.checked);
+                const noneChecked = Array.from(bookCheckboxes).every(c => !c.checked);
+
+                if (allChecked) {
+                    allBooksCheckbox.checked = true;
+                    allBooksCheckbox.indeterminate = false;
+                } else if (noneChecked) {
+                    allBooksCheckbox.checked = false;
+                    allBooksCheckbox.indeterminate = false;
+                } else {
+                    allBooksCheckbox.checked = false;
+                    allBooksCheckbox.indeterminate = true;
+                }
+            });
+        });
+    }
+
+    /**
+     * Perform advanced search with current filter settings
+     */
+    performAdvancedSearch(searchModule) {
+        const query = document.getElementById('advanced-search-input')?.value?.trim();
+        if (!query || !searchModule) return;
+
+        // Get search options from UI
+        const exactPhrase = document.querySelector('input[name="searchMode"][value="exact"]')?.checked || false;
+        const caseSensitive = document.getElementById('case-sensitive-option')?.checked || false;
+
+        // Get selected books
+        const allBooksCheckbox = document.getElementById('filter-all-books');
+        let bookIds = null; // null means all books
+
+        if (!allBooksCheckbox?.checked) {
+            const bookCheckboxes = document.querySelectorAll('.book-filter-checkbox:checked');
+            bookIds = Array.from(bookCheckboxes).map(cb => cb.value);
+            if (bookIds.length === 0) {
+                // No books selected - show message
+                document.getElementById('search-results-container').innerHTML = `
+                    <div class="search-hint">Please select at least one book to search</div>
+                `;
+                return;
+            }
+        }
+
+        // Perform search
+        const results = searchModule.search(query, {
+            bookIds,
+            exactPhrase,
+            caseSensitive,
+            limit: 100
+        });
+
+        // Display results
+        this.displaySearchResults(results, query, exactPhrase);
+    }
+
+    /**
+     * Display search results in the results container
+     */
+    displaySearchResults(results, query, isExactPhrase) {
+        const container = document.getElementById('search-results-container');
+        if (!container) return;
+
+        if (results.length === 0) {
+            container.innerHTML = `
+                <div class="no-results">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <h4>No results found</h4>
+                    <p>Try different keywords, check spelling, or adjust your filters</p>
+                </div>
+            `;
+            return;
+        }
+
+        const highlightQuery = (text, query, isExact) => {
+            if (isExact) {
+                const regex = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                return text.replace(regex, '<mark>$1</mark>');
+            } else {
+                const words = query.toLowerCase().split(/\s+/);
+                let result = text;
+                words.forEach(word => {
+                    const regex = new RegExp(`(${word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+                    result = result.replace(regex, '<mark>$1</mark>');
+                });
+                return result;
+            }
+        };
+
+        container.innerHTML = `
+            <div class="search-results-header">
+                <span class="results-count">${results.length} result${results.length !== 1 ? 's' : ''}</span>
+                <span class="results-query">for "${this.escapeHtml(query)}"</span>
+                ${isExactPhrase ? '<span class="results-mode">(exact phrase)</span>' : ''}
+            </div>
+            <div class="results-list">
+                ${results.map(result => `
+                    <div class="search-result" data-book-id="${result.bookId}" data-entry-id="${result.entryId}">
+                        <div class="search-result-header">
+                            <span class="search-result-book">${result.bookTitle}</span>
+                            <span class="search-result-location">
+                                ${result.location.chapter ? `Ch. ${result.location.chapter}` : ''}
+                                ${result.location.page ? `p. ${result.location.page}` : ''}
+                                ${result.location.month ? `${result.location.month} ${result.location.day}` : ''}
+                                ${result.location.entry ? `Entry ${result.location.entry}` : ''}
+                                ${result.location.type === 'step' ? `Step ${result.location.chapter}` : ''}
+                                ${result.location.type === 'tradition' ? `Tradition ${result.location.chapter}` : ''}
+                            </span>
+                        </div>
+                        ${result.title ? `<div class="search-result-title">${result.title}</div>` : ''}
+                        <div class="search-result-snippet">${highlightQuery(result.snippet, query, isExactPhrase)}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        // Setup click handlers
+        container.querySelectorAll('.search-result').forEach(el => {
+            el.addEventListener('click', () => {
+                this.navigateToSearchResult(el.dataset.bookId, el.dataset.entryId);
+            });
+        });
+    }
+
+    /**
+     * Navigate to a search result
+     */
+    navigateToSearchResult(bookId, entryId) {
+        if (!entryId) {
+            window.location.hash = `/book/${bookId}`;
+            return;
+        }
+
+        if (bookId === 'daily-reflections' && entryId.startsWith('dr-')) {
+            const dateKey = entryId.replace('dr-', '');
+            sessionStorage.setItem('navigateToDate', dateKey);
+            window.location.hash = `/book/${bookId}`;
+        } else if (bookId === 'as-bill-sees-it' && entryId.startsWith('absit-')) {
+            const entryNum = entryId.replace('absit-', '');
+            sessionStorage.setItem('navigateToEntry', entryNum);
+            window.location.hash = `/book/${bookId}`;
+        } else if (bookId === 'language-of-the-heart' && entryId.startsWith('article_')) {
+            sessionStorage.setItem('navigateToArticle', entryId);
+            window.location.hash = `/book/${bookId}`;
+        } else if (entryId.startsWith('step-') || entryId.startsWith('tradition-') ||
+                   entryId.startsWith('chapter-') || entryId.startsWith('story-') ||
+                   entryId.startsWith('appendix-') || entryId.startsWith('foreword-') ||
+                   entryId === 'preface' || entryId === 'doctors-opinion') {
+            window.location.hash = `/book/${bookId}/chapter/${entryId}`;
+        } else {
+            window.location.hash = `/book/${bookId}`;
+        }
+    }
+
+    /**
+     * Show search results (legacy method for header search)
      */
     showSearchResults(results, query) {
         if (this.pageNavEl) this.pageNavEl.classList.add('hidden');
@@ -3915,6 +5563,7 @@ class Reader {
             <div class="search-results-view">
                 <h2>Search Results</h2>
                 <p class="search-stats">${results.length} results for "${query}"</p>
+                <p style="margin-bottom: var(--spacing-lg);"><a href="#/search?q=${encodeURIComponent(query)}">Use advanced search for more options</a></p>
 
                 <div class="results-list">
                     ${results.map(result => `
@@ -3939,40 +5588,417 @@ class Reader {
         // Click handlers for results
         this.contentEl.querySelectorAll('.search-result').forEach(el => {
             el.addEventListener('click', () => {
-                const bookId = el.dataset.bookId;
-                const entryId = el.dataset.entryId;
-
-                // Navigate to the specific location based on entry type
-                if (entryId) {
-                    if (bookId === 'daily-reflections' && entryId.startsWith('dr-')) {
-                        // For Daily Reflections, navigate to book and set date
-                        const dateKey = entryId.replace('dr-', '');
-                        sessionStorage.setItem('navigateToDate', dateKey);
-                        window.location.hash = `/book/${bookId}`;
-                    } else if (bookId === 'as-bill-sees-it' && entryId.startsWith('absit-')) {
-                        // For As Bill Sees It, navigate to book and set entry
-                        const entryNum = entryId.replace('absit-', '');
-                        sessionStorage.setItem('navigateToEntry', entryNum);
-                        window.location.hash = `/book/${bookId}`;
-                    } else if (bookId === 'language-of-the-heart' && entryId.startsWith('article_')) {
-                        // For Language of the Heart, navigate to book and set article
-                        sessionStorage.setItem('navigateToArticle', entryId);
-                        window.location.hash = `/book/${bookId}`;
-                    } else if (entryId.startsWith('step-') || entryId.startsWith('tradition-') ||
-                               entryId.startsWith('chapter-') || entryId.startsWith('story-') ||
-                               entryId.startsWith('appendix-') || entryId.startsWith('foreword-') ||
-                               entryId === 'preface' || entryId === 'doctors-opinion') {
-                        // For structured content, navigate to specific chapter
-                        window.location.hash = `/book/${bookId}/chapter/${entryId}`;
-                    } else {
-                        // Default: just go to the book
-                        window.location.hash = `/book/${bookId}`;
-                    }
-                } else {
-                    window.location.hash = `/book/${bookId}`;
-                }
+                this.navigateToSearchResult(el.dataset.bookId, el.dataset.entryId);
             });
         });
+    }
+
+    // ==================== Study Tools Display Methods ====================
+
+    /**
+     * Display Commonly Read Passages
+     */
+    async displayStudyPassages(book) {
+        const passages = book.commonlyReadPassages;
+        if (!passages) return;
+
+        const passageCards = Object.entries(passages).map(([key, passage]) => {
+            const pageInfo = passage.pageStart && passage.pageEnd
+                ? `Pages ${passage.pageStart}-${passage.pageEnd}`
+                : passage.page ? `Page ${passage.page}` : '';
+
+            return `
+                <div class="study-card passage-card" data-passage-key="${key}">
+                    <h3 class="study-card-title">${passage.title}</h3>
+                    ${pageInfo ? `<div class="study-card-page">${pageInfo}</div>` : ''}
+                    <p class="study-card-description">${passage.description || ''}</p>
+                    ${passage.keyQuote ? `<blockquote class="study-card-quote">"${passage.keyQuote}"</blockquote>` : ''}
+                    ${passage.startsWithText ? `<div class="study-card-hint">Starts: "${passage.startsWithText.substring(0, 50)}..."</div>` : ''}
+                </div>
+            `;
+        }).join('');
+
+        this.contentEl.innerHTML = `
+            <div class="study-tools-view">
+                <div class="study-header">
+                    <h2>Commonly Read Passages</h2>
+                    <p class="study-description">Passages frequently read at AA meetings and in study groups.</p>
+                </div>
+                <div class="study-cards-grid">
+                    ${passageCards}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Display Step Study Guide
+     */
+    async displayStudySteps(book) {
+        const guide = book.stepStudyGuide;
+        if (!guide) return;
+
+        const stepCards = Object.entries(guide).map(([key, step]) => {
+            const stepNum = key.replace('step', '');
+            const readings = step.primaryReadings ? step.primaryReadings.map(r =>
+                `<li>${r.title || r.section || r.chapter} (${r.pages})</li>`
+            ).join('') : '';
+
+            const passages = step.keyPassages ? step.keyPassages.map(p =>
+                `<li class="key-passage">p. ${p.page}: "${p.quote}"</li>`
+            ).join('') : '';
+
+            const topics = step.focusTopics ? step.focusTopics.map(t =>
+                `<span class="topic-tag">${t}</span>`
+            ).join('') : '';
+
+            return `
+                <div class="study-card step-card">
+                    <div class="step-number">Step ${stepNum}</div>
+                    <p class="step-text">${step.step}</p>
+                    ${readings ? `
+                        <div class="step-readings">
+                            <h4>Primary Readings</h4>
+                            <ul>${readings}</ul>
+                        </div>
+                    ` : ''}
+                    ${passages ? `
+                        <div class="step-key-passages">
+                            <h4>Key Passages</h4>
+                            <ul>${passages}</ul>
+                        </div>
+                    ` : ''}
+                    ${topics ? `
+                        <div class="step-topics">
+                            <h4>Focus Topics</h4>
+                            <div class="topics-list">${topics}</div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }).join('');
+
+        this.contentEl.innerHTML = `
+            <div class="study-tools-view">
+                <div class="study-header">
+                    <h2>Step Study Guide</h2>
+                    <p class="study-description">A comprehensive guide for working through the 12 Steps with Big Book references.</p>
+                </div>
+                <div class="study-steps-list">
+                    ${stepCards}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Display Glossary
+     */
+    async displayStudyGlossary(book) {
+        const glossary = book.glossary;
+        if (!glossary) return;
+
+        const terms = Object.entries(glossary).map(([key, entry]) => {
+            const refs = entry.references ? entry.references.map(r => {
+                if (r.page) return `p. ${r.page}`;
+                if (r.appendix) return `Appendix ${r.appendix}`;
+                if (r.section) return r.section;
+                if (r.chapter) return `Chapter ${r.chapter}`;
+                return '';
+            }).filter(Boolean).join(', ') : '';
+
+            return `
+                <div class="glossary-term">
+                    <dt>${entry.term || key.replace(/([A-Z])/g, ' $1').trim()}</dt>
+                    <dd>
+                        <p>${entry.definition}</p>
+                        ${refs ? `<div class="glossary-refs">References: ${refs}</div>` : ''}
+                    </dd>
+                </div>
+            `;
+        }).join('');
+
+        this.contentEl.innerHTML = `
+            <div class="study-tools-view">
+                <div class="study-header">
+                    <h2>Glossary of AA Terms</h2>
+                    <p class="study-description">Definitions of key terms used in the Big Book.</p>
+                </div>
+                <dl class="glossary-list">
+                    ${terms}
+                </dl>
+            </div>
+        `;
+    }
+
+    /**
+     * Display Topic Index
+     */
+    async displayStudyTopics(book) {
+        const topicIndex = book.topicIndex;
+        if (!topicIndex) return;
+
+        const topics = Object.entries(topicIndex)
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map(([topic, data]) => {
+                const refs = data.references ? data.references.slice(0, 5).map(r =>
+                    `<span class="topic-ref">${r.location} p. ${r.page}</span>`
+                ).join('') : '';
+
+                const moreCount = data.references && data.references.length > 5
+                    ? `<span class="topic-more">+${data.references.length - 5} more</span>` : '';
+
+                return `
+                    <div class="topic-item">
+                        <div class="topic-name">${topic.charAt(0).toUpperCase() + topic.slice(1)}</div>
+                        <div class="topic-count">${data.occurrences || data.references?.length || 0} references</div>
+                        <div class="topic-refs">${refs}${moreCount}</div>
+                    </div>
+                `;
+            }).join('');
+
+        this.contentEl.innerHTML = `
+            <div class="study-tools-view">
+                <div class="study-header">
+                    <h2>Topic Index</h2>
+                    <p class="study-description">Find passages by topic throughout the Big Book.</p>
+                </div>
+                <div class="topic-index-grid">
+                    ${topics}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Display Reading Plans
+     */
+    async displayStudyReadingPlans(book) {
+        const plans = book.readingPlans;
+        if (!plans) return;
+
+        const planCards = Object.entries(plans).map(([key, plan]) => {
+            const days = plan.days ? plan.days.map(d =>
+                `<div class="reading-day">
+                    <span class="day-num">Day ${d.day}</span>
+                    <span class="day-reading">${d.reading}</span>
+                    ${d.pages ? `<span class="day-pages">${d.pages}</span>` : ''}
+                </div>`
+            ).join('') : '';
+
+            const weeks = plan.weeks ? plan.weeks.map(w =>
+                `<div class="reading-week">
+                    <h4>Week ${w.week}: ${w.focus}</h4>
+                    <ul>${w.readings.map(r => `<li>${r}</li>`).join('')}</ul>
+                </div>`
+            ).join('') : '';
+
+            return `
+                <div class="study-card reading-plan-card">
+                    <h3>${plan.title}</h3>
+                    <p class="plan-description">${plan.description}</p>
+                    ${days ? `<div class="reading-days">${days}</div>` : ''}
+                    ${weeks ? `<div class="reading-weeks">${weeks}</div>` : ''}
+                </div>
+            `;
+        }).join('');
+
+        this.contentEl.innerHTML = `
+            <div class="study-tools-view">
+                <div class="study-header">
+                    <h2>Reading Plans</h2>
+                    <p class="study-description">Structured reading plans to guide your Big Book study.</p>
+                </div>
+                <div class="reading-plans-list">
+                    ${planCards}
+                </div>
+            </div>
+        `;
+    }
+
+    /**
+     * Display Inventory Guide
+     */
+    async displayStudyInventory(book) {
+        const guide = book.inventoryGuide;
+        if (!guide) return;
+
+        let html = '<div class="study-tools-view"><div class="study-header"><h2>Inventory Guide</h2><p class="study-description">Guides for taking personal inventory as described in the Big Book.</p></div>';
+
+        // Resentment Inventory
+        if (guide.resentmentInventory) {
+            const ri = guide.resentmentInventory;
+            const columns = ri.columns.map(c =>
+                `<div class="inventory-column">
+                    <h4>${c.name}</h4>
+                    <p>${c.description}</p>
+                </div>`
+            ).join('');
+
+            html += `
+                <div class="inventory-section">
+                    <h3>Resentment Inventory (Page ${ri.pageReference})</h3>
+                    <p>${ri.description}</p>
+                    ${ri.keyQuote ? `<blockquote class="inventory-quote">"${ri.keyQuote}"</blockquote>` : ''}
+                    <div class="inventory-columns">${columns}</div>
+                </div>
+            `;
+        }
+
+        // Fear Inventory
+        if (guide.fearInventory) {
+            const fi = guide.fearInventory;
+            const columns = fi.columns.map(c =>
+                `<div class="inventory-column">
+                    <h4>${c.name}</h4>
+                    <p>${c.description}</p>
+                </div>`
+            ).join('');
+
+            html += `
+                <div class="inventory-section">
+                    <h3>Fear Inventory (Page ${fi.pageReference})</h3>
+                    <p>${fi.description}</p>
+                    ${fi.keyQuote ? `<blockquote class="inventory-quote">"${fi.keyQuote}"</blockquote>` : ''}
+                    <div class="inventory-columns">${columns}</div>
+                </div>
+            `;
+        }
+
+        // Sex Inventory
+        if (guide.sexInventory) {
+            const si = guide.sexInventory;
+            const questions = si.questions.map(q => `<li>${q}</li>`).join('');
+
+            html += `
+                <div class="inventory-section">
+                    <h3>Sex/Relationships Inventory (Page ${si.pageReference})</h3>
+                    <p>${si.description}</p>
+                    <ul class="inventory-questions">${questions}</ul>
+                </div>
+            `;
+        }
+
+        // Character Defects
+        if (guide.characterDefects) {
+            const cd = guide.characterDefects;
+            const defects = cd.defects.map(d =>
+                `<div class="defect-item">
+                    <span class="defect-name">${d.defect}</span>
+                    <span class="defect-pages">p. ${d.pages.join(', ')}</span>
+                    ${d.keyQuote ? `<div class="defect-quote">"${d.keyQuote}"</div>` : ''}
+                </div>`
+            ).join('');
+
+            html += `
+                <div class="inventory-section">
+                    <h3>Character Defects</h3>
+                    <p>${cd.description}</p>
+                    <div class="defects-list">${defects}</div>
+                </div>
+            `;
+        }
+
+        // Character Assets
+        if (guide.characterAssets) {
+            const ca = guide.characterAssets;
+            const assets = ca.assets.map(a =>
+                `<div class="asset-item">
+                    <span class="asset-name">${a.asset}</span>
+                    ${a.pages ? `<span class="asset-pages">p. ${a.pages.join(', ')}</span>` : ''}
+                </div>`
+            ).join('');
+
+            html += `
+                <div class="inventory-section">
+                    <h3>Character Assets</h3>
+                    <p>${ca.description}</p>
+                    <div class="assets-list">${assets}</div>
+                </div>
+            `;
+        }
+
+        html += '</div>';
+        this.contentEl.innerHTML = html;
+    }
+
+    /**
+     * Display Historical Context
+     */
+    async displayStudyHistory(book) {
+        const history = book.historicalContext;
+        if (!history) return;
+
+        let html = '<div class="study-tools-view"><div class="study-header"><h2>Historical Context</h2><p class="study-description">Background information about the Big Book and AA history.</p></div>';
+
+        // Book History
+        if (history.bookHistory) {
+            const bh = history.bookHistory;
+            html += `
+                <div class="history-section">
+                    <h3>Book History</h3>
+                    <div class="history-facts">
+                        <div class="history-fact"><strong>First Published:</strong> ${bh.firstPublished}</div>
+                        <div class="history-fact"><strong>Original Title:</strong> ${bh.originalTitle}</div>
+                        <div class="history-fact"><strong>Written By:</strong> ${bh.writtenBy}</div>
+                        <div class="history-fact"><strong>Original Price:</strong> ${bh.originalPrice}</div>
+                        <div class="history-fact"><strong>First Printing:</strong> ${bh.firstPrinting} copies</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Edition History
+        if (history.editionHistory) {
+            const editions = Object.entries(history.editionHistory).map(([key, ed]) =>
+                `<div class="edition-item">
+                    <h4>${ed.name}</h4>
+                    <div class="edition-year">Year: ${ed.year}</div>
+                    <div class="edition-changes">${ed.changes}</div>
+                    <div class="edition-stories">Stories: ${ed.stories}</div>
+                </div>`
+            ).join('');
+
+            html += `
+                <div class="history-section">
+                    <h3>Edition History</h3>
+                    <div class="editions-list">${editions}</div>
+                </div>
+            `;
+        }
+
+        // Key Dates
+        if (history.keyDates) {
+            const kd = history.keyDates;
+            html += `
+                <div class="history-section">
+                    <h3>Key Dates</h3>
+                    <div class="history-facts">
+                        <div class="history-fact"><strong>Bill W. Last Drink:</strong> ${kd.billLastDrink}</div>
+                        <div class="history-fact"><strong>Dr. Bob Last Drink:</strong> ${kd.drBobLastDrink}</div>
+                        <div class="history-fact"><strong>AA Founded:</strong> ${kd.aaFounded}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Personal Stories Context
+        if (history.personalStoriesContext) {
+            const psc = history.personalStoriesContext;
+            html += `
+                <div class="history-section">
+                    <h3>Personal Stories Context</h3>
+                    <div class="stories-context">
+                        <div><strong>Pioneers of AA:</strong> ${psc.pioneersOfAA}</div>
+                        <div><strong>They Stopped in Time:</strong> ${psc.theyStoppedInTime}</div>
+                        <div><strong>They Lost Nearly All:</strong> ${psc.theyLostNearlyAll}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        html += '</div>';
+        this.contentEl.innerHTML = html;
     }
 }
 

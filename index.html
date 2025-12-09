@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AA Literature Study</title>
+    <title>Big Book Study</title>
     <link rel="stylesheet" href="css/main.css">
     <link rel="stylesheet" href="css/reader.css">
     <link rel="stylesheet" href="css/annotations.css">
     <link rel="stylesheet" href="css/search.css">
+    <link rel="stylesheet" href="css/dictionary.css">
 </head>
 <body>
     <div id="app">
@@ -21,13 +22,19 @@
                         <line x1="3" y1="18" x2="21" y2="18"></line>
                     </svg>
                 </button>
-                <h1 class="logo">AA Study</h1>
+                <a href="#/" class="logo-link">
+                    <h1 class="logo">BigBook.Study</h1>
+                </a>
             </div>
             <div class="header-center">
                 <div class="search-container">
-                    <input type="text" id="search-input" placeholder="Search all literature..." aria-label="Search">
-                    <button id="search-btn" class="btn-icon" aria-label="Search">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="search-icon">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                    </svg>
+                    <input type="text" id="search-input" placeholder="Search all literature... (Ctrl+K)" aria-label="Search">
+                    <button id="search-btn" class="btn-icon search-btn" aria-label="Search">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <circle cx="11" cy="11" r="8"></circle>
                             <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
                         </svg>
@@ -35,7 +42,7 @@
                 </div>
             </div>
             <div class="header-right">
-                <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme">
+                <button id="theme-toggle" class="btn-icon" aria-label="Toggle theme" title="Toggle theme">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="5"></circle>
                         <line x1="12" y1="1" x2="12" y2="3"></line>
@@ -48,7 +55,7 @@
                         <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
                     </svg>
                 </button>
-                <button id="settings-btn" class="btn-icon" aria-label="Settings">
+                <button id="settings-btn" class="btn-icon" aria-label="Settings" title="Settings">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="3"></circle>
                         <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
@@ -131,9 +138,155 @@
             <main id="reader" class="reader">
                 <div id="reader-content" class="reader-content">
                     <!-- Content populated by JavaScript -->
-                    <div class="welcome-screen">
-                        <h2>Welcome to AA Literature Study</h2>
-                        <p>Select a book from the sidebar to begin reading, or use the search to find specific content.</p>
+                    <div class="welcome-screen" id="welcome-screen">
+                        <!-- Hero Section -->
+                        <div class="welcome-hero">
+                            <div class="welcome-logo">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                            </div>
+                            <h2>Welcome to Big Book Study</h2>
+                            <p class="welcome-tagline">Your personal study companion for AA literature</p>
+                        </div>
+
+                        <!-- Quick Start Section -->
+                        <div class="welcome-section">
+                            <h3 class="welcome-section-title">Quick Start</h3>
+                            <div class="quick-start-grid">
+                                <a href="#/book/big-book" class="quick-start-card">
+                                    <div class="quick-start-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="quick-start-text">
+                                        <span class="quick-start-title">Alcoholics Anonymous</span>
+                                        <span class="quick-start-subtitle">The Big Book</span>
+                                    </div>
+                                </a>
+                                <a href="#/book/twelve-and-twelve" class="quick-start-card">
+                                    <div class="quick-start-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">
+                                        <span style="color: white; font-weight: 700; font-size: 16px;">12</span>
+                                    </div>
+                                    <div class="quick-start-text">
+                                        <span class="quick-start-title">Twelve Steps & Traditions</span>
+                                        <span class="quick-start-subtitle">The 12 & 12</span>
+                                    </div>
+                                </a>
+                                <a href="#/book/daily-reflections" class="quick-start-card">
+                                    <div class="quick-start-icon" style="background: linear-gradient(135deg, #16a34a, #22c55e);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                            <line x1="16" y1="2" x2="16" y2="6"></line>
+                                            <line x1="8" y1="2" x2="8" y2="6"></line>
+                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="quick-start-text">
+                                        <span class="quick-start-title">Daily Reflections</span>
+                                        <span class="quick-start-subtitle">A reading for each day</span>
+                                    </div>
+                                </a>
+                                <a href="#/book/as-bill-sees-it" class="quick-start-card">
+                                    <div class="quick-start-icon" style="background: linear-gradient(135deg, #ea580c, #f97316);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                            <circle cx="12" cy="7" r="4"></circle>
+                                        </svg>
+                                    </div>
+                                    <div class="quick-start-text">
+                                        <span class="quick-start-title">As Bill Sees It</span>
+                                        <span class="quick-start-subtitle">Bill's writings</span>
+                                    </div>
+                                </a>
+                                <a href="#/book/study-guide" class="quick-start-card">
+                                    <div class="quick-start-icon" style="background: linear-gradient(135deg, #0891b2, #06b6d4);">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2">
+                                            <circle cx="12" cy="12" r="10"></circle>
+                                            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                                            <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="quick-start-text">
+                                        <span class="quick-start-title">Big Book Study Guide</span>
+                                        <span class="quick-start-subtitle">Q&A study format</span>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- Continue Reading Section (dynamically populated) -->
+                        <div class="welcome-section" id="continue-reading-section" style="display: none;">
+                            <h3 class="welcome-section-title">Continue Reading</h3>
+                            <div id="continue-reading-list" class="continue-reading-list">
+                                <!-- Populated by JavaScript -->
+                            </div>
+                        </div>
+
+                        <!-- Features Section -->
+                        <div class="welcome-section">
+                            <h3 class="welcome-section-title">Study Features</h3>
+                            <div class="features-grid">
+                                <div class="feature-card">
+                                    <div class="feature-icon highlight-demo">
+                                        <span class="demo-text">Abc</span>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Highlight Text</h4>
+                                        <p>Mark important passages with 6 different colors. Each color can have a custom meaning.</p>
+                                    </div>
+                                </div>
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Add Notes</h4>
+                                        <p>Write personal comments, questions, and definitions on any passage.</p>
+                                    </div>
+                                </div>
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <circle cx="11" cy="11" r="8"></circle>
+                                            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                                        </svg>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Search Everything</h4>
+                                        <p>Find any word or phrase across all AA literature instantly.</p>
+                                    </div>
+                                </div>
+                                <div class="feature-card">
+                                    <div class="feature-icon">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="feature-content">
+                                        <h4>Cross-References</h4>
+                                        <p>Discover connections between books with automatic page references.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Keyboard Shortcuts Hint -->
+                        <div class="welcome-shortcuts">
+                            <span class="shortcut-hint">
+                                <kbd>Ctrl</kbd> + <kbd>K</kbd> to search
+                            </span>
+                            <span class="shortcut-divider">|</span>
+                            <span class="shortcut-hint">
+                                Select text to annotate
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -145,6 +298,7 @@
                         </svg>
                     </button>
                     <div class="page-info">
+                        <span>Page</span>
                         <input type="number" id="page-input" min="1" aria-label="Page number">
                         <span>of <span id="total-pages">0</span></span>
                     </div>
@@ -159,60 +313,60 @@
 
         <!-- Annotation Toolbar (floating, appears on text selection) -->
         <div id="annotation-toolbar" class="annotation-toolbar hidden">
-            <div class="toolbar-section">
-                <span class="toolbar-label">Highlight:</span>
-                <button class="color-btn" data-color="yellow" style="background: #ffeb3b;" aria-label="Yellow highlight"></button>
-                <button class="color-btn" data-color="green" style="background: #a5d6a7;" aria-label="Green highlight"></button>
-                <button class="color-btn" data-color="blue" style="background: #90caf9;" aria-label="Blue highlight"></button>
-                <button class="color-btn" data-color="pink" style="background: #f48fb1;" aria-label="Pink highlight"></button>
-                <button class="color-btn" data-color="orange" style="background: #ffcc80;" aria-label="Orange highlight"></button>
-                <button class="color-btn" data-color="purple" style="background: #ce93d8;" aria-label="Purple highlight"></button>
+            <div class="toolbar-group">
+                <span class="toolbar-label">Highlight</span>
+                <div class="toolbar-colors">
+                    <button class="color-btn" data-color="yellow" style="background-color: #fef08a;" title="Important" aria-label="Important highlight"></button>
+                    <button class="color-btn" data-color="green" style="background-color: #bbf7d0;" title="Action Item" aria-label="Action Item highlight"></button>
+                    <button class="color-btn" data-color="blue" style="background-color: #bfdbfe;" title="Question" aria-label="Question highlight"></button>
+                    <button class="color-btn" data-color="pink" style="background-color: #fbcfe8;" title="Personal" aria-label="Personal highlight"></button>
+                    <button class="color-btn" data-color="orange" style="background-color: #fed7aa;" title="Reference" aria-label="Reference highlight"></button>
+                    <button class="color-btn" data-color="purple" style="background-color: #ddd6fe;" title="Insight" aria-label="Insight highlight"></button>
+                </div>
             </div>
-            <div class="toolbar-divider"></div>
-            <div class="toolbar-section">
-                <span class="toolbar-label">Underline:</span>
-                <button class="underline-btn" data-style="solid" aria-label="Solid underline">
-                    <span style="text-decoration: underline;">A</span>
-                </button>
-                <button class="underline-btn" data-style="dashed" aria-label="Dashed underline">
-                    <span style="text-decoration: underline dashed;">A</span>
-                </button>
-                <button class="underline-btn" data-style="wavy" aria-label="Wavy underline">
-                    <span style="text-decoration: underline wavy;">A</span>
-                </button>
-                <button class="underline-btn" data-style="double" aria-label="Double underline">
-                    <span style="text-decoration: underline double;">A</span>
-                </button>
+            <div class="toolbar-separator"></div>
+            <div class="toolbar-group">
+                <span class="toolbar-label">Underline</span>
+                <div class="toolbar-underlines">
+                    <button class="underline-btn" data-style="solid" title="Key Point" aria-label="Key Point underline">
+                        <span class="underline-preview" style="text-decoration: underline; text-decoration-style: solid; text-decoration-color: #2563eb; text-decoration-thickness: 2px;">A</span>
+                    </button>
+                    <button class="underline-btn" data-style="dashed" title="To Review" aria-label="To Review underline">
+                        <span class="underline-preview" style="text-decoration: underline; text-decoration-style: dashed; text-decoration-color: #16a34a; text-decoration-thickness: 2px;">A</span>
+                    </button>
+                    <button class="underline-btn" data-style="wavy" title="Question" aria-label="Question underline">
+                        <span class="underline-preview" style="text-decoration: underline; text-decoration-style: wavy; text-decoration-color: #dc2626; text-decoration-thickness: 1px;">A</span>
+                    </button>
+                    <button class="underline-btn" data-style="double" title="Definition" aria-label="Definition underline">
+                        <span class="underline-preview" style="text-decoration: underline; text-decoration-style: double; text-decoration-color: #7c3aed; text-decoration-thickness: 1px;">A</span>
+                    </button>
+                </div>
             </div>
-            <div class="toolbar-divider"></div>
-            <div class="toolbar-section">
-                <button class="action-btn" data-action="comment" aria-label="Add comment">
+            <div class="toolbar-separator"></div>
+            <div class="toolbar-group toolbar-actions">
+                <button class="action-btn" data-action="comment" aria-label="Add comment" title="Add Comment">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
                     </svg>
-                    <span>Comment</span>
                 </button>
-                <button class="action-btn" data-action="question" aria-label="Add question">
+                <button class="action-btn" data-action="question" aria-label="Add question" title="Add Question">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
                         <line x1="12" y1="17" x2="12.01" y2="17"></line>
                     </svg>
-                    <span>Question</span>
                 </button>
-                <button class="action-btn" data-action="definition" aria-label="Add definition">
+                <button class="action-btn" data-action="definition" aria-label="Dictionary lookup" title="Dictionary">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
                         <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
                     </svg>
-                    <span>Definition</span>
                 </button>
-                <button class="action-btn" data-action="crossref" aria-label="Create cross-reference">
+                <button class="action-btn" data-action="crossref" aria-label="Create cross-reference" title="Link">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
                         <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
                     </svg>
-                    <span>Link</span>
                 </button>
             </div>
         </div>

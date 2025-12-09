@@ -12,6 +12,8 @@ import { pageCrossRef } from './crossref.js';
 import { sidebar } from './ui/sidebar.js';
 import { modal } from './ui/modal.js';
 import { toast } from './ui/toast.js';
+import { dictionary } from './dictionary.js';
+import { dictionaryPopup } from './ui/dictionaryPopup.js';
 
 console.log('=== All imports loaded successfully ===');
 
@@ -125,6 +127,15 @@ class App {
             console.error('Event listeners setup failed:', eventsError);
         }
 
+        // Initialize dictionary
+        try {
+            await dictionary.initialize();
+            this.setupDictionaryHandlers();
+            console.log('6. Dictionary initialized');
+        } catch (dictError) {
+            console.error('Dictionary init failed:', dictError);
+        }
+
         // Mark as initialized
         this.initialized = true;
         console.log('=== App Init Complete ===');
@@ -193,6 +204,11 @@ class App {
                 id: 'language-of-the-heart',
                 path: 'data/language_of_the_heart_final.json',
                 shortTitle: 'Language of the Heart'
+            },
+            {
+                id: 'study-guide',
+                path: 'data/BigBook_StudyGuide.json',
+                shortTitle: 'Study Guide'
             }
         ];
 
@@ -201,7 +217,9 @@ class App {
         for (const config of bookConfigs) {
             try {
                 console.log(`Loading book: ${config.id} from ${config.path}`);
-                const response = await fetch(config.path);
+                // Add cache-busting to ensure fresh data
+                const cacheBuster = `?v=${Date.now()}`;
+                const response = await fetch(config.path + cacheBuster);
 
                 if (!response.ok) {
                     console.error(`Failed to fetch ${config.id}: HTTP ${response.status}`);
@@ -308,6 +326,33 @@ class App {
                         });
                     }
 
+                    // Study Tools (if available)
+                    if (book.commonlyReadPassages || book.stepStudyGuide || book.glossary) {
+                        chapters.push({ id: 'study-tools', title: '── Study Tools ──', isSection: true });
+
+                        if (book.commonlyReadPassages) {
+                            chapters.push({ id: 'study-passages', title: 'Commonly Read Passages' });
+                        }
+                        if (book.stepStudyGuide) {
+                            chapters.push({ id: 'study-steps', title: 'Step Study Guide' });
+                        }
+                        if (book.glossary) {
+                            chapters.push({ id: 'study-glossary', title: 'Glossary' });
+                        }
+                        if (book.topicIndex) {
+                            chapters.push({ id: 'study-topics', title: 'Topic Index' });
+                        }
+                        if (book.readingPlans) {
+                            chapters.push({ id: 'study-reading-plans', title: 'Reading Plans' });
+                        }
+                        if (book.inventoryGuide) {
+                            chapters.push({ id: 'study-inventory', title: 'Inventory Guide' });
+                        }
+                        if (book.historicalContext) {
+                            chapters.push({ id: 'study-history', title: 'Historical Context' });
+                        }
+                    }
+
                     console.log(`Big Book chapters built: ${chapters.length} total`);
                 } else if (book.structure && book.structure.chapters) {
                     // AA Comes of Age format - has structure.chapters and structure.appendices
@@ -389,6 +434,21 @@ class App {
                     });
 
                     console.log(`Language of the Heart chapters built: ${chapters.length} total`);
+                } else if (book.tableOfContents && book.content && book.content.sections) {
+                    // Big Book Study Guide format - has tableOfContents and content.sections
+                    console.log('Big Book Study Guide format detected');
+
+                    book.tableOfContents.forEach(section => {
+                        chapters.push({
+                            id: section.id,
+                            title: section.title,
+                            bigBookPages: section.bigBookPages,
+                            questionCount: section.questionCount,
+                            commentCount: section.commentCount
+                        });
+                    });
+
+                    console.log(`Big Book Study Guide chapters built: ${chapters.length} total`);
                 } else if (book.content) {
                     chapters = book.content.map(c => ({
                         id: c.number || c.id,
@@ -595,6 +655,17 @@ class App {
                 return;
             }
 
+            // Handle Big Book Study Guide format
+            if (book.tableOfContents && book.content && book.content.sections) {
+                console.log('Handling Study Guide format, chapterId:', chapterId);
+                reader.showLoading();
+                reader.currentBook = book;
+                await reader.displayStudyGuideSection(book, chapterId);
+                sidebar.setActive(bookId, chapterId);
+                reader.saveProgress(bookId, chapterId);
+                return;
+            }
+
             // Standard book format
             if (book.content) {
                 const chapter = book.content.find(c =>
@@ -660,23 +731,27 @@ class App {
             }
         });
 
-        // Search route
+        // Search route - show advanced search view
         router.on('/search', () => {
             const query = router.getQuery().q || '';
-            if (query) {
-                appInstance.performSearch(query);
-            }
+            // Pass available books from app for filtering (search may not have all books indexed)
+            const availableBooks = Array.from(appInstance.books.values()).map(book => ({
+                id: book.metadata?.id || book.id,
+                title: book.metadata?.shortTitle || book.metadata?.title || book.id
+            }));
+            reader.showSearchView(query, search, availableBooks);
             sidebar.setActiveNav('/search');
         });
 
-        // Index/Notes route
+        // Index route - topic index of AA literature
         router.on('/index', () => {
             reader.showIndex();
             sidebar.setActiveNav('/index');
         });
 
+        // Notes route - user annotations (highlights, comments, questions, etc.)
         router.on('/annotations', () => {
-            reader.showIndex();
+            reader.showNotes();
             sidebar.setActiveNav('/annotations');
         });
 
@@ -714,7 +789,7 @@ class App {
             }
         });
 
-        searchBtn.addEventListener('click', () => {
+        searchBtn?.addEventListener('click', () => {
             this.performSearch(searchInput.value);
         });
 
@@ -737,10 +812,29 @@ class App {
 
         // Settings
         const settingsBtn = document.getElementById('settings-btn');
-        settingsBtn.addEventListener('click', async () => {
+        settingsBtn?.addEventListener('click', async () => {
+            // Get current settings including highlight and underline colors
+            const highlightColors = await getSetting('highlightColors', [
+                { id: 'yellow', color: '#fef08a', label: 'Important' },
+                { id: 'green', color: '#bbf7d0', label: 'Action Item' },
+                { id: 'blue', color: '#bfdbfe', label: 'Question' },
+                { id: 'pink', color: '#fbcfe8', label: 'Personal' },
+                { id: 'orange', color: '#fed7aa', label: 'Reference' },
+                { id: 'purple', color: '#ddd6fe', label: 'Insight' }
+            ]);
+
+            const underlineColors = await getSetting('underlineColors', [
+                { id: 'solid', color: '#2563eb', label: 'Key Point' },
+                { id: 'dashed', color: '#16a34a', label: 'To Review' },
+                { id: 'wavy', color: '#dc2626', label: 'Question' },
+                { id: 'double', color: '#7c3aed', label: 'Definition' }
+            ]);
+
             const currentSettings = {
                 theme: await getSetting('theme', 'light'),
-                fontSize: await getSetting('fontSize', 16)
+                fontSize: await getSetting('fontSize', 16),
+                highlightColors,
+                underlineColors
             };
 
             const result = await modal.showSettingsModal(currentSettings);
@@ -753,9 +847,31 @@ class App {
                 await setSetting('theme', result.theme);
                 await setSetting('fontSize', parseInt(result.fontSize, 10));
 
+                // Save highlight colors and labels
+                const updatedHighlightColors = highlightColors.map(c => ({
+                    id: c.id,
+                    color: result[`highlight-color-${c.id}`] || c.color,
+                    label: result[`highlight-label-${c.id}`] || c.label
+                }));
+                await setSetting('highlightColors', updatedHighlightColors);
+
+                // Save underline colors and labels
+                const updatedUnderlineColors = underlineColors.map(c => ({
+                    id: c.id,
+                    color: result[`underline-color-${c.id}`] || c.color,
+                    label: result[`underline-label-${c.id}`] || c.label
+                }));
+                await setSetting('underlineColors', updatedUnderlineColors);
+
+                // Apply colors to CSS and update toolbar
+                this.applyColorScheme(updatedHighlightColors, updatedUnderlineColors);
+
                 toast.success('Settings saved');
             }
         });
+
+        // Initialize color scheme and toolbar tooltips
+        this.initColorScheme();
 
         // Export/Import data (in settings modal)
         document.addEventListener('click', async (e) => {
@@ -777,6 +893,27 @@ class App {
 
             if (e.target.id === 'import-data-btn') {
                 document.getElementById('import-file-input')?.click();
+            }
+
+            if (e.target.id === 'reset-all-btn') {
+                const confirmed = await modal.confirm(
+                    'This will permanently delete ALL your annotations, bookmarks, highlights, and settings. This action cannot be undone. Are you sure?',
+                    'Reset All Data'
+                );
+                if (confirmed) {
+                    try {
+                        const { resetAllData } = await import('./db.js');
+                        await resetAllData();
+                        toast.success('All data has been reset');
+                        // Close modal and refresh
+                        modal.close(null);
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 500);
+                    } catch (error) {
+                        toast.error('Failed to reset data: ' + error.message);
+                    }
+                }
             }
         });
 
@@ -880,10 +1017,34 @@ class App {
                         <kbd>?</kbd>
                         <span>Show this help</span>
                     </div>
+                    <div class="shortcut-item">
+                        <kbd>Ctrl+D</kbd>
+                        <span>Look up selected word in dictionary</span>
+                    </div>
                 </div>
             `,
             confirmText: 'Got it',
             showCancel: false
+        });
+    }
+
+    /**
+     * Setup dictionary event handlers
+     */
+    setupDictionaryHandlers() {
+        // Keyboard shortcut: Ctrl/Cmd + D to look up selected word
+        document.addEventListener('keydown', (e) => {
+            if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+                const selection = window.getSelection();
+                const selectedText = selection.toString().trim();
+
+                if (selectedText) {
+                    e.preventDefault();
+                    const word = selectedText.split(/\s+/)[0];
+                    const rect = selection.getRangeAt(0).getBoundingClientRect();
+                    dictionaryPopup.show(word, rect.left, rect.bottom + window.scrollY);
+                }
+            }
         });
     }
 
@@ -898,6 +1059,67 @@ class App {
 
         // Update URL
         window.location.hash = `/search?q=${encodeURIComponent(query)}`;
+    }
+
+    /**
+     * Initialize color scheme from saved settings
+     */
+    async initColorScheme() {
+        try {
+            const highlightColors = await getSetting('highlightColors', [
+                { id: 'yellow', color: '#fef08a', label: 'Important' },
+                { id: 'green', color: '#bbf7d0', label: 'Action Item' },
+                { id: 'blue', color: '#bfdbfe', label: 'Question' },
+                { id: 'pink', color: '#fbcfe8', label: 'Personal' },
+                { id: 'orange', color: '#fed7aa', label: 'Reference' },
+                { id: 'purple', color: '#ddd6fe', label: 'Insight' }
+            ]);
+
+            const underlineColors = await getSetting('underlineColors', [
+                { id: 'solid', color: '#2563eb', label: 'Key Point' },
+                { id: 'dashed', color: '#16a34a', label: 'To Review' },
+                { id: 'wavy', color: '#dc2626', label: 'Question' },
+                { id: 'double', color: '#7c3aed', label: 'Definition' }
+            ]);
+
+            this.applyColorScheme(highlightColors, underlineColors);
+        } catch (error) {
+            console.warn('Failed to init color scheme:', error);
+        }
+    }
+
+    /**
+     * Apply color scheme to CSS variables and update toolbar tooltips
+     */
+    applyColorScheme(highlightColors, underlineColors) {
+        const root = document.documentElement;
+
+        // Apply highlight colors to CSS variables and toolbar buttons
+        highlightColors.forEach(c => {
+            root.style.setProperty(`--highlight-${c.id}`, c.color);
+
+            const btn = document.querySelector(`.color-btn[data-color="${c.id}"]`);
+            if (btn) {
+                btn.style.backgroundColor = c.color;
+                btn.title = c.label;
+                btn.setAttribute('aria-label', `${c.label} highlight`);
+            }
+        });
+
+        // Apply underline colors to CSS variables and toolbar buttons
+        underlineColors.forEach(c => {
+            root.style.setProperty(`--underline-${c.id}`, c.color);
+
+            const btn = document.querySelector(`.underline-btn[data-style="${c.id}"]`);
+            if (btn) {
+                btn.title = c.label;
+                btn.setAttribute('aria-label', `${c.label} underline`);
+                const preview = btn.querySelector('.underline-preview');
+                if (preview) {
+                    preview.style.textDecorationColor = c.color;
+                }
+            }
+        });
     }
 
     /**

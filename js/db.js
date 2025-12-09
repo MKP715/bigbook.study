@@ -558,3 +558,24 @@ export async function isBookmarked(bookId, chapterId) {
     const bookmarks = await getBookmarks();
     return bookmarks.find(b => b.bookId === bookId && b.chapterId === chapterId);
 }
+
+// ============ Reset All Data ============
+
+/**
+ * Reset all application data - clears all stores
+ */
+export async function resetAllData() {
+    const storeNames = ['annotations', 'crossReferences', 'settings', 'searchIndex', 'readingProgress'];
+
+    for (const storeName of storeNames) {
+        await new Promise((resolve, reject) => {
+            const transaction = db.transaction([storeName], 'readwrite');
+            const store = transaction.objectStore(storeName);
+            const request = store.clear();
+            request.onsuccess = () => resolve();
+            request.onerror = () => reject(request.error);
+        });
+    }
+
+    return true;
+}

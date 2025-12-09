@@ -201,6 +201,24 @@ class Modal {
      * Show settings modal
      */
     showSettingsModal(currentSettings = {}) {
+        // Default highlight colors with labels
+        const defaultHighlightColors = currentSettings.highlightColors || [
+            { id: 'yellow', color: '#fef08a', label: 'Important' },
+            { id: 'green', color: '#bbf7d0', label: 'Action Item' },
+            { id: 'blue', color: '#bfdbfe', label: 'Question' },
+            { id: 'pink', color: '#fbcfe8', label: 'Personal' },
+            { id: 'orange', color: '#fed7aa', label: 'Reference' },
+            { id: 'purple', color: '#ddd6fe', label: 'Insight' }
+        ];
+
+        // Default underline colors
+        const defaultUnderlineColors = currentSettings.underlineColors || [
+            { id: 'solid', color: '#2563eb', label: 'Key Point' },
+            { id: 'dashed', color: '#16a34a', label: 'To Review' },
+            { id: 'wavy', color: '#dc2626', label: 'Question' },
+            { id: 'double', color: '#7c3aed', label: 'Definition' }
+        ];
+
         return this.open({
             title: 'Settings',
             body: `
@@ -220,12 +238,43 @@ class Modal {
                 </div>
                 <hr style="margin: 16px 0; border-color: var(--border-color);">
                 <div class="form-group">
+                    <label class="form-label">Highlight Colors</label>
+                    <p class="form-hint" style="margin-bottom: 12px;">Customize colors and labels for each highlight type</p>
+                    <div class="color-settings-grid">
+                        ${defaultHighlightColors.map(c => `
+                            <input type="color" name="highlight-color-${c.id}" value="${c.color}" data-color-id="${c.id}">
+                            <input type="text" class="form-input" name="highlight-label-${c.id}" value="${escapeHtml(c.label)}" placeholder="Label" style="padding: 6px 10px; font-size: 14px;">
+                            <span class="highlight-preview-${c.id}" style="display: inline-block; width: 60px; padding: 2px 8px; border-radius: 4px; background-color: ${c.color}; font-size: 12px; text-align: center;">${c.id}</span>
+                        `).join('')}
+                    </div>
+                </div>
+                <hr style="margin: 16px 0; border-color: var(--border-color);">
+                <div class="form-group">
+                    <label class="form-label">Underline Styles</label>
+                    <p class="form-hint" style="margin-bottom: 12px;">Customize colors and labels for each underline style</p>
+                    <div class="underline-settings-grid">
+                        ${defaultUnderlineColors.map(c => `
+                            <input type="color" name="underline-color-${c.id}" value="${c.color}" data-style-id="${c.id}">
+                            <input type="text" class="form-input" name="underline-label-${c.id}" value="${escapeHtml(c.label)}" placeholder="Label" style="padding: 6px 10px; font-size: 14px;">
+                            <span style="font-size: 12px; color: var(--text-muted);">${c.id}</span>
+                            <span class="underline-preview-${c.id}" style="text-decoration: underline; text-decoration-style: ${c.id}; text-decoration-color: ${c.color}; text-decoration-thickness: 2px; padding: 0 8px; font-weight: 600;">Abc</span>
+                        `).join('')}
+                    </div>
+                </div>
+                <hr style="margin: 16px 0; border-color: var(--border-color);">
+                <div class="form-group">
                     <label class="form-label">Data Management</label>
-                    <div style="display: flex; gap: 8px; margin-top: 8px;">
+                    <div style="display: flex; gap: 8px; margin-top: 8px; flex-wrap: wrap;">
                         <button type="button" class="btn btn-secondary" id="export-data-btn">Export Data</button>
                         <button type="button" class="btn btn-secondary" id="import-data-btn">Import Data</button>
                     </div>
                     <input type="file" id="import-file-input" accept=".json" style="display: none;">
+                </div>
+                <hr style="margin: 16px 0; border-color: var(--border-color);">
+                <div class="form-group">
+                    <label class="form-label" style="color: #dc2626;">Danger Zone</label>
+                    <p class="form-hint" style="margin-bottom: 12px;">Reset all data including annotations, bookmarks, and settings. This cannot be undone.</p>
+                    <button type="button" class="btn btn-danger" id="reset-all-btn">Reset All Data</button>
                 </div>
             `,
             confirmText: 'Save Settings',
@@ -234,6 +283,28 @@ class Modal {
                 const fontSizeValue = body.querySelector('#font-size-value');
                 fontSizeInput.addEventListener('input', (e) => {
                     fontSizeValue.textContent = e.target.value + 'px';
+                });
+
+                // Live preview for highlight colors
+                body.querySelectorAll('[name^="highlight-color-"]').forEach(input => {
+                    input.addEventListener('input', (e) => {
+                        const colorId = e.target.dataset.colorId;
+                        const preview = body.querySelector(`.highlight-preview-${colorId}`);
+                        if (preview) {
+                            preview.style.backgroundColor = e.target.value;
+                        }
+                    });
+                });
+
+                // Live preview for underline colors
+                body.querySelectorAll('[name^="underline-color-"]').forEach(input => {
+                    input.addEventListener('input', (e) => {
+                        const styleId = e.target.dataset.styleId;
+                        const preview = body.querySelector(`.underline-preview-${styleId}`);
+                        if (preview) {
+                            preview.style.textDecorationColor = e.target.value;
+                        }
+                    });
                 });
             }
         });

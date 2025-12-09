@@ -293,17 +293,28 @@ class Annotations {
         popover.className = 'annotation-popover';
 
         const typeLabel = annotation.type.charAt(0).toUpperCase() + annotation.type.slice(1);
+        const isSimpleAnnotation = ['highlight', 'underline'].includes(annotation.type);
+
+        // Get color/style info for highlights and underlines
+        let styleInfo = '';
+        if (annotation.type === 'highlight') {
+            styleInfo = `<span class="popover-color-badge" style="background-color: var(--highlight-${annotation.color}, #fef08a);"></span>`;
+        } else if (annotation.type === 'underline') {
+            styleInfo = `<span class="popover-underline-badge underline-${annotation.underlineStyle}">Abc</span>`;
+        }
 
         popover.innerHTML = `
             <div class="popover-header">
-                <span class="popover-type ${annotation.type}">${typeLabel}</span>
+                <span class="popover-type ${annotation.type}">${typeLabel} ${styleInfo}</span>
                 <div class="popover-actions">
+                    ${!isSimpleAnnotation ? `
                     <button class="popover-btn edit-btn" title="Edit">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M12 20h9"></path>
                             <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path>
                         </svg>
                     </button>
+                    ` : ''}
                     <button class="popover-btn delete-btn" title="Delete">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <polyline points="3 6 5 6 21 6"></polyline>
@@ -312,7 +323,7 @@ class Annotations {
                     </button>
                 </div>
             </div>
-            <div class="popover-selected">"${annotation.selectedText}"</div>
+            <div class="popover-selected">"${escapeHtml(annotation.selectedText)}"</div>
             ${annotation.content ? `<div class="popover-content">${escapeHtml(annotation.content)}</div>` : ''}
             ${annotation.answer ? `<div class="popover-content" style="margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--border-color);"><strong>Answer:</strong> ${escapeHtml(annotation.answer)}</div>` : ''}
         `;
@@ -333,10 +344,13 @@ class Annotations {
         }
 
         // Event handlers
-        popover.querySelector('.edit-btn').addEventListener('click', async () => {
-            popover.remove();
-            await this.editAnnotation(annotation);
-        });
+        const editBtn = popover.querySelector('.edit-btn');
+        if (editBtn) {
+            editBtn.addEventListener('click', async () => {
+                popover.remove();
+                await this.editAnnotation(annotation);
+            });
+        }
 
         popover.querySelector('.delete-btn').addEventListener('click', async () => {
             popover.remove();
