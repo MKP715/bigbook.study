@@ -1,0 +1,2009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Big Book Study: Chapter 2 - There Is A Solution (Comprehensive)</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --bg: #f4f6f8;
+            --physical-bg: #ffebee; --physical-border: #ef5350;
+            --mental-bg: #f3e5f5; --mental-border: #ab47bc;
+            --duality-bg: #e3f2fd; --duality-border: #42a5f5;
+            --progression-bg: #fffde7; --progression-border: #fbc02d;
+            --fellowship-bg: #e8f5e9; --fellowship-border: #66bb6a;
+            --solution-bg: #e0f2f1; --solution-border: #26a69a;
+            --spiritual-bg: #ede7f6; --spiritual-border: #7e57c2;
+            --service-bg: #fff3e0; --service-border: #ff9800;
+            --step-bg: #fce4ec; --step-border: #ec407a;
+            --historical-bg: #efebe9; --historical-border: #8d6e63;
+            --key-bg: #e1f5fe; --key-border: #03a9f4;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            line-height: 1.6;
+            background-color: var(--bg);
+            color: #333;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-shrink: 0;
+            z-index: 10;
+            color: white;
+        }
+
+        h1 { margin: 0; font-size: 22px; }
+        .subtitle { font-size: 13px; opacity: 0.9; margin-left: 10px; }
+        .header-right { font-size: 12px; opacity: 0.8; text-align: right; }
+
+        .main-container {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .text-panel {
+            flex: 2;
+            padding: 30px 40px;
+            overflow-y: auto;
+            background: #fff;
+            border-right: 1px solid #ddd;
+            font-size: 17px;
+            font-family: 'Georgia', serif;
+            color: #2c3e50;
+        }
+
+        .text-panel p { margin-bottom: 18px; line-height: 1.8; }
+
+        .section-marker {
+            font-size: 11px;
+            color: #fff;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 25px 0 15px 0;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .section-title {
+            font-size: 14px;
+            color: #2c3e50;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 30px 0 15px 0;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-left: 4px solid var(--accent);
+            font-weight: 600;
+        }
+
+        .sidebar {
+            flex: 1.3;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #e1e4e8;
+            min-width: 380px;
+            max-width: 550px;
+        }
+
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            background: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px 5px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 11px;
+            color: #666;
+            transition: all 0.2s;
+            border-bottom: 3px solid transparent;
+        }
+
+        .tab-btn:hover { background: #f0f0f0; }
+        .tab-btn.active { color: var(--primary); border-bottom-color: var(--accent); background: #f8f9fa; }
+
+        .tab-content {
+            padding: 15px;
+            overflow-y: auto;
+            flex: 1;
+            display: none;
+        }
+        .tab-content.active { display: block; }
+
+        .highlight {
+            border-bottom: 2px solid;
+            cursor: pointer;
+            transition: all 0.2s;
+            padding: 1px 3px;
+            border-radius: 3px;
+        }
+
+        .highlight:hover { opacity: 0.8; }
+        .highlight.active { box-shadow: 0 2px 8px rgba(0,0,0,0.15); font-weight: 600; }
+
+        .physical { background-color: var(--physical-bg); border-color: var(--physical-border); }
+        .mental { background-color: var(--mental-bg); border-color: var(--mental-border); }
+        .duality { background-color: var(--duality-bg); border-color: var(--duality-border); }
+        .progression { background-color: var(--progression-bg); border-color: var(--progression-border); }
+        .fellowship { background-color: var(--fellowship-bg); border-color: var(--fellowship-border); }
+        .solution { background-color: var(--solution-bg); border-color: var(--solution-border); }
+        .spiritual { background-color: var(--spiritual-bg); border-color: var(--spiritual-border); }
+        .service { background-color: var(--service-bg); border-color: var(--service-border); }
+        .step { background-color: var(--step-bg); border-color: var(--step-border); }
+        .historical { background-color: var(--historical-bg); border-color: var(--historical-border); }
+        .key { background-color: var(--key-bg); border-color: var(--key-border); }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border-left: 4px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .card.active-card {
+            border: 2px solid var(--accent);
+            transform: translateX(-3px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card h4 {
+            margin: 0 0 8px 0;
+            font-size: 14px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 5px;
+        }
+
+        .tag {
+            font-size: 9px;
+            text-transform: uppercase;
+            padding: 2px 6px;
+            border-radius: 4px;
+            color: #fff;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+
+        .card p { font-size: 13px; margin: 0 0 8px 0; color: #555; line-height: 1.5; }
+        .card .step-connection {
+            font-size: 11px;
+            color: #ec407a;
+            font-weight: 600;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed #eee;
+        }
+        .card .sponsor-note {
+            font-size: 11px;
+            color: #ff9800;
+            font-style: italic;
+            margin-top: 8px;
+            padding: 8px;
+            background: #fff8e1;
+            border-radius: 4px;
+        }
+
+        .card.physical { border-left-color: var(--physical-border); }
+        .card.mental { border-left-color: var(--mental-border); }
+        .card.duality { border-left-color: var(--duality-border); }
+        .card.progression { border-left-color: var(--progression-border); }
+        .card.fellowship { border-left-color: var(--fellowship-border); }
+        .card.solution { border-left-color: var(--solution-border); }
+        .card.spiritual { border-left-color: var(--spiritual-border); }
+        .card.service { border-left-color: var(--service-border); }
+        .card.step { border-left-color: var(--step-border); }
+        .card.historical { border-left-color: var(--historical-border); }
+        .card.key { border-left-color: var(--key-border); }
+
+        .ref-box {
+            background: white;
+            border: 1px solid #e1e4e8;
+            border-left: 4px solid #0066cc;
+            padding: 12px;
+            margin-bottom: 12px;
+            border-radius: 4px;
+        }
+        .ref-title { font-weight: bold; color: #333; display: block; margin-bottom: 3px; font-size: 13px; }
+        .ref-book { font-size: 10px; font-weight: bold; color: #0066cc; text-transform: uppercase; margin-bottom: 5px; display: block; letter-spacing: 0.5px; }
+        .ref-text { font-size: 12px; color: #555; font-style: italic; margin-bottom: 6px; border-left: 2px solid #eee; padding-left: 8px; }
+        .ref-context { font-size: 11px; color: #888; }
+
+        .discussion-card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e1e4e8;
+        }
+        .discussion-card h4 { margin: 0 0 5px 0; font-size: 14px; color: var(--primary); }
+        .discussion-card .page-ref { font-size: 10px; color: #888; margin-bottom: 8px; }
+        .discussion-card p { font-size: 13px; margin: 0 0 10px 0; color: #555; }
+        .discussion-card ul { font-size: 12px; color: #666; margin: 8px 0; padding-left: 20px; }
+        .discussion-card li { margin-bottom: 4px; }
+
+        textarea {
+            width: 100%;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 10px;
+            margin-top: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 70px;
+        }
+        textarea:focus { outline: none; border-color: var(--accent); }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 15px;
+        }
+        .legend-item {
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .legend-item:hover { transform: scale(1.02); }
+        .dot { width: 8px; height: 8px; border-radius: 50%; margin-right: 6px; flex-shrink: 0; }
+
+        .meeting-section {
+            background: #fff;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #e1e4e8;
+        }
+        .meeting-section h3 { margin: 0 0 10px 0; font-size: 15px; color: var(--primary); }
+        .meeting-section h4 { margin: 10px 0 5px 0; font-size: 13px; color: #555; }
+        .meeting-section p, .meeting-section li { font-size: 12px; color: #666; }
+        .meeting-section ul { padding-left: 20px; margin: 5px 0; }
+
+        .time-block {
+            display: flex;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .time-block:last-child { border-bottom: none; }
+        .time-badge {
+            background: var(--accent);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-right: 10px;
+            min-width: 50px;
+            text-align: center;
+        }
+        .time-desc { font-size: 12px; color: #555; }
+
+        .concept-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+        }
+        .concept-box h4 { margin: 0 0 8px 0; font-size: 14px; }
+        .concept-box p { font-size: 12px; margin: 0; opacity: 0.95; }
+
+        .filter-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        .filter-btn {
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            background: #fff;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .filter-btn:hover { background: #f0f0f0; }
+        .filter-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+
+        .quote-box {
+            background: #f8f9fa;
+            border-left: 3px solid var(--accent);
+            padding: 10px 15px;
+            margin: 10px 0;
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        @media (max-width: 1000px) {
+            .main-container { flex-direction: column; }
+            .text-panel { height: 45vh; }
+            .sidebar { height: 55vh; border-left: none; border-top: 1px solid #ddd; max-width: none; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div style="display:flex; align-items: baseline;">
+        <h1>Chapter 2: There Is A Solution</h1>
+        <span class="subtitle">Pages 17-29</span>
+    </div>
+    <div class="header-right">
+        <div>BigBook.Study</div>
+        <div style="margin-top:3px;">Notes & Notables</div>
+    </div>
+</header>
+
+<div class="main-container">
+
+    <!-- LEFT: The Text -->
+    <div class="text-panel">
+
+        <div class="section-title">OPENING: THE FELLOWSHIP & ITS PROMISE</div>
+        <p class="section-marker">Page 17</p>
+
+        <p>
+            <span class="highlight key" onclick="showAnalysis('k1')">WE, OF ALCOHOLICS ANONYMOUS</span>, <span class="highlight fellowship" onclick="showAnalysis('f1')">know thousands of men and women who were once just as hopeless as Bill. Nearly all have recovered.</span> <span class="highlight solution" onclick="showAnalysis('s1')">They have solved the drink problem.</span>
+        </p>
+
+        <p>
+            <span class="highlight fellowship" onclick="showAnalysis('f2')">We are average Americans.</span> All sections of this country and many of its occupations are represented, as well as many political, economic, social, and religious backgrounds. <span class="highlight fellowship" onclick="showAnalysis('f3')">We are people who normally would not mix.</span> But there exists among us <span class="highlight fellowship" onclick="showAnalysis('f4')">a fellowship, a friendliness, and an understanding which is indescribably wonderful.</span> We are like the <span class="highlight fellowship" onclick="showAnalysis('f5')">passengers of a great liner the moment after rescue from shipwreck</span> when camaraderie, joyousness and democracy pervade the vessel from steerage to Captain's table. Unlike the feelings of the ship's passengers, however, <span class="highlight fellowship" onclick="showAnalysis('f6')">our joy in escape from disaster does not subside</span> as we go our individual ways. <span class="highlight fellowship" onclick="showAnalysis('f7')">The feeling of having shared in a common peril is one element in the powerful cement which binds us.</span> But that in itself would never have held us together as we are now joined.
+        </p>
+
+        <p>
+            <span class="highlight solution" onclick="showAnalysis('s2')">The tremendous fact for every one of us is that we have discovered a common solution.</span> We have <span class="highlight solution" onclick="showAnalysis('s3')">a way out on which we can absolutely agree</span>, and upon which we can join in brotherly and harmonious action. <span class="highlight key" onclick="showAnalysis('k2')">This is the great news this book carries to those who suffer from alcoholism.</span>
+        </p>
+
+        <div class="section-title">THE NATURE OF ALCOHOLISM</div>
+        <p class="section-marker">Page 18</p>
+
+        <p>
+            <span class="highlight progression" onclick="showAnalysis('p1')">An illness of this sort-and we have come to believe it an illness-</span>involves those about us in a way no other human sickness can. <span class="highlight duality" onclick="showAnalysis('d1')">If a person has cancer all are sorry for him and no one is angry or hurt. But not so with the alcoholic illness</span>, for with it there goes <span class="highlight progression" onclick="showAnalysis('p2')">annihilation of all the things worth while in life.</span> <span class="highlight progression" onclick="showAnalysis('p3')">It engulfs all whose lives touch the sufferer's.</span> It brings misunderstanding, fierce resentment, financial insecurity, disgusted friends and employers, <span class="highlight progression" onclick="showAnalysis('p4')">warped lives of blameless children, sad wives and parents</span>-anyone can increase the list.
+        </p>
+
+        <p>
+            <span class="highlight service" onclick="showAnalysis('sv1')">We hope this volume will inform and comfort those who are, or who may be affected.</span> There are many.
+        </p>
+
+        <p>
+            <span class="highlight service" onclick="showAnalysis('sv2')">Highly competent psychiatrists who have dealt with us have found it sometimes impossible to persuade an alcoholic to discuss his situation without reserve.</span> Strangely enough, <span class="highlight duality" onclick="showAnalysis('d2')">wives, parents and intimate friends usually find us even more unapproachable</span> than do the psychiatrist and the doctor.
+        </p>
+
+        <p>
+            But the <span class="highlight service" onclick="showAnalysis('sv3')">ex-problem drinker who has found this solution, who is properly armed with facts about himself, can generally win the entire confidence of another alcoholic in a few hours.</span> <span class="highlight step" onclick="showAnalysis('st1')">Until such an understanding is reached, little or nothing can be accomplished.</span>
+        </p>
+
+        <p>
+            That the man who is making the approach <span class="highlight service" onclick="showAnalysis('sv4')">has had the same difficulty</span>, that he obviously knows what he is talking about, that his whole deportment shouts at the new prospect that <span class="highlight service" onclick="showAnalysis('sv5')">he is a man with a real answer</span>, that he has <span class="highlight service" onclick="showAnalysis('sv6')">no attitude of Holier Than Thou</span>, nothing whatever except <span class="highlight spiritual" onclick="showAnalysis('sp1')">the sincere desire to be helpful</span>; that there are <span class="highlight service" onclick="showAnalysis('sv7')">no fees to pay, no axes to grind, no people to please, no lectures to be endured</span>-these are the conditions we have found most effective. <span class="highlight spiritual" onclick="showAnalysis('sp2')">After such an approach many take up their beds and walk again.</span>
+        </p>
+
+        <div class="section-title">THE PURPOSE OF AA & THIS BOOK</div>
+        <p class="section-marker">Page 19</p>
+
+        <p>
+            <span class="highlight service" onclick="showAnalysis('sv8')">None of us makes a sole vocation of this work, nor do we think its effectiveness would be increased if we did.</span> We feel that <span class="highlight step" onclick="showAnalysis('st2')">elimination of our drinking is but a beginning.</span> <span class="highlight spiritual" onclick="showAnalysis('sp3')">A much more important demonstration of our principles lies before us in our respective homes, occupations and affairs.</span> All of us spend much of our spare time in the sort of effort which we are going to describe. A few are fortunate enough to be so situated that they can give nearly all their time to the work.
+        </p>
+
+        <p>
+            If we keep on the way we are going there is little doubt that much good will result, but <span class="highlight service" onclick="showAnalysis('sv9')">the surface of the problem would hardly be scratched.</span> Those of us who live in large cities are overcome by the reflection that <span class="highlight service" onclick="showAnalysis('sv10')">close by hundreds are dropping into oblivion every day.</span> Many could recover if they had the opportunity we have enjoyed. <span class="highlight key" onclick="showAnalysis('k3')">How then shall we present that which has been so freely given us?</span>
+        </p>
+
+        <p>
+            <span class="highlight historical" onclick="showAnalysis('h1')">We have concluded to publish an anonymous volume setting forth the problem as we see it.</span> We shall bring to the task our combined experience and knowledge. This should suggest <span class="highlight solution" onclick="showAnalysis('s4')">a useful program for anyone concerned with a drinking problem.</span>
+        </p>
+
+        <p>
+            Of necessity there will have to be discussion of matters medical, psychiatric, social, and religious. We are aware that these matters are, from their very nature, controversial. <span class="highlight spiritual" onclick="showAnalysis('sp4')">Nothing would please us so much as to write a book which would contain no basis for contention or argument.</span> We shall do our utmost to achieve that ideal. Most of us sense that <span class="highlight spiritual" onclick="showAnalysis('sp5')">real tolerance of other people's shortcomings and viewpoints and a respect for their opinions are attitudes which make us more useful to others.</span> <span class="highlight step" onclick="showAnalysis('st3')">Our very lives, as ex-problem drinkers, depend upon our constant thought of others and how we may help meet their needs.</span>
+        </p>
+
+        <p class="section-marker">Page 20</p>
+
+        <p>
+            You may already have asked yourself <span class="highlight mental" onclick="showAnalysis('m1')">why it is that all of us became so very ill from drinking.</span> Doubtless you are curious to discover how and why, in the face of expert opinion to the contrary, <span class="highlight solution" onclick="showAnalysis('s5')">we have recovered from a hopeless condition of mind and body.</span> If you are an alcoholic who wants to get over it, you may already be asking-<span class="highlight key" onclick="showAnalysis('k4')">"What do I have to do?"</span>
+        </p>
+
+        <p>
+            <span class="highlight key" onclick="showAnalysis('k5')">It is the purpose of this book to answer such questions specifically.</span> We shall tell you what we have done. Before going into a detailed discussion, it may be well to summarize some points as we see them.
+        </p>
+
+        <p>
+            <span class="highlight mental" onclick="showAnalysis('m2')">How many times people have said to us:</span> "I can take it or leave it alone. Why can't he?" "Why don't you drink like a gentleman or quit?" "That fellow can't handle his liquor." "Why don't you try beer and wine?" "Lay off the hard stuff." "His will power must be weak." "He could stop if he wanted to." "She's such a sweet girl, I should think he'd stop for her sake." <span class="highlight mental" onclick="showAnalysis('m3')">"The doctor told him that if he ever drank again it would kill him, but there he is all lit up again."</span>
+        </p>
+
+        <p>
+            Now these are commonplace observations on drinkers which we hear all the time. <span class="highlight mental" onclick="showAnalysis('m4')">Back of them is a world of ignorance and misunderstanding.</span> We see that these expressions refer to people whose reactions are very different from ours.
+        </p>
+
+        <div class="section-title">THE THREE TYPES OF DRINKERS</div>
+
+        <p>
+            <span class="highlight duality" onclick="showAnalysis('d3')">Moderate drinkers have little trouble in giving up liquor entirely if they have good reason for it.</span> They can take it or leave it alone.
+        </p>
+
+        <p>
+            Then we have <span class="highlight duality" onclick="showAnalysis('d4')">a certain type of hard drinker.</span> He may have the habit badly enough to gradually impair him physically and mentally. It may cause him to die a few years before his time. <span class="highlight duality" onclick="showAnalysis('d5')">If a sufficiently strong reason-ill health, falling in love, change of environment, or the warning of a doctor-becomes operative, this man can also stop or moderate</span>, although he may find it difficult and troublesome and may even need medical attention.
+        </p>
+
+        <p class="section-marker">Page 21</p>
+
+        <p>
+            <span class="highlight physical" onclick="showAnalysis('ph1')">But what about the real alcoholic?</span> He may start off as a moderate drinker; he may or may not become a continuous hard drinker; but at some stage of his drinking career he <span class="highlight physical" onclick="showAnalysis('ph2')">begins to lose all control of his liquor consumption, once he starts to drink.</span>
+        </p>
+
+        <div class="section-title">PORTRAIT OF THE REAL ALCOHOLIC</div>
+
+        <p>
+            Here is the fellow who has been puzzling you, especially in his lack of control. He does <span class="highlight mental" onclick="showAnalysis('m5')">absurd, incredible, tragic things while drinking.</span> He is a real <span class="highlight duality" onclick="showAnalysis('d6')">Dr. Jekyll and Mr. Hyde.</span> <span class="highlight physical" onclick="showAnalysis('ph3')">He is seldom mildly intoxicated. He is always more or less insanely drunk.</span> <span class="highlight duality" onclick="showAnalysis('d7')">His disposition while drinking resembles his normal nature but little.</span> He may be one of the finest fellows in the world. Yet let him drink for a day, and he frequently becomes <span class="highlight progression" onclick="showAnalysis('p5')">disgustingly, and even dangerously anti-social.</span>
+        </p>
+
+        <p>
+            He has a positive <span class="highlight mental" onclick="showAnalysis('m6')">genius for getting tight at exactly the wrong moment</span>, particularly when some important decision must be made or engagement kept. <span class="highlight duality" onclick="showAnalysis('d8')">He is often perfectly sensible and well balanced concerning everything except liquor</span>, but in that respect he is incredibly <span class="highlight spiritual" onclick="showAnalysis('sp6')">dishonest and selfish.</span>
+        </p>
+
+        <p>
+            He often possesses special abilities, skills, and aptitudes, and has a promising career ahead of him. <span class="highlight progression" onclick="showAnalysis('p6')">He uses his gifts to build up a bright outlook for his family and himself, and then pulls the structure down on his head by a senseless series of sprees.</span> He is the fellow who goes to bed so intoxicated he ought to sleep the clock around. Yet early next morning he <span class="highlight physical" onclick="showAnalysis('ph4')">searches madly for the bottle he misplaced the night before.</span> If he can afford it, he may have <span class="highlight physical" onclick="showAnalysis('ph5')">liquor concealed all over his house</span> to be certain no one gets his entire supply away from him to throw down the wastepipe.
+        </p>
+
+        <p class="section-marker">Page 22</p>
+
+        <p>
+            <span class="highlight progression" onclick="showAnalysis('p7')">As matters grow worse, he begins to use a combination of high-powered sedative and liquor to quiet his nerves so he can go to work.</span> Then comes the day when he simply cannot make it and gets drunk all over again. Perhaps he goes to a doctor who gives him morphine or some sedative with which to taper off. <span class="highlight progression" onclick="showAnalysis('p8')">Then he begins to appear at hospitals and sanitariums.</span>
+        </p>
+
+        <p>
+            <span class="highlight key" onclick="showAnalysis('k6')">This is by no means a comprehensive picture of the true alcoholic, as our behavior patterns vary.</span> But this description should identify him roughly.
+        </p>
+
+        <div class="section-title">THE CENTRAL QUESTIONS</div>
+
+        <p>
+            <span class="highlight mental" onclick="showAnalysis('m7')">Why does he behave like this?</span> If hundreds of experiences have shown him that one drink means another debacle with all its attendant suffering and humiliation, <span class="highlight mental" onclick="showAnalysis('m8')">why is it he takes that one drink?</span> Why can't he stay on the water wagon? <span class="highlight mental" onclick="showAnalysis('m9')">What has become of the common sense and will power</span> that he still sometimes displays with respect to other matters?
+        </p>
+
+        <p>
+            <span class="highlight key" onclick="showAnalysis('k7')">Perhaps there never will be a full answer to these questions.</span> Opinions vary considerably as to why the alcoholic reacts differently from normal people. We are not sure why, once a certain point is reached, little can be done for him. <span class="highlight mental" onclick="showAnalysis('m10')">We cannot answer the riddle.</span>
+        </p>
+
+        <p>
+            We know that while the alcoholic keeps away from drink, as he may do for months or years, <span class="highlight duality" onclick="showAnalysis('d9')">he reacts much like other men.</span> We are equally positive that <span class="highlight physical" onclick="showAnalysis('ph6')">once he takes any alcohol whatever into his system, something happens, both in the bodily and mental sense, which makes it virtually impossible for him to stop.</span> The experience of any alcoholic will abundantly confirm this.
+        </p>
+
+        <p class="section-marker">Page 23</p>
+
+        <p>
+            These observations would be academic and pointless if our friend never took the first drink, thereby setting the terrible cycle in motion. <span class="highlight mental" onclick="showAnalysis('m11')">Therefore, the main problem of the alcoholic centers in his mind, rather than in his body.</span> If you ask him why he started on that last bender, the chances are he will offer you any one of a hundred alibis. Sometimes these excuses have a certain plausibility, but <span class="highlight mental" onclick="showAnalysis('m12')">none of them really makes sense in the light of the havoc an alcoholic's drinking bout creates.</span> They sound like the philosophy of the man who, having a headache, <span class="highlight mental" onclick="showAnalysis('m13')">beats himself on the head with a hammer so that he can't feel the ache.</span> If you draw this fallacious reasoning to the attention of an alcoholic, he will laugh it off, or become irritated and refuse to talk.
+        </p>
+
+        <p>
+            Once in a while he may tell the truth. And the truth, strange to say, is usually that <span class="highlight mental" onclick="showAnalysis('m14')">he has no more idea why he took that first drink than you have.</span> Some drinkers have excuses with which they are satisfied part of the time. But in their hearts they <span class="highlight mental" onclick="showAnalysis('m15')">really do not know why they do it.</span> Once this malady has a real hold, they are a baffled lot. There is the <span class="highlight mental" onclick="showAnalysis('m16')">obsession that somehow, someday, they will beat the game.</span> But they often suspect they are down for the count.
+        </p>
+
+        <p>
+            How true this is, few realize. In a vague way their families and friends sense that these drinkers are abnormal, but <span class="highlight mental" onclick="showAnalysis('m17')">everybody hopefully awaits the day when the sufferer will rouse himself from his lethargy and assert his power of will.</span>
+        </p>
+
+        <p>
+            <span class="highlight step" onclick="showAnalysis('st4')">The tragic truth is that if the man be a real alcoholic, the happy day may not arrive.</span> <span class="highlight physical" onclick="showAnalysis('ph7')">He has lost control.</span> At a certain point in the drinking of every alcoholic, he passes into a state where <span class="highlight step" onclick="showAnalysis('st5')">the most powerful desire to stop drinking is of absolutely no avail.</span> <span class="highlight key" onclick="showAnalysis('k8')">This tragic situation has already arrived in practically every case long before it is suspected.</span>
+        </p>
+
+        <p class="section-marker">Page 24</p>
+
+        <p>
+            <span class="highlight step" onclick="showAnalysis('st6')">The fact is that most alcoholics, for reasons yet obscure, have lost the power of choice in drink.</span> <span class="highlight mental" onclick="showAnalysis('m18')">Our so-called will power becomes practically nonexistent.</span> We are unable, at certain times, to bring into our consciousness with sufficient force <span class="highlight mental" onclick="showAnalysis('m19')">the memory of the suffering and humiliation of even a week or a month ago.</span> <span class="highlight key" onclick="showAnalysis('k9')">We are without defense against the first drink.</span>
+        </p>
+
+        <p>
+            The almost certain consequences that follow taking even a glass of beer do not crowd into the mind to deter us. If these thoughts occur, they are hazy and readily supplanted with <span class="highlight mental" onclick="showAnalysis('m20')">the old threadbare idea that this time we shall handle ourselves like other people.</span> <span class="highlight mental" onclick="showAnalysis('m21')">There is a complete failure of the kind of defense that keeps one from putting his hand on a hot stove.</span>
+        </p>
+
+        <p>
+            The alcoholic may say to himself in the most casual way, <span class="highlight mental" onclick="showAnalysis('m22')">"It won't burn me this time, so here's how!"</span> Or perhaps he doesn't think at all. How often have some of us begun to drink in this nonchalant way, and after the third or fourth, pounded on the bar and said to ourselves, <span class="highlight mental" onclick="showAnalysis('m23')">"For God's sake, how did I ever get started again?"</span> Only to have that thought supplanted by "Well, I'll stop with the sixth drink." Or "What's the use anyhow?"
+        </p>
+
+        <p>
+            <span class="highlight progression" onclick="showAnalysis('p9')">When this sort of thinking is fully established in an individual with alcoholic tendencies, he has probably placed himself beyond human aid</span>, and unless locked up, may die or go permanently insane. <span class="highlight key" onclick="showAnalysis('k10')">These stark and ugly facts have been confirmed by legions of alcoholics throughout history.</span> But for the grace of God, there would have been thousands more convincing demonstrations. <span class="highlight step" onclick="showAnalysis('st7')">So many want to stop but cannot.</span>
+        </p>
+
+        <div class="section-title">THE SOLUTION INTRODUCED</div>
+        <p class="section-marker">Page 25</p>
+
+        <p>
+            <span class="highlight solution" onclick="showAnalysis('s6')">There is a solution.</span> Almost none of us liked <span class="highlight step" onclick="showAnalysis('st8')">the self-searching, the leveling of our pride, the confession of shortcomings</span> which the process requires for its successful consummation. But we saw that it really worked in others, and <span class="highlight step" onclick="showAnalysis('st9')">we had come to believe in the hopelessness and futility of life as we had been living it.</span> When, therefore, we were approached by those in whom the problem had been solved, there was nothing left for us but to <span class="highlight spiritual" onclick="showAnalysis('sp7')">pick up the simple kit of spiritual tools laid at our feet.</span> We have found much of heaven and we have been <span class="highlight spiritual" onclick="showAnalysis('sp8')">rocketed into a fourth dimension of existence of which we had not even dreamed.</span>
+        </p>
+
+        <p>
+            <span class="highlight spiritual" onclick="showAnalysis('sp9')">The great fact is just this, and nothing less:</span> That we have had <span class="highlight spiritual" onclick="showAnalysis('sp10')">deep and effective spiritual experiences</span> which have revolutionized our whole attitude toward life, toward our fellows and toward God's universe. <span class="highlight spiritual" onclick="showAnalysis('sp11')">The central fact of our lives today is the absolute certainty that our Creator has entered into our hearts and lives in a way which is indeed miraculous.</span> <span class="highlight step" onclick="showAnalysis('st10')">He has commenced to accomplish those things for us which we could never do by ourselves.</span>
+        </p>
+
+        <p>
+            If you are as seriously alcoholic as we were, we believe there is <span class="highlight solution" onclick="showAnalysis('s7')">no middle-of-the-road solution.</span> We were in a position where life was becoming impossible, and if we had passed into the region from which there is no return through human aid, we had but <span class="highlight solution" onclick="showAnalysis('s8')">two alternatives: One was to go on to the bitter end, blotting out the consciousness of our intolerable situation as best we could; and the other, to accept spiritual help.</span> This we did because we honestly wanted to, and were willing to make the effort.
+        </p>
+
+        <div class="section-title">THE ROWLAND H. / DR. JUNG STORY</div>
+        <p class="section-marker">Page 26</p>
+
+        <p>
+            <span class="highlight historical" onclick="showAnalysis('h2')">A certain American business man had ability, good sense, and high character.</span> For years he had floundered from one sanitarium to another. He had consulted the best known American psychiatrists. Then he had gone to Europe, placing himself in the care of <span class="highlight historical" onclick="showAnalysis('h3')">a celebrated physician (the psychiatrist, Dr. Jung)</span> who prescribed for him. Though experience had made him skeptical, he finished his treatment with unusual confidence. His physical and mental condition were unusually good. Above all, <span class="highlight mental" onclick="showAnalysis('m24')">he believed he had acquired such a profound knowledge of the inner workings of his mind and its hidden springs that relapse was unthinkable.</span> Nevertheless, <span class="highlight progression" onclick="showAnalysis('p10')">he was drunk in a short time.</span> More baffling still, <span class="highlight mental" onclick="showAnalysis('m25')">he could give himself no satisfactory explanation for his fall.</span>
+        </p>
+
+        <p>
+            So he returned to this doctor, whom he admired, and asked him point-blank <span class="highlight key" onclick="showAnalysis('k11')">why he could not recover.</span> He wished above all things to regain self-control. He seemed quite rational and well-balanced with respect to other problems. Yet he had no control whatever over alcohol. Why was this?
+        </p>
+
+        <p>
+            He begged the doctor to tell him the whole truth, and he got it. In the doctor's judgment he was <span class="highlight progression" onclick="showAnalysis('p11')">utterly hopeless; he could never regain his position in society and he would have to place himself under lock and key or hire a bodyguard if he expected to live long.</span> <span class="highlight historical" onclick="showAnalysis('h4')">That was a great physician's opinion.</span>
+        </p>
+
+        <p class="section-marker">Page 27</p>
+
+        <p>
+            But this man still lives, and is a free man. <span class="highlight solution" onclick="showAnalysis('s9')">He does not need a bodyguard nor is he confined.</span> He can go anywhere on this earth where other free men may go without disaster, <span class="highlight spiritual" onclick="showAnalysis('sp12')">provided he remains willing to maintain a certain simple attitude.</span>
+        </p>
+
+        <p>
+            Some of our alcoholic readers may think they can do without spiritual help. Let us tell you the rest of the conversation our friend had with his doctor.
+        </p>
+
+        <p>
+            The doctor said: <span class="highlight historical" onclick="showAnalysis('h5')">"You have the mind of a chronic alcoholic. I have never seen one single case recover, where that state of mind existed to the extent that it does in you."</span> Our friend felt as though <span class="highlight progression" onclick="showAnalysis('p12')">the gates of hell had closed on him with a clang.</span>
+        </p>
+
+        <p>
+            He said to the doctor, <span class="highlight key" onclick="showAnalysis('k12')">"Is there no exception?"</span>
+        </p>
+
+        <p>
+            "Yes," replied the doctor, "there is. <span class="highlight historical" onclick="showAnalysis('h6')">Exceptions to cases such as yours have been occurring since early times.</span> Here and there, once in a while, alcoholics have had what are called <span class="highlight spiritual" onclick="showAnalysis('sp13')">vital spiritual experiences.</span> To me these occurrences are phenomena. They appear to be in the nature of <span class="highlight spiritual" onclick="showAnalysis('sp14')">huge emotional displacements and rearrangements.</span> <span class="highlight spiritual" onclick="showAnalysis('sp15')">Ideas, emotions, and attitudes which were once the guiding forces of the lives of these men are suddenly cast to one side, and a completely new set of conceptions and motives begin to dominate them.</span> In fact, I have been trying to produce some such emotional rearrangement within you. With many individuals the methods which I employed are successful, but <span class="highlight historical" onclick="showAnalysis('h7')">I have never been successful with an alcoholic of your description.</span>"
+        </p>
+
+        <p class="section-marker">Page 28</p>
+
+        <p>
+            Upon hearing this, our friend was somewhat relieved, for he reflected that, after all, <span class="highlight spiritual" onclick="showAnalysis('sp16')">he was a good church member.</span> This hope, however, was destroyed by the doctor's telling him that while his religious convictions were very good, <span class="highlight spiritual" onclick="showAnalysis('sp17')">in his case they did not spell the necessary vital spiritual experience.</span>
+        </p>
+
+        <p>
+            <span class="highlight historical" onclick="showAnalysis('h8')">Here was the terrible dilemma in which our friend found himself when he had the extraordinary experience</span>, which as we have already told you, made him a free man.
+        </p>
+
+        <p>
+            We, in our turn, sought the same escape with all the desperation of drowning men. <span class="highlight spiritual" onclick="showAnalysis('sp18')">What seemed at first a flimsy reed, has proved to be the loving and powerful hand of God.</span> <span class="highlight solution" onclick="showAnalysis('s10')">A new life has been given us or, if you prefer, "a design for living" that really works.</span>
+        </p>
+
+        <p>
+            <span class="highlight historical" onclick="showAnalysis('h9')">The distinguished American psychologist, William James, in his book "Varieties of Religious Experience,"</span> indicates a multitude of ways in which men have discovered God. <span class="highlight spiritual" onclick="showAnalysis('sp19')">We have no desire to convince anyone that there is only one way by which faith can be acquired.</span> If what we have learned and felt and seen means anything at all, it means that <span class="highlight spiritual" onclick="showAnalysis('sp20')">all of us, whatever our race, creed, or color are the children of a living Creator with whom we may form a relationship upon simple and understandable terms as soon as we are willing and honest enough to try.</span> Those having religious affiliations will find here nothing disturbing to their beliefs or ceremonies. <span class="highlight fellowship" onclick="showAnalysis('f8')">There is no friction among us over such matters.</span>
+        </p>
+
+        <p class="section-marker">Page 29</p>
+
+        <p>
+            <span class="highlight spiritual" onclick="showAnalysis('sp21')">We think it no concern of ours what religious bodies our members identify themselves with as individuals.</span> This should be an entirely personal affair which each one decides for himself in the light of past associations, or his present choice. <span class="highlight fellowship" onclick="showAnalysis('f9')">Not all of us join religious bodies, but most of us favor such memberships.</span>
+        </p>
+
+        <p>
+            In the following chapter, there appears <span class="highlight key" onclick="showAnalysis('k13')">an explanation of alcoholism, as we understand it</span>, then a chapter addressed to the agnostic. Many who once were in this class are now among our members. Surprisingly enough, <span class="highlight spiritual" onclick="showAnalysis('sp22')">we find such convictions no great obstacle to a spiritual experience.</span>
+        </p>
+
+        <p>
+            Further on, <span class="highlight key" onclick="showAnalysis('k14')">clear-cut directions are given showing how we recovered.</span> These are followed by forty-three personal experiences.
+        </p>
+
+        <p>
+            Each individual, in the personal stories, <span class="highlight service" onclick="showAnalysis('sv11')">describes in his own language and from his own point of view the way he established his relationship with God.</span> These give a fair cross section of our membership and a clear-cut idea of what has actually happened in their lives.
+        </p>
+
+        <p>
+            We hope no one will consider these self-revealing accounts in bad taste. Our hope is that many alcoholic men and women, desperately in need, will see these pages, and we believe that it is only by <span class="highlight service" onclick="showAnalysis('sv12')">fully disclosing ourselves and our problems that they will be persuaded to say, "Yes, I am one of them too; I must have this thing."</span>
+        </p>
+
+    </div>
+
+    <!-- RIGHT: Sidebar -->
+    <div class="sidebar">
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab('analysis')">Analysis</button>
+            <button class="tab-btn" onclick="switchTab('discuss')">Discussion</button>
+            <button class="tab-btn" onclick="switchTab('refs')">References</button>
+            <button class="tab-btn" onclick="switchTab('concepts')">Concepts</button>
+            <button class="tab-btn" onclick="switchTab('notes')">Notes</button>
+        </div>
+
+        <div id="analysis" class="tab-content active">
+            <div class="legend-grid">
+                <div class="legend-item physical"><div class="dot" style="background: var(--physical-border)"></div> Physical</div>
+                <div class="legend-item mental"><div class="dot" style="background: var(--mental-border)"></div> Mental</div>
+                <div class="legend-item duality"><div class="dot" style="background: var(--duality-border)"></div> Types</div>
+                <div class="legend-item progression"><div class="dot" style="background: var(--progression-border)"></div> Progression</div>
+                <div class="legend-item fellowship"><div class="dot" style="background: var(--fellowship-border)"></div> Fellowship</div>
+                <div class="legend-item solution"><div class="dot" style="background: var(--solution-border)"></div> Solution</div>
+                <div class="legend-item spiritual"><div class="dot" style="background: var(--spiritual-border)"></div> Spiritual</div>
+                <div class="legend-item service"><div class="dot" style="background: var(--service-border)"></div> Service</div>
+                <div class="legend-item step"><div class="dot" style="background: var(--step-border)"></div> Steps</div>
+                <div class="legend-item historical"><div class="dot" style="background: var(--historical-border)"></div> Historical</div>
+                <div class="legend-item key"><div class="dot" style="background: var(--key-border)"></div> Key Phrases</div>
+            </div>
+
+            <div id="cards-container">
+
+                <div id="card-k1" class="card key">
+                    <h4>"We, of Alcoholics Anonymous" <span class="tag" style="background: #03a9f4;">Opening</span></h4>
+                    <p>The first words establish collective identity. Not "I" but "WE" - recovery happens in community.</p>
+                    <div class="step-connection">Foundation: Unity is the first of the Three Legacies</div>
+                </div>
+
+                <div id="card-k2" class="card key">
+                    <h4>"Great News" <span class="tag" style="background: #03a9f4;">Gospel</span></h4>
+                    <p>The word "gospel" means "good news." The Big Book carries a message of hope to the hopeless.</p>
+                    <div class="sponsor-note">Sponsor Point: When did you first hear this "great news"?</div>
+                </div>
+
+                <div id="card-k3" class="card key">
+                    <h4>"How Shall We Present..." <span class="tag" style="background: #03a9f4;">Mission</span></h4>
+                    <p>The founders' question: How do we share what we've received? This question birthed the Big Book itself.</p>
+                    <div class="step-connection">Step 12: The obligation to carry the message drives everything.</div>
+                </div>
+
+                <div id="card-k4" class="card key">
+                    <h4>"What Do I Have To Do?" <span class="tag" style="background: #03a9f4;">The Question</span></h4>
+                    <p>THE most important question. The entire Big Book answers this - not theory, but specific actions.</p>
+                    <div class="sponsor-note">Sponsor Point: This is the question every newcomer must ask.</div>
+                </div>
+
+                <div id="card-k5" class="card key">
+                    <h4>"Answer Questions Specifically" <span class="tag" style="background: #03a9f4;">Promise</span></h4>
+                    <p>The Big Book promises SPECIFIC answers, not vague philosophy. It's a manual, not a meditation.</p>
+                    <div class="sponsor-note">Sponsor Point: Are you looking for specific directions or just comfort?</div>
+                </div>
+
+                <div id="card-k6" class="card key">
+                    <h4>"Not Comprehensive Picture" <span class="tag" style="background: #03a9f4;">Humility</span></h4>
+                    <p>The authors acknowledge they don't have all answers. Alcoholism manifests in many ways - but the solution is the same.</p>
+                </div>
+
+                <div id="card-k7" class="card key">
+                    <h4>"Never Full Answer" <span class="tag" style="background: #03a9f4;">Mystery</span></h4>
+                    <p>Honest admission: we don't fully understand WHY alcoholics react differently. But we know WHAT works.</p>
+                </div>
+
+                <div id="card-k8" class="card key">
+                    <h4>"Already Arrived" <span class="tag" style="background: #03a9f4;">Warning</span></h4>
+                    <p>The tragic situation arrives BEFORE it's suspected. By the time we recognize the problem, we're already deep in it.</p>
+                    <div class="sponsor-note">Sponsor Point: When did your "tragic situation" actually begin vs. when you recognized it?</div>
+                </div>
+
+                <div id="card-k9" class="card key">
+                    <h4>"Without Defense" <span class="tag" style="background: #03a9f4;">Crucial</span></h4>
+                    <p>Perhaps the most important line in the book. We have NO defense against the first drink - ONLY a spiritual solution works.</p>
+                    <div class="step-connection">Step 1: This IS powerlessness. Step 2: We need a Power greater than ourselves.</div>
+                </div>
+
+                <div id="card-k10" class="card key">
+                    <h4>"Confirmed by Legions" <span class="tag" style="background: #03a9f4;">Evidence</span></h4>
+                    <p>This isn't theory - it's confirmed by countless alcoholics throughout history. The evidence is overwhelming.</p>
+                </div>
+
+                <div id="card-k11" class="card key">
+                    <h4>"Why Could Not Recover" <span class="tag" style="background: #03a9f4;">Desperation</span></h4>
+                    <p>Rowland's desperate question to Jung. He'd tried everything - why couldn't he recover? The answer changed history.</p>
+                </div>
+
+                <div id="card-k12" class="card key">
+                    <h4>"Is There No Exception?" <span class="tag" style="background: #03a9f4;">Hope</span></h4>
+                    <p>The pivotal question. Jung's answer - "yes, vital spiritual experiences" - became AA's foundation.</p>
+                    <div class="step-connection">This exception IS the program. Spiritual experience is the way out.</div>
+                </div>
+
+                <div id="card-k13" class="card key">
+                    <h4>"As We Understand It" <span class="tag" style="background: #03a9f4;">Humility</span></h4>
+                    <p>Key phrase used throughout AA - "as we understand it." Not dogma, but shared experience and understanding.</p>
+                </div>
+
+                <div id="card-k14" class="card key">
+                    <h4>"Clear-Cut Directions" <span class="tag" style="background: #03a9f4;">Promise</span></h4>
+                    <p>The Big Book promises clear-cut directions - the 12 Steps. Not suggestions, but specific actions that lead to recovery.</p>
+                    <div class="sponsor-note">Sponsor Point: Have you followed the clear-cut directions, or made your own path?</div>
+                </div>
+
+                <div id="card-f1" class="card fellowship">
+                    <h4>Thousands Recovered <span class="tag" style="background: #66bb6a;">Evidence</span></h4>
+                    <p>Recovery works. "Hopeless" shows where we started; "recovered" shows where we can go. This is testimony, not theory.</p>
+                    <div class="step-connection">Step 12: These thousands carry the message to others.</div>
+                    <div class="sponsor-note"><strong>Deep Dive:</strong> "Recovered" (past tense) is deliberately chosen—we have recovered from a "hopeless condition of mind and body," but we are NOT cured of alcoholism. The allergy remains. One drink reactivates the phenomenon of craving. This distinction prevents the dangerous thought: "Maybe I can drink normally now."</div>
+                </div>
+
+                <div id="card-f2" class="card fellowship">
+                    <h4>Average Americans <span class="tag" style="background: #66bb6a;">Identity</span></h4>
+                    <p>Not special, not unique - average people from all walks of life. Alcoholism doesn't discriminate by background.</p>
+                </div>
+
+                <div id="card-f3" class="card fellowship">
+                    <h4>Would Not Mix <span class="tag" style="background: #66bb6a;">Unity</span></h4>
+                    <p>Alcoholism is the great equalizer. Social barriers dissolve. CEOs sit with construction workers, atheists with believers.</p>
+                    <div class="step-connection">Tradition 1: Our common welfare comes first.</div>
+                </div>
+
+                <div id="card-f4" class="card fellowship">
+                    <h4>Indescribably Wonderful <span class="tag" style="background: #66bb6a;">Experience</span></h4>
+                    <p>The fellowship is beyond description - friendliness and understanding that must be experienced to be believed.</p>
+                    <div class="sponsor-note">Sponsor Point: How would you describe the fellowship to a newcomer?</div>
+                </div>
+
+                <div id="card-f5" class="card fellowship">
+                    <h4>Shipwreck Rescue <span class="tag" style="background: #66bb6a;">Metaphor</span></h4>
+                    <p>Survivors from drowning waters experience instant kinship regardless of class. We've all nearly drowned.</p>
+                    <div class="sponsor-note">Sponsor Point: Describe your "rescue from shipwreck" moment.</div>
+                </div>
+
+                <div id="card-f6" class="card fellowship">
+                    <h4>Joy Does Not Subside <span class="tag" style="background: #66bb6a;">Lasting</span></h4>
+                    <p>Unlike temporary relief, our joy in recovery doesn't fade. The gratitude and connection remain fresh.</p>
+                </div>
+
+                <div id="card-f7" class="card fellowship">
+                    <h4>Common Peril <span class="tag" style="background: #66bb6a;">Bond</span></h4>
+                    <p>Shared danger creates powerful bonds. We've all faced the same enemy - and survived together.</p>
+                    <div class="step-connection">This shared peril IS what makes AA work - mutual identification.</div>
+                </div>
+
+                <div id="card-f8" class="card fellowship">
+                    <h4>No Friction Over Religion <span class="tag" style="background: #66bb6a;">Tolerance</span></h4>
+                    <p>Despite different religious backgrounds, there's no conflict in AA. Unity of purpose transcends doctrinal differences.</p>
+                    <div class="step-connection">Tradition 10: AA has no opinion on outside issues.</div>
+                </div>
+
+                <div id="card-f9" class="card fellowship">
+                    <h4>Religious Membership Optional <span class="tag" style="background: #66bb6a;">Freedom</span></h4>
+                    <p>AA doesn't require religious affiliation. Most favor it, but it's each person's choice - not a requirement for recovery.</p>
+                </div>
+
+                <div id="card-s1" class="card solution">
+                    <h4>Solved the Drink Problem <span class="tag" style="background: #26a69a;">Victory</span></h4>
+                    <p>Not "managing" or "coping" - SOLVED. The problem can be completely overcome through this program.</p>
+                    <div class="step-connection">The promises: "We will intuitively know how to handle situations which used to baffle us."</div>
+                </div>
+
+                <div id="card-s2" class="card solution">
+                    <h4>Common Solution <span class="tag" style="background: #26a69a;">Thesis</span></h4>
+                    <p>This is the thesis of the Big Book. One solution, not many. Universal, not individual. The steps work for everyone who works them.</p>
+                </div>
+
+                <div id="card-s3" class="card solution">
+                    <h4>Absolutely Agree <span class="tag" style="background: #26a69a;">Unity</span></h4>
+                    <p>A way out we can ALL agree on. Despite differences in background and belief, the solution is universal.</p>
+                </div>
+
+                <div id="card-s4" class="card solution">
+                    <h4>Useful Program <span class="tag" style="background: #26a69a;">Practical</span></h4>
+                    <p>Not just theory - a USEFUL program. Practical, actionable, proven to work for anyone who applies it.</p>
+                </div>
+
+                <div id="card-s5" class="card solution">
+                    <h4>Recovered from Hopeless <span class="tag" style="background: #26a69a;">Miracle</span></h4>
+                    <p>"Hopeless condition of mind and body" - yet we recovered. What seemed impossible became reality through spiritual means.</p>
+                    <div class="sponsor-note">Sponsor Point: Did you believe recovery was possible when you first came in?</div>
+                </div>
+
+                <div id="card-s6" class="card solution">
+                    <h4>There IS A Solution <span class="tag" style="background: #26a69a;">Hope</span></h4>
+                    <p>After describing hopelessness, these four words arrive like a life preserver. Hope enters.</p>
+                </div>
+
+                <div id="card-s7" class="card solution">
+                    <h4>No Middle Ground <span class="tag" style="background: #26a69a;">Commitment</span></h4>
+                    <p>"Half measures availed us nothing." For the real alcoholic, it's all or nothing - death or spiritual solution.</p>
+                    <div class="sponsor-note">Sponsor Point: Have you tried half-measures? What happened?</div>
+                </div>
+
+                <div id="card-s8" class="card solution">
+                    <h4>Two Alternatives <span class="tag" style="background: #26a69a;">Choice</span></h4>
+                    <p>Only two choices: (1) go on to bitter end, or (2) accept spiritual help. There is no third option for the real alcoholic.</p>
+                    <div class="step-connection">Step 3: This is the decision - to turn our will over or continue in self-destruction.</div>
+                </div>
+
+                <div id="card-s9" class="card solution">
+                    <h4>No Bodyguard Needed <span class="tag" style="background: #26a69a;">Freedom</span></h4>
+                    <p>Rowland, once told he'd need to be locked up, now lives free. The solution works - complete freedom from alcohol.</p>
+                </div>
+
+                <div id="card-s10" class="card solution">
+                    <h4>Design for Living <span class="tag" style="background: #26a69a;">Blueprint</span></h4>
+                    <p>"A design for living that really works" - not just sobriety, but a complete blueprint for a new way of life.</p>
+                    <div class="sponsor-note">Sponsor Point: How has AA given you more than just sobriety?</div>
+                </div>
+
+                <div id="card-p1" class="card progression">
+                    <h4>An Illness <span class="tag" style="background: #fbc02d;">Disease</span></h4>
+                    <p>Revolutionary in 1939 - calling alcoholism an "illness" removed moral judgment. "We have come to believe" - they learned this.</p>
+                    <div class="step-connection">The disease concept removes shame and enables honest assessment.</div>
+                </div>
+
+                <div id="card-p2" class="card progression">
+                    <h4>Annihilation <span class="tag" style="background: #fbc02d;">Destruction</span></h4>
+                    <p>Not just inconvenience - ANNIHILATION of everything worthwhile. Alcoholism destroys completely what we value most.</p>
+                </div>
+
+                <div id="card-p3" class="card progression">
+                    <h4>Engulfs All <span class="tag" style="background: #fbc02d;">Family</span></h4>
+                    <p>Alcoholism is a family disease. Everyone touched by the sufferer is affected - spouses, children, parents, friends.</p>
+                    <div class="step-connection">Step 8-9: Making amends recognizes this damage.</div>
+                </div>
+
+                <div id="card-p4" class="card progression">
+                    <h4>Warped Lives <span class="tag" style="background: #fbc02d;">Collateral</span></h4>
+                    <p>Blameless children, sad wives and parents - the innocent suffer most. Our disease warps lives that never chose this.</p>
+                    <div class="sponsor-note">Sponsor Point: Who has been affected by your drinking?</div>
+                </div>
+
+                <div id="card-p5" class="card progression">
+                    <h4>Dangerously Anti-Social <span class="tag" style="background: #fbc02d;">Behavior</span></h4>
+                    <p>Not just unpleasant - DANGEROUSLY anti-social. One day of drinking can turn the finest person into a threat.</p>
+                </div>
+
+                <div id="card-p6" class="card progression">
+                    <h4>Pulls Structure Down <span class="tag" style="background: #fbc02d;">Self-Sabotage</span></h4>
+                    <p>We build promising careers and relationships, then destroy them with senseless sprees. The pattern repeats.</p>
+                    <div class="sponsor-note">Sponsor Point: What have you built up and then torn down?</div>
+                </div>
+
+                <div id="card-p7" class="card progression">
+                    <h4>Sedatives and Liquor <span class="tag" style="background: #fbc02d;">Escalation</span></h4>
+                    <p>The progression: drinking leads to needing sedatives to function, which leads to more drinking. A deadly spiral.</p>
+                </div>
+
+                <div id="card-p8" class="card progression">
+                    <h4>Hospitals and Sanitariums <span class="tag" style="background: #fbc02d;">Institutions</span></h4>
+                    <p>The inevitable destination without recovery - hospitals, sanitariums, jails. The disease progresses to institutional care.</p>
+                </div>
+
+                <div id="card-p9" class="card progression">
+                    <h4>Beyond Human Aid <span class="tag" style="background: #fbc02d;">Hopeless</span></h4>
+                    <p>When alcoholic thinking is "fully established," human methods fail. Only superhuman aid reaches us.</p>
+                    <div class="step-connection">Step 2: A Power GREATER than ourselves could restore us.</div>
+                </div>
+
+                <div id="card-p10" class="card progression">
+                    <h4>Drunk in Short Time <span class="tag" style="background: #fbc02d;">Relapse</span></h4>
+                    <p>Rowland had the best treatment, best knowledge, best confidence - and was drunk in a short time. Knowledge alone fails.</p>
+                </div>
+
+                <div id="card-p11" class="card progression">
+                    <h4>Utterly Hopeless <span class="tag" style="background: #fbc02d;">Verdict</span></h4>
+                    <p>Jung's verdict: utterly hopeless, never regain position in society, need to be locked up. This was the medical opinion.</p>
+                    <div class="step-connection">Step 1: Accepting this hopelessness is the beginning of hope.</div>
+                </div>
+
+                <div id="card-p12" class="card progression">
+                    <h4>Gates of Hell <span class="tag" style="background: #fbc02d;">Despair</span></h4>
+                    <p>"The gates of hell had closed on him with a clang." Complete despair - yet this became the doorway to freedom.</p>
+                    <div class="sponsor-note">Sponsor Point: Describe your "gates of hell" moment.</div>
+                </div>
+
+                <div id="card-m1" class="card mental">
+                    <h4>Why So Very Ill <span class="tag" style="background: #ab47bc;">Question</span></h4>
+                    <p>The fundamental question: Why do WE get so sick from drinking when others don't? This chapter begins to answer.</p>
+                </div>
+
+                <div id="card-m2" class="card mental">
+                    <h4>What People Say <span class="tag" style="background: #ab47bc;">Misunderstanding</span></h4>
+                    <p>"Take it or leave it," "Why can't he quit?" - common phrases that show complete misunderstanding of alcoholism.</p>
+                </div>
+
+                <div id="card-m3" class="card mental">
+                    <h4>Deadly Warning Ignored <span class="tag" style="background: #ab47bc;">Insanity</span></h4>
+                    <p>"The doctor told him it would kill him, but there he is all lit up again." This defies logic - it's the insanity of alcoholism.</p>
+                    <div class="step-connection">Step 2: "Insane" - doing the same thing expecting different results.</div>
+                </div>
+
+                <div id="card-m4" class="card mental">
+                    <h4>World of Ignorance <span class="tag" style="background: #ab47bc;">Context</span></h4>
+                    <p>Behind the judgmental comments lies ignorance. People don't understand that alcoholism is fundamentally different from heavy drinking.</p>
+                </div>
+
+                <div id="card-m5" class="card mental">
+                    <h4>Absurd, Incredible, Tragic <span class="tag" style="background: #ab47bc;">Behavior</span></h4>
+                    <p>Our drinking behavior defies explanation - absurd to observers, incredible to family, tragic in consequences.</p>
+                </div>
+
+                <div id="card-m6" class="card mental">
+                    <h4>Genius for Bad Timing <span class="tag" style="background: #ab47bc;">Self-Sabotage</span></h4>
+                    <p>We get drunk at the worst possible moments. Job interviews, anniversaries. It's as if the subconscious tries to destroy us.</p>
+                    <div class="sponsor-note">Sponsor Point: Share an example of your own "bad timing."</div>
+                </div>
+
+                <div id="card-m7" class="card mental">
+                    <h4>Why Does He Behave This Way <span class="tag" style="background: #ab47bc;">Mystery</span></h4>
+                    <p>The central question family asks. Why? The answer involves both physical allergy and mental obsession.</p>
+                </div>
+
+                <div id="card-m8" class="card mental">
+                    <h4>Why That One Drink <span class="tag" style="background: #ab47bc;">Crux</span></h4>
+                    <p>After hundreds of bad experiences, why take that first drink? THIS is the crux of the problem - the mental obsession.</p>
+                    <div class="step-connection">The body problem starts AFTER the first drink. The mind problem causes it.</div>
+                </div>
+
+                <div id="card-m9" class="card mental">
+                    <h4>Common Sense and Will Power <span class="tag" style="background: #ab47bc;">Failure</span></h4>
+                    <p>We display common sense and will power in other areas - why not with alcohol? The disease bypasses our normal defenses.</p>
+                </div>
+
+                <div id="card-m10" class="card mental">
+                    <h4>Cannot Answer the Riddle <span class="tag" style="background: #ab47bc;">Humility</span></h4>
+                    <p>Honest admission: we don't fully understand WHY. But we know the solution works even without complete understanding.</p>
+                </div>
+
+                <div id="card-m11" class="card mental">
+                    <h4>Mind, Not Body <span class="tag" style="background: #ab47bc;">Key Insight</span></h4>
+                    <p>CRUCIAL: The body's allergy triggers craving, but the mind triggers the first drink. If we never took that first drink, the allergy wouldn't matter.</p>
+                    <div class="step-connection">This is why the solution must be spiritual/mental, not just physical.</div>
+                </div>
+
+                <div id="card-m12" class="card mental">
+                    <h4>Alibis Don't Make Sense <span class="tag" style="background: #ab47bc;">Denial</span></h4>
+                    <p>We have a hundred excuses, but none make sense given the havoc drinking causes. Our alibis are hollow.</p>
+                </div>
+
+                <div id="card-m13" class="card mental">
+                    <h4>Hammer on the Head <span class="tag" style="background: #ab47bc;">Insanity</span></h4>
+                    <p>Hitting yourself with a hammer to cure a headache. Drinking to solve drinking problems. It defies logic - that's the insanity.</p>
+                    <div class="sponsor-note">Sponsor Point: How have you "hit yourself with a hammer"?</div>
+                </div>
+
+                <div id="card-m14" class="card mental">
+                    <h4>No Idea Why <span class="tag" style="background: #ab47bc;">Blank Spot</span></h4>
+                    <p>"He has no more idea why he took that first drink than you have." The mental blank spot - we don't even know why we started.</p>
+                    <div class="sponsor-note">Sponsor Point: Can you explain why you took that first drink after a period of sobriety?</div>
+                </div>
+
+                <div id="card-m15" class="card mental">
+                    <h4>Really Do Not Know <span class="tag" style="background: #ab47bc;">Bafflement</span></h4>
+                    <p>In our hearts, we really don't know why we do it. This bafflement is part of the disease - beyond rational explanation.</p>
+                </div>
+
+                <div id="card-m16" class="card mental">
+                    <h4>The Great Obsession <span class="tag" style="background: #ab47bc;">Delusion</span></h4>
+                    <p>The idea we'll "beat the game" - control drinking like normal people. This obsession must be smashed for recovery to begin.</p>
+                    <div class="step-connection">Step 1: Admitting we CAN'T beat the game.</div>
+                </div>
+
+                <div id="card-m17" class="card mental">
+                    <h4>Waiting for Willpower <span class="tag" style="background: #ab47bc;">False Hope</span></h4>
+                    <p>Family waits hopefully for us to "rouse ourselves" and use willpower. For the real alcoholic, that day may never come.</p>
+                </div>
+
+                <div id="card-m18" class="card mental">
+                    <h4>Willpower Nonexistent <span class="tag" style="background: #ab47bc;">Powerlessness</span></h4>
+                    <p>Our "so-called will power becomes practically nonexistent" regarding alcohol. It works elsewhere, but not here.</p>
+                    <div class="step-connection">Step 1: We are powerless - our willpower doesn't work with alcohol.</div>
+                </div>
+
+                <div id="card-m19" class="card mental">
+                    <h4>Cannot Remember Suffering <span class="tag" style="background: #ab47bc;">Amnesia</span></h4>
+                    <p>We can't bring to mind "with sufficient force" the memory of past suffering. It's there, but blocked at the crucial moment.</p>
+                </div>
+
+                <div id="card-m20" class="card mental">
+                    <h4>This Time Different <span class="tag" style="background: #ab47bc;">Delusion</span></h4>
+                    <p>"This time we shall handle ourselves like other people" - the threadbare idea that never proves true for the real alcoholic.</p>
+                </div>
+
+                <div id="card-m21" class="card mental">
+                    <h4>Hot Stove Defense Missing <span class="tag" style="background: #ab47bc;">Defect</span></h4>
+                    <p>We instinctively avoid hot stoves - but not alcohol. The normal defense mechanism is completely absent.</p>
+                    <div class="step-connection">This missing defense is what makes us need a spiritual solution.</div>
+                    <div class="sponsor-note"><strong>Cross-Reference:</strong> This "Hot Stove" analogy is the direct precursor to the famous "Jaywalker" story on Page 37 (Chapter 3). The jaywalker repeatedly runs into traffic despite broken bones—same insanity, different metaphor. Connect these in discussion: "If repeatedly touching a hot stove is insane, what about repeatedly drinking despite consequences?"</div>
+                </div>
+
+                <div id="card-m22" class="card mental">
+                    <h4>"Won't Burn Me This Time" <span class="tag" style="background: #ab47bc;">Insanity</span></h4>
+                    <p>The insane thought: "It won't burn me this time." We KNOW it will, yet somehow convince ourselves otherwise.</p>
+                </div>
+
+                <div id="card-m23" class="card mental">
+                    <h4>"How Did I Get Started Again?" <span class="tag" style="background: #ab47bc;">Bewilderment</span></h4>
+                    <p>After the third or fourth drink, we wonder how we got started. We didn't plan it - the obsession took over.</p>
+                    <div class="sponsor-note">Sponsor Point: Have you ever been bewildered at finding yourself drinking?</div>
+                </div>
+
+                <div id="card-m24" class="card mental">
+                    <h4>Profound Knowledge Failed <span class="tag" style="background: #ab47bc;">Limits</span></h4>
+                    <p>Rowland believed his "profound knowledge of the inner workings of his mind" made relapse unthinkable. He was wrong.</p>
+                    <div class="step-connection">Understanding the problem intellectually doesn't solve it.</div>
+                </div>
+
+                <div id="card-m25" class="card mental">
+                    <h4>No Satisfactory Explanation <span class="tag" style="background: #ab47bc;">Mystery</span></h4>
+                    <p>Even after relapse, Rowland couldn't explain why he drank. The mental obsession defies logical explanation.</p>
+                </div>
+
+                <div id="card-ph1" class="card physical">
+                    <h4>The Real Alcoholic <span class="tag" style="background: #ef5350;">Definition</span></h4>
+                    <p>Distinguishes the chronic alcoholic from heavy drinkers. Not quantity, but reaction. The "real" alcoholic loses control once drinking begins.</p>
+                    <div class="step-connection">Step 1: Am I a "real" alcoholic?</div>
+                </div>
+
+                <div id="card-ph2" class="card physical">
+                    <h4>Loses All Control <span class="tag" style="background: #ef5350;">Allergy</span></h4>
+                    <p>The defining symptom. Once alcohol enters the system, the "phenomenon of craving" kicks in. We cannot predict or control the outcome.</p>
+                </div>
+
+                <div id="card-ph3" class="card physical">
+                    <h4>Insanely Drunk <span class="tag" style="background: #ef5350;">Extreme</span></h4>
+                    <p>"Seldom mildly intoxicated. Always more or less insanely drunk." We don't have just one or two - we go to extremes.</p>
+                </div>
+
+                <div id="card-ph4" class="card physical">
+                    <h4>Searches for the Bottle <span class="tag" style="background: #ef5350;">Craving</span></h4>
+                    <p>After a night of drinking, we wake up searching madly for the bottle. The physical craving demands more alcohol.</p>
+                    <div class="sponsor-note">Sponsor Point: Have you experienced the morning search for alcohol?</div>
+                </div>
+
+                <div id="card-ph5" class="card physical">
+                    <h4>Liquor Concealed <span class="tag" style="background: #ef5350;">Hiding</span></h4>
+                    <p>Hiding bottles all over the house - a classic sign. We fear someone will take away our supply.</p>
+                </div>
+
+                <div id="card-ph6" class="card physical">
+                    <h4>Something Happens <span class="tag" style="background: #ef5350;">Phenomenon</span></h4>
+                    <p>"Something happens, both in bodily and mental sense." The allergy creates a reaction we can't control - the "phenomenon of craving."</p>
+                    <div class="step-connection">Doctor's Opinion explains this in detail.</div>
+                    <div class="sponsor-note"><strong>Linguistic Note:</strong> "Virtually impossible" in 1939 meant "in essence" or "to all intents and purposes"—NOT "almost" as modern readers might assume. The Big Book is saying it IS impossible to stop once started, not "nearly" impossible. This is a critical distinction: without help, there is no fighting the craving.</div>
+                </div>
+
+                <div id="card-ph7" class="card physical">
+                    <h4>Lost Control <span class="tag" style="background: #ef5350;">Fact</span></h4>
+                    <p>Simple statement of fact: "He has lost control." Not losing, not might lose - HAS lost. It's already happened.</p>
+                    <div class="step-connection">Step 1: Admitting we have lost control is the foundation.</div>
+                </div>
+
+                <div id="card-d1" class="card duality">
+                    <h4>Cancer vs. Alcoholism <span class="tag" style="background: #42a5f5;">Stigma</span></h4>
+                    <p>Cancer brings sympathy; alcoholism brings anger. The stigma of alcoholism makes it harder to seek help and find understanding.</p>
+                </div>
+
+                <div id="card-d2" class="card duality">
+                    <h4>More Unapproachable <span class="tag" style="background: #42a5f5;">Walls</span></h4>
+                    <p>We're harder to reach for family than for professionals. Our defenses are highest against those closest to us.</p>
+                </div>
+
+                <div id="card-d3" class="card duality">
+                    <h4>Moderate Drinkers <span class="tag" style="background: #42a5f5;">Type 1</span></h4>
+                    <p>First type: can genuinely "take it or leave it." With good reason, they quit easily. The alcoholic cannot understand this ability.</p>
+                </div>
+
+                <div id="card-d4" class="card duality">
+                    <h4>Hard Drinker <span class="tag" style="background: #42a5f5;">Type 2</span></h4>
+                    <p>Second type: drinks heavily but CAN stop with sufficient motivation. Many alcoholics misidentify as this type.</p>
+                </div>
+
+                <div id="card-d5" class="card duality">
+                    <h4>Can Stop with Reason <span class="tag" style="background: #42a5f5;">Distinction</span></h4>
+                    <p>The hard drinker CAN stop if given sufficient reason - health, love, job. The real alcoholic cannot, regardless of reason.</p>
+                    <div class="sponsor-note">Sponsor Point: Have good reasons ever been enough to keep you stopped?</div>
+                </div>
+
+                <div id="card-d6" class="card duality">
+                    <h4>Jekyll and Hyde <span class="tag" style="background: #42a5f5;">Personality</span></h4>
+                    <p>Two distinct people: sober self and drunk self. We're not bad people trying to be good - we're sick people with split personalities.</p>
+                    <div class="sponsor-note">Sponsor Point: Describe your "Hyde" personality.</div>
+                </div>
+
+                <div id="card-d7" class="card duality">
+                    <h4>Disposition Changes <span class="tag" style="background: #42a5f5;">Transformation</span></h4>
+                    <p>Our disposition while drinking "resembles his normal nature but little." Alcohol transforms us into someone else entirely.</p>
+                </div>
+
+                <div id="card-d8" class="card duality">
+                    <h4>Sensible Except Liquor <span class="tag" style="background: #42a5f5;">Paradox</span></h4>
+                    <p>We're sensible and well-balanced about everything EXCEPT alcohol. This paradox baffles everyone, including ourselves.</p>
+                </div>
+
+                <div id="card-d9" class="card duality">
+                    <h4>Reacts Like Other Men <span class="tag" style="background: #42a5f5;">Sober</span></h4>
+                    <p>When not drinking, we react normally. The problem isn't our personality - it's our reaction to alcohol.</p>
+                </div>
+
+                <div id="card-sv1" class="card service">
+                    <h4>Inform and Comfort <span class="tag" style="background: #ff9800;">Purpose</span></h4>
+                    <p>The Big Book's dual purpose: INFORM those affected and COMFORT those who suffer. Education and empathy together.</p>
+                </div>
+
+                <div id="card-sv2" class="card service">
+                    <h4>Psychiatrists Can't Reach Us <span class="tag" style="background: #ff9800;">Limitation</span></h4>
+                    <p>Even highly competent professionals find it impossible to get us to open up. Our defenses are too strong.</p>
+                </div>
+
+                <div id="card-sv3" class="card service">
+                    <h4>Win Confidence in Hours <span class="tag" style="background: #ff9800;">12th Step</span></h4>
+                    <p>One alcoholic reaches another where professionals couldn't. The magic is identification - "I was just like you."</p>
+                    <div class="step-connection">Step 12: We carry this message through identification.</div>
+                </div>
+
+                <div id="card-sv4" class="card service">
+                    <h4>Had the Same Difficulty <span class="tag" style="background: #ff9800;">Identification</span></h4>
+                    <p>The key to reaching another alcoholic: we've HAD the same difficulty. Not studied it - LIVED it.</p>
+                </div>
+
+                <div id="card-sv5" class="card service">
+                    <h4>Man with a Real Answer <span class="tag" style="background: #ff9800;">Credibility</span></h4>
+                    <p>Our whole deportment shows we have a REAL answer, not theory. Newcomers can see it in how we live.</p>
+                </div>
+
+                <div id="card-sv6" class="card service">
+                    <h4>No Holier Than Thou <span class="tag" style="background: #ff9800;">Humility</span></h4>
+                    <p>Crucial attitude: humility, not superiority. We're fellow sufferers sharing. Any hint of superiority destroys connection.</p>
+                    <div class="sponsor-note">Sponsor Point: Check your attitude when helping others.</div>
+                </div>
+
+                <div id="card-sv7" class="card service">
+                    <h4>No Fees, No Axes <span class="tag" style="background: #ff9800;">Traditions</span></h4>
+                    <p>No professional fees, no hidden agendas. Purity of motive is essential. We give freely what was freely given.</p>
+                    <div class="step-connection">Tradition 7: Self-supporting through contributions.</div>
+                </div>
+
+                <div id="card-sv8" class="card service">
+                    <h4>Not a Sole Vocation <span class="tag" style="background: #ff9800;">Balance</span></h4>
+                    <p>None of us makes this our sole job. We live in the real world, demonstrating recovery in daily life.</p>
+                    <div class="step-connection">Tradition 8: AA should remain forever nonprofessional.</div>
+                </div>
+
+                <div id="card-sv9" class="card service">
+                    <h4>Surface Hardly Scratched <span class="tag" style="background: #ff9800;">Urgency</span></h4>
+                    <p>Even with all our efforts, we've barely scratched the surface. The need is overwhelming - so many still suffer.</p>
+                </div>
+
+                <div id="card-sv10" class="card service">
+                    <h4>Hundreds Dropping Daily <span class="tag" style="background: #ff9800;">Urgency</span></h4>
+                    <p>"Close by hundreds are dropping into oblivion every day." The urgency of carrying the message - lives depend on it.</p>
+                    <div class="sponsor-note">Sponsor Point: How does this urgency affect your commitment to service?</div>
+                </div>
+
+                <div id="card-sv11" class="card service">
+                    <h4>Own Language, Own Point of View <span class="tag" style="background: #ff9800;">Personal</span></h4>
+                    <p>Each person describes their relationship with God in their OWN way. No formula - just honest personal experience.</p>
+                </div>
+
+                <div id="card-sv12" class="card service">
+                    <h4>Fully Disclosing Ourselves <span class="tag" style="background: #ff9800;">Honesty</span></h4>
+                    <p>By fully disclosing ourselves, we help others identify: "Yes, I am one of them too." Honesty creates connection.</p>
+                    <div class="step-connection">Step 5 & 12: We share our story to help others.</div>
+                </div>
+
+                <div id="card-st1" class="card step">
+                    <h4>Understanding Required First <span class="tag" style="background: #ec407a;">Foundation</span></h4>
+                    <p>"Until such an understanding is reached, little or nothing can be accomplished." Identification must come before change.</p>
+                </div>
+
+                <div id="card-st2" class="card step">
+                    <h4>Drinking But a Beginning <span class="tag" style="background: #ec407a;">Beyond Sobriety</span></h4>
+                    <p>"Elimination of our drinking is but a beginning." Sobriety is just the start - the real work is living the program.</p>
+                    <div class="sponsor-note">Sponsor Point: What lies beyond just not drinking?</div>
+                </div>
+
+                <div id="card-st3" class="card step">
+                    <h4>Constant Thought of Others <span class="tag" style="background: #ec407a;">Step 12</span></h4>
+                    <p>"Our very lives...depend upon our constant thought of others." Service isn't optional - it's essential for survival.</p>
+                </div>
+
+                <div id="card-st4" class="card step">
+                    <h4>Happy Day May Not Arrive <span class="tag" style="background: #ec407a;">Warning</span></h4>
+                    <p>For the real alcoholic, waiting for willpower to kick in is futile. The "happy day" of spontaneous recovery won't come.</p>
+                </div>
+
+                <div id="card-st5" class="card step">
+                    <h4>Desire to Stop Not Enough <span class="tag" style="background: #ec407a;">Step 1</span></h4>
+                    <p>"The most powerful desire to stop drinking is of absolutely no avail." Wanting to stop isn't enough - we need help.</p>
+                </div>
+
+                <div id="card-st6" class="card step">
+                    <h4>Lost Power of Choice <span class="tag" style="background: #ec407a;">Step 1</span></h4>
+                    <p>This IS Step 1: "powerless over alcohol." We've lost the power to choose not to drink. This admission is the foundation.</p>
+                </div>
+
+                <div id="card-st7" class="card step">
+                    <h4>Want to Stop But Cannot <span class="tag" style="background: #ec407a;">Desperation</span></h4>
+                    <p>"So many want to stop but cannot." This is the essence of powerlessness - the will is there, but the power is gone.</p>
+                    <div class="sponsor-note">Sponsor Point: Have you experienced wanting to stop but being unable?</div>
+                </div>
+
+                <div id="card-st8" class="card step">
+                    <h4>Self-Searching <span class="tag" style="background: #ec407a;">Steps 4-5</span></h4>
+                    <p>"Self-searching, leveling of pride, confession" - Steps 4 and 5 in preview. Few of us liked it, but we saw it worked.</p>
+                </div>
+
+                <div id="card-st9" class="card step">
+                    <h4>Believed in Hopelessness <span class="tag" style="background: #ec407a;">Surrender</span></h4>
+                    <p>"We had come to believe in the hopelessness and futility of life as we had been living it." Complete surrender precedes recovery.</p>
+                    <div class="step-connection">Step 1: This hopelessness is the gift of desperation.</div>
+                </div>
+
+                <div id="card-st10" class="card step">
+                    <h4>Could Never Do Ourselves <span class="tag" style="background: #ec407a;">Step 3</span></h4>
+                    <p>God accomplishes what we couldn't. This is Step 3 - turning our will over because ours doesn't work.</p>
+                </div>
+
+                <div id="card-sp1" class="card spiritual">
+                    <h4>Sincere Desire to Help <span class="tag" style="background: #7e57c2;">Motive</span></h4>
+                    <p>Nothing except "the sincere desire to be helpful." Pure motive is the foundation of effective 12th step work.</p>
+                </div>
+
+                <div id="card-sp2" class="card spiritual">
+                    <h4>Take Up Beds and Walk <span class="tag" style="background: #7e57c2;">Miracle</span></h4>
+                    <p>Biblical language: "many take up their beds and walk again." Recovery is described as miraculous healing.</p>
+                </div>
+
+                <div id="card-sp3" class="card spiritual">
+                    <h4>Demonstration in Daily Life <span class="tag" style="background: #7e57c2;">Practice</span></h4>
+                    <p>"A much more important demonstration of our principles lies before us" - in homes, jobs, and relationships. Recovery is lived, not just discussed.</p>
+                </div>
+
+                <div id="card-sp4" class="card spiritual">
+                    <h4>No Basis for Contention <span class="tag" style="background: #7e57c2;">Peace</span></h4>
+                    <p>The founders wanted no basis for argument. AA avoids controversy to focus on our primary purpose.</p>
+                    <div class="step-connection">Tradition 10: AA has no opinion on outside issues.</div>
+                </div>
+
+                <div id="card-sp5" class="card spiritual">
+                    <h4>Tolerance and Respect <span class="tag" style="background: #7e57c2;">Attitude</span></h4>
+                    <p>"Real tolerance of other people's shortcomings and viewpoints." Tolerance makes us more useful to others.</p>
+                </div>
+
+                <div id="card-sp6" class="card spiritual">
+                    <h4>Dishonest and Selfish <span class="tag" style="background: #7e57c2;">Defects</span></h4>
+                    <p>About alcohol, we are "incredibly dishonest and selfish." These character defects fuel our drinking.</p>
+                    <div class="step-connection">Steps 4-7: Identifying and removing these defects.</div>
+                </div>
+
+                <div id="card-sp7" class="card spiritual">
+                    <h4>Kit of Spiritual Tools <span class="tag" style="background: #7e57c2;">The Steps</span></h4>
+                    <p>The Twelve Steps described as "simple" and "laid at our feet." We didn't search for them - our job is just to pick them up.</p>
+                </div>
+
+                <div id="card-sp8" class="card spiritual">
+                    <h4>Fourth Dimension <span class="tag" style="background: #7e57c2;">New Reality</span></h4>
+                    <p>"Rocketed into a fourth dimension" - a completely new way of experiencing life. Not just sobriety, but spiritual awakening.</p>
+                    <div class="sponsor-note">Sponsor Point: What does "fourth dimension" mean to you?</div>
+                </div>
+
+                <div id="card-sp9" class="card spiritual">
+                    <h4>The Great Fact <span class="tag" style="background: #7e57c2;">Core Truth</span></h4>
+                    <p>"The great fact is just this, and nothing less" - introduces the central spiritual truth of the program.</p>
+                </div>
+
+                <div id="card-sp10" class="card spiritual">
+                    <h4>Deep Spiritual Experiences <span class="tag" style="background: #7e57c2;">Transformation</span></h4>
+                    <p>"Deep and effective spiritual experiences which have revolutionized our whole attitude." Complete transformation, not just behavior change.</p>
+                </div>
+
+                <div id="card-sp11" class="card spiritual">
+                    <h4>Creator Entered Our Hearts <span class="tag" style="background: #7e57c2;">Presence</span></h4>
+                    <p>"The absolute certainty that our Creator has entered into our hearts and lives." Not theory - experienced reality.</p>
+                    <div class="sponsor-note">Sponsor Point: Have you experienced God's presence in your life?</div>
+                </div>
+
+                <div id="card-sp12" class="card spiritual">
+                    <h4>Simple Attitude <span class="tag" style="background: #7e57c2;">Maintenance</span></h4>
+                    <p>Freedom maintained by "a certain simple attitude." Not complicated - willingness and honesty are the keys.</p>
+                </div>
+
+                <div id="card-sp13" class="card spiritual">
+                    <h4>Vital Spiritual Experiences <span class="tag" style="background: #7e57c2;">Dr. Jung</span></h4>
+                    <p>Jung's prescription: not more therapy, but spiritual experience. A founder of modern psychology recognized his field's limits.</p>
+                </div>
+
+                <div id="card-sp14" class="card spiritual">
+                    <h4>Huge Emotional Displacements <span class="tag" style="background: #7e57c2;">Change</span></h4>
+                    <p>Jung described it as "huge emotional displacements and rearrangements." Not minor adjustments - fundamental personality change.</p>
+                </div>
+
+                <div id="card-sp15" class="card spiritual">
+                    <h4>Old Ideas Cast Aside <span class="tag" style="background: #7e57c2;">Transformation</span></h4>
+                    <p>"Ideas, emotions, and attitudes...suddenly cast to one side, and a completely new set of conceptions and motives begin to dominate."</p>
+                    <div class="step-connection">This IS the spiritual awakening - old life replaced by new.</div>
+                </div>
+
+                <div id="card-sp16" class="card spiritual">
+                    <h4>Good Church Member <span class="tag" style="background: #7e57c2;">Insufficient</span></h4>
+                    <p>Rowland was a "good church member" - but that wasn't enough. Religious affiliation doesn't equal spiritual experience.</p>
+                </div>
+
+                <div id="card-sp17" class="card spiritual">
+                    <h4>Not the Necessary Experience <span class="tag" style="background: #7e57c2;">Key Distinction</span></h4>
+                    <p>Religious belief vs. vital experience. Knowledge ABOUT God differs from experience OF God.</p>
+                    <div class="sponsor-note">Sponsor Point: What's the difference between religion and spiritual experience?</div>
+                </div>
+
+                <div id="card-sp18" class="card spiritual">
+                    <h4>Flimsy Reed to Powerful Hand <span class="tag" style="background: #7e57c2;">Discovery</span></h4>
+                    <p>"What seemed at first a flimsy reed, has proved to be the loving and powerful hand of God." Faith grows through experience.</p>
+                </div>
+
+                <div id="card-sp19" class="card spiritual">
+                    <h4>Many Ways to Find God <span class="tag" style="background: #7e57c2;">Openness</span></h4>
+                    <p>"We have no desire to convince anyone that there is only one way." AA is open to all paths to spiritual awakening.</p>
+                </div>
+
+                <div id="card-sp20" class="card spiritual">
+                    <h4>Children of Living Creator <span class="tag" style="background: #7e57c2;">Universal</span></h4>
+                    <p>AA's inclusive spirituality: "whatever our race, creed, or color." Relationship with God available to all.</p>
+                </div>
+
+                <div id="card-sp21" class="card spiritual">
+                    <h4>No Concern What Church <span class="tag" style="background: #7e57c2;">Freedom</span></h4>
+                    <p>"We think it no concern of ours what religious bodies our members identify themselves with." Complete religious freedom.</p>
+                    <div class="step-connection">Tradition 10: No opinion on outside issues, including religion.</div>
+                </div>
+
+                <div id="card-sp22" class="card spiritual">
+                    <h4>Agnostics No Obstacle <span class="tag" style="background: #7e57c2;">Inclusive</span></h4>
+                    <p>"Surprisingly enough, we find such convictions no great obstacle." Even agnostics and atheists find spiritual experience.</p>
+                    <div class="sponsor-note">Sponsor Point: How does this encourage newcomers with doubt?</div>
+                </div>
+
+                <div id="card-h1" class="card historical">
+                    <h4>Anonymous Volume <span class="tag" style="background: #8d6e63;">Origins</span></h4>
+                    <p>"We have concluded to publish an anonymous volume" - the decision to create the Big Book, published in 1939.</p>
+                    <div class="step-connection">Tradition 11-12: Anonymity is the spiritual foundation of our traditions.</div>
+                </div>
+
+                <div id="card-h2" class="card historical">
+                    <h4>Rowland H. <span class="tag" style="background: #8d6e63;">Key Figure</span></h4>
+                    <p>This "American businessman" was Rowland Hazard. His story connects AA to Jung, to Oxford Groups, to Bill's transformation.</p>
+                </div>
+
+                <div id="card-h3" class="card historical">
+                    <h4>Dr. Carl Jung <span class="tag" style="background: #8d6e63;">Pioneer</span></h4>
+                    <p>One of the most famous psychiatrists in history. His honesty with Rowland - and his spiritual prescription - planted AA's seed.</p>
+                </div>
+
+                <div id="card-h4" class="card historical">
+                    <h4>Great Physician's Opinion <span class="tag" style="background: #8d6e63;">Authority</span></h4>
+                    <p>"That was a great physician's opinion" - Jung was among the world's most respected psychiatrists. His verdict carried weight.</p>
+                </div>
+
+                <div id="card-h5" class="card historical">
+                    <h4>Mind of Chronic Alcoholic <span class="tag" style="background: #8d6e63;">Diagnosis</span></h4>
+                    <p>Jung's diagnosis: "You have the mind of a chronic alcoholic. I have never seen one single case recover." Devastating but honest.</p>
+                </div>
+
+                <div id="card-h6" class="card historical">
+                    <h4>Exceptions Since Early Times <span class="tag" style="background: #8d6e63;">Hope</span></h4>
+                    <p>"Exceptions to cases such as yours have been occurring since early times." Jung acknowledged a long history of spiritual recovery.</p>
+                </div>
+
+                <div id="card-h7" class="card historical">
+                    <h4>Never Successful with Alcoholics <span class="tag" style="background: #8d6e63;">Humility</span></h4>
+                    <p>Jung admitted: "I have never been successful with an alcoholic of your description." Even the great Jung couldn't cure alcoholism.</p>
+                </div>
+
+                <div id="card-h8" class="card historical">
+                    <h4>The Terrible Dilemma <span class="tag" style="background: #8d6e63;">Crisis</span></h4>
+                    <p>"Here was the terrible dilemma" - Rowland faced: utterly hopeless by medicine, yet needing a spiritual experience he couldn't produce.</p>
+                    <div class="sponsor-note">Sponsor Point: Have you faced a similar dilemma?</div>
+                </div>
+
+                <div id="card-h9" class="card historical">
+                    <h4>William James <span class="tag" style="background: #8d6e63;">Influence</span></h4>
+                    <p>Harvard psychologist whose "Varieties of Religious Experience" influenced AA's founders. He documented multiple paths to spiritual awakening.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- TAB 2: Discussion Questions -->
+        <div id="discuss" class="tab-content">
+            <div class="concept-box">
+                <h4>Discussion Questions</h4>
+                <p>Prompts organized by section to help explore the text more deeply and connect it to personal experience.</p>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px; color: #667eea;">Opening: Fellowship (pp. 17-18)</h3>
+
+            <div class="discussion-card">
+                <h4>1. The Shipwreck Metaphor</h4>
+                <div class="page-ref">Page 17</div>
+                <p>The book compares us to passengers rescued from a shipwreck. How does this image resonate with your experience?</p>
+                <ul>
+                    <li>When did you realize you were "drowning"?</li>
+                    <li>Who threw you a lifeline?</li>
+                    <li>How has the fellowship sustained you since?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <div class="discussion-card">
+                <h4>2. "Would Not Mix"</h4>
+                <div class="page-ref">Page 17</div>
+                <p>AA claims we're "people who normally would not mix." Has this been true in your experience?</p>
+                <ul>
+                    <li>What barriers have dissolved in AA for you?</li>
+                    <li>Who have you connected with that you never would have outside AA?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px; color: #667eea;">Three Types of Drinkers (pp. 20-21)</h3>
+
+            <div class="discussion-card">
+                <h4>3. Which Type Are You?</h4>
+                <div class="page-ref">Pages 20-21</div>
+                <p>The book describes moderate drinkers, hard drinkers, and real alcoholics.</p>
+                <ul>
+                    <li>Which type did you once think you were?</li>
+                    <li>What convinced you that you're a "real alcoholic"?</li>
+                    <li>Can you now clearly distinguish between the types?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px; color: #667eea;">Portrait of the Alcoholic (pp. 21-23)</h3>
+
+            <div class="discussion-card">
+                <h4>4. Jekyll and Hyde</h4>
+                <div class="page-ref">Page 21</div>
+                <p>"He is a real Dr. Jekyll and Mr. Hyde."</p>
+                <ul>
+                    <li>Describe your "Hyde" personality when drinking</li>
+                    <li>How did family react to your dual personality?</li>
+                    <li>Did you believe you could control Mr. Hyde?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <div class="discussion-card">
+                <h4>5. Genius for Bad Timing</h4>
+                <div class="page-ref">Page 21</div>
+                <p>"A positive genius for getting tight at exactly the wrong moment."</p>
+                <ul>
+                    <li>Share a specific example of terrible timing</li>
+                    <li>What important events did you ruin?</li>
+                    <li>Looking back, was there a pattern of self-sabotage?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <div class="discussion-card">
+                <h4>6. The Hammer Analogy</h4>
+                <div class="page-ref">Page 23</div>
+                <p>Comparing drinking to hitting yourself with a hammer to cure a headache.</p>
+                <ul>
+                    <li>How did you "drink to fix problems drinking caused"?</li>
+                    <li>What circular thinking kept you trapped?</li>
+                    <li>When did you see the insanity of this?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px; color: #667eea;">The Mental Obsession (pp. 22-24)</h3>
+
+            <div class="discussion-card">
+                <h4>7. "Without Defense"</h4>
+                <div class="page-ref">Page 24</div>
+                <p>"We are without defense against the first drink."</p>
+                <ul>
+                    <li>What defenses did you try to build?</li>
+                    <li>How did each one fail?</li>
+                    <li>What is your defense today?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <div class="discussion-card">
+                <h4>8. The Blank Spot</h4>
+                <div class="page-ref">Page 23</div>
+                <p>"He has no more idea why he took that first drink than you have."</p>
+                <ul>
+                    <li>Do you remember deciding to drink, or did it "just happen"?</li>
+                    <li>Describe a relapse that baffled you</li>
+                    <li>What does this tell you about the nature of alcoholism?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px; color: #667eea;">The Solution (pp. 25-29)</h3>
+
+            <div class="discussion-card">
+                <h4>9. No Middle Ground</h4>
+                <div class="page-ref">Page 25</div>
+                <p>"There is no middle-of-the-road solution."</p>
+                <ul>
+                    <li>Have you tried half-measures? What happened?</li>
+                    <li>What does "complete commitment" mean to you?</li>
+                    <li>Are there areas where you're still holding back?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <div class="discussion-card">
+                <h4>10. Fourth Dimension</h4>
+                <div class="page-ref">Page 25</div>
+                <p>"Rocketed into a fourth dimension of existence."</p>
+                <ul>
+                    <li>What does "fourth dimension" mean to you?</li>
+                    <li>Have you experienced moments of this new reality?</li>
+                    <li>How is life different now than before recovery?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <div class="discussion-card">
+                <h4>11. Dr. Jung's Verdict</h4>
+                <div class="page-ref">Pages 26-27</div>
+                <p>Jung told Rowland he was "utterly hopeless" and needed a "vital spiritual experience."</p>
+                <ul>
+                    <li>Have you had a moment when someone told you the hard truth?</li>
+                    <li>What was your reaction?</li>
+                    <li>How did hopelessness become the doorway to hope?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <div class="discussion-card">
+                <h4>12. Religion vs. Spiritual Experience</h4>
+                <div class="page-ref">Page 28</div>
+                <p>Rowland was a "good church member" but lacked "vital spiritual experience."</p>
+                <ul>
+                    <li>What's the difference between religion and spiritual experience?</li>
+                    <li>Did religious background help or hinder your recovery?</li>
+                    <li>What does "vital spiritual experience" mean to you now?</li>
+                </ul>
+                <textarea placeholder="Your thoughts..."></textarea>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px; color: #667eea;">Sponsor/Sponsee Questions</h3>
+
+            <div class="discussion-card">
+                <h4>For Sponsors to Ask</h4>
+                <p>Use these with your sponsee when studying Chapter 2:</p>
+                <ul>
+                    <li>Do you believe you are a "real alcoholic"? What's your evidence?</li>
+                    <li>Have you experienced loss of control once you start drinking?</li>
+                    <li>Do you believe recovery is possible for YOU?</li>
+                    <li>Are you willing to go to any lengths for recovery?</li>
+                    <li>What does "spiritual solution" mean to you right now?</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 3: References -->
+        <div id="refs" class="tab-content">
+            <div class="concept-box">
+                <h4>Cross-References Guide</h4>
+                <p>Chapter 2 themes connect throughout AA literature. These references deepen understanding.</p>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px;">Big Book References</h3>
+
+            <div class="ref-box">
+                <span class="ref-book">Doctor's Opinion (pp. xxv-xxxii)</span>
+                <span class="ref-title">The Physical Allergy</span>
+                <p class="ref-text">"We believe...the action of alcohol on these chronic alcoholics is a manifestation of an allergy...the phenomenon of craving is limited to this class."</p>
+                <span class="ref-context">Explains "loses all control" (p. 21) and "something happens" (p. 22)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Doctor's Opinion (p. xxviii)</span>
+                <span class="ref-title">The Three Types</span>
+                <p class="ref-text">"There are types entirely normal in every respect except in the effect alcohol has upon them."</p>
+                <span class="ref-context">Supports the three types of drinkers (pp. 20-21)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">More About Alcoholism (p. 30)</span>
+                <span class="ref-title">The Great Obsession</span>
+                <p class="ref-text">"The idea that somehow, someday he will control and enjoy his drinking is the great obsession of every abnormal drinker."</p>
+                <span class="ref-context">Expands on "obsession that they will beat the game" (p. 23)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">More About Alcoholism (p. 37)</span>
+                <span class="ref-title">Jim the Car Salesman</span>
+                <p class="ref-text">"The thought crossed my mind that if I put an ounce of whiskey in my milk it couldn't hurt me."</p>
+                <span class="ref-context">Illustrates "genius for getting tight at the wrong moment" (p. 21)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">More About Alcoholism (p. 43)</span>
+                <span class="ref-title">Without Defense</span>
+                <p class="ref-text">"The alcoholic at certain times has no effective mental defense against the first drink. Except in a few rare cases, neither he nor any other human being can provide such a defense."</p>
+                <span class="ref-context">Expands "without defense against the first drink" (p. 24)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">How It Works (p. 58)</span>
+                <span class="ref-title">Half Measures</span>
+                <p class="ref-text">"Half measures availed us nothing. We stood at the turning point."</p>
+                <span class="ref-context">Echoes "no middle-of-the-road solution" (p. 25)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Appendix II (p. 567)</span>
+                <span class="ref-title">Spiritual Experience Explained</span>
+                <p class="ref-text">"The terms 'spiritual experience' and 'spiritual awakening' are used many times in this book...the personality change sufficient to bring about recovery."</p>
+                <span class="ref-context">Clarifies "vital spiritual experiences" (p. 27)</span>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px;">Twelve Steps and Twelve Traditions</h3>
+
+            <div class="ref-box">
+                <span class="ref-book">12&12 - Step 1 (p. 21)</span>
+                <span class="ref-title">Utter Defeat</span>
+                <p class="ref-text">"We perceive that only through utter defeat are we able to take our first steps toward liberation and strength."</p>
+                <span class="ref-context">Parallels "hopelessness and futility of life" (p. 25)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">12&12 - Step 2 (p. 25)</span>
+                <span class="ref-title">Insanity Defined</span>
+                <p class="ref-text">"Therefore, Step Two is the rallying point for all of us. Whether agnostic, atheist, or former believer, we can stand together on this Step."</p>
+                <span class="ref-context">Supports "agnostics no great obstacle" (p. 29)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">12&12 - Tradition 5 (p. 150)</span>
+                <span class="ref-title">Primary Purpose</span>
+                <p class="ref-text">"Each group has but one primary purpose-to carry its message to the alcoholic who still suffers."</p>
+                <span class="ref-context">Echoes "hundreds dropping into oblivion" (p. 19)</span>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px;">External References</h3>
+
+            <div class="ref-box">
+                <span class="ref-book">William James - Varieties of Religious Experience</span>
+                <span class="ref-title">Cited on Page 28</span>
+                <p class="ref-text">"The sway of alcohol over mankind is unquestionably due to its power to stimulate the mystical faculties of human nature."</p>
+                <span class="ref-context">James validated multiple paths to spiritual awakening</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Carl Jung Letter to Bill W. (Jan 1961)</span>
+                <span class="ref-title">Historical Context</span>
+                <p class="ref-text">"His craving for alcohol was the equivalent, on a low level, of the spiritual thirst of our being for wholeness, expressed in medieval language: the union with God... 'alcohol' in Latin is spiritus."</p>
+                <span class="ref-context">Jung later explained his prescription of "vital spiritual experience"</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">As Bill Sees It (p. 4)</span>
+                <span class="ref-title">Fellowship</span>
+                <p class="ref-text">"The fellowship of Alcoholics Anonymous is a product of the sufferings of its members and their willingness to share their experience, strength and hope."</p>
+                <span class="ref-context">Expands fellowship themes from pages 17-18</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Grapevine - Dr. Jung's Letter</span>
+                <span class="ref-title">Original 1963 Publication</span>
+                <p class="ref-text">Jung's actual letter to Bill W., published in Jan 1963 Grapevine, provides the full context of the Rowland story.</p>
+                <span class="ref-context">Essential historical document for understanding pp. 26-28</span>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px;">Additional Big Book References</h3>
+
+            <div class="ref-box">
+                <span class="ref-book">Doctor's Opinion (p. xxix)</span>
+                <span class="ref-title">The Psychic Change</span>
+                <p class="ref-text">"Unless this person can experience an entire psychic change there is very little hope of his recovery."</p>
+                <span class="ref-context">Dr. Silkworth's term for what Jung called "spiritual experience" (p. 27)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Doctor's Opinion (p. xxvi)</span>
+                <span class="ref-title">Hopeless Condition</span>
+                <p class="ref-text">"We doctors have realized for a long time that some form of moral psychology was of urgent importance to alcoholics, but its application presented difficulties beyond our conception."</p>
+                <span class="ref-context">Medical acknowledgment supporting Jung's prescription (p. 27)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Foreword to First Edition (p. xiii)</span>
+                <span class="ref-title">"Recovered" vs. "Recovering"</span>
+                <p class="ref-text">"We, of Alcoholics Anonymous, are more than one hundred men and women who have recovered from a seemingly hopeless state of mind and body."</p>
+                <span class="ref-context">Clarifies "recovered" language used on page 17</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Working With Others (p. 89)</span>
+                <span class="ref-title">Carrying the Message</span>
+                <p class="ref-text">"Practical experience shows that nothing will so much insure immunity from drinking as intensive work with other alcoholics."</p>
+                <span class="ref-context">Expands "one alcoholic to another" theme (pp. 18-19)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Working With Others (p. 94)</span>
+                <span class="ref-title">No Fees, No Axes</span>
+                <p class="ref-text">"Burn the idea into the consciousness of every man that he can get well regardless of anyone. The only condition is that he trust in God and clean house."</p>
+                <span class="ref-context">Reinforces "no fees to pay, no axes to grind" (p. 18)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Into Action (p. 84)</span>
+                <span class="ref-title">The Fourth Dimension</span>
+                <p class="ref-text">"We will suddenly realize that God is doing for us what we could not do for ourselves."</p>
+                <span class="ref-context">Connects to "rocketed into a fourth dimension" (p. 25)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">A Vision for You (p. 164)</span>
+                <span class="ref-title">The Fellowship in Action</span>
+                <p class="ref-text">"Abandon yourself to God as you understand God. Admit your faults to Him and to your fellows... Give freely of what you find and join us."</p>
+                <span class="ref-context">Summary echoing Chapter 2's fellowship themes</span>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px;">Additional 12&12 References</h3>
+
+            <div class="ref-box">
+                <span class="ref-book">12&12 - Step 3 (p. 34)</span>
+                <span class="ref-title">The Decision</span>
+                <p class="ref-text">"Once we have placed the key of willingness in the lock and have the door ever so slightly open, we find that we can always open it some more."</p>
+                <span class="ref-context">Relates to "two alternatives" choice (p. 25)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">12&12 - Step 2 (p. 26)</span>
+                <span class="ref-title">Coming to Believe</span>
+                <p class="ref-text">"We needed to ask ourselves but one short question. 'Do I now believe, or am I even willing to believe, that there is a Power greater than myself?'"</p>
+                <span class="ref-context">Supports "agnostics no great obstacle" (p. 29)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">12&12 - Tradition 1 (p. 129)</span>
+                <span class="ref-title">Unity</span>
+                <p class="ref-text">"The unity of Alcoholics Anonymous is the most cherished quality our Society has... We stay whole, or A.A. dies."</p>
+                <span class="ref-context">Supports "people who normally would not mix" (p. 17)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">12&12 - Step 12 (p. 106)</span>
+                <span class="ref-title">The Joy of Living</span>
+                <p class="ref-text">"We have found that the joy of living is the theme of A.A.'s Twelfth Step."</p>
+                <span class="ref-context">Connects to "joy in escape from disaster does not subside" (p. 17)</span>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px;">AA Pamphlets & Other Literature</h3>
+
+            <div class="ref-box">
+                <span class="ref-book">Came to Believe (AA Pamphlet)</span>
+                <span class="ref-title">Spiritual Experiences</span>
+                <p class="ref-text">Collection of AA members' stories about how they found a Higher Power, demonstrating "many ways" to spiritual awakening.</p>
+                <span class="ref-context">Expands Jung's "vital spiritual experiences" (p. 27)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Living Sober (Chapter 1)</span>
+                <span class="ref-title">Not Drinking Is the Basis</span>
+                <p class="ref-text">"We have learned that sobriety is the basis of the good life. Sobriety is the launching pad for our recovery."</p>
+                <span class="ref-context">Practical application of "elimination of drinking is but a beginning" (p. 19)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Pass It On (Chapter 8)</span>
+                <span class="ref-title">The Jung Connection</span>
+                <p class="ref-text">Detailed historical account of how Rowland H.'s meeting with Jung led to Ebby T. and eventually to Bill W.'s awakening.</p>
+                <span class="ref-context">Full historical context for pages 26-28</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Dr. Bob and the Good Oldtimers (Chapter 1)</span>
+                <span class="ref-title">The Hopeless Alcoholic</span>
+                <p class="ref-text">Dr. Bob's own story of being "hopeless" before finding the solution through spiritual means and fellowship.</p>
+                <span class="ref-context">Living example of "hopeless condition of mind and body" (p. 20)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Daily Reflections (June 1)</span>
+                <span class="ref-title">The Common Solution</span>
+                <p class="ref-text">"The tremendous fact for every one of us is that we have discovered a common solution."</p>
+                <span class="ref-context">Daily meditation on the "common solution" (p. 17)</span>
+            </div>
+
+            <h3 style="margin: 15px 0 10px; font-size: 14px;">Biblical & Literary References</h3>
+
+            <div class="ref-box">
+                <span class="ref-book">John 5:8 (King James Version)</span>
+                <span class="ref-title">"Take Up Thy Bed and Walk"</span>
+                <p class="ref-text">"Jesus saith unto him, Rise, take up thy bed, and walk."</p>
+                <span class="ref-context">Source of the phrase "take up their beds and walk again" (p. 18)</span>
+            </div>
+
+            <div class="ref-box">
+                <span class="ref-book">Robert Louis Stevenson - Dr. Jekyll and Mr. Hyde (1886)</span>
+                <span class="ref-title">The Duality Metaphor</span>
+                <p class="ref-text">The classic tale of a man with two personalities - one respectable, one monstrous - that he cannot control.</p>
+                <span class="ref-context">Source of "real Dr. Jekyll and Mr. Hyde" reference (p. 21)</span>
+            </div>
+        </div>
+
+        <!-- TAB 4: Key Concepts -->
+        <div id="concepts" class="tab-content">
+            <div class="concept-box">
+                <h4>Chapter 2 Core Message</h4>
+                <p>There IS a solution for alcoholism - but it requires admitting hopelessness and accepting spiritual help. Human power alone cannot solve it.</p>
+            </div>
+
+            <div class="meeting-section">
+                <h3>The Two-Fold Disease</h3>
+                <p><strong>Physical Allergy:</strong> Once we drink, we cannot stop. The body reacts abnormally, creating craving.</p>
+                <p><strong>Mental Obsession:</strong> Before we drink, we cannot resist. The mind convinces us to take that first drink despite all consequences.</p>
+                <p><strong>Key insight:</strong> The body is the problem AFTER drinking; the mind is the problem BEFORE drinking. The solution must address the mind.</p>
+            </div>
+
+            <div class="meeting-section">
+                <h3>Three Types of Drinkers</h3>
+                <p><strong>1. Moderate Drinker:</strong> Can take it or leave it. Stops with reason.</p>
+                <p><strong>2. Hard Drinker:</strong> Drinks heavily but CAN stop with sufficient motivation.</p>
+                <p><strong>3. Real Alcoholic:</strong> Cannot stop once started. Cannot stay stopped without help. Loses power of choice.</p>
+            </div>
+
+            <div class="meeting-section">
+                <h3>The Mental Blank Spot</h3>
+                <p>At the critical moment of the first drink, we:</p>
+                <ul>
+                    <li>Cannot recall consequences clearly</li>
+                    <li>Believe "this time will be different"</li>
+                    <li>Lack the instinctive defense (like avoiding a hot stove)</li>
+                    <li>Often don't remember deciding to drink</li>
+                </ul>
+                <p><strong>This is the insanity</strong> - not dramatic madness, but the inability to apply past experience to present choice.</p>
+            </div>
+
+            <div class="meeting-section">
+                <h3>Why Human Power Fails</h3>
+                <ul>
+                    <li>Willpower works in other areas, not with alcohol</li>
+                    <li>Knowledge doesn't prevent drinking (Rowland knew everything)</li>
+                    <li>Consequences don't prevent drinking (even death threats fail)</li>
+                    <li>Love doesn't prevent drinking ("sweet girl" can't save him)</li>
+                    <li>When "fully established" in alcoholic thinking, we're beyond human aid</li>
+                </ul>
+            </div>
+
+            <div class="meeting-section">
+                <h3>The Spiritual Solution</h3>
+                <p>Dr. Jung prescribed "vital spiritual experience" - not religion, but:</p>
+                <ul>
+                    <li>"Huge emotional displacements and rearrangements"</li>
+                    <li>Old ideas cast aside, new ones take over</li>
+                    <li>Complete personality change</li>
+                    <li>This is the "psychic change" mentioned in Doctor's Opinion</li>
+                </ul>
+                <p><strong>Result:</strong> "Rocketed into a fourth dimension" - a completely new way of living.</p>
+            </div>
+
+            <div class="meeting-section">
+                <h3>Key Terms Defined</h3>
+                <p><strong>Allergy:</strong> Abnormal physical reaction to alcohol creating craving</p>
+                <p><strong>Obsession:</strong> Mental twist that convinces us to drink despite evidence</p>
+                <p><strong>Hopelessness:</strong> Inability to recover by human power alone</p>
+                <p><strong>Spiritual experience:</strong> Personality change sufficient for recovery</p>
+                <p><strong>Fourth dimension:</strong> New way of experiencing life beyond material existence</p>
+                <p><strong>Design for living:</strong> Complete program for all of life, not just not drinking</p>
+            </div>
+
+            <div class="meeting-section">
+                <h3>How Chapter 2 Connects to the Steps</h3>
+                <ul>
+                    <li><strong>Step 1:</strong> "Lost power of choice" / "without defense" = powerlessness</li>
+                    <li><strong>Step 2:</strong> "Beyond human aid" = need Power greater than ourselves</li>
+                    <li><strong>Step 3:</strong> "Accept spiritual help" = turn will over</li>
+                    <li><strong>Steps 4-5:</strong> "Self-searching, confession" = inventory work</li>
+                    <li><strong>Step 12:</strong> "One alcoholic to another" = carrying the message</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- TAB 6: Notes -->
+        <div id="notes" class="tab-content">
+            <div class="meeting-section">
+                <h3>My Study Notes</h3>
+                <p style="font-size: 12px; color: #666;">Jot down thoughts, questions for your sponsor, or meeting insights.</p>
+                <textarea style="height: 150px;" placeholder="Key insights from this chapter..."></textarea>
+            </div>
+
+            <div class="meeting-section">
+                <h3>Personal Identification</h3>
+                <p style="font-size: 12px; color: #666;">How does this chapter describe YOUR story?</p>
+                <textarea style="height: 120px;" placeholder="Which parts of the 'portrait' fit me?"></textarea>
+            </div>
+
+            <div class="meeting-section">
+                <h3>Questions for My Sponsor</h3>
+                <textarea style="height: 100px;" placeholder="Things I want to discuss..."></textarea>
+            </div>
+
+            <div class="meeting-section">
+                <h3>Step Work Connections</h3>
+                <p style="font-size: 12px; color: #666;">How does this chapter apply to working the Steps?</p>
+                <textarea style="height: 100px;" placeholder="Step connections I see..."></textarea>
+            </div>
+
+            <div class="meeting-section">
+                <h3>Action Items</h3>
+                <textarea style="height: 100px;" placeholder="What do I need to do based on this chapter?"></textarea>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(tabId).classList.add('active');
+        const btn = Array.from(document.querySelectorAll('.tab-btn')).find(b => b.getAttribute('onclick').includes(tabId));
+        if(btn) btn.classList.add('active');
+    }
+
+    function showAnalysis(cardId) {
+        switchTab('analysis');
+        document.querySelectorAll('.highlight').forEach(h => h.classList.remove('active'));
+        const card = document.getElementById('card-' + cardId);
+        if (card) {
+            document.querySelectorAll('.card').forEach(c => c.classList.remove('active-card'));
+            card.classList.add('active-card');
+            card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+    }
+
+    function filterCards(category) {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+
+        const cards = document.querySelectorAll('#cards-container .card');
+        cards.forEach(card => {
+            if (category === 'all' || card.classList.contains(category)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    }
+
+    document.querySelectorAll('.highlight').forEach(el => {
+        el.addEventListener('click', function() {
+            document.querySelectorAll('.highlight').forEach(h => h.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
+
+</body>
+</html>
