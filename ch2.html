@@ -360,6 +360,190 @@
             .text-panel { height: 45vh; }
             .sidebar { height: 55vh; border-left: none; border-top: 1px solid #ddd; max-width: none; }
         }
+
+        /* Q&A Study Guide Styles */
+        .qa-page-section {
+            margin-bottom: 20px;
+            border: 1px solid #e1e4e8;
+            border-radius: 8px;
+            background: #fff;
+            overflow: hidden;
+        }
+
+        .qa-page-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 12px 15px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .qa-page-header:hover {
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+        }
+
+        .qa-page-header .toggle-icon {
+            transition: transform 0.3s;
+        }
+
+        .qa-page-header.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .qa-page-content {
+            padding: 15px;
+        }
+
+        .qa-page-content.collapsed {
+            display: none;
+        }
+
+        .qa-item {
+            margin-bottom: 15px;
+            border-left: 3px solid #3498db;
+            padding-left: 12px;
+        }
+
+        .qa-item.paragraph-start {
+            border-left-color: #9b59b6;
+        }
+
+        .qa-question {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 13px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+        }
+
+        .qa-question:hover {
+            color: #3498db;
+        }
+
+        .qa-number {
+            background: #3498db;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-right: 10px;
+            flex-shrink: 0;
+            min-width: 35px;
+            text-align: center;
+        }
+
+        .qa-item.paragraph-start .qa-number {
+            background: #9b59b6;
+        }
+
+        .qa-answer {
+            color: #2980b9;
+            font-size: 13px;
+            padding: 10px;
+            background: #ebf5fb;
+            border-radius: 6px;
+            margin-top: 6px;
+            line-height: 1.6;
+        }
+
+        .qa-answer.hidden {
+            display: none;
+        }
+
+        .qa-comment {
+            color: #27ae60;
+            font-size: 12px;
+            font-style: italic;
+            padding: 10px;
+            background: #eafaf1;
+            border-radius: 6px;
+            margin-top: 8px;
+            border-left: 3px solid #27ae60;
+        }
+
+        .qa-note {
+            color: #e67e22;
+            font-size: 12px;
+            font-style: italic;
+            padding: 10px;
+            background: #fef5e7;
+            border-radius: 6px;
+            margin-top: 8px;
+            border-left: 3px solid #e67e22;
+        }
+
+        .qa-note::before {
+            content: "Personal Reflection: ";
+            font-weight: 600;
+        }
+
+        .qa-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .qa-btn {
+            padding: 8px 15px;
+            border: 1px solid #3498db;
+            border-radius: 20px;
+            background: white;
+            color: #3498db;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 600;
+        }
+
+        .qa-btn:hover {
+            background: #3498db;
+            color: white;
+        }
+
+        .qa-btn.active {
+            background: #3498db;
+            color: white;
+        }
+
+        .qa-search {
+            flex: 1;
+            min-width: 150px;
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            font-size: 12px;
+        }
+
+        .qa-search:focus {
+            outline: none;
+            border-color: #3498db;
+        }
+
+        .appendix-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .appendix-section h4 {
+            margin: 0 0 10px 0;
+            font-size: 14px;
+        }
+
+        .appendix-section p {
+            font-size: 12px;
+            margin: 0;
+            opacity: 0.95;
+        }
     </style>
 </head>
 <body>
@@ -379,6 +563,32 @@
 
     <!-- LEFT: The Text -->
     <div class="text-panel">
+
+        <div class="section-title">PERSONALIZED INTRODUCTION</div>
+
+        <p>
+            As we study Chapter 2, "THERE IS A SOLUTION," we will learn what the Solution is to that seemingly hopeless state of mind and body. We will learn who gave us this information. We will learn where we will find the clear-cut directions for taking the actions we must take to be assured that we will join the first one hundred as recovered alcoholics.
+        </p>
+
+        <p>
+            We will learn the difference between the Fellowship and the Program. We will learn that, although we share a common problem, that, in itself, will not produce the Solution. We will learn some very real truths about alcoholism. We will learn that, although an alcoholic cannot control the amount he drinks once he has taken the first few drinks (because of the physical sensitivity to alcohol), that is not the real problem. The physical allergy is not what drives us to Alcoholics Anonymous for help. The real problem centers in the mind; because the real alcoholic is unable to manage his most earnest decision to never take another drink.
+        </p>
+
+        <p>
+            But drinking is not the main problem of the chronic alcoholic. Alcoholics drink – and do so better than almost everybody else. Stopping is not the problem. Every alcoholic has stopped many times. The real problem of the chronic alcoholic is that we cannot stay stopped. The real alcoholic mind is one that does not have sufficient willpower to manage the decision to stay stopped; that produces the "insidious insanity" that leads to the first drink. Lacking willpower to manage a decision to not take the first drink mandates that the hopeless alcoholic find a Higher Power that will remove the need to try to manage a decision to never drink again.
+        </p>
+
+        <p>
+            We will also learn something of the three types of drinkers. There are the moderate drinkers who would never think about coming to Alcoholics Anonymous; they can take it or leave it alone. Then, there are the hard drinkers; they may need to come to Alcoholics Anonymous to learn that they are not alcoholics. Given a good reason, they can drink like moderate drinkers or abstain completely, if they so choose.
+        </p>
+
+        <p>
+            But the real or chronic alcoholic is totally powerless over alcohol. We can neither control the amount we drink, nor do we have the power to manage a decision to not ever drink again. Alcoholics Anonymous is for the real alcoholic only. We will learn more about that when we study the Twelve Traditions of Alcoholics Anonymous.
+        </p>
+
+        <p>
+            So, is there a Solution? Let's find out.
+        </p>
 
         <div class="section-title">OPENING: THE FELLOWSHIP & ITS PROMISE</div>
         <p class="section-marker">Page 17</p>
@@ -643,6 +853,7 @@
     <div class="sidebar">
         <div class="tabs">
             <button class="tab-btn active" onclick="switchTab('analysis')">Analysis</button>
+            <button class="tab-btn" onclick="switchTab('qa')">Q&A Study</button>
             <button class="tab-btn" onclick="switchTab('discuss')">Discussion</button>
             <button class="tab-btn" onclick="switchTab('refs')">References</button>
             <button class="tab-btn" onclick="switchTab('concepts')">Concepts</button>
@@ -1430,6 +1641,2124 @@
             </div>
         </div>
 
+        <!-- TAB: Q&A Study Guide -->
+        <div id="qa" class="tab-content">
+            <div class="concept-box">
+                <h4>Chapter 2 Study Guide: Questions & Answers</h4>
+                <p>Comprehensive Q&A covering pages 17-29. Questions marked with (P) indicate new paragraphs. Click questions to reveal answers.</p>
+            </div>
+
+            <div class="qa-controls">
+                <button class="qa-btn active" onclick="toggleAllAnswers(true)">Show All Answers</button>
+                <button class="qa-btn" onclick="toggleAllAnswers(false)">Hide All Answers</button>
+                <button class="qa-btn" onclick="expandAllSections()">Expand All Pages</button>
+                <button class="qa-btn" onclick="collapseAllSections()">Collapse All Pages</button>
+            </div>
+
+            <!-- PAGE 17 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 17</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 1</span>
+                            <span>What do they know?</span>
+                        </div>
+                        <div class="qa-answer">WE, OF ALCOHOLICS ANONYMOUS, know <u>thousands</u> of men and women who were once just as hopeless as Bill.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">2</span>
+                            <span>What have they done? (2 sentences)</span>
+                        </div>
+                        <div class="qa-answer"><u>Nearly all have recovered.</u> They have solved the drink problem.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 3</span>
+                            <span>Who are they, members of Alcoholics Anonymous? (2 sentences)</span>
+                        </div>
+                        <div class="qa-answer">We are average Americans. All sections of this country and many of its occupations are represented, as well as many political, economic, social, and religious backgrounds.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4</span>
+                            <span>Without AA, would they have known each other?</span>
+                        </div>
+                        <div class="qa-answer">We are people who normally would not mix.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>What do recovered alcoholics share?</span>
+                        </div>
+                        <div class="qa-answer">But there exists among us a fellowship, a friendliness, and an understanding which is indescribably wonderful.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>Who are they like?</span>
+                        </div>
+                        <div class="qa-answer">We are like the passengers of a great liner the moment after rescue from shipwreck when camaraderie, joyousness, and democracy pervade the vessel from steerage to Captain's table.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7</span>
+                            <span>How are they unlike the passengers?</span>
+                        </div>
+                        <div class="qa-answer">Unlike the feelings of the ship's passengers, however, our joy in escape from disaster does not subside as we go our individual ways.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8</span>
+                            <span>What feeling have they shared?</span>
+                        </div>
+                        <div class="qa-answer">The feeling of having shared in a common peril is one element in the powerful cement which binds us.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>Will the common problem keep them together?</span>
+                        </div>
+                        <div class="qa-answer">But that in itself would never have held us together as we are now joined.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 10</span>
+                            <span>What tremendous fact does keep them together?</span>
+                        </div>
+                        <div class="qa-answer">The tremendous fact for every one of us is that we have discovered a common solution.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11-a</span>
+                            <span>On what can they absolutely agree?</span>
+                        </div>
+                        <div class="qa-answer">We have a way out on which we can absolutely agree,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11-b</span>
+                            <span>They can join in what?</span>
+                        </div>
+                        <div class="qa-answer">and upon which we can join in brotherly and harmonious action.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13</span>
+                            <span>Where do alcoholics find this most important information?</span>
+                        </div>
+                        <div class="qa-answer">This is the great news this book carries to those who suffer from alcoholism.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 18 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 18</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 1</span>
+                            <span>Is the effect of the illness limited to just the alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">An illness of this sort – and we have come to believe it an illness – involves those about us in a way no other human sickness can.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">2</span>
+                            <span>What are the feelings for a cancer patient?</span>
+                        </div>
+                        <div class="qa-answer">If a person has cancer all are sorry for him and no one is angry or hurt.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>What goes with alcoholic illness?</span>
+                        </div>
+                        <div class="qa-answer">But not so with the alcoholic illness, for with it there goes annihilation of all the things worth while in life.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4</span>
+                            <span>Who does it affect?</span>
+                        </div>
+                        <div class="qa-answer">It engulfs all whose lives touch the sufferer's.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>What does it bring to all those affected by alcoholism?</span>
+                        </div>
+                        <div class="qa-answer">It brings misunderstanding, fierce resentment, financial insecurity, disgusted friends and employers, warped lives of blameless children, sad wives and parents – anyone can increase the list.</div>
+                    </div>
+
+                    <div class="qa-note">*1. Note: How does this compare to the way it was with you and yours?</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 6</span>
+                            <span>What is the hope?</span>
+                        </div>
+                        <div class="qa-answer">We hope this volume will inform and comfort those who are, or who may be affected.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7</span>
+                            <span>Is this for just a few?</span>
+                        </div>
+                        <div class="qa-answer">There are many.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: It has been estimated that for every alcoholic, a minimum of 5-6 lives are made miserable. They are emotionally worse off than the alcoholic as they have to take the reality of alcoholism cold sober. The alcoholic has an escape in the bottle.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 8</span>
+                            <span>Are they willing to discuss their situation with professionals or even those who are close to them? (the entire paragraph)</span>
+                        </div>
+                        <div class="qa-answer">Highly competent psychiatrists who have dealt with us have found it sometimes impossible to persuade an alcoholic to discuss his situation without reserve. Strangely enough, wives, parents and intimate friends usually find us even more unapproachable than do the psychiatrist and the doctor.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 9</span>
+                            <span>What can the recovered alcoholic do?</span>
+                        </div>
+                        <div class="qa-answer">But the <u>ex-problem drinker who has found this solution</u>, <u>who is properly armed with facts about himself</u>, <u>can generally win the entire confidence of another alcoholic in a few hours.</u></div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10</span>
+                            <span>When can some progress be made with the suffering alcoholic?</span>
+                        </div>
+                        <div class="qa-answer"><em>Until such an understanding is reached, little or nothing can be accomplished.</em></div>
+                    </div>
+
+                    <div class="qa-comment">Comment: The precise process of Sponsorship is covered in Chapter Seven.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 11</span>
+                            <span>What is it that the recovered alcoholic brings to the suffering alcoholic? (a long, long, long sentence)</span>
+                        </div>
+                        <div class="qa-answer">That the man who is making the approach has had the same difficulty, that he obviously knows what he is talking about, that his whole deportment shouts at the new prospect that he is a man with a real answer, that he has no attitude of Holier Than Thou, nothing whatever except the sincere desire to be helpful; that there are no fees to pay, no axes to grind, no people to please, no lectures to be endured – these are the conditions we have found most effective.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Would this describe the qualifications of a Sponsor?</div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 19 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 19</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1</span>
+                            <span>What happens after the recovered alcoholic tells his story to the suffering alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">After such an approach many take up their beds and walk again.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>How many recovered alcoholics earn their living 12th Stepping alcoholics?</span>
+                        </div>
+                        <div class="qa-answer">None of us makes a sole vocation of this work, nor do we think its effectiveness would be increased if we did.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>What is the elimination of drinking?</span>
+                        </div>
+                        <div class="qa-answer">We feel that elimination of our drinking is but a beginning.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: But I thought the whole purpose of Alcoholics Anonymous was just to not drink.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4</span>
+                            <span>What is much more important than just not drinking?</span>
+                        </div>
+                        <div class="qa-answer">A much more important demonstration of <u>our principles</u> lies before us in our respective homes, occupations and affairs.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Our principles are the life giving Twelve Steps and the life saving Twelve Traditions. We must learn how to put them to work from the time we wake up until we have fallen asleep.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>How many of the authors worked with suffering alcoholics?</span>
+                        </div>
+                        <div class="qa-answer"><u>All of us</u> spend much of our spare time in the sort of effort which we are going to describe.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: The effort they describe is in Chapter Seven. It is to search out, go to and approach suffering alcoholics with the understanding and hope only a recovered alcoholic can give one who is suffering.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>What are some of them fortunate enough to do?</span>
+                        </div>
+                        <div class="qa-answer">A few are fortunate enough to be so situated that they can give nearly all their time to the work.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 7</span>
+                            <span>Will AA bring an end to the ravages of alcoholism?</span>
+                        </div>
+                        <div class="qa-answer">If we keep on the way we are going there is little doubt that much good will result, but the surface of the problem would hardly be scratched.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8</span>
+                            <span>With what are recovered alcoholics overcome if they live in large cities like Dallas?</span>
+                        </div>
+                        <div class="qa-answer">Those of us who live in large cities are overcome by the reflection that close by hundreds are dropping into oblivion every day.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: For every one of us sitting comfortably in meetings, there are 20-30 or more suffering from alcoholism. They are unaware of what their problem is and will continue to remain ignorant until a recovered alcoholic shares their experience and knowledge of the truth about alcoholism, just as Bill did with Dr. Bob.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>Many alcoholics could recover if what?</span>
+                        </div>
+                        <div class="qa-answer">Many could recover if they had the opportunity we have enjoyed.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: What chance would Dr. Bob have had if Bill had not made those 12 telephone calls in an effort to protect his sobriety?</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10</span>
+                            <span>What question faced the First 100?</span>
+                        </div>
+                        <div class="qa-answer">How then shall we present that which has been so freely given us?</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 11</span>
+                            <span>To what conclusion did the First 100 arrive as an answer to that question?</span>
+                        </div>
+                        <div class="qa-answer">We have concluded to publish an anonymous volume <u>setting forth the problem as we</u> (Recovered Alcoholics) <u>see it</u>.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12</span>
+                            <span>What is the content of the Big Book?</span>
+                        </div>
+                        <div class="qa-answer">We shall bring to the task our combined experience and knowledge.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Not the Experience, Strength, and Hope of untreated alcoholics and/or non-alcoholics.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13</span>
+                            <span>Who could benefit from this accumulated experience and knowledge?</span>
+                        </div>
+                        <div class="qa-answer">This should suggest a useful program for anyone concerned with a drinking problem.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Since the information in this Book has been time tested and has experienced proven success since April 1939, would you disagree with this statement?</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 14</span>
+                            <span>What will it be necessary to discuss?</span>
+                        </div>
+                        <div class="qa-answer">Of necessity there will have to be discussion of matters medical, psychiatric, social, and religious.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">15</span>
+                            <span>The authors were aware of what?</span>
+                        </div>
+                        <div class="qa-answer">We are aware that these matters are, from their very nature, controversial.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">16</span>
+                            <span>What would really please the authors?</span>
+                        </div>
+                        <div class="qa-answer">Nothing would please us so much as to write a book which would contain no basis for contention or argument.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">17</span>
+                            <span>What did the authors of this Book try to achieve?</span>
+                        </div>
+                        <div class="qa-answer">We shall do our utmost to achieve that ideal.</div>
+                    </div>
+
+                    <div class="qa-comment">QUESTION: Were they successful in their attempt to avoid contention?<br>ANSWER: The answer to this question is demonstrated by the wide acceptance of our Program. It has been accepted by every major living Program on the face of this Earth.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">18</span>
+                            <span>What do most of them sense?</span>
+                        </div>
+                        <div class="qa-answer">Most of us sense that real tolerance of other people's shortcomings and viewpoints and a respect for their opinions are attitudes which make us more useful to others.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 20 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 20</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1</span>
+                            <span>What is it that their very lives depend on?</span>
+                        </div>
+                        <div class="qa-answer">Our very lives, as <u>ex-problem drinkers</u>, depend upon our constant thought of others and how we may help meet their needs.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>What may you have already asked?</span>
+                        </div>
+                        <div class="qa-answer">You may already have asked yourself why it is that all of us became so very ill from drinking.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>What are you probably curious about?</span>
+                        </div>
+                        <div class="qa-answer">Doubtless you are curious to discover how and why, in the face of expert opinion to the contrary, we have recovered from a hopeless condition of mind and body.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4</span>
+                            <span>If you are an alcoholic who wants to recover, what are you asking?</span>
+                        </div>
+                        <div class="qa-answer">If you are an alcoholic who wants to get over it, you may already be asking – "What do I have to do?"</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 5</span>
+                            <span>What is the specific purpose of this Book?</span>
+                        </div>
+                        <div class="qa-answer">It is the purpose of this book to answer such questions specifically.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>What will the First 100 tell us in this Book?</span>
+                        </div>
+                        <div class="qa-answer">We shall tell you what we (Recovered Alcoholics) <u>have done</u>.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7</span>
+                            <span>Before answering these questions, what did the authors do?</span>
+                        </div>
+                        <div class="qa-answer">Before going into a detailed discussion, it may be well to summarize some points <u>as we</u> (Recovered Alcoholics) <u>see them</u>.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 8</span>
+                            <span>What have people said to the suffering alcoholic many times? (the entire paragraph)</span>
+                        </div>
+                        <div class="qa-answer">How many times people have said to us: "I can take it or leave it alone. Why can't he?" "Why don't you drink like a gentleman or quit?" "That fellow can't handle his liquor." "Why don't you try beer and wine?" "Lay off the hard stuff." "His will power must be weak." "He could stop if he wanted to." "She's such a sweet girl, I should think he'd stop for her sake." "The doctor told him that if he ever drank again it would kill him, but there he is all lit up again."</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 9</span>
+                            <span>Are these commonplace observations?</span>
+                        </div>
+                        <div class="qa-answer">Now these are commonplace observations on drinkers which we hear all the time.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10</span>
+                            <span>What is behind them?</span>
+                        </div>
+                        <div class="qa-answer">Back of them is a world of ignorance and misunderstanding.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11</span>
+                            <span>Do such comments come from alcoholics?</span>
+                        </div>
+                        <div class="qa-answer">We see that these expressions refer to people whose reactions are very different from ours.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 12</span>
+                            <span>What is a moderate drinker?</span>
+                        </div>
+                        <div class="qa-answer">Moderate drinkers have little trouble in giving up liquor entirely if they have good reason for it.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13</span>
+                            <span>What can they do that alcoholics cannot do?</span>
+                        </div>
+                        <div class="qa-answer">They can take it or leave it alone.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Chronic alcoholics can neither take it nor can they leave it alone.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 14</span>
+                            <span>What is the next type of drinker mentioned?</span>
+                        </div>
+                        <div class="qa-answer">Then we have a certain type of hard drinker.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">15</span>
+                            <span>Could his habit be serious?</span>
+                        </div>
+                        <div class="qa-answer">He may have the habit badly enough to gradually impair him physically and mentally.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 21 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 21</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1</span>
+                            <span>What could it do to him?</span>
+                        </div>
+                        <div class="qa-answer">It may cause him to die a few years before his time.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">2-a</span>
+                            <span>Can the hard drinker (a drunk) stop or moderate if given a good reason to do so?</span>
+                        </div>
+                        <div class="qa-answer">If a sufficiently strong reason – ill health, falling in love, change of environment, or the warning of a doctor – becomes operative, this man can also stop or moderate, although he may find it difficult and troublesome</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">2-b</span>
+                            <span>Could he benefit from treatment?</span>
+                        </div>
+                        <div class="qa-answer">and may even need medical attention.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Hard drinkers can benefit from treatment or psychological help. Alcoholics cannot!</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 4</span>
+                            <span>Do the hard drinker and the real alcoholic look similar on the surface? (the entire paragraph)</span>
+                        </div>
+                        <div class="qa-answer">But what about the real alcoholic? He may start off as a moderate drinker; he may or may not become a continuous hard drinker; but at some stage of his drinking he begins to lose all control of his liquor consumption, once he starts to drink.</div>
+                    </div>
+
+                    <div class="qa-comment">QUESTION: What is the significant difference between the hard drinker (a drunk) and the real alcoholic?<br>ANSWER: The drunk could quit drinking if he would. The alcoholic would quit if he could. A very significant difference.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 5</span>
+                            <span>What is especially puzzling about the real alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">Here is the fellow who has been puzzling you, especially in his lack of control.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>What does he do while drinking?</span>
+                        </div>
+                        <div class="qa-answer">He does absurd, incredible, tragic things while drinking.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7</span>
+                            <span>Does the real alcoholic experience a change of personality when he drinks?</span>
+                        </div>
+                        <div class="qa-answer">He is a real Dr. Jekyll and Mr. Hyde.</div>
+                    </div>
+
+                    <div class="qa-note">*2. Note: Did you have a significant personality change when drinking?</div>
+
+                    <div class="qa-comment">Comment: Robert Louis Stevenson, the author of "Dr. Jekyll and Mr. Hyde," died of alcoholism. It is believed that this was his story.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8</span>
+                            <span>Is the real alcoholic usually only mildly intoxicated?</span>
+                        </div>
+                        <div class="qa-answer">He is seldom mildly intoxicated.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>He is almost always in what condition?</span>
+                        </div>
+                        <div class="qa-answer">He is always more or less insanely drunk.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10</span>
+                            <span>Are many real alcoholics decent people when sober? (2 sentences)</span>
+                        </div>
+                        <div class="qa-answer">His disposition while drinking resembles his normal nature but little. He may be one of the finest fellows in the world.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Again dispelling the "alcoholic personality" idea.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11</span>
+                            <span>What happens when they drink?</span>
+                        </div>
+                        <div class="qa-answer">Yet let him drink for a day, and he frequently becomes disgustingly, and even dangerously anti-social.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12</span>
+                            <span>At what is he a genius?</span>
+                        </div>
+                        <div class="qa-answer">He has a positive genius for getting tight at exactly the wrong moment, particularly when some important decision must be made or engagement kept.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Remember Bill blew the opportunity to make a good bit of money by starting to drink before a partnership was liquidated?</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13-a</span>
+                            <span>Is the real alcoholic a normal person in every way but one?</span>
+                        </div>
+                        <div class="qa-answer">He is often perfectly sensible and well balanced concerning everything</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13-b</span>
+                            <span>What is that one?</span>
+                        </div>
+                        <div class="qa-answer">except liquor,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13-c</span>
+                            <span>In this one respect, they are incredibly what?</span>
+                        </div>
+                        <div class="qa-answer">but in that respect he is incredibly dishonest and selfish.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Here, the Authors make a statement as to the truth about alcoholics. We are unbelievably selfish and dishonest. As we take and experience the Steps, this will become very clear.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">17</span>
+                            <span>Are most alcoholics talented and capable?</span>
+                        </div>
+                        <div class="qa-answer">He often possesses special abilities, skills, and aptitudes, and has a promising career ahead of him.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">18-a</span>
+                            <span>How does the real alcoholic use his gifts?</span>
+                        </div>
+                        <div class="qa-answer">He uses his gifts to build up a bright outlook for his family and himself,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">18-b</span>
+                            <span>What does the alcoholic do to scuttle success?</span>
+                        </div>
+                        <div class="qa-answer">and then pulls the structure down on his head by a senseless series of sprees.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">20</span>
+                            <span>Should a drunk alcoholic sleep all day and all night?</span>
+                        </div>
+                        <div class="qa-answer">He is the fellow who goes to bed so intoxicated he ought to sleep the clock around.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">21</span>
+                            <span>The alcoholic's sleep is interrupted for what reason?</span>
+                        </div>
+                        <div class="qa-answer">Yet early next morning he searches madly for the bottle he misplaced the night before.</div>
+                    </div>
+
+                    <div class="qa-note">*3. Note: Have you ever had to search for a bottle to get your day started?</div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 22 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 22</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1-a</span>
+                            <span>If an alcoholic has sufficient funds, what does he do?</span>
+                        </div>
+                        <div class="qa-answer">If he can afford it, he may have liquor concealed all over his house</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1-b</span>
+                            <span>Why would he do that?</span>
+                        </div>
+                        <div class="qa-answer">to be certain no one gets his entire supply away from him to throw down the wastepipe.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3-a</span>
+                            <span>When alcohol quits working, what do many alcoholics add to their drinking?</span>
+                        </div>
+                        <div class="qa-answer">As matters grow worse, he begins to use a combination of high-powered sedative and liquor</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3-b</span>
+                            <span>What do they hope to accomplish?</span>
+                        </div>
+                        <div class="qa-answer">to quiet his nerves so he can go to work.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>What follows this effort?</span>
+                        </div>
+                        <div class="qa-answer">Then comes the day when he simply cannot make it and gets drunk all over again.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>What is the next step to continue to be able to function?</span>
+                        </div>
+                        <div class="qa-answer">Perhaps he goes to a doctor who gives him morphine or some sedative with which to taper off.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7</span>
+                            <span>Then where do the real alcoholics start winding up?</span>
+                        </div>
+                        <div class="qa-answer">Then he begins to appear at hospitals and sanitariums.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Today, rather than sanitariums, it is treatment centers.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 8</span>
+                            <span>Is the foregoing a complete picture of the real alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">This is by no means a comprehensive picture of the true alcoholic, as our behavior patterns vary.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>Does it come close?</span>
+                        </div>
+                        <div class="qa-answer">But this description should identify him roughly.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 10</span>
+                            <span>If hundreds of drunken experiences have ended in a debacle, what are the questions? (the entire paragraph)</span>
+                        </div>
+                        <div class="qa-answer">Why does he behave like this? If hundreds of experiences have shown him that one drink means another debacle with all its attendant suffering and humiliation, why is it he takes that one drink? Why can't he stay on the water wagon? What has become of the common sense and will power that he still sometimes displays with respect to other matters?</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 11</span>
+                            <span>Is there some understanding of this today? (3 sentences)</span>
+                        </div>
+                        <div class="qa-answer">Perhaps there never will be a full answer to these questions. Opinions vary considerably as to why the alcoholic reacts differently from normal people. We are not sure why, once a certain point is reached, little can be done for him.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12</span>
+                            <span>Can they answer the riddle?</span>
+                        </div>
+                        <div class="qa-answer">We cannot answer the riddle.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 13</span>
+                            <span>Of what are they certain?</span>
+                        </div>
+                        <div class="qa-answer">We know that while the alcoholic keeps away from drink, as he may do for months or years, he reacts much like other men.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14-a</span>
+                            <span>Of what are they equally positive?</span>
+                        </div>
+                        <div class="qa-answer">We are equally positive that once he takes any alcohol whatever into his system,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14-b</span>
+                            <span>Does the ingestion of alcohol affect both the body and the mind?</span>
+                        </div>
+                        <div class="qa-answer">something happens, both in the bodily and mental sense</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14-c</span>
+                            <span>What is the result of taking any alcohol into the body of an alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">which makes it virtually impossible for him to stop.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 23 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 23</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1</span>
+                            <span>What makes the preceding statement exceedingly clear?</span>
+                        </div>
+                        <div class="qa-answer">The experience of any alcoholic will abundantly confirm this.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: From this point on in this Book, we will be dealing with the real problem of the chronic (real) alcoholic – the problem of the mind: the inability of the alcoholic to manage the decision to not start drinking again based on self-knowledge, self-will, or the alcoholic's willpower. We will be told of the need for a spiritual experience/awakening to survive alcoholism – the reason the alcoholic must gain access to a Higher Power.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>What sets the terrible cycle in motion?</span>
+                        </div>
+                        <div class="qa-answer">These observations would be academic and pointless if our friend never took the first drink, thereby setting the terrible cycle in motion.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>Where does the real problem of the real alcoholic rest?</span>
+                        </div>
+                        <div class="qa-answer">Therefore, <strong>the main problem of the alcoholic centers in his mind</strong>, rather than in his body.</div>
+                    </div>
+
+                    <div class="qa-note">*4. Note: Is the real problem physical (allergy) or mental (insanity)?</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4</span>
+                            <span>If you ask an alcoholic why he drinks, can he give you an honest answer? (2 sentences)</span>
+                        </div>
+                        <div class="qa-answer">If you ask him why he started on that last bender, the chances are he will offer you any one of a hundred alibis. Sometimes these excuses have a certain plausibility, but none of them really makes sense in the light of the havoc an alcoholic's drinking bout creates.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>What analogy do the authors give?</span>
+                        </div>
+                        <div class="qa-answer">They sound like the philosophy of the man who, having a headache, beats himself on the head with a hammer so that he can't feel the ache.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>If this is pointed out to him, what will be his reaction?</span>
+                        </div>
+                        <div class="qa-answer">If you draw this fallacious reasoning to the attention of an alcoholic, he will laugh it off, or become irritated and refuse to talk.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 7</span>
+                            <span>Does the alcoholic ever tell the truth?</span>
+                        </div>
+                        <div class="qa-answer">Once in a while he may tell the truth.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8</span>
+                            <span>What is the truth?</span>
+                        </div>
+                        <div class="qa-answer">And the truth, strange to say, is usually that he has no more idea why he took that first drink than you have.</div>
+                    </div>
+
+                    <div class="qa-note">*5. Note: In the early days of your out of control drinking, did anyone ask you why you drank the way you did? Did you give them the honest answer, "I don't know?"</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>Even with plausible excuses, do they know the answer?</span>
+                        </div>
+                        <div class="qa-answer">Some drinkers have excuses with which they are satisfied part of the time.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10</span>
+                            <span>What is the <em>real</em> truth?</span>
+                        </div>
+                        <div class="qa-answer">But in their hearts they really do not know why they do it.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11</span>
+                            <span>Once they have crossed the line, what is their mental state?</span>
+                        </div>
+                        <div class="qa-answer">Once this malady has a real hold, they are a baffled lot.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12</span>
+                            <span>What is the obsession of every alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">There is the obsession that somehow, someday, they will beat the game.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13</span>
+                            <span>Do they normally suspect the truth?</span>
+                        </div>
+                        <div class="qa-answer">But they often suspect they are down for the count.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 14</span>
+                            <span>Do most folks realize this?</span>
+                        </div>
+                        <div class="qa-answer">How true this is, few realize.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">15</span>
+                            <span>What do family members and friends hope?</span>
+                        </div>
+                        <div class="qa-answer">In a vague way their families and friends sense that these drinkers are abnormal, but everybody hopefully awaits the day when the sufferer will rouse himself from his lethargy and assert his power of will.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 16</span>
+                            <span>What is the tragic truth?</span>
+                        </div>
+                        <div class="qa-answer">The tragic truth is that if the man be a real alcoholic, the happy day may not arrive.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">17</span>
+                            <span>What has the alcoholic lost?</span>
+                        </div>
+                        <div class="qa-answer">He has lost control.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 24 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 24</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1</span>
+                            <span>What happens at a certain point in the alcoholic's drinking career?</span>
+                        </div>
+                        <div class="qa-answer">At a certain point in the drinking of every alcoholic, he passes into a state where the most powerful desire to stop drinking is of absolutely no avail.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">2</span>
+                            <span>What is the tragic situation?</span>
+                        </div>
+                        <div class="qa-answer">This tragic situation has already arrived in practically every case long before it is suspected.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 3</span>
+                            <span>What is it that the alcoholic has lost?</span>
+                        </div>
+                        <div class="qa-answer"><em>The fact is that most alcoholics, for reasons yet obscure, have lost the power of choice in drink.</em></div>
+                    </div>
+
+                    <div class="qa-note">*6. Note: Do you believe you have the power to control your drinking once you have started? Do you believe you have the power to stop starting? Have you lost the power of choice as to how much you drink and, more importantly, have you lost the power to choose whether or not you will drink? Is your life unmanageable where it comes to drinking?</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4</span>
+                            <span>What happens to the alcoholic's willpower?</span>
+                        </div>
+                        <div class="qa-answer"><em>Our so-called will power becomes practically nonexistent.</em></div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>How long can they rely on their minds to keep fresh the misery of their last drunk?</span>
+                        </div>
+                        <div class="qa-answer"><em>We are unable, at certain times, to bring into our consciousness with sufficient force the memory of the suffering and humiliation of even a week or a month ago.</em></div>
+                    </div>
+
+                    <div class="qa-note">*7. Note: How long were you able to stay stopped before coming to Alcoholics Anonymous for help? Why would we ask a newcomer to go to 90 meetings in 90 days if they have a real desire to stop drinking?</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>As the result of this phenomenon, what are they without?</span>
+                        </div>
+                        <div class="qa-answer"><em>We are without defense against the first drink.</em></div>
+                    </div>
+
+                    <div class="qa-comment">QUESTION: If we, on our own, are without defense against taking the first drink, what then, must be our destiny?<br>ANSWER: Without the aid of a Power greater than ourselves (Step Two), death or permanent insanity (Step One).</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 7</span>
+                            <span>With no more than a glass of beer, what does not enter their mind?</span>
+                        </div>
+                        <div class="qa-answer">The almost certain consequences that follow taking even a glass of beer do not crowd into the mind to deter us.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8</span>
+                            <span>If there is a slight suspicion, what does the mind do?</span>
+                        </div>
+                        <div class="qa-answer">If these thoughts occur, they are hazy and readily supplanted with the old threadbare idea that this time we shall handle ourselves like other people.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>What analogy do they give here regarding the loss of the power of choice?</span>
+                        </div>
+                        <div class="qa-answer">There is a complete failure of the kind of defense that keeps one from putting his hand on a hot stove.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 10</span>
+                            <span>What may the alcoholic say to himself?</span>
+                        </div>
+                        <div class="qa-answer">The alcoholic may say to himself in the most casual way, "It won't burn me this time, so here's how!"</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11</span>
+                            <span>Do alcoholics always give some thought to taking a drink?</span>
+                        </div>
+                        <div class="qa-answer">Or perhaps he doesn't think at all.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12-a</span>
+                            <span>Do some alcoholics start drinking without realizing what they are doing?</span>
+                        </div>
+                        <div class="qa-answer">How often have some of us begun to drink in this nonchalant way,</div>
+                    </div>
+
+                    <div class="qa-note">*8. Note: Have you ever found yourself drinking and couldn't remember how you got started?</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12-b</span>
+                            <span>When they realize they are drinking, what thought or thoughts do they have? (rest of paragraph)</span>
+                        </div>
+                        <div class="qa-answer">and after the third or fourth, pounded on the bar and said to ourselves, "For God's sake, how did I ever get started again?" Only to have that thought supplanted by "Well, I'll stop with the sixth drink." Or "What's the use anyhow?"</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 14-a</span>
+                            <span>When alcoholics reach this stage of alcoholism, where do they find themselves?</span>
+                        </div>
+                        <div class="qa-answer">When this sort of thinking is fully established in an individual with alcoholic tendencies, he has probably placed himself beyond human aid</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14-b</span>
+                            <span>If not locked up, what will happen to them?</span>
+                        </div>
+                        <div class="qa-answer">and unless locked up, may die or go permanently insane.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">16</span>
+                            <span>Is this fact or fiction?</span>
+                        </div>
+                        <div class="qa-answer">These stark and ugly facts have been confirmed by legions of alcoholics throughout history.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 25 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 25</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1</span>
+                            <span>What has prevented many such demonstrations?</span>
+                        </div>
+                        <div class="qa-answer">But for the grace of God, there would have been thousands more convincing demonstrations.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">2</span>
+                            <span>What are so many unable to do?</span>
+                        </div>
+                        <div class="qa-answer">So many want to stop but cannot.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 3</span>
+                            <span>Is there a solution?</span>
+                        </div>
+                        <div class="qa-answer"><strong><em>There is a solution.</em></strong></div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4-a</span>
+                            <span>Does the alcoholic like the solution?</span>
+                        </div>
+                        <div class="qa-answer">Almost none of us liked the self-searching,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4-b</span>
+                            <span>What do they not like?</span>
+                        </div>
+                        <div class="qa-answer">the leveling of our pride, the confession of shortcomings</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4-c</span>
+                            <span>Are these actions necessary for success in sobriety?</span>
+                        </div>
+                        <div class="qa-answer">which the process requires for its successful consummation.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7-a</span>
+                            <span>What gave AA members hope?</span>
+                        </div>
+                        <div class="qa-answer">But we saw that it really worked in others,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7-b</span>
+                            <span>What were they faced with when confronted by recovered alcoholics?</span>
+                        </div>
+                        <div class="qa-answer">and we had come to believe in the hopelessness and futility of life as we had been living it.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>For those alcoholics who have adopted the simple kit of spiritual tools as a way of life, what have they experienced? (2 sentences)</span>
+                        </div>
+                        <div class="qa-answer">When, therefore, we were approached by those in whom the problem had been solved, there was nothing left for us but to pick up the simple kit of spiritual tools laid at our feet. We have found much of heaven and we have been rocketed into a fourth dimension of existence of which we had not even dreamed.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 10</span>
+                            <span>What is the great fact for recovered alcoholics?</span>
+                        </div>
+                        <div class="qa-answer">The great fact is just this, and nothing less: That we have had deep and effective spiritual experiences* which have revolutionized our whole attitude toward life, toward our fellows and toward God's universe.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Notice the asterisk (*) after "spiritual experiences." Read footnote.<br><br>* Fully explained – Appendix II.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11</span>
+                            <span>What is the central fact in their lives today?</span>
+                        </div>
+                        <div class="qa-answer">The central fact of our lives today is the absolute certainty that our Creator has entered into our hearts and lives in a way which is indeed miraculous.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12</span>
+                            <span>What has He commenced doing?</span>
+                        </div>
+                        <div class="qa-answer">He has commenced to accomplish those things for us which we could never do by ourselves.</div>
+                    </div>
+
+                    <div class="qa-note">*9. Note: Is this a self-help program?</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 13</span>
+                            <span>Is there a middle-of-the-road solution for real alcoholics?</span>
+                        </div>
+                        <div class="qa-answer">If you are as seriously alcoholic as we were, we believe there is no middle-of-the-road solution.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14</span>
+                            <span>How were their lives?</span>
+                        </div>
+                        <div class="qa-answer">We were in a position where life was becoming impossible, and if we had passed into the region from which there is no return through human aid, we had but two alternatives:</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">15</span>
+                            <span>What were the two alternatives?</span>
+                        </div>
+                        <div class="qa-answer">One was to go on to the bitter end, blotting out the consciousness of our intolerable situation as best we could; and the other, to accept spiritual help.</div>
+                    </div>
+
+                    <div class="qa-note">*10. Note: Do these two alternatives appear to be Step One and Step Two?</div>
+
+                </div>
+            </div>
+
+            <!-- APPENDIX II SECTION -->
+            <div class="appendix-section">
+                <h4>Appendix II Reference</h4>
+                <p>The following section covers Appendix II (Pages 567-568 in the 4th Edition), which explains spiritual experiences and awakenings.</p>
+            </div>
+
+            <!-- APPENDIX II -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Appendix II (Pages 567-568)</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 1</span>
+                            <span>Upon careful reading, what does the reader learn is the product of a "spiritual experience" and "spiritual awakening?"</span>
+                        </div>
+                        <div class="qa-answer">The terms "spiritual experience" and "spiritual awakening" are used many times in this book which, upon careful reading, shows that the personality change sufficient to bring about recovery from alcoholism has manifested itself among us in many different forms.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Please note the words, "careful reading." Some alcoholics will not recover because they will not "carefully read" this Basic Text for Alcoholics Anonymous.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>What impression did the readers of the First Printing of the First Edition get?</span>
+                        </div>
+                        <div class="qa-answer">Yet it is true that our first printing gave many readers the impression that these personality changes, or religious experiences, must be in the nature of sudden and spectacular upheavals.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: The only significant change that has been made in the Basic Text (the first 164 pages plus "The Doctor's Opinion") of the Big Book is the one that produced the need for Appendix II. Step Twelve in the First Printing read, "Having had a spiritual experience as the result of this course of action..." In reading "Bill's Story," we read where he had a sudden spiritual experience as the result of these steps. Dr. Bob, on the other hand, had a very slowly developed "spiritual awakening." Many of those reading the First Printing of the Big Book were not experiencing Bill's "hot flash" and felt they were missing something. To correct that misconception, Bill re-worded Step Twelve to what it now reads and added "Appendix II" as an explanation.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>This conclusion is what?</span>
+                        </div>
+                        <div class="qa-answer">Happily for everyone, this conclusion is erroneous.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 4</span>
+                            <span>In the stories in the first chapters, which spiritual event was described?</span>
+                        </div>
+                        <div class="qa-answer">In the first few chapters a number of sudden revolutionary changes are described.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>Did most alcoholics believe that they, too, must have a spiritual experience?</span>
+                        </div>
+                        <div class="qa-answer">Though it was not our intention to create such an impression, many alcoholics have nevertheless concluded that in order to recover they must acquire an immediate and overwhelming "God-consciousness" followed at once by a vast change in feeling and outlook.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 6</span>
+                            <span>Are such transformations frequent?</span>
+                        </div>
+                        <div class="qa-answer">Among our rapidly growing membership of thousands of alcoholics such transformations, though frequent, are by no means the rule.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7-a</span>
+                            <span>What do most recovered alcoholics experience?</span>
+                        </div>
+                        <div class="qa-answer">Most of our experiences are what the psychologist William James calls the "educational variety"</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7-b</span>
+                            <span>Why did William James call them that?</span>
+                        </div>
+                        <div class="qa-answer">because they develop slowly over a period of time.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>Very often, who are the first to notice the change that has taken place?</span>
+                        </div>
+                        <div class="qa-answer">Quite often friends of the newcomer are aware of the difference long before he is himself.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10-a</span>
+                            <span>What does the alcoholic finally realize?</span>
+                        </div>
+                        <div class="qa-answer">He finally realizes that he has undergone a profound alteration in his reaction to life;</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10-b</span>
+                            <span>Could he have accomplished this himself?</span>
+                        </div>
+                        <div class="qa-answer">that such a change could hardly have been brought about by himself alone.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12</span>
+                            <span>What could seldom have been accomplished by self discipline?</span>
+                        </div>
+                        <div class="qa-answer">What often takes place in a few months could seldom have been accomplished by years of self discipline.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13-a</span>
+                            <span>With few exceptions, what do they all tap into?</span>
+                        </div>
+                        <div class="qa-answer">With few exceptions our members find that they have tapped an unsuspected inner resource</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13-b</span>
+                            <span>What do they identify this to be?</span>
+                        </div>
+                        <div class="qa-answer">which they presently identify with their own conception of a Power greater than themselves.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>What do most of them think?</span>
+                        </div>
+                        <div class="qa-answer">Most of us think this awareness of a Power greater than ourselves is the essence of spiritual experience.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>What do religious folks call it?</span>
+                        </div>
+                        <div class="qa-answer">Our more religious members call it "God-consciousness."</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 4-a</span>
+                            <span>What do they wish to say emphatically to any alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">Most emphatically we wish to say that any alcoholic capable of honestly facing his problems in the light of our experience can recover,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4-b</span>
+                            <span>What is one condition the alcoholic must meet?</span>
+                        </div>
+                        <div class="qa-answer">provided he does not close his mind to all spiritual concepts.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>What will defeat an alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">He can only be defeated by an attitude of intolerance or belligerent denial.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 7</span>
+                            <span>What is it that no one should have difficulty with?</span>
+                        </div>
+                        <div class="qa-answer">We find that no one need have difficulty with the spirituality of the program.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8</span>
+                            <span>What are the essentials of recovery?</span>
+                        </div>
+                        <div class="qa-answer">Willingness, honesty and open mindedness are the essentials of recovery.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>How important are they?</span>
+                        </div>
+                        <div class="qa-answer">But these are indispensable.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 10</span>
+                            <span>What will keep a person in everlasting ignorance?</span>
+                        </div>
+                        <div class="qa-answer">"There is a principle which is a bar against all information, which is proof against all arguments and which cannot fail to keep a man in everlasting ignorance – that principle is contempt prior to investigation."<br><br>— HERBERT SPENCER</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 26 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 26</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1</span>
+                            <span>Why did they accept spiritual help?</span>
+                        </div>
+                        <div class="qa-answer">This we did because we honestly wanted to, and were willing to make the effort.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>How is Rowland H., an American businessman, described?</span>
+                        </div>
+                        <div class="qa-answer">A certain American business man had ability, good sense, and high character.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>Where had he sought help? (2 sentences)</span>
+                        </div>
+                        <div class="qa-answer">For years he had floundered from one sanitarium to another. He had consulted the best known American psychiatrists.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4</span>
+                            <span>Who did he finally go to?</span>
+                        </div>
+                        <div class="qa-answer">Then he had gone to Europe, placing himself in the care of a celebrated physician (<u>the psychiatrist, Dr. Jung</u>) who prescribed for him.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>Was he confident that he had been fixed?</span>
+                        </div>
+                        <div class="qa-answer">Though experience had made him skeptical, he finished his treatment with unusual confidence.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>How were his mental and physical condition after his treatment?</span>
+                        </div>
+                        <div class="qa-answer">His physical and mental condition were unusually good.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7</span>
+                            <span>Above all, what did he believe?</span>
+                        </div>
+                        <div class="qa-answer">Above all, he believed he had acquired such a profound knowledge of the inner workings of his mind and its hidden springs that relapse was unthinkable.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8</span>
+                            <span>Nevertheless, what happened?</span>
+                        </div>
+                        <div class="qa-answer">Nevertheless, he was drunk in a short time.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>How did he explain it?</span>
+                        </div>
+                        <div class="qa-answer">More baffling still, he could give himself no satisfactory explanation for his fall.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 10-a</span>
+                            <span>What did he do?</span>
+                        </div>
+                        <div class="qa-answer">So he returned to this doctor,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10-b</span>
+                            <span>Did he really respect the doctor?</span>
+                        </div>
+                        <div class="qa-answer">whom he admired,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10-c</span>
+                            <span>What did he ask the doctor?</span>
+                        </div>
+                        <div class="qa-answer">and asked him point-blank why he could not recover.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13</span>
+                            <span>What was his greatest wish?</span>
+                        </div>
+                        <div class="qa-answer">He wished above all things to regain self-control.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14</span>
+                            <span>Did he appear to be a very normal person?</span>
+                        </div>
+                        <div class="qa-answer">He seemed quite rational and well-balanced with respect to other problems.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">15</span>
+                            <span>What was it he had no control over?</span>
+                        </div>
+                        <div class="qa-answer">Yet he had no control whatever over alcohol.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">16</span>
+                            <span>What was his question?</span>
+                        </div>
+                        <div class="qa-answer">Why was this?</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 17</span>
+                            <span>What did he want to know?</span>
+                        </div>
+                        <div class="qa-answer">He begged the doctor to tell him the whole truth, and he got it.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">18-a</span>
+                            <span>What was the truth?</span>
+                        </div>
+                        <div class="qa-answer">In the doctor's judgment he was utterly hopeless; he could never regain his position in society</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">18-b</span>
+                            <span>What would he have to do to live?</span>
+                        </div>
+                        <div class="qa-answer">and he would have to place himself under lock and key or hire a bodyguard if he expected to live long.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">20</span>
+                            <span>Who said so?</span>
+                        </div>
+                        <div class="qa-answer">That was a great physician's opinion.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 21</span>
+                            <span>Did he die from drinking?</span>
+                        </div>
+                        <div class="qa-answer">But this man still lives, and is a free man.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">22</span>
+                            <span>Did he need to be protected from himself?</span>
+                        </div>
+                        <div class="qa-answer">He does not need a bodyguard nor is he confined.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">23-a</span>
+                            <span>Was he free to come and go as he pleased?</span>
+                        </div>
+                        <div class="qa-answer">He can go anywhere on this earth where other free men may go without disaster,</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 27 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 27</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1-b</span>
+                            <span>What must he do to maintain his freedom from alcohol?</span>
+                        </div>
+                        <div class="qa-answer">provided he remains willing to maintain a certain simple attitude.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Could this be to accept spiritual help?</div>
+
+                    <div class="qa-comment">Comment: Rowland never joined Alcoholics Anonymous. He remained in New York and was an active member of the Calvary Church.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>Do some alcoholics believe they can do without spiritual help?</span>
+                        </div>
+                        <div class="qa-answer">Some of our alcoholic readers may think they can do without spiritual help.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>What will the authors tell?</span>
+                        </div>
+                        <div class="qa-answer">Let us tell you the rest of the conversation our friend had with his doctor.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 4</span>
+                            <span>What did the doctor tell Rowland was his problem?</span>
+                        </div>
+                        <div class="qa-answer">The doctor said: "You have the mind of a chronic alcoholic.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>How many alcoholics, like Rowland, had Dr. Jung seen recover?</span>
+                        </div>
+                        <div class="qa-answer">I have <u>never</u> seen one single case recover, where that state of mind existed to the extent that it does in you."</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">6</span>
+                            <span>How did Rowland feel after hearing the prognosis?</span>
+                        </div>
+                        <div class="qa-answer">Our friend felt as though the gates of hell had closed on him with a clang.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 7</span>
+                            <span>What was his question to the doctor?</span>
+                        </div>
+                        <div class="qa-answer">He said to the doctor, "Is there no exception?"</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 8</span>
+                            <span>What was the doctor's reply?</span>
+                        </div>
+                        <div class="qa-answer">"Yes," replied the doctor, "there is.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">9</span>
+                            <span>Was the doctor aware of exceptions?</span>
+                        </div>
+                        <div class="qa-answer">Exceptions to cases such as yours have been occurring since early times.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10</span>
+                            <span>Were they a common occurrence?</span>
+                        </div>
+                        <div class="qa-answer">Here and there, once in a while, alcoholics have had what are called <u>vital spiritual experiences</u>.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11</span>
+                            <span>Did Dr. Jung understand these occurrences?</span>
+                        </div>
+                        <div class="qa-answer">To me these occurrences are phenomena.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">12</span>
+                            <span>What did these vital spiritual experiences appear to be to Dr. Jung?</span>
+                        </div>
+                        <div class="qa-answer">They appear to be in the nature of huge emotional displacements and rearrangements.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Remember, Dr. Silkworth believed that the only hope for a chronic alcoholic was an entire psychic change – a complete change in the way we think and the way we feel. Dr. Jung told Rowland the same thing. Our old ideas and beliefs must be replaced with new ideas and beliefs. Taking the Twelve Steps of Alcoholics Anonymous will produce that vital psychic change or "Spiritual Awakening/Experience," a complete change in the way we think and the way we feel.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13</span>
+                            <span>What was the product of these occurrences?</span>
+                        </div>
+                        <div class="qa-answer">Ideas, emotions, and attitudes which were once the guiding forces of the lives of these men are suddenly cast to one side, and a completely new set of conceptions and motives begin to dominate them.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: If we carefully follow the clear-cut directions in the Big Book, we are promised a completely new set of conceptions and motives which will dominate us rather than the selfishness – self-centeredness which is the source of the insidious insanity and the cause of an alcoholic death or wet brain insanity.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14</span>
+                            <span>What had Dr. Jung been attempting to do with Rowland?</span>
+                        </div>
+                        <div class="qa-answer">In fact, I have been trying to produce some such emotional rearrangement within you.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">15-a</span>
+                            <span>Had Dr. Jung been successful with hard drinkers?</span>
+                        </div>
+                        <div class="qa-answer">With many individuals the methods which I employed are successful,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">15-b</span>
+                            <span>Had he ever had any success with a real alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">but I have <u>never been successful</u> with an alcoholic of your description."*</div>
+                    </div>
+
+                    <div class="qa-comment">*For amplification – see Appendix II.</div>
+
+                    <div class="qa-comment">Comment: Again, we are requested to see "Appendix II." Since we have already done that, we will not take time to revisit that Section now.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 17-a</span>
+                            <span>Was Rowland relieved to hear the doctor's suspected solution?</span>
+                        </div>
+                        <div class="qa-answer">Upon hearing this, our friend was somewhat relieved,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">17-b</span>
+                            <span>Why did he have hope?</span>
+                        </div>
+                        <div class="qa-answer">for he reflected that, after all, he was a good church member.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">19</span>
+                            <span>What did Dr. Jung do to Rowland's hope?</span>
+                        </div>
+                        <div class="qa-answer">This hope, however, was destroyed by the doctor's telling him that while his religious convictions were very good, in his case they did not spell the necessary vital spiritual experience.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: If strong religious belief was a solution for alcoholism, we would not have so many priests and other men and women "of the Cloth" coming to us for help with their drinking problem.</div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 28 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 28</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 1</span>
+                            <span>What made Rowland a free man?</span>
+                        </div>
+                        <div class="qa-answer">Here was the terrible dilemma in which our friend found himself when he had the extraordinary experience, which as we have already told you, made him a free man.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Rowland continued his affiliation with the Oxford Group and the Calvary Church in New York City. He never became involved with Alcoholics Anonymous, but did live the rest of his life sober.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>What do other alcoholics do that Rowland did?</span>
+                        </div>
+                        <div class="qa-answer">We, in our turn, sought the same escape with all the desperation of drowning men.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3</span>
+                            <span>What has the flimsy beginning proved to be?</span>
+                        </div>
+                        <div class="qa-answer">What seemed at first a flimsy reed, has proved to be the loving and powerful hand of God.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4-a</span>
+                            <span>What does the Program of Alcoholics Anonymous give the suffering alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">A new life has been given us or,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">4-b</span>
+                            <span>Or what is another way to view what is given?</span>
+                        </div>
+                        <div class="qa-answer">if you prefer, "<u>a design for living</u>" that really works.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: Tragically, far too many of our members believe Alcoholics Anonymous is only about not drinking. They have paid a tremendous price to come to us for help and then miss the whole purpose of our Program of Action which promises a happy and purposeful life.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 6</span>
+                            <span>What contribution did William James make to AA?</span>
+                        </div>
+                        <div class="qa-answer">The distinguished American psychologist, William James, in his book "Varieties of Religious Experience," indicates a multitude of ways in which men have discovered God.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7</span>
+                            <span>What do the authors not want to do?</span>
+                        </div>
+                        <div class="qa-answer">We have no desire to convince anyone that there is only one way by which faith can be acquired.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8-a</span>
+                            <span>What does the experience of the First 100 mean?</span>
+                        </div>
+                        <div class="qa-answer">If what we have learned and felt and seen means anything at all, it means that all of us, whatever our race, creed, or color are the children of a living Creator</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">8-b</span>
+                            <span>When will this happen?</span>
+                        </div>
+                        <div class="qa-answer">with whom we may form a relationship upon simple and understandable terms as soon as we are <u>willing and honest enough to try</u>.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">10</span>
+                            <span>Will the Program, as described in the Big Book, disturb any religious views?</span>
+                        </div>
+                        <div class="qa-answer">Those having religious affiliations will find here nothing disturbing to their beliefs or ceremonies.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">11</span>
+                            <span>Does AA argue religious views?</span>
+                        </div>
+                        <div class="qa-answer">There is no friction among us over such matters.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 12</span>
+                            <span>Does AA care what religious group or groups a member belongs to?</span>
+                        </div>
+                        <div class="qa-answer">We think it no concern of ours what religious bodies our members identify themselves with as individuals.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">13</span>
+                            <span>How does AA view that topic?</span>
+                        </div>
+                        <div class="qa-answer">This should be an entirely personal affair which each one decides for himself in the light of past associations, or his present choice.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14-a</span>
+                            <span>Do all AA's join up with a religious group?</span>
+                        </div>
+                        <div class="qa-answer">Not all of us join religious bodies,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">14-b</span>
+                            <span>Does AA favor such affiliation?</span>
+                        </div>
+                        <div class="qa-answer">but most of us favor such memberships.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 16-a</span>
+                            <span>What will the reader learn in the next chapter?</span>
+                        </div>
+                        <div class="qa-answer">In the following chapter, there appears an explanation of alcoholism, as we understand it,</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">16-b</span>
+                            <span>What is the chapter following that one about?</span>
+                        </div>
+                        <div class="qa-answer">then a chapter addressed to the agnostic.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">18</span>
+                            <span>Does AA get a lot of agnostics?</span>
+                        </div>
+                        <div class="qa-answer">Many who once were in this class are now among our members.</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- PAGE 29 -->
+            <div class="qa-page-section">
+                <div class="qa-page-header" onclick="togglePageSection(this)">
+                    <span>Page 29</span>
+                    <span class="toggle-icon">▼</span>
+                </div>
+                <div class="qa-page-content">
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">1</span>
+                            <span>Is being an agnostic a great handicap to recovery?</span>
+                        </div>
+                        <div class="qa-answer">Surprisingly enough, we find such convictions no great obstacle to a spiritual experience.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 2</span>
+                            <span>(Fill in the blanks.) Further on, __(what)__ are given showing __(what)__?</span>
+                        </div>
+                        <div class="qa-answer">Further on, <strong><u>clear-cut directions</u></strong> are given showing <strong><u>how we recovered</u></strong>.</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: This Big Book is the only place the directions for taking the Twelve Steps of Alcoholics Anonymous and the Recovery resulting therefrom can be found! Bill made it clear in the Foreword to the 12 & 12 that the Big Book was and still is our Basic Text. It is the one we should put to the test before selecting a second book.</div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">3-a</span>
+                            <span>What follows the clear-cut directions in the Basic Text?</span>
+                        </div>
+                        <div class="qa-answer">Each individual, in the personal stories,</div>
+                    </div>
+
+                    <div class="qa-comment">Comment: One story less in the Fourth Edition than in the Third.</div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 3-b</span>
+                            <span>What does each individual do in telling his story?</span>
+                        </div>
+                        <div class="qa-answer">describes in his own language and from his own point of view the way he established his relationship with God.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">5</span>
+                            <span>What do the stories accomplish?</span>
+                        </div>
+                        <div class="qa-answer">These give a fair cross section of our membership and a clear-cut idea of what has actually happened in their lives.</div>
+                    </div>
+
+                    <div class="qa-item paragraph-start">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">(P) 6</span>
+                            <span>What do the authors hope those who read the stories will not do?</span>
+                        </div>
+                        <div class="qa-answer">We hope no one will consider these self-revealing accounts in bad taste.</div>
+                    </div>
+
+                    <div class="qa-item">
+                        <div class="qa-question" onclick="toggleAnswer(this)">
+                            <span class="qa-number">7</span>
+                            <span>What do the authors hope the stories will do for the suffering alcoholic?</span>
+                        </div>
+                        <div class="qa-answer">Our hope is that many alcoholic men and women, desperately in need, will see these pages, and we believe that it is only by fully disclosing ourselves and our problems that they will be persuaded to say, "Yes, I am one of them too; I must have this thing."</div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="qa-comment" style="margin-top: 20px; background: #f0f0f0; border-left-color: #666;">
+                <strong>NOTE:</strong> The ideas expressed in this study guide are solely those of the author and are not representative of AA as a whole. Many have found this document useful in their recovery work.
+            </div>
+
+        </div>
+
         <!-- TAB 2: Discussion Questions -->
         <div id="discuss" class="tab-content">
             <div class="concept-box">
@@ -2003,6 +4332,56 @@
             this.classList.add('active');
         });
     });
+
+    // Q&A Study Guide Functions
+    function toggleAnswer(questionElement) {
+        const answer = questionElement.nextElementSibling;
+        if (answer && answer.classList.contains('qa-answer')) {
+            answer.classList.toggle('hidden');
+        }
+    }
+
+    function toggleAllAnswers(show) {
+        document.querySelectorAll('.qa-answer').forEach(answer => {
+            if (show) {
+                answer.classList.remove('hidden');
+            } else {
+                answer.classList.add('hidden');
+            }
+        });
+        // Update button states
+        document.querySelectorAll('.qa-controls .qa-btn').forEach((btn, index) => {
+            if (index < 2) {
+                btn.classList.toggle('active', (show && index === 0) || (!show && index === 1));
+            }
+        });
+    }
+
+    function togglePageSection(headerElement) {
+        headerElement.classList.toggle('collapsed');
+        const content = headerElement.nextElementSibling;
+        if (content && content.classList.contains('qa-page-content')) {
+            content.classList.toggle('collapsed');
+        }
+    }
+
+    function expandAllSections() {
+        document.querySelectorAll('.qa-page-header').forEach(header => {
+            header.classList.remove('collapsed');
+        });
+        document.querySelectorAll('.qa-page-content').forEach(content => {
+            content.classList.remove('collapsed');
+        });
+    }
+
+    function collapseAllSections() {
+        document.querySelectorAll('.qa-page-header').forEach(header => {
+            header.classList.add('collapsed');
+        });
+        document.querySelectorAll('.qa-page-content').forEach(content => {
+            content.classList.add('collapsed');
+        });
+    }
 </script>
 
 </body>
