@@ -398,6 +398,7 @@
             background: linear-gradient(135deg, #1a252f 0%, #2c3e50 50%, #34495e 100%);
             box-shadow: 0 2px 20px rgba(0,0,0,0.15);
             position: relative;
+            margin-top: 0;
         }
 
         header::after {
@@ -804,186 +805,6 @@
         .qa-search:focus {
             border-color: #3498db;
             box-shadow: 0 0 0 4px rgba(52, 152, 219, 0.15);
-        }
-
-        /* Dark Mode Support */
-        .dark-mode-toggle {
-            position: fixed;
-            top: 80px;
-            right: 20px;
-            width: 44px;
-            height: 44px;
-            border-radius: 50%;
-            background: #fff;
-            border: 2px solid #e1e4e8;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            z-index: 999;
-            transition: all 0.3s ease;
-        }
-
-        .dark-mode-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-        }
-
-        .dark-mode-toggle svg {
-            width: 22px;
-            height: 22px;
-            color: #667eea;
-            transition: all 0.3s ease;
-        }
-
-        /* Dark Mode Styles */
-        body.dark-mode {
-            --bg: #1a1a2e;
-            --primary: #e0e0e0;
-            background-color: #0f0f1a;
-            color: #e0e0e0;
-        }
-
-        body.dark-mode header {
-            background: linear-gradient(135deg, #16213e 0%, #1a1a2e 100%);
-        }
-
-        body.dark-mode .text-panel {
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-            color: #d0d0d0;
-            border-color: #2a2a4a;
-        }
-
-        body.dark-mode .text-panel::before {
-            background: linear-gradient(180deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%);
-        }
-
-        body.dark-mode .sidebar {
-            background: linear-gradient(180deg, #16213e 0%, #1a1a2e 100%);
-            border-color: #2a2a4a;
-        }
-
-        body.dark-mode .tabs {
-            background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
-            border-color: #2a2a4a;
-        }
-
-        body.dark-mode .tab-btn {
-            color: #a0a0a0;
-        }
-
-        body.dark-mode .tab-btn:hover {
-            background: rgba(102, 126, 234, 0.1);
-            color: #e0e0e0;
-        }
-
-        body.dark-mode .tab-btn.active {
-            background: rgba(102, 126, 234, 0.15);
-            color: #667eea;
-        }
-
-        body.dark-mode .card,
-        body.dark-mode .meeting-section,
-        body.dark-mode .discussion-card,
-        body.dark-mode .ref-box {
-            background: linear-gradient(135deg, #1e1e3a 0%, #252545 100%);
-            border-color: #3a3a5a;
-            color: #d0d0d0;
-        }
-
-        body.dark-mode .card h4,
-        body.dark-mode .meeting-section h3,
-        body.dark-mode .discussion-card h4 {
-            color: #a0c4ff;
-        }
-
-        body.dark-mode .card p,
-        body.dark-mode .meeting-section p,
-        body.dark-mode .discussion-card p {
-            color: #b0b0b0;
-        }
-
-        body.dark-mode .section-title {
-            background: linear-gradient(135deg, #1e1e3a 0%, #252545 100%);
-            color: #e0e0e0;
-        }
-
-        body.dark-mode .qa-page-content {
-            background: #1a1a2e;
-        }
-
-        body.dark-mode .qa-answer {
-            background: rgba(52, 152, 219, 0.15);
-            color: #a0d0ff;
-        }
-
-        body.dark-mode .qa-comment {
-            background: rgba(39, 174, 96, 0.15);
-            color: #80d0a0;
-        }
-
-        body.dark-mode .qa-note {
-            background: rgba(230, 126, 34, 0.15);
-            color: #f0b080;
-        }
-
-        body.dark-mode textarea {
-            background: #1e1e3a;
-            border-color: #3a3a5a;
-            color: #e0e0e0;
-        }
-
-        body.dark-mode textarea:focus {
-            border-color: #667eea;
-            background: #252545;
-        }
-
-        body.dark-mode .dark-mode-toggle {
-            background: #252545;
-            border-color: #3a3a5a;
-        }
-
-        body.dark-mode .dark-mode-toggle svg {
-            color: #ffd700;
-        }
-
-        body.dark-mode .text-panel::-webkit-scrollbar-track,
-        body.dark-mode .tab-content::-webkit-scrollbar-track {
-            background: #1a1a2e;
-        }
-
-        body.dark-mode .text-panel::-webkit-scrollbar-thumb,
-        body.dark-mode .tab-content::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #3a3a5a 0%, #4a4a6a 100%);
-        }
-
-        body.dark-mode .filter-btn {
-            background: #1e1e3a;
-            border-color: #3a3a5a;
-            color: #c0c0c0;
-        }
-
-        body.dark-mode .filter-btn:hover {
-            background: #252545;
-        }
-
-        body.dark-mode .font-controls {
-            background: #1e1e3a;
-        }
-
-        body.dark-mode .font-btn {
-            background: #252545;
-            border-color: #3a3a5a;
-            color: #e0e0e0;
-        }
-
-        body.dark-mode .scroll-top-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-
-        body.dark-mode .highlight {
-            opacity: 0.9;
         }
 
         /* Tooltip Styles */
@@ -1756,20 +1577,8 @@
     </style>
 </head>
 <body>
-
 <!-- Reading Progress Bar -->
 <div class="reading-progress" id="reading-progress"></div>
-
-<!-- Dark Mode Toggle -->
-<button class="dark-mode-toggle" onclick="toggleDarkMode()" aria-label="Toggle dark mode" data-tooltip="Toggle Dark Mode">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="sun-icon">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-    </svg>
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" class="moon-icon" style="display:none;">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-    </svg>
-</button>
-
 <header>
     <div style="display:flex; align-items: baseline;">
         <h1>Chapter 2: There Is A Solution</h1>
@@ -5841,54 +5650,6 @@
         const textPanel = document.querySelector('.text-panel');
         if (textPanel) {
             textPanel.addEventListener('scroll', updateReadingProgress);
-        }
-    });
-
-    // ========== DARK MODE ==========
-    function toggleDarkMode() {
-        const body = document.body;
-        const sunIcon = document.querySelector('.sun-icon');
-        const moonIcon = document.querySelector('.moon-icon');
-
-        body.classList.toggle('dark-mode');
-
-        const isDarkMode = body.classList.contains('dark-mode');
-
-        // Toggle icons
-        if (isDarkMode) {
-            sunIcon.style.display = 'none';
-            moonIcon.style.display = 'block';
-        } else {
-            sunIcon.style.display = 'block';
-            moonIcon.style.display = 'none';
-        }
-
-        // Save preference
-        localStorage.setItem('bigbook-darkmode', isDarkMode);
-    }
-
-    function loadDarkModePreference() {
-        const savedDarkMode = localStorage.getItem('bigbook-darkmode');
-        if (savedDarkMode === 'true') {
-            document.body.classList.add('dark-mode');
-            const sunIcon = document.querySelector('.sun-icon');
-            const moonIcon = document.querySelector('.moon-icon');
-            if (sunIcon) sunIcon.style.display = 'none';
-            if (moonIcon) moonIcon.style.display = 'block';
-        }
-    }
-
-    // Load dark mode preference on page load
-    document.addEventListener('DOMContentLoaded', loadDarkModePreference);
-
-    // ========== KEYBOARD SHORTCUT FOR DARK MODE ==========
-    document.addEventListener('keydown', function(e) {
-        // Ctrl/Cmd + D for dark mode (if not in input/textarea)
-        if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
-            if (document.activeElement.tagName !== 'TEXTAREA' && document.activeElement.tagName !== 'INPUT') {
-                e.preventDefault();
-                toggleDarkMode();
-            }
         }
     });
 
