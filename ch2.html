@@ -270,6 +270,13 @@
             grid-template-columns: 1fr 1fr;
             gap: 6px;
             margin-bottom: 15px;
+            /* Sticky positioning for desktop */
+            position: sticky;
+            top: 0;
+            background: linear-gradient(180deg, #f8f9fa 0%, #f8f9fa 92%, transparent 100%);
+            z-index: 10;
+            margin: -15px -15px 15px -15px;
+            padding: 15px 15px 20px 15px;
         }
         .legend-item {
             padding: 6px 8px;
@@ -1098,6 +1105,11 @@
             .legend-grid {
                 grid-template-columns: 1fr;
                 gap: 4px;
+                /* Disable sticky on mobile to save space */
+                position: static;
+                margin: 0 0 15px 0;
+                padding: 0;
+                background: transparent;
             }
 
             .legend-item {
