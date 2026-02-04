@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Concept One - Final Responsibility and Ultimate Authority</title>
+    <style>
+        :root {
+            --primary-blue: #1a5276;
+            --light-blue: #d4e6f1;
+            --accent-gold: #b7950b;
+            --light-gold: #fcf3cf;
+            --dark-gray: #2c3e50;
+            --medium-gray: #566573;
+            --light-gray: #f8f9fa;
+            --quote-bg: #fef9e7;
+            --reference-color: #7f8c8d;
+            --highlight-green: #d5f5e3;
+            --highlight-red: #fadbd8;
+            --sidebar-bg: #eaf2f8;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --shadow-hover: 0 8px 15px rgba(0, 0, 0, 0.15);
+            --transition: all 0.3s ease;
+            --sidebar-width: 280px;
+            --content-max-width: 1400px;
+            --concept-purple: #6c3483;
+            --light-purple: #e8daef;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 20px;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Georgia', serif;
+            line-height: 1.8;
+            color: var(--dark-gray);
+            background-color: var(--light-gray);
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--concept-purple), var(--accent-gold), #27ae60);
+            width: 0%;
+            z-index: 9999;
+            transition: width 0.1s ease;
+        }
+
+        /* Hero Header */
+        .hero {
+            width: 100%;
+            min-height: 35vh;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--concept-purple) 0%, #8e44ad 50%, #6c3483 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(5deg); }
+        }
+
+        .hero-content {
+            text-align: center;
+            color: white;
+            z-index: 1;
+            padding: 40px;
+            max-width: 900px;
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5em, 6vw, 4em);
+            font-weight: 300;
+            letter-spacing: 4px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .hero .subtitle {
+            font-size: clamp(1.2em, 3vw, 1.8em);
+            font-style: italic;
+            opacity: 0.95;
+            margin-bottom: 10px;
+        }
+
+        .hero .concept-number {
+            font-size: 0.9em;
+            letter-spacing: 2px;
+            opacity: 0.8;
+            margin-bottom: 20px;
+        }
+
+        /* Main Layout */
+        .main-wrapper {
+            display: grid;
+            grid-template-columns: var(--sidebar-width) 1fr;
+            max-width: var(--content-max-width);
+            margin: 0 auto;
+            gap: 0;
+            transition: grid-template-columns 0.3s ease;
+        }
+
+        .main-wrapper.sidebar-collapsed {
+            grid-template-columns: 60px 1fr;
+        }
+
+        /* Sticky Sidebar */
+        .sidebar-nav {
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            background: white;
+            border-right: 1px solid #e0e0e0;
+            overflow-y: auto;
+            padding: 30px 20px;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            transition: width 0.3s ease, padding 0.3s ease;
+            width: var(--sidebar-width);
+        }
+
+        .sidebar-nav.collapsed {
+            width: 60px;
+            padding: 30px 10px;
+        }
+
+        .sidebar-nav.collapsed h3,
+        .sidebar-nav.collapsed ul {
+            opacity: 0;
+            visibility: hidden;
+            height: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--concept-purple);
+        }
+
+        .sidebar-header h3 {
+            color: var(--concept-purple);
+            font-size: 1.1em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin: 0;
+            padding: 0;
+            border: none;
+        }
+
+        .collapse-btn {
+            background: var(--concept-purple);
+            color: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1em;
+            transition: var(--transition);
+        }
+
+        .collapse-btn:hover {
+            background: var(--accent-gold);
+            transform: scale(1.1);
+        }
+
+        .sidebar-nav ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 0;
+        }
+
+        .sidebar-nav a {
+            display: block;
+            padding: 12px 15px;
+            color: var(--medium-gray);
+            text-decoration: none;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-size: 0.95em;
+            border-left: 3px solid transparent;
+        }
+
+        .sidebar-nav a:hover {
+            background: var(--light-purple);
+            color: var(--concept-purple);
+            border-left-color: var(--concept-purple);
+            transform: translateX(5px);
+        }
+
+        .sidebar-nav a.active {
+            background: var(--light-purple);
+            color: var(--concept-purple);
+            font-weight: 600;
+            border-left-color: var(--concept-purple);
+        }
+
+        /* Main Content */
+        .main-content {
+            background: white;
+            min-height: 100vh;
+        }
+
+        .content-section {
+            padding: 60px 80px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .content-section:last-child {
+            border-bottom: none;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .section-number {
+            background: linear-gradient(135deg, var(--concept-purple), #8e44ad);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            flex-shrink: 0;
+        }
+
+        h2 {
+            color: var(--concept-purple);
+            font-size: 1.8em;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        h3 {
+            color: var(--concept-purple);
+            font-size: 1.4em;
+            margin: 35px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--light-purple);
+        }
+
+        h4 {
+            color: var(--dark-gray);
+            font-size: 1.15em;
+            margin: 25px 0 15px;
+        }
+
+        p {
+            margin-bottom: 20px;
+            line-height: 1.9;
+        }
+
+        /* Quote Box */
+        .quote-box {
+            background: linear-gradient(135deg, var(--quote-bg), #fff8e7);
+            padding: 30px 35px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border-left: 5px solid var(--accent-gold);
+            font-style: italic;
+            font-size: 1.1em;
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+
+        .quote-box.official {
+            background: linear-gradient(135deg, var(--light-gold), #fcf8e3);
+            border-left: 5px solid var(--accent-gold);
+        }
+
+        .reference {
+            color: var(--reference-color);
+            font-size: 0.85em;
+            font-style: italic;
+            margin-top: 15px;
+            display: block;
+        }
+
+        /* Key Point Box */
+        .key-point {
+            background: linear-gradient(135deg, var(--highlight-green), #e8f8f5);
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            border-left: 5px solid #27ae60;
+            box-shadow: var(--shadow);
+        }
+
+        .key-point strong {
+            color: #1e8449;
+        }
+
+        /* Warning Box */
+        .warning-box {
+            background: linear-gradient(135deg, var(--highlight-red), #fdf2f2);
+            padding: 25px 30px;
+            border-radius: 12px;
+            margin: 30px 0;
+            border-left: 5px solid #c0392b;
+            box-shadow: var(--shadow);
+        }
+
+        .warning-box strong {
+            color: #922b21;
+        }
+
+        /* Info Sidebar */
+        .info-sidebar {
+            background: linear-gradient(135deg, var(--sidebar-bg), #fff);
+            padding: 25px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 1px solid var(--light-blue);
+            box-shadow: var(--shadow);
+        }
+
+        .info-sidebar h4 {
+            color: var(--concept-purple);
+            margin-top: 0;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--light-purple);
+            margin-bottom: 15px;
+        }
+
+        /* Lists */
+        ul, ol {
+            margin: 20px 0 20px 25px;
+        }
+
+        li {
+            margin-bottom: 12px;
+            line-height: 1.7;
+        }
+
+        /* Declaration Box */
+        .declaration-box {
+            background: linear-gradient(135deg, var(--concept-purple), #8e44ad);
+            color: white;
+            padding: 50px 40px;
+            margin: 40px -80px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-radius: 0;
+        }
+
+        .declaration-box h3 {
+            color: var(--light-gold);
+            margin-top: 0;
+            font-size: 1.5em;
+            border: none;
+            padding: 0;
+        }
+
+        .declaration-box p {
+            font-size: 1.3em;
+            line-height: 1.9;
+            margin-bottom: 15px;
+        }
+
+        /* History Box */
+        .history-box {
+            background: linear-gradient(135deg, #fdf2e9, #fef9e7);
+            padding: 30px;
+            border-radius: 15px;
+            margin: 30px 0;
+            border: 2px solid #e59866;
+            box-shadow: var(--shadow);
+        }
+
+        .history-box h4 {
+            color: #a04000;
+            margin-top: 0;
+            font-size: 1.2em;
+        }
+
+        /* Concept Card Grid */
+        .concept-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .concept-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            border-top: 5px solid var(--concept-purple);
+            transition: var(--transition);
+        }
+
+        .concept-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .concept-card h3 {
+            color: var(--concept-purple);
+            margin-top: 0;
+            font-size: 1.3em;
+            border: none;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--light-purple);
+        }
+
+        .concept-card p:first-of-type {
+            font-weight: 600;
+            color: var(--accent-gold);
+            margin-top: 15px;
+        }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: white;
+            box-shadow: var(--shadow);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: var(--concept-purple);
+            color: white;
+            text-align: left;
+            padding: 20px;
+            font-weight: 600;
+            font-size: 1.05em;
+        }
+
+        .comparison-table td {
+            border-top: 1px solid #e8e8e8;
+            padding: 20px;
+            vertical-align: top;
+            line-height: 1.7;
+        }
+
+        .comparison-table tr:hover td {
+            background: var(--light-purple);
+        }
+
+        /* Inverted Pyramid Visualization */
+        .pyramid-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 40px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+            border-radius: 15px;
+        }
+
+        .pyramid-level {
+            text-align: center;
+            color: white;
+            padding: 15px 20px;
+            margin: 3px 0;
+            font-weight: 600;
+            font-family: 'Segoe UI', sans-serif;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            transition: var(--transition);
+            width: var(--level-width);
+            background: var(--level-bg);
+        }
+
+        .pyramid-level:hover {
+            transform: scale(1.02);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+        }
+
+        .arrow-down {
+            color: var(--concept-purple);
+            font-size: 24px;
+            margin: 5px 0;
+            font-weight: bold;
+        }
+
+        /* Three Pillars */
+        .three-pillars {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .pillar {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: var(--shadow-hover);
+            transition: var(--transition);
+        }
+
+        .pillar:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .pillar-header {
+            padding: 30px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--concept-purple), #8e44ad);
+        }
+
+        .pillar-header h3 {
+            margin: 10px 0;
+            padding: 0;
+            border: none;
+            font-size: 1.3em;
+            letter-spacing: 2px;
+            color: white;
+        }
+
+        .pillar-content {
+            padding: 30px;
+        }
+
+        /* Connection Flow */
+        .connection-flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            flex-wrap: wrap;
+        }
+
+        .flow-item {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            min-width: 200px;
+            border: 3px solid var(--concept-purple);
+        }
+
+        .flow-arrow {
+            font-size: 2em;
+            color: var(--concept-purple);
+        }
+
+        /* Discussion Questions */
+        .discussion-questions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 25px 0;
+        }
+
+        .question-box {
+            background: linear-gradient(135deg, var(--light-purple), #fff);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 4px solid var(--concept-purple);
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .question-box:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .question-box h4 {
+            color: var(--concept-purple);
+            margin: 0 0 12px 0;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .question-box p {
+            margin: 0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
+
+        /* Back to Top */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: linear-gradient(135deg, var(--concept-purple), #8e44ad);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            box-shadow: var(--shadow-hover);
+            transition: var(--transition);
+            opacity: 0;
+            visibility: hidden;
+            z-index: 1000;
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Menu Toggle */
+        .menu-toggle {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: var(--concept-purple);
+            border: none;
+            padding: 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background: white;
+            margin: 5px auto;
+            transition: var(--transition);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .content-section {
+                padding: 50px 50px;
+            }
+
+            .declaration-box {
+                margin: 40px -50px;
+            }
+
+            .three-pillars {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .main-wrapper {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar-nav {
+                position: fixed;
+                left: -100%;
+                top: 0;
+                width: 280px;
+                height: 100vh;
+                z-index: 1000;
+                transition: var(--transition);
+            }
+
+            .sidebar-nav.open {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .content-section {
+                padding: 40px 25px;
+            }
+
+            .declaration-box {
+                margin: 40px -25px;
+                padding: 40px 25px;
+            }
+
+            .connection-flow {
+                flex-direction: column;
+            }
+
+            .flow-arrow {
+                transform: rotate(90deg);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .hero {
+                min-height: 25vh;
+                padding: 30px 15px;
+            }
+
+            .content-section {
+                padding: 30px 20px;
+            }
+
+            .declaration-box {
+                margin: 40px -20px;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .sidebar-nav,
+            .back-to-top,
+            .progress-bar,
+            .menu-toggle {
+                display: none !important;
+            }
+
+            .main-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Accessibility */
+        a:focus,
+        button:focus {
+            outline: 3px solid var(--accent-gold);
+            outline-offset: 2px;
+        }
+
+        ::selection {
+            background: var(--light-gold);
+            color: var(--dark-gray);
+        }
+
+        strong {
+            color: var(--concept-purple);
+        }
+
+        em {
+            color: var(--accent-gold);
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<button class="menu-toggle" id="menuToggle" aria-label="Toggle navigation">
+    <span></span>
+    <span></span>
+    <span></span>
+</button>
+
+<!-- Hero Section -->
+<header class="hero">
+    <div class="hero-content">
+        <div class="concept-number">THE TWELVE CONCEPTS FOR WORLD SERVICE</div>
+        <h1>CONCEPT ONE</h1>
+        <div class="subtitle">Final Responsibility and Ultimate Authority</div>
+    </div>
+</header>
+
+<!-- Main Layout -->
+<div class="main-wrapper">
+
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar-nav" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Contents</h3>
+            <button class="collapse-btn" id="collapseBtn" aria-label="Collapse sidebar">‹</button>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="#official-text">Official Text</a></li>
+                <li><a href="#understanding">Understanding Concept One</a></li>
+                <li><a href="#history">Historical Context</a></li>
+                <li><a href="#1955-convention">The 1955 St. Louis Convention</a></li>
+                <li><a href="#inverted-pyramid">The Inverted Pyramid</a></li>
+                <li><a href="#collective-conscience">Collective Conscience</a></li>
+                <li><a href="#tradition-two">Connection to Tradition Two</a></li>
+                <li><a href="#counter-balance">The Counter-Balance</a></li>
+                <li><a href="#service-structure">Service Structure</a></li>
+                <li><a href="#group-conscience">Group Conscience</a></li>
+                <li><a href="#practical-application">Practical Application</a></li>
+                <li><a href="#warnings">Warnings and Cautions</a></li>
+                <li><a href="#discussion">Discussion Questions</a></li>
+                <li><a href="#sources">Sources</a></li>
+            </ul>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+        <!-- Section 1: Official Text -->
+        <section id="official-text" class="content-section">
+            <div class="section-header">
+                <div class="section-number">1</div>
+                <h2>The Official Text</h2>
+            </div>
+
+            <div class="declaration-box">
+                <h3>Concept I (Short Form)</h3>
+                <p>"Final responsibility and ultimate authority for A.A. world services should always reside in the collective conscience of our whole Fellowship."</p>
+            </div>
+
+            <h3>Long Form</h3>
+            <div class="quote-box official">
+                "The final responsibility and ultimate authority for A.A. world services should always reside in the collective conscience of our whole Fellowship."
+                <span class="reference">— The Twelve Concepts for World Service (Long Form)</span>
+            </div>
+
+            <div class="info-sidebar">
+                <h4>About the Twelve Concepts</h4>
+                <p>The Twelve Concepts for World Service were written by A.A.'s co-founder Bill W. and were adopted by the General Service Conference of Alcoholics Anonymous in 1962.</p>
+                <p>The Concepts are an interpretation of A.A.'s world service structure as it emerged through A.A.'s early history and experience.</p>
+                <p>The complete text is published in <em>The A.A. Service Manual/Twelve Concepts for World Service</em>.</p>
+            </div>
+        </section>
+
+        <!-- Section 2: Understanding Concept One -->
+        <section id="understanding" class="content-section">
+            <div class="section-header">
+                <div class="section-number">2</div>
+                <h2>Understanding Concept One</h2>
+            </div>
+
+            <p>Concept One establishes the foundational principle of A.A.'s service structure: ultimate authority resides not with leaders, trustees, or any organizational body, but with <strong>the collective conscience of our whole Fellowship</strong>.</p>
+
+            <p>This is a radical departure from traditional organizational structures. In most organizations, authority flows from the top down. In Alcoholics Anonymous, authority flows from the bottom up—from the groups to the General Service Conference, and ultimately back to the groups themselves.</p>
+
+            <h3>Why Does Concept One Exist?</h3>
+
+            <p>Bill W. wrote the Concepts to solve a specific problem: <strong>Mortality.</strong></p>
+
+            <p>In the early days (1935–1955), Bill W. and Dr. Bob were the "benevolent dictators" of A.A. They, along with the early Trustees (The Alcoholic Foundation), made the decisions, signed the checks, and protected the Big Book. But Bill knew that "founders are mortal." If they died without a clear successor, A.A. would either:</p>
+
+            <ul>
+                <li><strong>Collapse into Anarchy:</strong> Groups fighting over who is "real A.A."</li>
+                <li><strong>Become a Dictatorship:</strong> A self-appointed Board seizing power.</li>
+            </ul>
+
+            <p>Concept One was the legal and spiritual instrument to prevent both outcomes. It established that no individual, no board, no committee—however well-intentioned—could claim ultimate authority over A.A.'s future.</p>
+
+            <div class="key-point">
+                <strong>Key Principle:</strong> Concept One means that no individual, no board of trustees, no service committee—no matter how experienced or well-intentioned—has the final say in A.A. world service matters. That authority belongs to the Fellowship as a whole, expressed through the collective conscience of our groups.
+            </div>
+
+            <h3>What "Collective Conscience" Means</h3>
+
+            <p>The collective conscience is not simply a vote or a majority opinion. It is the spiritual principle of seeking God's will through group discussion, informed consideration, and the shared experience of recovery.</p>
+
+            <h3>Collective Conscience vs. Majority Vote</h3>
+
+            <p>Why did Bill use the term "Conscience" instead of "Opinion" or "Majority"? This distinction is crucial:</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Majority Vote (Political)</th>
+                        <th>Collective Conscience (Spiritual)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>51% wins; 49% loses and may be resentful.</td>
+                        <td>Strives for "Substantial Unanimity" (typically 2/3 or more consensus).</td>
+                    </tr>
+                    <tr>
+                        <td>Based on personal preference and self-interest ("What I want").</td>
+                        <td>Based on principles and what serves A.A. ("What is best for A.A. and the suffering alcoholic?").</td>
+                    </tr>
+                    <tr>
+                        <td>Often quick decisions driven by expediency.</td>
+                        <td>Slow, deliberative process involving discussion, prayer, and meditation.</td>
+                    </tr>
+                    <tr>
+                        <td>Authority comes from the power of numbers.</td>
+                        <td>Authority comes from God expressing Himself through the group (Tradition Two).</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <p>The collective conscience emerges when:</p>
+            <ul>
+                <li>Groups gather to discuss matters affecting A.A. as a whole</li>
+                <li>Members share their experience, strength, and hope on service matters</li>
+                <li>We seek not what we want, but what is best for A.A. and for the alcoholic who still suffers</li>
+                <li>We trust in a Power greater than ourselves to guide our decisions</li>
+            </ul>
+
+            <h3>Why This Concept Matters</h3>
+
+            <p>Concept One protects A.A. from several dangers:</p>
+            <ol>
+                <li><strong>Authoritarianism:</strong> No individual or small group can seize control of A.A.</li>
+                <li><strong>Corporate Bureaucracy:</strong> The organization exists to serve the groups, not the other way around.</li>
+                <li><strong>Loss of Spiritual Foundation:</strong> Decisions are guided by principles, not personalities or politics.</li>
+                <li><strong>Disconnection from Members:</strong> Those who serve must remain accountable to those they serve.</li>
+            </ol>
+        </section>
+
+        <!-- Section 3: Historical Context -->
+        <section id="history" class="content-section">
+            <div class="section-header">
+                <div class="section-number">3</div>
+                <h2>Historical Context</h2>
+            </div>
+
+            <p>To understand Concept One, we must understand the history of how A.A.'s service structure developed and why Bill W. and the other pioneers made the choices they did.</p>
+
+            <h3>The Early Years (1935-1950)</h3>
+
+            <p>When A.A. began in 1935, there was no formal structure beyond individual groups helping individual alcoholics. As the Fellowship grew rapidly after the publication of the Big Book in 1939, it became clear that some form of organization was necessary to:</p>
+
+            <ul>
+                <li>Manage the publication and distribution of A.A. literature</li>
+                <li>Handle inquiries from new groups and individuals</li>
+                <li>Coordinate public information efforts</li>
+                <li>Protect the A.A. name and Traditions</li>
+            </ul>
+
+            <p>The Alcoholic Foundation (later renamed the General Service Board) was established to handle these responsibilities. But a critical question remained: <strong>To whom were these service bodies accountable?</strong></p>
+
+            <h3>The Need for a Conference (1950-1955)</h3>
+
+            <p>Bill W. recognized that concentrating authority in the hands of a few trustees—no matter how dedicated—was dangerous. He also knew that he and Dr. Bob would not live forever, and A.A. needed a structure that could survive without its founders.</p>
+
+            <p>Bill's solution was the General Service Conference—a yearly gathering of delegates elected by A.A. groups from across North America to serve as the "group conscience" of the entire Fellowship.</p>
+
+            <div class="history-box">
+                <h4>The Experimental Conference (1951-1954)</h4>
+                <p>From 1951 through 1954, the General Service Conference met on an experimental basis. During these years, Bill W. worked to convince the Fellowship that this representative structure could effectively carry A.A.'s message while remaining accountable to the groups.</p>
+                <p>The question was simple but profound: Would A.A. groups trust their delegates to make wise decisions on world service matters? Or would the Fellowship reject the Conference and retain the old trustee-centered system?</p>
+            </div>
+        </section>
+
+        <!-- Section 4: The 1955 St. Louis Convention -->
+        <section id="1955-convention" class="content-section">
+            <div class="section-header">
+                <div class="section-number">4</div>
+                <h2>The 1955 St. Louis Convention</h2>
+            </div>
+
+            <p>The defining moment for Concept One—and indeed for all of A.A.'s service structure—came at the 20th Anniversary International Convention in St. Louis, Missouri, in July 1955.</p>
+
+            <h3>A.A. "Comes of Age"</h3>
+
+            <p>At this convention, Bill W. on behalf of Dr. Bob (who had died in 1950), the trustees, and A.A.'s old-time leaders, formally transferred world service responsibility from the founders and trustees to the entire Fellowship through the General Service Conference.</p>
+
+            <p>This was more than a ceremonial gesture. It was the formal recognition that <strong>ultimate authority in A.A. rests with the groups themselves</strong>, not with any individual or service body.</p>
+
+            <div class="history-box">
+                <h4>The Resolution of July 3, 1955</h4>
+                <p>On July 3, 1955, the Convention unanimously adopted this resolution:</p>
+                <div class="quote-box official">
+                    "That the General Service Conference of Alcoholics Anonymous should become, as of this date, July 3, 1955, the guardian of the Traditions of Alcoholics Anonymous, the perpetuator of the World Services of our Society, the voice of the group conscience of our entire Fellowship, and the sole successors to its co-founders, Dr. Bob and Bill."
+                </div>
+                <p>This resolution embodied the principle that would later be formalized as Concept One: final authority rests with the collective conscience of the Fellowship.</p>
+            </div>
+
+            <h3>The Significance of 1955</h3>
+
+            <p>The 1955 Convention marked A.A.'s transition from a movement led by its founders to a Fellowship governed by its members. Bill W. literally stepped down from the platform, symbolizing that he no longer held special authority over A.A.'s future.</p>
+
+            <p>From that moment forward:</p>
+            <ul>
+                <li>The General Service Conference became the voice of A.A.'s collective conscience</li>
+                <li>Delegates elected by the groups became the primary decision-makers for world service matters</li>
+                <li>The trustees and service boards became accountable to the Conference, not the other way around</li>
+                <li>No individual—not even Bill W. himself—could override the will of the Fellowship</li>
+            </ul>
+
+            <div class="info-sidebar">
+                <h4>Learning More About 1955</h4>
+                <p>The complete story of the 1955 Convention and the transfer of authority is told in Bill W.'s book <em>A.A. Comes of Age</em>, published in October 1955.</p>
+                <p>This book remains essential reading for anyone seeking to understand A.A.'s service structure and the spiritual principles behind the Concepts.</p>
+            </div>
+        </section>
+
+        <!-- Section 5: The Inverted Pyramid -->
+        <section id="inverted-pyramid" class="content-section">
+            <div class="section-header">
+                <div class="section-number">5</div>
+                <h2>The Inverted Pyramid</h2>
+            </div>
+
+            <p>Concept One establishes what is often called the "inverted pyramid" of A.A. service—a structure where authority flows from the bottom up, not from the top down.</p>
+
+            <h3>Understanding the Terms: Responsibility vs. Authority</h3>
+
+            <p>Before exploring the inverted pyramid structure, it's crucial to understand the distinction between the two key terms in Concept One:</p>
+
+            <div class="concept-card-grid">
+                <div class="concept-card">
+                    <h3>"Final Responsibility"</h3>
+                    <p><strong>The Burden.</strong></p>
+                    <p>This refers to the duty to support the services financially and morally. It implies ownership. Just as a homeowner is responsible for a leaking roof, the A.A. groups are responsible for the G.S.O., the Grapevine, and international work.</p>
+                    <p>Final responsibility means that if world services face problems—financial difficulties, declining participation, unclear direction—it is <em>our</em> problem as groups and members, not "their" problem as staff or trustees.</p>
+                </div>
+                <div class="concept-card">
+                    <h3>"Ultimate Authority"</h3>
+                    <p><strong>The Power.</strong></p>
+                    <p>This refers to the right to direct, reorganize, or even dismantle the service structure. The groups hold the "purse strings" and the "vote." The Board of Trustees serves at the pleasure of the Conference, which serves at the pleasure of the Groups.</p>
+                    <p>Ultimate authority means that the Fellowship, through the Conference, can change policies, redirect resources, approve or reject literature, and make any decisions affecting A.A. world services.</p>
+                </div>
+            </div>
+
+            <div class="warning-box">
+                <strong>Study Note on "Abdication":</strong> Bill W. warns that we must not <em>abdicate</em> this responsibility. If we stop paying attention (low participation in assemblies, low contributions), the authority inevitably drifts back to the paid workers and trustees. Bureaucracy fills the vacuum left by apathy. Authority is fun; responsibility is heavy—but both belong to the groups.
+            </div>
+
+            <h3>A.A.'s Inverted Pyramid Structure</h3>
+
+            <p>Unlike traditional organizations where authority flows from the top down, A.A.'s structure is an <strong>inverted pyramid</strong> where authority flows from the bottom up:</p>
+
+            <div class="pyramid-container">
+                <div class="pyramid-level" style="--level-width: 100%; --level-bg: linear-gradient(135deg, #6c3483, #8e44ad);">
+                    The A.A. Groups (Ultimate Authority)
+                </div>
+                <div class="arrow-down">▼</div>
+                <div class="pyramid-level" style="--level-width: 85%; --level-bg: linear-gradient(135deg, #8e44ad, #9b59b6);">
+                    Districts & General Service Representatives (G.S.R.s)
+                </div>
+                <div class="arrow-down">▼</div>
+                <div class="pyramid-level" style="--level-width: 70%; --level-bg: linear-gradient(135deg, #9b59b6, #a569bd);">
+                    Areas & District Committee Members (D.C.M.s)
+                </div>
+                <div class="arrow-down">▼</div>
+                <div class="pyramid-level" style="--level-width: 55%; --level-bg: linear-gradient(135deg, #a569bd, #bb8fce);">
+                    General Service Conference & Delegates
+                </div>
+                <div class="arrow-down">▼</div>
+                <div class="pyramid-level" style="--level-width: 40%; --level-bg: linear-gradient(135deg, #bb8fce, #d2b4de);">
+                    General Service Board (Trustees)
+                </div>
+                <div class="arrow-down">▼</div>
+                <div class="pyramid-level" style="--level-width: 25%; --level-bg: linear-gradient(135deg, #d2b4de, #e8daef); color: #6c3483;">
+                    General Service Office (Staff & Operations)
+                </div>
+            </div>
+
+            <p>In this structure:</p>
+
+            <ol>
+                <li><strong>The Groups</strong> hold ultimate authority through their collective conscience</li>
+                <li><strong>The General Service Representatives (GSRs)</strong> carry their group's voice to the District and Area</li>
+                <li><strong>The Delegates</strong> represent their Area's collective conscience at the General Service Conference</li>
+                <li><strong>The Conference</strong> expresses the collective conscience of the whole Fellowship</li>
+                <li><strong>The Trustees and Service Boards</strong> carry out the will of the Conference</li>
+                <li><strong>The General Service Office Staff</strong> implements the decisions and policies established by the Conference</li>
+            </ol>
+
+            <div class="key-point">
+                <strong>Important:</strong> Those at the "bottom" of the inverted pyramid are not less important—they are trusted servants carrying out the will of those they serve. The structure ensures accountability flows upward, not downward.
+            </div>
+
+            <h3>Authority vs. Responsibility</h3>
+
+            <p>Concept One distinguishes between <em>authority</em> and <em>responsibility</em>:</p>
+
+            <ul>
+                <li><strong>Authority</strong> remains with the groups and the collective conscience of the Fellowship</li>
+                <li><strong>Responsibility</strong> for carrying out the Fellowship's will is delegated to trusted servants at various levels</li>
+            </ul>
+
+            <p>The remaining eleven Concepts explain how this responsibility is delegated, how decisions are made, and how the service structure operates while remaining accountable to the groups.</p>
+        </section>
+
+        <!-- Section 6: Collective Conscience -->
+        <section id="collective-conscience" class="content-section">
+            <div class="section-header">
+                <div class="section-number">6</div>
+                <h2>The Collective Conscience</h2>
+            </div>
+
+            <p>The phrase "collective conscience of our whole Fellowship" is at the heart of Concept One. But what does this really mean in practice?</p>
+
+            <h3>More Than Just Voting</h3>
+
+            <p>The collective conscience is not a simple democratic vote where the majority rules. It is a spiritual process that seeks to discern the right course of action through:</p>
+
+            <ul>
+                <li><strong>Prayer and Meditation:</strong> Seeking guidance from a Higher Power</li>
+                <li><strong>Discussion and Deliberation:</strong> Hearing all viewpoints with open minds</li>
+                <li><strong>Informed Consideration:</strong> Understanding the facts, history, and implications</li>
+                <li><strong>Shared Experience:</strong> Drawing on the wisdom of those who have gone before</li>
+                <li><strong>Principles Before Personalities:</strong> Focusing on what is right, not who is right</li>
+                <li><strong>Substantial Unanimity:</strong> Seeking broad consensus rather than bare majorities</li>
+            </ul>
+
+            <h3>How the Collective Conscience Works</h3>
+
+            <p>The collective conscience operates at every level of A.A. service:</p>
+
+            <div class="three-pillars">
+                <div class="pillar">
+                    <div class="pillar-header">
+                        <h3>Group Level</h3>
+                    </div>
+                    <div class="pillar-content">
+                        <p>At group business meetings, members discuss matters affecting their group and their ability to carry the message. The group conscience emerges through informed discussion and spiritual seeking.</p>
+                        <p>The GSR carries this group conscience to District and Area assemblies.</p>
+                    </div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-header">
+                        <h3>Area Level</h3>
+                    </div>
+                    <div class="pillar-content">
+                        <p>At Area assemblies, GSRs share their groups' conscience on matters affecting A.A. in their geographic area and on agenda items for the General Service Conference.</p>
+                        <p>The Area Delegate carries this collective conscience to the Conference.</p>
+                    </div>
+                </div>
+
+                <div class="pillar">
+                    <div class="pillar-header">
+                        <h3>Conference Level</h3>
+                    </div>
+                    <div class="pillar-content">
+                        <p>At the General Service Conference, Delegates from all Areas share the conscience of their Areas on matters affecting A.A. as a whole.</p>
+                        <p>The Conference's decisions express the collective conscience of the entire Fellowship.</p>
+                    </div>
+                </div>
+            </div>
+
+            <h3>Trust in the Process</h3>
+
+            <div class="quote-box">
+                The collective conscience works when we trust that a Power greater than ourselves can guide our decisions. We come together not to fight for our own views, but to discover what is best for A.A. and for the alcoholic who still suffers.
+            </div>
+
+            <p>This requires humility, patience, and faith—the same qualities we develop in working the Twelve Steps.</p>
+        </section>
+
+        <!-- Section 7: Connection to Tradition Two -->
+        <section id="tradition-two" class="content-section">
+            <div class="section-header">
+                <div class="section-number">7</div>
+                <h2>Connection to Tradition Two</h2>
+            </div>
+
+            <p>Concept One is the natural extension of Tradition Two into the realm of world service. Understanding their connection helps us see the spiritual continuity running through all of A.A.'s principles.</p>
+
+            <h3>Tradition Two</h3>
+
+            <div class="quote-box official">
+                "For our group purpose there is but one ultimate authority—a loving God as He may express Himself in our group conscience. Our leaders are but trusted servants; they do not govern."
+                <span class="reference">— Tradition Two (Twelve Steps and Twelve Traditions, p. 132)</span>
+            </div>
+
+            <h3>Concept One</h3>
+
+            <div class="quote-box official">
+                "Final responsibility and ultimate authority for A.A. world services should always reside in the collective conscience of our whole Fellowship."
+                <span class="reference">— Concept One, Twelve Concepts for World Service</span>
+            </div>
+
+            <h3>The Same Spiritual Principle</h3>
+
+            <p>Both Tradition Two and Concept One express the same fundamental truth:</p>
+
+            <div class="key-point">
+                <strong>Ultimate authority in A.A. comes not from human leaders but from God as expressed through our collective conscience.</strong>
+            </div>
+
+            <p>The difference is one of scope:</p>
+
+            <ul>
+                <li><strong>Tradition Two</strong> applies this principle to individual groups—no group leader or steering committee has ultimate authority over the group</li>
+                <li><strong>Concept One</strong> applies this principle to world services—no trustee, board, or service entity has ultimate authority over A.A. as a whole</li>
+            </ul>
+
+            <h3>Trusted Servants, Not Governors</h3>
+
+            <p>Both the Tradition and the Concept emphasize that those who serve are <em>trusted servants</em> carrying out the will of those they serve. They are accountable to the groups, not the other way around.</p>
+
+            <p>This principle prevents A.A. from becoming:</p>
+            <ul>
+                <li>A hierarchy where leaders govern from above</li>
+                <li>A personality-driven organization dependent on charismatic individuals</li>
+                <li>A bureaucracy where staff and committees lose sight of their purpose</li>
+            </ul>
+
+            <div class="info-sidebar">
+                <h4>Study Both Together</h4>
+                <p>For a deeper understanding of how Concept One relates to Tradition Two, study both the <em>Twelve Steps and Twelve Traditions</em> (particularly the chapter on Tradition Two) and the <em>Twelve Concepts for World Service</em> together.</p>
+                <p>The spiritual principles are the same; only the application differs.</p>
+            </div>
+        </section>
+
+        <!-- Section 8: The Counter-Balance -->
+        <section id="counter-balance" class="content-section">
+            <div class="section-header">
+                <div class="section-number">8</div>
+                <h2>The Critical Counter-Balance</h2>
+            </div>
+
+            <p>A thorough study of Concept One is incomplete without understanding <strong>Concept Two</strong> and <strong>Concept Three</strong>. If Concept One were the <em>only</em> rule, A.A. would be paralyzed by 2 million members trying to vote on every decision—even the color of the office carpet.</p>
+
+            <h3>How the Concepts Work Together</h3>
+
+            <ul>
+                <li><strong>Concept One:</strong> Groups have the ultimate authority through the collective conscience of the whole Fellowship.</li>
+                <li><strong>Concept Two:</strong> Groups <em>delegate</em> that authority to the General Service Conference to act on their behalf.</li>
+                <li><strong>Concept Three:</strong> We grant our trusted servants the "Right of Decision"—the right to act without checking back on every detail.</li>
+            </ul>
+
+            <div class="key-point">
+                <strong>Important Understanding:</strong> Concept One does not mean the groups run the office day-to-day. That would be "Concept Zero" (Anarchy). Concept One gives the groups the <em>ultimate</em> authority to intervene when necessary, but not the mandate to micromanage daily operations.
+            </div>
+
+            <h3>The Balance in Practice</h3>
+
+            <p>This three-way balance ensures that:</p>
+
+            <ul>
+                <li>The groups retain ultimate control over A.A.'s destiny (Concept One)</li>
+                <li>Practical decisions can be made efficiently through delegation (Concept Two)</li>
+                <li>Trusted servants can act with wisdom and experience without constant oversight (Concept Three)</li>
+            </ul>
+
+            <p>Without this balance, A.A. would swing between two extremes:</p>
+
+            <div class="connection-flow">
+                <div class="flow-item">
+                    <h4>Without Delegation</h4>
+                    <p>Every decision requires contacting all groups → Paralysis and inefficiency</p>
+                </div>
+                <div class="flow-arrow">vs</div>
+                <div class="flow-item">
+                    <h4>Without Ultimate Authority</h4>
+                    <p>Trustees and staff make all decisions → Bureaucracy and disconnection from groups</p>
+                </div>
+            </div>
+
+            <div class="info-sidebar">
+                <h4>Study All Twelve Concepts</h4>
+                <p>Concept One establishes <em>where</em> ultimate authority resides. The remaining eleven Concepts explain <em>how</em> that authority is exercised through delegation, decision-making, and service structure.</p>
+                <p>For the complete picture, study all Twelve Concepts in <em>The A.A. Service Manual</em>.</p>
+            </div>
+        </section>
+
+        <!-- Section 9: Service Structure -->
+        <section id="service-structure" class="content-section">
+            <div class="section-header">
+                <div class="section-number">9</div>
+                <h2>A.A.'s Service Structure</h2>
+            </div>
+
+            <p>Concept One establishes that ultimate authority resides with the groups. But how does this authority flow through A.A.'s service structure in practice?</p>
+
+            <h3>The Chain of Responsibility</h3>
+
+            <p>A.A.'s service structure creates a chain through which the collective conscience flows:</p>
+
+            <ol>
+                <li><strong>The A.A. Group:</strong> The basic unit where alcoholics gather for recovery. Each group holds a business meeting to develop its group conscience on service matters.</li>
+
+                <li><strong>The General Service Representative (GSR):</strong> Elected by the group to represent them in the wider service structure. The GSR attends District meetings and Area assemblies.</li>
+
+                <li><strong>The District Committee Member (DCM):</strong> Elected by GSRs in a District to coordinate activities and represent Districts at Area assemblies.</li>
+
+                <li><strong>The Area Assembly:</strong> Where GSRs and DCMs meet to develop the Area's collective conscience on matters affecting A.A. in their geographic area and on Conference agenda items.</li>
+
+                <li><strong>The Delegate:</strong> Elected by the Area assembly to attend the annual General Service Conference. The Delegate carries the Area's collective conscience to Conference.</li>
+
+                <li><strong>The General Service Conference:</strong> The annual meeting of Delegates, Trustees, and staff that serves as "the group conscience of our whole Fellowship" on world service matters.</li>
+
+                <li><strong>The General Service Board:</strong> Trustees who implement Conference decisions and oversee A.A.'s corporate entities throughout the year.</li>
+
+                <li><strong>The General Service Office (GSO):</strong> The staff who carry out the day-to-day operations of A.A.'s world services.</li>
+            </ol>
+
+            <h3>Authority Flows Up, Responsibility Flows Down</h3>
+
+            <div class="key-point">
+                <strong>Key Understanding:</strong> In this structure, <em>authority</em> flows upward from the groups through their representatives to the Conference. <em>Responsibility</em> for implementation flows downward from the Conference through the Trustees and staff.
+            </div>
+
+            <p>This two-way flow ensures that:</p>
+            <ul>
+                <li>Those who serve remain accountable to those they serve</li>
+                <li>Groups have a voice in decisions affecting A.A. as a whole</li>
+                <li>Practical implementation is delegated to those with expertise and resources</li>
+                <li>The Fellowship maintains ultimate control over its destiny</li>
+            </ul>
+
+            <h3>The General Service Conference</h3>
+
+            <p>The Conference is the practical embodiment of Concept One. It is where Delegates from all Areas come together to express the collective conscience of the entire Fellowship on matters including:</p>
+
+            <ul>
+                <li>A.A. literature (new publications, revisions, translations)</li>
+                <li>Public information and cooperation with professionals</li>
+                <li>Finances and budget approval</li>
+                <li>Policy matters affecting A.A. as a whole</li>
+                <li>Corrections and treatment facilities</li>
+                <li>International coordination</li>
+            </ul>
+
+            <div class="info-sidebar">
+                <h4>Learn More About Service</h4>
+                <p>The complete structure and function of A.A.'s service system is described in <em>The A.A. Service Manual</em>, which is published together with the <em>Twelve Concepts for World Service</em>.</p>
+                <p>Every GSR and anyone interested in service should study this manual to understand how they can participate in A.A.'s collective conscience.</p>
+            </div>
+        </section>
+
+        <!-- Section 10: Group Conscience -->
+        <section id="group-conscience" class="content-section">
+            <div class="section-header">
+                <div class="section-number">10</div>
+                <h2>Practicing Group Conscience</h2>
+            </div>
+
+            <p>Understanding Concept One in theory is one thing; practicing it in our groups and service bodies is another. How do we develop and honor the collective conscience in practice?</p>
+
+            <h3>Elements of a Healthy Group Conscience</h3>
+
+            <ol>
+                <li>
+                    <strong>Informed Discussion</strong>
+                    <p>Members should have the facts they need to make sound decisions. This means sharing relevant information, background, and experience before voting.</p>
+                </li>
+
+                <li>
+                    <strong>Time for Consideration</strong>
+                    <p>Important decisions should not be rushed. When possible, give members time to think, pray, and discuss matters before calling for a decision.</p>
+                </li>
+
+                <li>
+                    <strong>Respectful Dialogue</strong>
+                    <p>Everyone's voice matters in group conscience. We listen with open minds, avoiding interruptions, personal attacks, and dismissive attitudes.</p>
+                </li>
+
+                <li>
+                    <strong>Spiritual Foundation</strong>
+                    <p>Group conscience meetings often begin and end with prayer, reminding us that we seek God's will, not our own.</p>
+                </li>
+
+                <li>
+                    <strong>Substantial Unanimity</strong>
+                    <p>While we may vote, A.A. seeks "substantial unanimity"—broad consensus rather than bare majorities. This prevents the tyranny of the majority and ensures decisions have broad support.</p>
+                </li>
+
+                <li>
+                    <strong>Principles Before Personalities</strong>
+                    <p>We focus on what is right for A.A. and the alcoholic who still suffers, not on who is speaking or what we personally prefer.</p>
+                </li>
+
+                <li>
+                    <strong>Willingness to Be Wrong</strong>
+                    <p>We hold our opinions lightly, knowing that we may not have all the answers and that others may see things we have missed.</p>
+                </li>
+            </ol>
+
+            <h3>Common Pitfalls to Avoid</h3>
+
+            <div class="warning-box">
+                <strong>Warning:</strong> Group conscience can be undermined when:
+                <ul>
+                    <li>A vocal minority dominates discussion and intimidates others</li>
+                    <li>Decisions are made hastily without proper information or consideration</li>
+                    <li>Personal agendas or personality conflicts drive the discussion</li>
+                    <li>Members don't participate, leaving decisions to a few</li>
+                    <li>The group ignores A.A.'s Traditions and Concepts in making decisions</li>
+                    <li>Financial or other outside interests influence decision-making</li>
+                </ul>
+            </div>
+
+            <h3>When to Revisit Decisions</h3>
+
+            <p>Group conscience is not infallible. When circumstances change or new information comes to light, it's appropriate to revisit previous decisions. The collective conscience evolves as we grow in understanding and experience.</p>
+
+            <p>However, frequent reversals of decisions can create instability. Groups should balance flexibility with consistency, avoiding constant reopening of settled matters unless there is good reason.</p>
+        </section>
+
+        <!-- Section 11: Practical Application -->
+        <section id="practical-application" class="content-section">
+            <div class="section-header">
+                <div class="section-number">11</div>
+                <h2>Practical Application</h2>
+            </div>
+
+            <p>How does Concept One apply to daily service work in A.A.? Here are practical examples of this principle in action.</p>
+
+            <h3>Personal Responsibility: Am I Participating?</h3>
+
+            <p>Concept One seems abstract until we apply it to our own behavior. Ask yourself:</p>
+
+            <ul>
+                <li><strong>Do I vote?</strong> If I don't attend business meetings, I am silencing the "Ultimate Authority." My absence weakens the collective conscience.</li>
+                <li><strong>Is my group connected?</strong> If my group has no G.S.R., we have severed the cord to the rest of A.A. We have no voice in the collective conscience that guides world services.</li>
+                <li><strong>Do I trust the outcome?</strong> When the Conference votes differently than I wanted, do I accept it as the collective conscience? Or do I dismiss it as "politics" and "them" making bad decisions?</li>
+                <li><strong>Do I support world services financially?</strong> Final responsibility includes financial support. If I enjoy A.A. literature, the website, and the 12th Step help from G.S.O., am I contributing to make it sustainable?</li>
+                <li><strong>Am I informed?</strong> Do I read Conference reports? Do I understand what my Delegate does? Or have I abdicated my responsibility to others?</li>
+            </ul>
+
+            <div class="key-point">
+                <strong>Critical Insight:</strong> Concept One is not about "them" (the trustees, the staff, the Conference). It is about <em>us</em>—the groups and members. We cannot complain about decisions if we refuse to participate in making them.
+            </div>
+
+            <h3>At the Group Level</h3>
+
+            <div class="info-sidebar">
+                <h4>Example Situation</h4>
+                <p>Your group's treasurer suggests changing meeting times. Rather than the treasurer or a few long-timers deciding, the matter is brought to a group business meeting where all members can discuss and vote. The group's decision—its collective conscience—is then implemented.</p>
+            </div>
+
+            <p>Concept One reminds us that:</p>
+            <ul>
+                <li>No individual or clique should make decisions affecting the whole group</li>
+                <li>All members should have the opportunity to participate in group conscience</li>
+                <li>Service positions like treasurer or secretary are trusted servants, not authorities</li>
+                <li>The group's conscience guides all decisions about the group's affairs</li>
+            </ul>
+
+            <h3>At the Area Level</h3>
+
+            <div class="info-sidebar">
+                <h4>Example Situation</h4>
+                <p>A Conference agenda item asks whether A.A. should develop a new piece of literature. Your Area Delegate doesn't just vote based on personal opinion—they bring the matter to the Area assembly, gather input from GSRs representing groups, and carry that collective conscience to Conference.</p>
+            </div>
+
+            <p>Concept One reminds us that:</p>
+            <ul>
+                <li>Delegates represent their Area's collective conscience, not their personal views</li>
+                <li>GSRs should seek their groups' input on Conference agenda items</li>
+                <li>The process may take time, but it ensures decisions reflect the Fellowship's will</li>
+                <li>No Delegate should feel they must vote according to personal preference alone</li>
+            </ul>
+
+            <h3>At the Conference Level</h3>
+
+            <div class="info-sidebar">
+                <h4>Example Situation</h4>
+                <p>The Conference is considering a proposed change to A.A. literature. Even though the Trustees and GSO staff may have done extensive research and have strong recommendations, the final decision rests with the Conference—representing the collective conscience of the entire Fellowship.</p>
+            </div>
+
+            <p>Concept One reminds us that:</p>
+            <ul>
+                <li>Professional expertise and research inform decisions but don't dictate them</li>
+                <li>The Conference has the authority to accept, modify, or reject recommendations from Trustees and staff</li>
+                <li>Those with experience and expertise serve the Conference; they don't govern it</li>
+                <li>Final decisions reflect the Fellowship's collective conscience, not organizational convenience</li>
+            </ul>
+
+            <h3>In Intergroup/Central Offices</h3>
+
+            <div class="info-sidebar">
+                <h4>Example Situation</h4>
+                <p>An Intergroup office manager wants to implement a new phone system. While the manager may make day-to-day operational decisions, major policy changes or significant expenditures should be brought to the Intergroup board, which in turn may need to consult the groups they serve.</p>
+            </div>
+
+            <p>Concept One reminds us that:</p>
+            <ul>
+                <li>Intergroups and central offices serve groups; they don't govern them</li>
+                <li>Major decisions affecting member groups should involve those groups</li>
+                <li>Staff and managers implement policy; they don't create it independently</li>
+                <li>Accountability flows upward to the groups served</li>
+            </ul>
+        </section>
+
+        <!-- Section 12: Warnings and Cautions -->
+        <section id="warnings" class="content-section">
+            <div class="section-header">
+                <div class="section-number">12</div>
+                <h2>Warnings and Cautions</h2>
+            </div>
+
+            <p>Concept One protects A.A. from serious dangers, but only if we understand and practice it. Here are warnings about what can go wrong when this Concept is ignored or misunderstood.</p>
+
+            <h3>Danger: The Tyranny of Personalities</h3>
+
+            <div class="warning-box">
+                <strong>Warning:</strong> When strong personalities dominate groups or service bodies, the collective conscience is replaced by individual will. This can happen when:
+                <ul>
+                    <li>Old-timers or founders claim special authority based on seniority</li>
+                    <li>Aggressive members intimidate others into silence</li>
+                    <li>Groups defer to "experts" rather than seeking collective conscience</li>
+                    <li>Service positions become power positions rather than opportunities to serve</li>
+                </ul>
+                <strong>Protection:</strong> Remember that all members have equal voice in group conscience. No one's opinion counts more than another's. Practice rotation of service positions to prevent entrenchment.
+            </div>
+
+            <h3>Danger: Apathy and Low Participation</h3>
+
+            <div class="warning-box">
+                <strong>Warning:</strong> The collective conscience only works when members participate. When most members don't attend business meetings or Area assemblies, a small minority makes decisions for everyone. This can lead to:
+                <ul>
+                    <li>Decisions that don't reflect the Fellowship's true conscience</li>
+                    <li>Lack of accountability and oversight</li>
+                    <li>Service positions filled by default rather than by informed choice</li>
+                    <li>Disconnection between groups and service entities</li>
+                </ul>
+                <strong>Protection:</strong> Encourage participation. Make business meetings welcoming and informative. Help members understand that service participation is part of recovery.
+            </div>
+
+            <h3>Danger: Bureaucratic Drift</h3>
+
+            <div class="warning-box">
+                <strong>Warning:</strong> Over time, service entities can drift from being servants of the groups to becoming independent bureaucracies. This happens when:
+                <ul>
+                <li>Trustees and staff make major decisions without Conference approval</li>
+                    <li>Procedures become so complex that ordinary members feel excluded</li>
+                    <li>Service entities prioritize their own perpetuation over their service purpose</li>
+                    <li>The focus shifts from carrying the message to maintaining the organization</li>
+                </ul>
+                <strong>Protection:</strong> Regularly review whether service activities serve the groups and the alcoholic who still suffers. Simplify procedures. Maintain the inverted pyramid structure.
+            </div>
+
+            <h3>Danger: Misunderstanding "Authority"</h3>
+
+            <div class="warning-box">
+                <strong>Warning:</strong> Some misread Concept One to mean that groups can ignore Traditions, overrule Conference decisions, or refuse to cooperate with A.A. as a whole. This misunderstanding can lead to:
+                <ul>
+                    <li>Groups claiming authority to violate A.A.'s Traditions</li>
+                    <li>Refusal to participate in or support world services</li>
+                    <li>Isolation from the broader Fellowship</li>
+                    <li>Fragmentation of A.A. unity</li>
+                </ul>
+                <strong>Protection:</strong> Understand that Concept One refers to <em>collective</em> authority—the conscience of the <em>whole</em> Fellowship, not individual groups acting alone. The Traditions bind us together; Concept One explains how we make decisions together.
+            </div>
+
+            <h3>Balancing Authority and Responsibility</h3>
+
+            <p>Concept One establishes where ultimate authority rests, but it doesn't mean groups must make every decision. The remaining Concepts explain how authority is <em>delegated</em> to trusted servants who carry out the Fellowship's will.</p>
+
+            <p>The key is maintaining the balance:</p>
+            <ul>
+                <li>Groups retain ultimate authority but delegate day-to-day responsibility</li>
+                <li>Trusted servants make operational decisions within the bounds set by the groups</li>
+                <li>Major policy decisions come back to the groups through the Conference</li>
+                <li>Everyone remains accountable to someone—accountability flows upward, not downward</li>
+            </ul>
+        </section>
+
+        <!-- Section 13: Discussion Questions -->
+        <section id="discussion" class="content-section">
+            <div class="section-header">
+                <div class="section-number">13</div>
+                <h2>Discussion Questions</h2>
+            </div>
+
+            <p>Use these questions for personal reflection or group discussion to deepen your understanding of Concept One.</p>
+
+            <div class="discussion-questions">
+                <div class="question-box">
+                    <h4>Personal Reflection</h4>
+                    <p>How comfortable am I with the idea that ultimate authority in A.A. rests with the collective conscience rather than with leaders or experts? What does this teach me about humility and trust?</p>
+                </div>
+
+                <div class="question-box">
+                    <h4>Group Participation</h4>
+                    <p>Do I participate in my group's business meetings and group conscience decisions? If not, what holds me back? How can I become more involved?</p>
+                </div>
+
+                <div class="question-box">
+                    <h4>Service Structure</h4>
+                    <p>Do I understand how my group's voice reaches the General Service Conference? Can I explain to a newcomer how A.A.'s inverted pyramid works?</p>
+                </div>
+
+                <div class="question-box">
+                    <h4>Spiritual Foundation</h4>
+                    <p>How is Concept One similar to Step Three? What does it mean to trust in God's will as expressed through our collective conscience?</p>
+                </div>
+
+                <div class="question-box">
+                    <h4>Connection to Tradition Two</h4>
+                    <p>How does Concept One extend Tradition Two from the group level to world services? What is the same, and what is different?</p>
+                </div>
+
+                <div class="question-box">
+                    <h4>Practical Application</h4>
+                    <p>Have I seen situations where strong personalities tried to override group conscience? How did the group handle it? What did I learn?</p>
+                </div>
+
+                <div class="question-box">
+                    <h4>Historical Perspective</h4>
+                    <p>Why was Bill W. willing to step down and transfer authority to the groups in 1955? What does this teach me about leadership and ego?</p>
+                </div>
+
+                <div class="question-box">
+                    <h4>Protecting A.A.</h4>
+                    <p>What could happen to A.A. if Concept One were abandoned and authority concentrated in a few leaders? How does this Concept protect our Fellowship?</p>
+                </div>
+
+                <div class="question-box">
+                    <h4>Future Vision</h4>
+                    <p>How do I see Concept One working 50 or 100 years from now? Will this principle still be relevant? Why or why not?</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 14: Sources -->
+        <section id="sources" class="content-section">
+            <div class="section-header">
+                <div class="section-number">14</div>
+                <h2>Sources and Further Study</h2>
+            </div>
+
+            <h3>Official A.A. Literature</h3>
+
+            <p>All information in this study guide is drawn from official A.A. Conference-approved literature. For deeper study, consult these sources:</p>
+
+            <div class="info-sidebar">
+                <h4>Essential Reading</h4>
+                <ul>
+                    <li><strong>The A.A. Service Manual / Twelve Concepts for World Service</strong> — The complete text of all Twelve Concepts with Bill W.'s essays explaining each one. This is the primary source for understanding the Concepts.</li>
+
+                    <li><strong>A.A. Comes of Age</strong> — Bill W.'s history of A.A.'s first 20 years, including the story of the 1955 St. Louis Convention and the transfer of authority to the Fellowship.</li>
+
+                    <li><strong>Twelve Steps and Twelve Traditions</strong> — Particularly the chapter on Tradition Two, which lays the spiritual foundation for Concept One.</li>
+
+                    <li><strong>The A.A. Group pamphlet</strong> — Explains the role of the group in A.A.'s structure and the importance of group conscience.</li>
+
+                    <li><strong>The General Service Conference: The Voice of Our Whole Fellowship</strong> — Pamphlet explaining how the Conference works as the embodiment of Concept One.</li>
+                </ul>
+            </div>
+
+            <h3>Where to Get A.A. Literature</h3>
+
+            <p>All A.A. Conference-approved literature can be obtained from:</p>
+            <ul>
+                <li>Your local A.A. Intergroup or Central Office</li>
+                <li>The A.A. General Service Office at <strong>www.aa.org</strong></li>
+                <li>Your Area's literature distribution center</li>
+                <li>Many A.A. groups maintain lending libraries</li>
+            </ul>
+
+            <h3>Online Resources</h3>
+
+            <p>The official A.A. website (www.aa.org) provides:</p>
+            <ul>
+                <li>The short form of all Twelve Concepts</li>
+                <li>Information about the General Service Conference</li>
+                <li>Service material and resources for GSRs and other trusted servants</li>
+                <li>Contact information for your local Area and District</li>
+            </ul>
+
+            <div class="key-point">
+                <strong>Study Reminder:</strong> This study guide is an introduction to Concept One, not a replacement for reading the original material. Bill W.'s essays in the Twelve Concepts book contain wisdom and detail that no summary can capture. Read the original sources for the fullest understanding.
+            </div>
+
+            <h3>Getting Involved</h3>
+
+            <p>The best way to understand Concept One is to participate in A.A. service:</p>
+            <ul>
+                <li>Attend your group's business meetings</li>
+                <li>Consider serving as your group's GSR</li>
+                <li>Attend your Area's assemblies and workshops</li>
+                <li>Ask your Delegate about the General Service Conference</li>
+                <li>Study the Concepts with other members</li>
+            </ul>
+
+            <p>Concept One comes alive when we practice it, not just study it.</p>
+        </section>
+
+    </main>
+
+</div>
+
+<!-- Back to Top Button -->
+<a href="#" class="back-to-top" id="backToTop" aria-label="Back to top">↑</a>
+
+<script>
+    // Progress Bar
+    window.addEventListener('scroll', () => {
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progressBar').style.width = scrolled + '%';
+    });
+
+    // Back to Top Button
+    const backToTop = document.getElementById('backToTop');
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    backToTop.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Sidebar Collapse
+    const collapseBtn = document.getElementById('collapseBtn');
+    const sidebar = document.getElementById('sidebar');
+    const mainWrapper = document.querySelector('.main-wrapper');
+
+    collapseBtn.addEventListener('click', () => {
+        sidebar.classList.toggle('collapsed');
+        mainWrapper.classList.toggle('sidebar-collapsed');
+        collapseBtn.textContent = sidebar.classList.contains('collapsed') ? '›' : '‹';
+    });
+
+    // Mobile Menu Toggle
+    const menuToggle = document.getElementById('menuToggle');
+    menuToggle.addEventListener('click', () => {
+        sidebar.classList.toggle('open');
+    });
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', (e) => {
+        if (window.innerWidth <= 900) {
+            if (!sidebar.contains(e.target) && !menuToggle.contains(e.target)) {
+                sidebar.classList.remove('open');
+            }
+        }
+    });
+
+    // Active Navigation
+    const sections = document.querySelectorAll('.content-section');
+    const navLinks = document.querySelectorAll('.sidebar-nav a');
+
+    const observerOptions = {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.2
+    };
+
+    const observerCallback = (entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const id = entry.target.getAttribute('id');
+                navLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href') === `#${id}`) {
+                        link.classList.add('active');
+                    }
+                });
+            }
+        });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, observerOptions);
+    sections.forEach(section => observer.observe(section));
+
+    // Smooth scroll for navigation links
+    navLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const targetId = link.getAttribute('href');
+            const targetSection = document.querySelector(targetId);
+            targetSection.scrollIntoView({ behavior: 'smooth' });
+
+            // Close mobile menu after clicking link
+            if (window.innerWidth <= 900) {
+                sidebar.classList.remove('open');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>
