@@ -7,3 +7,10 @@ check_musty.ps1
 extract_pages.py
 fix_pages.py
 tmp_find_markers.py
+bigbook.html
+reorder_ch1.ps1
+verify_annotations.ps1
+verify_order.ps1
+verify_renumber.ps1
+verify_ann.ps1
+renumber_ids.ps1
