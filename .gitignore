@@ -2,3 +2,8 @@
 .claude/settings.local.json
 B_Alcoholics Anonymous (Big Book).pdf
 nul
+bigbook_backup.html
+check_musty.ps1
+extract_pages.py
+fix_pages.py
+tmp_find_markers.py
