@@ -60,6 +60,7 @@
             .action-card, .prayer-card, .reading-card, .warning-card,
             .promise-card, .question-card, .science-card,
             .bg-white.rounded-xl, .bg-aa-50.rounded-xl,
+            .bg-amber-50.rounded-xl, .bg-purple-50.rounded-xl,
             blockquote, table, thead, tr, img {
                 break-inside: avoid;
                 page-break-inside: avoid;
@@ -69,6 +70,9 @@
             .ref-tag, .sci-tag, .bb-ref, .twelve-ref,
             .prayer-card, .warning-card, .promise-card, .science-card,
             .action-card, .reading-card, .question-card,
+            .bg-amber-50, .border-amber-200, .border-amber-400, .text-amber-800,
+            .bg-purple-50, .border-purple-200, .text-purple-800,
+            .bg-aa-50, .border-aa-200, .text-aa-800,
             thead tr, .checklist li::before {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
@@ -201,7 +205,7 @@
         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
     </button>
     <a href="index.html" class="text-sm text-gray-500 hover:text-aa-600 mr-4">&larr; Back to BigBook.Study</a>
-    <h1 class="text-lg font-bold text-aa-800 truncate">Sponsorship &amp; Study Guide</h1>
+    <h1 class="text-lg font-bold text-aa-800 truncate">The Three Legacies &mdash; Study Guide</h1>
     <!-- Zoom controls -->
     <div class="ml-auto flex items-center gap-0.5 mr-3">
         <button type="button" id="zoom-out" class="p-1 text-gray-400 hover:text-aa-600 rounded" title="Zoom Out (Ctrl+-)">
@@ -231,13 +235,16 @@
 <!-- SIDEBAR NAV -->
 <div id="sidebar-overlay" class="fixed inset-0 bg-black/40 z-30 hidden md:hidden" aria-hidden="true"></div>
 <nav id="sidebar" class="fixed top-14 left-0 bottom-0 w-64 bg-white border-r border-gray-200 overflow-y-auto py-4 px-3 z-40 -translate-x-full md:translate-x-0 transition-transform duration-200">
+    <!-- === MAIN OVERVIEW === -->
+    <button class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm font-bold text-gray-800 bg-gray-100 hover:bg-gray-200 mb-3" data-target="main">&#9733; Study Guide Overview</button>
+
     <!-- === 12 STEPS === -->
     <div class="mb-2">
-        <button class="sidebar-group-toggle w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-aa-800 bg-aa-50 hover:bg-aa-100 transition-colors" data-group="steps-nav">
+        <button class="sidebar-group-toggle w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-aa-800 bg-aa-50 hover:bg-aa-100 transition-colors collapsed" data-group="steps-nav">
             <span>12 Steps</span>
-            <svg class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            <svg class="w-4 h-4 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
-        <div id="steps-nav" class="sidebar-group mt-1">
+        <div id="steps-nav" class="sidebar-group mt-1 hidden">
             <div class="mb-2">
                 <p class="text-xs font-semibold text-gray-400 uppercase tracking-wider px-3 mb-1">Foundation</p>
                 <button class="nav-item active w-full text-left px-3 py-1.5 rounded-lg text-sm font-medium" data-target="welcome">Overview &amp; Purpose</button>
@@ -355,9 +362,92 @@
 <main id="content" class="md:ml-64 mt-14 p-4 md:p-8 max-w-4xl">
 
 <!-- ============================================ -->
-<!-- WELCOME / OVERVIEW -->
+<!-- MAIN LANDING PAGE -->
 <!-- ============================================ -->
-<section id="sec-welcome" class="step-section active markdown-body">
+<section id="sec-main" class="step-section markdown-body">
+
+<div class="flex items-center gap-3 mb-2">
+<span class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 text-white font-bold text-lg">&#9733;</span>
+<h1 class="text-3xl font-bold text-gray-800">The Three Legacies &mdash; A Personal Study Guide</h1>
+</div>
+<p class="text-lg text-gray-600 mb-6">Recovery, Unity, Service &mdash; the Three Legacies of Alcoholics Anonymous.</p>
+
+<div class="bg-gray-50 border border-gray-200 rounded-xl p-6 mb-8">
+<h3 class="text-lg font-bold text-gray-800 mb-3">About This Guide</h3>
+<p class="text-sm text-gray-700 mb-3">This is a <strong>personal study guide</strong>, prepared by a fellow member of Alcoholics Anonymous as an act of service. It is not official A.A. literature. It does not represent the views of A.A. as a whole, any group, or any service body. It is simply one member&rsquo;s attempt to study the three legacies thoroughly, honestly, and with the kind of rigor our founders brought to everything they wrote.</p>
+<p class="text-sm text-gray-700 mb-3">Every citation in this guide is sourced from A.A.-approved literature&mdash;the Big Book, the Twelve Steps and Twelve Traditions, AA Comes of Age, As Bill Sees It, Pass It On, The Language of the Heart, Daily Reflections, and official service materials. Page numbers refer to standard editions. Where I share personal understanding, I have clearly marked it as my own reflection.</p>
+<p class="text-sm text-gray-700">The first-person voice you will encounter throughout is deliberate. This is how I study: by reading, reflecting, and writing down what I have learned in my own words. I share it here in the hope that it may be useful to others&mdash;sponsors, sponsees, study groups, or anyone who wants to go deeper into the program that saved my life.</p>
+</div>
+
+<h3 class="text-xl font-bold text-gray-800 mb-4">The Three Legacies</h3>
+<p class="text-sm text-gray-700 mb-4">Bill W. described Recovery, Unity, and Service as A.A.&rsquo;s Three Legacies&mdash;the inheritance that every generation of members passes on to the next. Each legacy is expressed through twelve principles:</p>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+
+<div class="bg-white rounded-xl border-2 border-blue-200 p-5 shadow-sm cursor-pointer hover:shadow-md hover:border-blue-400 transition-all" onclick="showSection('welcome')">
+<div class="flex items-center gap-2 mb-3">
+<span class="flex items-center justify-center w-8 h-8 rounded-full bg-aa-600 text-white font-bold text-sm">I</span>
+<h4 class="font-bold text-aa-800">The Twelve Steps</h4>
+</div>
+<p class="text-xs font-semibold uppercase tracking-wider text-blue-600 mb-2">Recovery &mdash; The Personal Program</p>
+<p class="text-sm text-gray-600 mb-3">A comprehensive, Big Book&ndash;based study of all twelve Steps with exact page references, discussion questions, action items, prayers, and supplementary science cards. Designed for sponsors and sponsees working the Steps together.</p>
+<ul class="text-xs text-gray-500 space-y-1">
+<li>&bull; Big Book &amp; 12&amp;12 page references throughout</li>
+<li>&bull; Writing exercises and step work assignments</li>
+<li>&bull; Prayers and meditations for each Step</li>
+</ul>
+<p class="text-xs font-semibold text-blue-600 mt-3">Click to explore &rarr;</p>
+</div>
+
+<div class="bg-white rounded-xl border-2 border-amber-200 p-5 shadow-sm cursor-pointer hover:shadow-md hover:border-amber-400 transition-all" onclick="showSection('homegroup')">
+<div class="flex items-center gap-2 mb-3">
+<span class="flex items-center justify-center w-8 h-8 rounded-full bg-amber-600 text-white font-bold text-sm">II</span>
+<h4 class="font-bold text-amber-800">The Twelve Traditions</h4>
+</div>
+<p class="text-xs font-semibold uppercase tracking-wider text-amber-600 mb-2">Unity &mdash; How Groups Survive</p>
+<p class="text-sm text-gray-600 mb-3">A deep study of each Tradition with the 12&amp;12, historical context from AA Comes of Age, workshop teachings, As Bill Sees It entries, Language of the Heart essays, Grapevine self-inventory checklists, and connections to the Twelve Concepts.</p>
+<ul class="text-xs text-gray-500 space-y-1">
+<li>&bull; Concept / Conduct / Consequence framework</li>
+<li>&bull; Historical context and Washingtonian warnings</li>
+<li>&bull; Practice vs. Violate self-inventory grids</li>
+</ul>
+<p class="text-xs font-semibold text-amber-600 mt-3">Click to explore &rarr;</p>
+</div>
+
+<div class="bg-white rounded-xl border-2 border-purple-200 p-5 shadow-sm cursor-pointer hover:shadow-md hover:border-purple-400 transition-all" onclick="showSection('concept1')">
+<div class="flex items-center gap-2 mb-3">
+<span class="flex items-center justify-center w-8 h-8 rounded-full bg-purple-600 text-white font-bold text-sm">III</span>
+<h4 class="font-bold text-purple-800">The Twelve Concepts</h4>
+</div>
+<p class="text-xs font-semibold uppercase tracking-wider text-purple-600 mb-2">Service &mdash; The Structure That Serves</p>
+<p class="text-sm text-gray-600 mb-3">The Twelve Concepts for World Service describe how A.A.&rsquo;s service structure operates&mdash;from the group conscience to the General Service Conference. These principles ensure that A.A. remains accountable, effective, and true to its purpose.</p>
+<ul class="text-xs text-gray-500 space-y-1">
+<li>&bull; Authority, delegation, and participation</li>
+<li>&bull; The General Warranties of Article XII</li>
+<li>&bull; How the service structure protects the Fellowship</li>
+</ul>
+<p class="text-xs font-semibold text-purple-600 mt-3">Click to explore &rarr;</p>
+</div>
+
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<h4 class="font-semibold text-gray-800 mb-2">How to Navigate</h4>
+<p class="text-sm text-gray-700 mb-2">Use the sidebar on the left to browse by legacy. Click <strong>12 Steps</strong>, <strong>12 Traditions</strong>, or <strong>12 Concepts</strong> to expand each section, then select any individual Step, Tradition, or Concept to study it in depth.</p>
+<p class="text-sm text-gray-700">You can also click the three cards above to jump directly to the beginning of each legacy.</p>
+</div>
+
+<div class="warning-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-red-800 mb-2">Important Disclaimer</h4>
+<p class="text-sm text-gray-700">This guide is a tool to supplement&mdash;never replace&mdash;direct sponsorship, the Big Book text, meeting attendance, and your own relationship with a Higher Power. The Big Book says: <em>&ldquo;To show other alcoholics precisely how we have recovered is the main purpose of this book.&rdquo;</em> <span class="ref-tag bb-ref">BB p.xiii</span> That book, not this guide, is the authority.</p>
+</div>
+
+</section>
+
+<!-- ============================================ -->
+<!-- WELCOME / OVERVIEW (STEPS) -->
+<!-- ============================================ -->
+<section id="sec-welcome" class="step-section markdown-body">
 <div class="flex items-center gap-3 mb-2">
 <span class="flex items-center justify-center w-10 h-10 rounded-full bg-aa-600 text-white font-bold text-lg">&#9733;</span>
 <h1 class="text-3xl font-bold text-aa-800">Sponsorship &amp; Study Guide</h1>
@@ -6252,66 +6342,947 @@
 
 
 <!-- ============================================ -->
-<!-- TRADITION 5 (Placeholder) -->
+<!-- TRADITION 5 -->
 <!-- ============================================ -->
 <section id="sec-trad5" class="step-section markdown-body">
+
+<!-- ===== HERO / HEADER ===== -->
 <div class="flex items-center gap-3 mb-2">
-    <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-600 text-white font-bold text-lg">5</span>
-    <h1 class="text-3xl font-bold text-amber-800">Tradition Five &mdash; Purpose</h1>
+<span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-600 text-white font-bold text-lg">5</span>
+<h1 class="text-3xl font-bold text-amber-800">Tradition Five &mdash; Purpose</h1>
 </div>
-<p class="text-lg text-gray-600 mb-6">Singleness of purpose.</p>
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;Each group has but one primary purpose&mdash;to carry its message to the alcoholic who still suffers.&rdquo;<br>Singleness of purpose&mdash;the reason every A.A. group exists.</blockquote>
 
-<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">
-"Each group has but one primary purpose&mdash;to carry its message to the alcoholic who still suffers."
-</blockquote>
+<!-- ===== INTRO BANNER ===== -->
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<p class="text-sm text-gray-700">Tradition Five is the mission statement of Alcoholics Anonymous. It answers the most important question any organization can ask: <strong>Why do we exist?</strong> The answer is breathtakingly simple: to carry the message of recovery to the alcoholic who still suffers. Not to educate the public. Not to reform society. Not to treat other diseases. Not to run clubs, hospitals, or halfway houses. <em>One thing.</em> Bill W. borrowed an old cobbler&rsquo;s proverb to drive the point home: &ldquo;Shoemaker, stick to thy last!&rdquo; For me, Tradition Five is the lens through which I evaluate everything my group does. If an activity does not carry the message to alcoholics, it is a distraction&mdash;no matter how noble it may be.</p>
+</div>
 
+<!-- ===== CONCEPT / CONDUCT / CONSEQUENCE ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">From Concept to Conduct to Consequence</h3>
+
+<p class="text-sm text-gray-700 mb-4">I study Tradition Five through three lenses: the <strong>Concept</strong> (the spiritual principle), the <strong>Conduct</strong> (the actions it requires), and the <strong>Consequence</strong> (what I see when it is practiced).</p>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-amber-600 font-bold text-lg">&#9670;</span>
+<h3 class="text-xl font-bold text-gray-800">Concept</h3>
+<span class="ref-tag twelve-ref ml-2">PURPOSE</span>
+</div>
+<p class="text-sm text-gray-700 mb-2"><strong>What is the spiritual concept I am learning?</strong></p>
+<p class="text-sm text-gray-700 mb-4">The concept underlying Tradition Five is <strong>Purpose</strong>&mdash;specifically, singleness of purpose. A.A. exists to do one thing and one thing only: carry its message to the alcoholic who still suffers. This is not a limitation but a liberation. By doing one thing supremely well, A.A. has saved more lives than any institution that tried to do everything.</p>
+<p class="text-sm font-bold text-gray-800 mb-2">Why Purpose?</p>
+<ul class="space-y-2 text-sm text-gray-700 mb-4">
+<li>Alcoholism scattered my life in a thousand directions; Purpose gives me one clear aim</li>
+<li>My disease told me I could do everything; Purpose teaches me the power of doing one thing well</li>
+<li>Self-will led me to grandiose plans that always failed; Purpose grounds me in humble service</li>
+<li>I once lived without purpose; carrying the message gives my life meaning</li>
+</ul>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-2">
+<p class="text-sm text-gray-700"><strong>Personal Understanding:</strong> For me, Purpose is the antidote to the grandiosity that nearly killed me. In my drinking days, I had a hundred plans and no follow-through. A.A. taught me that one clear purpose, faithfully pursued, is worth more than a thousand brilliant ideas abandoned. When my group stays focused on carrying the message, everything else falls into place. When we drift into other ventures&mdash;no matter how well-intentioned&mdash;we lose our way. Tradition Five keeps me honest about why I am here.</p>
+</div>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-amber-600 font-bold text-lg">&#9671;</span>
+<h3 class="text-xl font-bold text-gray-800">Conduct</h3>
+<span class="ref-tag twelve-ref ml-2">WHAT WE DO</span>
+</div>
+<p class="text-sm text-gray-700 mb-2"><strong>What actions does this concept require of me?</strong></p>
+<p class="text-sm text-gray-700 mb-4">The concept of Purpose demands specific <strong>conduct</strong> from me and from my group:</p>
+<ul class="space-y-2 text-sm text-gray-700 mb-4">
+<li><strong>Keeping the message central:</strong> Every meeting, every service activity, every group decision should be evaluated against one question: Does this carry the message?</li>
+<li><strong>Welcoming the newcomer:</strong> The person who still suffers is the reason my group exists; everything else is secondary</li>
+<li><strong>Resisting mission creep:</strong> Saying no to good ideas that are not A.A.&rsquo;s primary purpose</li>
+<li><strong>Practicing Step Twelve:</strong> Carrying the message is not just a group obligation&mdash;it is my personal responsibility</li>
+<li><strong>Sharing experience, strength, and hope:</strong> The message I carry is not theory&mdash;it is my own story of recovery</li>
+<li><strong>Cooperating without affiliating:</strong> Working with outside agencies while keeping A.A.&rsquo;s identity clear</li>
+</ul>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-2">
+<p class="text-sm text-gray-700"><strong>Personal Understanding:</strong> The conduct that challenges me most is <strong>&ldquo;resisting mission creep.&rdquo;</strong> I have seen groups drift into becoming social clubs, therapy sessions, debate societies, and even political forums. Each drift began with good intentions. But Tradition Five conduct means I gently redirect my group back to its primary purpose whenever I see us straying. The hardest word in A.A. is sometimes &ldquo;no&rdquo;&mdash;not because the idea is bad, but because it is not our job.</p>
+</div>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-amber-600 font-bold text-lg">&#9672;</span>
+<h3 class="text-xl font-bold text-gray-800">Consequence</h3>
+<span class="ref-tag twelve-ref ml-2">WHAT WE SEE</span>
+</div>
+<p class="text-sm text-gray-700 mb-2"><strong>What do I see when this concept is practiced?</strong></p>
+<ul class="space-y-2 text-sm text-gray-700 mb-4">
+<li><strong>Groups that are alive with purpose:</strong> Meetings where the focus is on recovery, where newcomers feel welcomed, where the message of hope is palpable</li>
+<li><strong>Effective Twelfth Step work:</strong> Members who actively carry the message to hospitals, institutions, and suffering alcoholics</li>
+<li><strong>Clarity of identity:</strong> A.A. is known for one thing&mdash;helping alcoholics recover&mdash;and it does that one thing better than any other organization on earth</li>
+<li><strong>Freedom from distraction:</strong> Groups that are not entangled in outside causes, debates, or ventures</li>
+</ul>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-2">
+<p class="text-sm text-gray-700"><strong>Personal Understanding:</strong> The consequence I see most powerfully is in the newcomer&rsquo;s eyes. When a desperate person walks into a meeting that is focused on carrying the message, they feel it immediately. They hear stories like their own. They see hope. They think, &ldquo;Maybe this can work for me.&rdquo; But when a meeting has drifted from its purpose&mdash;when it has become a gripe session, a social hour, or a political debate&mdash;the newcomer feels something is off. They may not come back. And that, for me, is the ultimate consequence of violating Tradition Five: <strong>someone dies because we were too busy doing other things to carry the message.</strong></p>
+</div>
+</div>
+
+<!-- ===== REQUIRED READING ===== -->
 <div class="reading-card rounded-xl p-5 mb-6">
-<h4 class="font-bold text-amber-800 mb-3">Required Reading</h4>
+<h4 class="font-bold text-amber-800 mb-3">Required Reading for This Study</h4>
 <ul class="space-y-1 text-sm text-gray-700">
-<li><span class="ref-tag twelve-ref">12&amp;12 pp.150&ndash;152</span> Tradition Five</li>
+<li><span class="ref-tag twelve-ref">12&amp;12 pp.150&ndash;154</span> Tradition Five</li>
+<li><span class="ref-tag bb-ref">BB pp.89&ndash;103</span> Chapter 7: &ldquo;Working With Others&rdquo;</li>
+<li><span class="ref-tag bb-ref">BB pp.151&ndash;164</span> Chapter 11: &ldquo;A Vision for You&rdquo;</li>
+<li><span class="ref-tag bb-ref">BB pp.562&ndash;563</span> Appendix I: The Twelve Traditions (Long Form)</li>
+</ul>
+</div>
+
+<!-- ===== 1. SHORT AND LONG FORMS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">1. The Short and Long Forms</h3>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Short Form</h4>
+<p class="text-sm text-gray-700 italic">&ldquo;Each group has but one primary purpose&mdash;to carry its message to the alcoholic who still suffers.&rdquo;</p>
+<p class="text-xs text-gray-500 mt-2">&mdash; Appendix I, Big Book, p. 562</p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Long Form</h4>
+<p class="text-sm text-gray-700 italic">&ldquo;Each Alcoholics Anonymous group ought to be a spiritual entity having but one primary purpose&mdash;that of carrying its message to the alcoholic who still suffers.&rdquo;</p>
+<p class="text-xs text-gray-500 mt-2">&mdash; Appendix I, Big Book, p. 563</p>
+</div>
+</div>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">Key Differences Between the Forms</h4>
+<p class="text-sm text-gray-700">The Long Form adds two crucial words: <strong>&ldquo;spiritual entity.&rdquo;</strong> This is significant. A group is not merely an organization, a club, or a social gathering. It is a <em>spiritual entity</em>&mdash;a living expression of God&rsquo;s grace operating through recovering alcoholics. When I remember that my group is a spiritual entity, I treat its purpose with the reverence it deserves.</p>
+</div>
+
+<!-- ===== 2. FROM THE 12&12 ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">2. From the Twelve Steps and Twelve Traditions</h3>
+
+<p class="text-sm text-gray-700 mb-4">The 12&amp;12&rsquo;s chapter on Tradition Five (pp. 150&ndash;154) covers the principle of singleness of purpose with characteristic power and clarity. Bill W. uses an extended analogy, three compelling arguments, and practical wisdom to explain why every group must have but one primary purpose. I study it passage by passage.</p>
+
+<!-- 12&12 Passage 1: Shoemaker, Stick to Thy Last -->
+<h4 class="font-semibold text-gray-800 mb-2">1. &ldquo;Shoemaker, Stick to Thy Last!&rdquo;</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 p.150</span></p>
+
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;Shoemaker, stick to thy last!&rdquo; &hellip; better do one thing supremely well than many badly.<br><span class="text-sm not-italic text-gray-500">&mdash; Twelve Steps and Twelve Traditions, p. 150</span></blockquote>
+
+<p class="text-sm text-gray-700 mb-3">Bill W. opens the chapter with this ancient cobbler&rsquo;s proverb. A cobbler who tries to be a baker, a tailor, and a blacksmith will do none of them well. But a cobbler who sticks to making shoes can become the finest in the land. A.A.&rsquo;s &ldquo;last&rdquo;&mdash;its one craft&mdash;is carrying the message of recovery to alcoholics.</p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">This proverb cuts right through my alcoholic grandiosity. My disease always told me I could do everything&mdash;and I tried, and I failed at all of it. In A.A., I have learned the power of humility: <strong>do one thing well</strong>. My group is not a hospital, not a church, not a welfare agency, not a counseling center. It is a place where alcoholics help other alcoholics get sober. When we stick to that one purpose, we are unstoppable. When we try to be everything, we become nothing.</p>
+</div>
+
+<!-- 12&12 Passage 2: The Skid Row Mission -->
+<h4 class="font-semibold text-gray-800 mb-2">2. The Lesson of Misdirected Purpose</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 pp.150&ndash;151</span></p>
+
+<p class="text-sm text-gray-700 mb-3">Bill W. describes how early A.A. groups were tempted to branch out into education, rehabilitation, and social reform. Some groups tried to run hospitals. Others wanted to educate the public about alcoholism. Still others became quasi-professional counseling services. In every case, the result was the same: <strong>the group lost its effectiveness in the one area where it was uniquely qualified&mdash;carrying the message of recovery from one alcoholic to another.</strong></p>
+
+<p class="text-sm text-gray-700 mb-3">The chapter makes clear that these were not bad ideas. Hospitals are needed. Education is valuable. But they are not A.A.&rsquo;s job. When a group takes on functions that belong to other agencies, it dilutes its own purpose and usually does a poor job at the borrowed function as well.</p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">I have seen this pattern in my own experience. A group I attended started holding &ldquo;educational nights&rdquo; about nutrition, meditation techniques, and relationship skills. Each topic was worthwhile. But slowly, the meetings drifted from the message of recovery. Newcomers stopped feeling the identification that kept them coming back. The group shrank. When we returned to our primary purpose&mdash;sharing experience, strength, and hope about alcoholism and recovery&mdash;the group came alive again. <strong>Tradition Five saved that meeting.</strong></p>
+</div>
+
+<!-- 12&12 Passage 3: "Better Do One Thing Supremely Well" -->
+<h4 class="font-semibold text-gray-800 mb-2">3. &ldquo;Better Do One Thing Supremely Well Than Many Badly&rdquo;</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 p.150</span></p>
+
+<p class="text-sm text-gray-700 mb-3">This is one of Bill W.&rsquo;s most quoted lines. It captures the entire philosophy of singleness of purpose in a single sentence. A.A. has survived and thrived for nearly ninety years not because it tried to solve every problem, but because it focused relentlessly on one: <strong>helping alcoholics recover through the Twelve Steps.</strong></p>
+
+<div class="warning-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-red-800 mb-2">Historical Warning: The Groups That Tried to Do Everything</h4>
+<p class="text-sm text-gray-700">Early A.A. history is littered with examples of groups that expanded their mission beyond carrying the message. Groups that tried to run hospitals failed at both healthcare and recovery. Groups that became social clubs attracted people who wanted entertainment rather than sobriety. Groups that tried to reform society lost their spiritual focus. In each case, the lesson was the same: <strong>an A.A. group that tries to be everything ends up being nothing.</strong></p>
+</div>
+
+<!-- 12&12 Passage 4: Carrying the Message vs. Practicing These Principles -->
+<h4 class="font-semibold text-gray-800 mb-2">4. Carrying the Message &mdash; The Heart of A.A.</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 pp.150&ndash;154</span></p>
+
+<p class="text-sm text-gray-700 mb-3">The 12&amp;12 draws a direct line from Step Twelve to Tradition Five. Step Twelve says: &ldquo;Having had a spiritual awakening as the result of these Steps, we tried to carry this message to alcoholics, and to practice these principles in all our affairs.&rdquo; Tradition Five takes that individual command and makes it the group&rsquo;s mission. <strong>What I am called to do as an individual in Step Twelve, my group is called to do collectively in Tradition Five.</strong></p>
+
+<p class="text-sm text-gray-700 mb-3">Bill W. emphasizes that the message A.A. carries is not a theory or a philosophy&mdash;it is the <strong>lived experience</strong> of recovery. The alcoholic who still suffers does not need a lecture; they need to hear from someone who has been where they are and found a way out. This is why A.A.&rsquo;s message cannot be carried by professionals or institutions&mdash;only by recovered alcoholics sharing their experience, strength, and hope.</p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">The connection between Step Twelve and Tradition Five changed how I understand both. Step Twelve is not just a suggestion for my personal recovery&mdash;it is the <em>reason my group exists</em>. When I carry the message, I am fulfilling both my personal obligation under Step Twelve and my group&rsquo;s purpose under Tradition Five. And the &ldquo;message&rdquo; is not advice, not instruction, not criticism. It is my story: what it was like, what happened, and what it is like now. <strong>That story, honestly told, is the most powerful tool in the world for reaching the alcoholic who still suffers.</strong></p>
+</div>
+
+<!-- 12&12 Passage 5: The Group as Spiritual Entity -->
+<h4 class="font-semibold text-gray-800 mb-2">5. The Group as a &ldquo;Spiritual Entity&rdquo;</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 pp.151&ndash;152</span></p>
+
+<p class="text-sm text-gray-700 mb-3">The Long Form of Tradition Five calls the A.A. group a &ldquo;spiritual entity.&rdquo; Bill W. takes this seriously. The group is not merely a collection of individuals who happen to meet in the same room. It is something more&mdash;a living expression of God&rsquo;s will working through the collective experience of recovering alcoholics. When the group functions according to its primary purpose, it becomes a channel for grace.</p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">I have felt this &ldquo;spiritual entity&rdquo; quality in meetings where the group is truly focused on its primary purpose. There is an energy, a presence, something that transcends the individual members. Newcomers feel it&mdash;they often say, &ldquo;There was something different about that room.&rdquo; That &ldquo;something different&rdquo; is the spiritual entity at work: a group of imperfect people, united in a single purpose, becoming a channel for a power greater than themselves. <strong>When we protect our primary purpose, we protect that spiritual entity.</strong></p>
+</div>
+
+<!-- ===== 3. FROM THE BIG BOOK ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">3. From the Big Book (4th Edition)</h3>
+
+<p class="text-sm text-gray-700 mb-4">Tradition Five was not formally written until years after the Big Book, but the principle of carrying the message is woven throughout the original text. These passages embody the spirit of singleness of purpose:</p>
+
+<h4 class="font-semibold text-gray-800 mb-2">Foreword to the First Edition</h4>
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;To show other alcoholics precisely how we have recovered is the main purpose of this book.&rdquo;<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, Foreword to the First Edition, p. xiii</span></blockquote>
+
+<p class="text-sm text-gray-700 mb-3">The very first sentence of the very first Foreword states A.A.&rsquo;s primary purpose. Before the Traditions existed, the Big Book declared it: <strong>showing alcoholics how to recover.</strong> Not educating the public, not reforming society&mdash;showing alcoholics how to recover.</p>
+
+<h4 class="font-semibold text-gray-800 mb-2">Chapter 7: &ldquo;Working With Others&rdquo;</h4>
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;Practical experience shows that nothing will so much insure immunity from drinking as intensive work with other alcoholics. It works when other activities fail.&rdquo;<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, p. 89</span></blockquote>
+
+<p class="text-sm text-gray-700 mb-3">This opening line of Chapter 7 is the Big Book&rsquo;s strongest statement of why carrying the message is paramount. It is not merely a noble ideal&mdash;it is a <em>survival mechanism</em>. Working with others keeps me sober when nothing else can.</p>
+
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;Burn the idea into the consciousness of every man that he can get well regardless of anyone. The only condition is that he trust in God and clean house.&rdquo;<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, p. 98</span></blockquote>
+
+<h4 class="font-semibold text-gray-800 mb-2">Chapter 11: &ldquo;A Vision for You&rdquo;</h4>
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;Our book is meant to be suggestive only. We realize we know only a little. God will constantly disclose more to you and to us. Ask Him in your morning meditation what you can do each day for the man who is still sick.&rdquo;<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, p. 164</span></blockquote>
+
+<p class="text-sm text-gray-700 mb-3">The closing page of the Big Book&rsquo;s main text returns to carrying the message. Among the last instructions the reader receives is to ask God what they can do for the person who is still sick. <strong>The Big Book begins and ends with primary purpose.</strong></p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">When I read these passages together, I see that the primary purpose of A.A. was not an afterthought added by the Traditions&mdash;it was the foundation on which the entire Fellowship was built. The Big Book opens with it (p. xiii), devotes an entire chapter to it (Chapter 7), and closes with it (p. 164). <strong>Carrying the message is not one of many things A.A. does. It is the only thing A.A. does.</strong> Everything else&mdash;meetings, sponsorship, service, fellowship&mdash;exists to support that single purpose.</p>
+</div>
+
+<!-- ===== 4. HISTORICAL CONTEXT ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">4. Historical Context &mdash; AA Comes of Age</h3>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">The Groups That Lost Their Way</h4>
+<p class="text-sm text-gray-700 mb-3">In <em>AA Comes of Age</em>, Bill W. describes the painful process by which A.A. learned the lesson of singleness of purpose. Early groups, flush with the excitement of recovery, wanted to apply the A.A. approach to every problem they could see. Some groups tried to run hospitals for alcoholics. Others wanted to launch education campaigns. Still others tried to reform the criminal justice system, the welfare system, or the medical establishment.</p>
+<p class="text-sm text-gray-700 mb-3">In every case, the expansion failed. The groups that tried to run hospitals discovered they lacked the medical expertise and financial resources. The groups that tried to educate the public found themselves entangled in controversy. The groups that tried to reform institutions lost their spiritual focus and became political organizations.</p>
+<p class="text-sm text-gray-700">The common thread was clear: <strong>when an A.A. group tried to do something other than carry the message, it did that other thing badly and carried the message poorly.</strong> The Tradition emerged from this painful experience.</p>
+<p class="text-xs text-gray-500 mt-2">&mdash; AA Comes of Age, pp. 106&ndash;110</p>
+</div>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">The Washingtonian Echo</h4>
+<p class="text-sm text-gray-700 mb-3">The Washingtonian movement of the 1840s remains the most powerful historical warning for A.A. The Washingtonians began as a simple fellowship of drunkards helping one another stay sober. Within a few years, they had grown to an estimated 600,000 members. But they could not resist the temptation to expand their mission. They endorsed temperance legislation. They became involved in the abolition movement. They took sides in political controversies. Within a decade, the movement had destroyed itself&mdash;not because it lacked passion but because it lost its singleness of purpose.</p>
+<p class="text-sm text-gray-700"><strong>A.A.&rsquo;s founders knew this history intimately. Tradition Five is, in part, a deliberate response to the Washingtonian tragedy.</strong></p>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">The historical context of Tradition Five teaches me that <strong>good intentions are not enough</strong>. The early groups that tried to expand their mission were motivated by genuine compassion. They saw suffering and wanted to help. But A.A.&rsquo;s founders had the humility and wisdom to recognize that A.A. could not help everyone with everything. It could do one thing&mdash;carry the message to alcoholics&mdash;and it could do that one thing better than any organization in history. The Washingtonian warning haunts me: 600,000 members, destroyed by mission creep. I carry that lesson into every group conscience meeting.</p>
+</div>
+
+<!-- ===== 5. WORKSHOP TEACHINGS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">5. Common Workshop Teachings</h3>
+
+<p class="text-sm text-gray-700 mb-4">I have found these common analogies from A.A. workshops very helpful in bringing Tradition Five to life. They make the abstract concept of singleness of purpose practical and memorable.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+<!-- The Lifeboat's Purpose -->
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The &ldquo;Lifeboat&rsquo;s Purpose&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-2">A lifeboat has one purpose: to save people from drowning. If the crew of the lifeboat decides to also deliver the mail, serve dinner, and teach swimming lessons, <strong>people drown.</strong></p>
+<p class="text-sm text-gray-700"><strong>The Lesson:</strong> My A.A. group is a lifeboat. People are drowning in alcoholism right now. Every minute we spend on something other than carrying the message is a minute someone might die.</p>
+</div>
+
+<!-- We Are Not a Social Club -->
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">&ldquo;We Are Not a Social Club&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-2">Many speakers warn against the &ldquo;social club&rdquo; trap: meetings that become more about fellowship, coffee, and socializing than about carrying the message. Fellowship is wonderful&mdash;but it is a <em>byproduct</em> of the primary purpose, not a replacement for it.</p>
+<p class="text-sm text-gray-700"><strong>The Lesson:</strong> If a newcomer walks in and hears people talking about last night&rsquo;s game instead of recovery, they may never come back.</p>
+</div>
+
+<!-- The Swiss Army Knife -->
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The &ldquo;Swiss Army Knife&rdquo; Problem</h4>
+<p class="text-sm text-gray-700 mb-2">A Swiss Army knife has many tools, but none of them work as well as the dedicated tool. The blade is too small, the screwdriver is awkward, the scissors are flimsy. <strong>A.A. is not a Swiss Army knife.</strong> It is a scalpel&mdash;one tool, razor-sharp, designed for one purpose.</p>
+<p class="text-sm text-gray-700"><strong>The Lesson:</strong> When I try to make A.A. into a multi-purpose organization, I dull its edge.</p>
+</div>
+
+<!-- The Chain of Purpose -->
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The &ldquo;Chain of Purpose&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-2">Step 12 &rarr; Tradition 5 &rarr; Tradition 3. Step Twelve tells me to carry the message. Tradition Five makes it the group&rsquo;s purpose. Tradition Three ensures the door stays open to receive it. <strong>Break any link and alcoholics die.</strong></p>
+<p class="text-sm text-gray-700"><strong>The Lesson:</strong> These three links form an unbreakable chain. My personal Twelfth Step work, my group&rsquo;s primary purpose, and the open door of membership&mdash;they depend on each other.</p>
+</div>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">The &ldquo;lifeboat&rdquo; analogy is the one that stays with me. <strong>People are literally dying while we argue about coffee brands and meeting formats.</strong> Every time I catch myself caring more about the meeting logistics than the newcomer in the back row, I remember: I am on a lifeboat. Someone is drowning. Nothing else matters right now. The &ldquo;Chain of Purpose&rdquo; also convicts me&mdash;it shows that Steps, Traditions, and membership are all part of one continuous mission. If I neglect any part of the chain, the whole thing breaks.</p>
+</div>
+
+<!-- ===== 6. FROM AS BILL SEES IT ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">6. From As Bill Sees It</h3>
+
+<p class="text-sm text-gray-700 mb-4">Several entries in <em>As Bill Sees It</em> illuminate the principles of Tradition Five:</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Page 192 &mdash; &ldquo;Carrying the Message&rdquo;</h4>
+<p class="text-sm text-gray-700">&ldquo;The wonderful energy the Twelfth Step releases, by which it carries our message to the next suffering alcoholic and finally translates the Twelve Steps into action upon all our affairs, is the payoff, the magnificent reality of A.A.&rdquo; Also: &ldquo;Never talk down to an alcoholic from any moral or spiritual hilltop; simply lay out the kit of spiritual tools for his inspection.&rdquo; <span class="text-xs text-gray-500">(Sources: 12&amp;12, p. 109; BB, p. 95)</span></p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Page 29 &mdash; &ldquo;Gratitude Should Go Forward&rdquo;</h4>
+<p class="text-sm text-gray-700">&ldquo;Gratitude should go forward, rather than backward. In other words, if you carry the message to still others, you will be making the best possible repayment for the help given to you.&rdquo; Bill writes that no satisfaction has been deeper and no joy greater than in a Twelfth Step job well done&mdash;watching eyes open with wonder as people move from darkness into light. <span class="text-xs text-gray-500">(Sources: Letter, 1959; 12&amp;12, p. 110)</span></p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Page 21 &mdash; &ldquo;Citizens Again&rdquo;</h4>
+<p class="text-sm text-gray-700">&ldquo;The member who gets the most out of the program spends a very large amount of time on Twelfth Step work in the early years.&rdquo; Bill W. writes that carrying the message is the first and foundational step&mdash;A.A. aims not only for sobriety but for members to become citizens of the world again. Twelfth Step work is &ldquo;the first but not the final step.&rdquo; <span class="text-xs text-gray-500">(Source: Letter, 1959)</span></p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Page 304 &mdash; &ldquo;Single Purpose&rdquo;</h4>
+<p class="text-sm text-gray-700">&ldquo;Our Society, therefore, will prudently cleave to its single purpose: the carrying of the message to the alcoholic who still suffers.&rdquo; This entry draws from <em>AA Comes of Age</em>, p. 232, and states the principle of Tradition Five with unmistakable clarity.</p>
+</div>
+</div>
+
+<!-- ===== 7. DAILY REFLECTIONS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">7. Daily Reflections on Tradition Five</h3>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-3">May 30 &mdash; &ldquo;Our Primary Purpose&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-3"><strong>Reflection:</strong> The May 30 entry in <em>Daily Reflections</em> draws on <em>AA Comes of Age</em> (p. 109): &ldquo;The more A.A. sticks to its primary purpose, the greater will be its helpful influence everywhere.&rdquo; It reminds me that A.A.&rsquo;s effectiveness comes not from the breadth of its mission but from its laser focus on one thing: carrying the message to the alcoholic who still suffers. The reflection emphasizes gratitude for our founding members who kept the focus on the core mission, and humility in recognizing that A.A. does not hold exclusive rights to recovery solutions&mdash;but it does one thing better than anyone else.</p>
+<p class="text-xs text-gray-500">&mdash; Daily Reflections, May 30</p>
+</div>
+
+<!-- ===== 8. FROM THE LANGUAGE OF THE HEART ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">8. From The Language of the Heart</h3>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">Bill W.&rsquo;s Tradition Five Essay (April 1948)</h4>
+<p class="text-sm text-gray-700 mb-3">In his monthly Grapevine series on the Traditions, Bill devoted the April 1948 essay to Tradition Five. This essay, reprinted in <em>The Language of the Heart</em> (pp. 81&ndash;83), explores the spiritual foundation of singleness of purpose. Bill writes about how the temptation to diversify nearly destroyed the young Fellowship, and how the cobbler&rsquo;s proverb became A.A.&rsquo;s guiding principle. He emphasizes that A.A.&rsquo;s unique contribution to the world is not its organizational structure or its philosophy but its <em>method</em>: one alcoholic talking to another.</p>
+<p class="text-xs text-gray-500">&mdash; The Language of the Heart, pp. 81&ndash;83</p>
+</div>
+
+<!-- ===== 9. SELF-INVENTORY ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">9. Practical Application &mdash; Self-Inventory</h3>
+<p class="text-xs text-gray-500 mb-3">Reference: AA Grapevine Traditions Checklist (SMF-131)</p>
+
+<p class="text-sm text-gray-700 mb-4">Here are the self-inventory questions for Tradition Five from the AA Grapevine Traditions Checklist:</p>
+
+<div class="question-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-cyan-800 mb-3">Tradition Five Self-Inventory Questions</h4>
+<ul class="space-y-3 text-sm text-gray-700">
+<li><strong>1.</strong> Do I ever cop out by saying, &ldquo;I&rsquo;m not a group, so this or that Tradition doesn&rsquo;t apply to me&rdquo;?</li>
+<li><strong>2.</strong> Am I willing to explain firmly to a newcomer the limitations of A.A. help, even if he gets mad at me for not giving him a loan?</li>
+<li><strong>3.</strong> Have I today imposed on any A.A. member for a special favor or consideration simply because I am a fellow alcoholic?</li>
+<li><strong>4.</strong> Am I willing to twelfth-step the next newcomer without regard to who or what is in it for me?</li>
+<li><strong>5.</strong> Do I help my group in every way I can to fulfill our primary purpose?</li>
+<li><strong>6.</strong> Do I remember that A.A. old-timers, too, can be alcoholics who still suffer? Do I try both to help them and to learn from them?</li>
+</ul>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">Questions 4 and 5 convict me most. <strong>Am I willing to twelfth-step the next newcomer without regard to what&rsquo;s in it for me?</strong> Honestly, I sometimes choose comfort over service. And question 5&mdash;do I help my group fulfill its primary purpose in every way I can?&mdash;reminds me that singleness of purpose is not just a group principle. It is my personal responsibility. Question 6 also stops me: I sometimes forget that the old-timer with thirty years may be suffering just as much as the newcomer. <strong>Tradition Five applies to everyone&mdash;not just the person who walks in today.</strong></p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="promise-card rounded-xl p-5">
+<h4 class="font-bold text-green-800 mb-2">When I Practice Tradition Five:</h4>
+<ul class="space-y-2 text-sm text-gray-700">
+<li>I greet every newcomer and make them feel welcome</li>
+<li>I share my story honestly to carry the message</li>
+<li>I keep meetings focused on recovery from alcoholism</li>
+<li>I volunteer for Twelfth Step calls and H&amp;I commitments</li>
+<li>I remember that someone&rsquo;s life may depend on what happens in this room</li>
+</ul>
+</div>
+<div class="warning-card rounded-xl p-5">
+<h4 class="font-bold text-red-800 mb-2">When I Violate Tradition Five:</h4>
+<ul class="space-y-2 text-sm text-gray-700">
+<li>I treat meetings as social events rather than lifesaving gatherings</li>
+<li>I ignore newcomers while catching up with friends</li>
+<li>I let my group drift into topics unrelated to alcoholism recovery</li>
+<li>I leave the Twelfth Step work to others</li>
+<li>I forget that an A.A. group exists for the person who still suffers</li>
+</ul>
+</div>
+</div>
+
+<!-- ===== 10. SERVICE MATERIALS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">10. Official Service Materials</h3>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">P-35/F-8: &ldquo;Problems Other Than Alcohol&rdquo;</h4>
+<p class="text-sm text-gray-700">This pamphlet directly addresses the tension between singleness of purpose and the reality that many members have problems beyond alcoholism. It affirms that A.A.&rsquo;s primary purpose is helping alcoholics recover&mdash;not treating other conditions. Members with dual addictions are welcome, but A.A. meetings focus on alcoholism.</p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">P-16: &ldquo;The A.A. Group&rdquo;</h4>
+<p class="text-sm text-gray-700">This pamphlet emphasizes that the primary purpose of every A.A. group is to carry the message. It provides practical guidance on how groups can stay focused on this purpose while managing the many activities that support it.</p>
+</div>
+</div>
+
+<!-- ===== 11. P-43 ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">11. The Twelve Traditions Illustrated (P-43)</h3>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">The Step Five / Tradition Five Parallel</h4>
+<p class="text-sm text-gray-700 mb-3">The <em>Twelve Traditions Illustrated</em> pamphlet (P-43) draws a parallel between Step Five and Tradition Five. Step Five asks the individual to admit the exact nature of their wrongs to God, to themselves, and to another human being. Tradition Five asks the group to be equally honest about its purpose: <strong>we exist for one reason only.</strong> Just as Step Five demands honesty about who I am, Tradition Five demands honesty about why the group exists.</p>
+<p class="text-sm text-gray-700">This parallel is powerful: the group, like the individual, must practice rigorous honesty. A group that pretends its purpose is broader than carrying the message is practicing the same kind of self-deception that the individual practices before Step Five.</p>
+</div>
+
+<!-- ===== 12. TWELVE CONCEPTS CONNECTIONS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">12. Connections to the Twelve Concepts</h3>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">Tradition Five connects to several of the Twelve Concepts for World Service:</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li><strong>Concept I</strong> &mdash; Final responsibility and ultimate authority reside in the A.A. Fellowship itself. The Fellowship&rsquo;s ultimate authority is exercised through its primary purpose&mdash;if the Fellowship loses its purpose, it loses its authority.</li>
+<li><strong>Concept V</strong> &mdash; The Right of Appeal protects minority opinions. This ensures that the voice of the still-suffering alcoholic&mdash;the person Tradition Five exists to serve&mdash;is never drowned out by the majority&rsquo;s other interests.</li>
+<li><strong>Concept XI</strong> &mdash; The trustees should always have the best possible committees, corporate service directors, executives, staffs, and consultants. All of these service positions exist to support A.A.&rsquo;s primary purpose&mdash;not to expand it.</li>
+<li><strong>Concept XII (General Warranties)</strong> &mdash; The Warranties protect A.A.&rsquo;s service structure from becoming an end in itself. The structure exists to serve the primary purpose&mdash;not the other way around.</li>
+</ul>
+</div>
+
+<!-- ===== 13. WISDOM PRINCIPLES ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">13. Wisdom Principles &mdash; Step Twelve and Tradition Five</h3>
+
+<p class="text-sm text-gray-700 mb-4">Tradition Five has a direct and profound connection to Step Twelve. The Step commands me to carry the message; the Tradition makes it the group&rsquo;s sole reason for existence.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The Individual and the Group</h4>
+<p class="text-sm text-gray-700">Step Twelve is my personal command: carry the message. Tradition Five is the group&rsquo;s command: carry the message. What I do individually, the group does collectively. <strong>There is no conflict between the Step and the Tradition because they are the same mission at different scales.</strong></p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">&ldquo;Nothing Will So Much Insure Immunity&rdquo;</h4>
+<p class="text-sm text-gray-700">The Big Book says nothing insures immunity from drinking like working with others <span class="ref-tag bb-ref">BB p.89</span>. This means carrying the message is not merely a duty&mdash;it is my <em>best protection against relapse</em>. Tradition Five makes this personal survival mechanism the group&rsquo;s institutional purpose.</p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The Akron Discovery</h4>
+<p class="text-sm text-gray-700">Bill W. in Akron, May 1935: a desperate man who realized he needed to find another alcoholic not to save the other person but to save himself. <strong>This is the origin of Tradition Five.</strong> The primary purpose was born before the first group existed, before the Big Book was written, before the Traditions were conceived. It was born in one man&rsquo;s desperate need to carry the message.</p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The Message Is the Method</h4>
+<p class="text-sm text-gray-700">A.A.&rsquo;s message is not a theory, a theology, or a treatment plan. It is <em>one alcoholic sharing their experience, strength, and hope with another</em>. No professional can carry it. No institution can manufacture it. Only I can carry it&mdash;because only I have lived it. <strong>This is why A.A. is irreplaceable: the message and the messenger are one.</strong></p>
+</div>
+</div>
+
+<!-- ===== CONCLUSION ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">Conclusion and Personal Reflection</h3>
+
+<p class="text-sm text-gray-700 mb-3">Through this study, Tradition Five has taught me that <strong>singleness of purpose is not a limitation&mdash;it is a superpower</strong>. A.A. has survived and thrived for nearly ninety years because it has relentlessly focused on one thing: carrying the message of recovery to the alcoholic who still suffers. Every time A.A. has been tempted to diversify, to expand, to &ldquo;do more,&rdquo; it has returned to the cobbler&rsquo;s wisdom: stick to your last.</p>
+
+<p class="text-sm text-gray-700 mb-3">For me personally, Tradition Five gives my life its deepest meaning. I was a man without purpose, drowning in alcohol. A.A. gave me a purpose&mdash;the most important purpose I could imagine: <strong>to carry the message of hope to someone who is as desperate as I once was.</strong></p>
+
+<div class="action-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-blue-800 mb-2">My Personal Commitment</h4>
+<p class="text-sm text-gray-700">Next time I am in a meeting and notice a newcomer sitting alone, I will practice Tradition Five. I will say to myself: <em>&ldquo;That person is the reason this meeting exists. Everything else can wait.&rdquo;</em></p>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Final Personal Understanding</h4>
+<p class="text-sm text-gray-700">Tradition Five has transformed how I see every meeting I attend. I no longer go to meetings just for myself. I go because someone who walks in tonight may need to hear my story. I go because the lifeboat has one purpose and I am part of the crew. I go because Bill W., alone in the Mayflower Hotel in Akron, desperate and craving a drink, discovered that the best way to save himself was to find another alcoholic and carry the message. <strong>That discovery&mdash;that carrying the message saves the carrier as much as the recipient&mdash;is the beating heart of A.A. It is why we exist. And it is enough.</strong></p>
+</div>
+
+<!-- ===== STUDY ASSIGNMENTS ===== -->
+<h4 class="font-semibold text-gray-800 mb-2">My Study Assignments</h4>
+<ol class="space-y-2 text-sm text-gray-700 list-decimal list-inside mb-6">
+<li><strong>I studied/read:</strong> Pages 150&ndash;154 in <em>Twelve Steps and Twelve Traditions</em> (Tradition Five)</li>
+<li><strong>I studied/read:</strong> Big Book Chapter 7: &ldquo;Working With Others&rdquo; (pp. 89&ndash;103)</li>
+<li><strong>I studied/read:</strong> Big Book Chapter 11: &ldquo;A Vision for You&rdquo; (pp. 151&ndash;164)</li>
+<li><strong>I studied/read:</strong> Big Book Foreword to First Edition (p. xiii)</li>
+<li><strong>I studied/read:</strong> Appendix I (pp. 562&ndash;563) for the Short and Long Forms</li>
+<li><strong>I studied/read:</strong> <em>AA Comes of Age</em>, pp. 106&ndash;110 (groups that lost their way)</li>
+<li><strong>I studied/read:</strong> <em>The Language of the Heart</em>, pp. 81&ndash;83 (Tradition Five essay, April 1948)</li>
+<li><strong>I studied/read:</strong> <em>As Bill Sees It</em> entries on carrying the message and primary purpose</li>
+<li><strong>I studied/read:</strong> <em>Daily Reflections</em>, May 30</li>
+<li><strong>I studied/read:</strong> AA Grapevine Traditions Checklist (SMF-131), Tradition Five questions</li>
+<li><strong>I will reflect:</strong> Take the self-inventory above and write honestly about where I neglect the primary purpose</li>
+<li><strong>I will reflect:</strong> Consider how the cobbler&rsquo;s proverb applies to my personal recovery and my group&rsquo;s activities</li>
+</ol>
+
+<!-- ===== SOURCES ===== -->
+<div class="reading-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-3">Sources I Referenced in This Study</h4>
+<ul class="space-y-2 text-sm text-gray-700">
+<li><span class="ref-tag twelve-ref">12&amp;12</span> <em>Twelve Steps and Twelve Traditions</em> &mdash; Tradition Five (pp. 150&ndash;154), Step Twelve (pp. 106&ndash;125)</li>
+<li><span class="ref-tag bb-ref">BB</span> <em>Alcoholics Anonymous</em> (Big Book, 4th Ed.) &mdash; Foreword to First Edition (p. xiii); Chapter 7 (pp. 89&ndash;103); Chapter 11 (pp. 151&ndash;164); Appendix I (pp. 562&ndash;563)</li>
+<li><em>AA Comes of Age</em> &mdash; pp. 106&ndash;110, p. 232 (groups that expanded beyond primary purpose; &ldquo;single purpose&rdquo; statement)</li>
+<li><em>The Language of the Heart</em> &mdash; pp. 81&ndash;83 (Tradition Five essay, April 1948)</li>
+<li><em>As Bill Sees It</em> &mdash; Pages 21, 29, 192, 304 (citizens again, gratitude should go forward, carrying the message, and single purpose entries)</li>
+<li><em>Daily Reflections</em> &mdash; May 30</li>
+<li>AA Grapevine Traditions Checklist (SMF-131) &mdash; Tradition Five questions</li>
+<li>P-35/F-8 &mdash; &ldquo;Problems Other Than Alcohol&rdquo;</li>
+<li>P-16 &mdash; &ldquo;The A.A. Group&rdquo; (primary purpose section)</li>
+<li>P-43 &mdash; &ldquo;The Twelve Traditions Illustrated&rdquo;</li>
 </ul>
 </div>
 
 <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
-<p class="text-sm text-gray-700">Content coming soon &mdash; study the 12&amp;12 chapter on this Tradition.</p>
+<h4 class="font-bold text-amber-800 mb-2">Notes on Sources</h4>
+<p class="text-sm text-gray-700 mb-2"><strong>&ldquo;Shoemaker, stick to thy last!&rdquo;:</strong> Ancient proverb quoted by Bill W. in the 12&amp;12, p. 150. The &ldquo;last&rdquo; is the foot-shaped form a cobbler uses to make shoes.</p>
+<p class="text-sm text-gray-700 mb-2"><strong>Mayflower Hotel, Akron:</strong> Bill W. was at the Mayflower Hotel in Akron, Ohio, in May 1935 when he had the desperate urge to find another alcoholic. This led to his meeting with Dr. Bob, which is considered the founding moment of A.A.</p>
+<p class="text-sm text-gray-700"><strong>&ldquo;Spiritual entity&rdquo;:</strong> The Long Form of Tradition Five uses this phrase, distinguishing the A.A. group from a mere social or organizational entity.</p>
 </div>
 
-<div class="promise-card rounded-xl p-5 mb-6">
-<h4 class="font-bold text-green-800 mb-3">Spiritual Principle: Purpose</h4>
-<p class="text-sm text-gray-700">"Shoemaker, stick to thy last!" Tradition Five reminds every group that its one primary purpose is carrying the message to the alcoholic who still suffers. When groups stray from this purpose, they lose their effectiveness and their reason for being.</p>
-</div>
 </section>
 
 
 <!-- ============================================ -->
-<!-- TRADITION 6 (Placeholder) -->
+<!-- TRADITION 6 -->
 <!-- ============================================ -->
 <section id="sec-trad6" class="step-section markdown-body">
+
+<!-- ===== HERO / HEADER ===== -->
 <div class="flex items-center gap-3 mb-2">
-    <span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-600 text-white font-bold text-lg">6</span>
-    <h1 class="text-3xl font-bold text-amber-800">Tradition Six &mdash; Solidarity</h1>
+<span class="flex items-center justify-center w-10 h-10 rounded-full bg-amber-600 text-white font-bold text-lg">6</span>
+<h1 class="text-3xl font-bold text-amber-800">Tradition Six &mdash; Solidarity</h1>
 </div>
-<p class="text-lg text-gray-600 mb-6">No endorsement of outside enterprises.</p>
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;An A.A. group ought never endorse, finance, or lend the A.A. name to any related facility or outside enterprise, lest problems of money, property, and prestige divert us from our primary purpose.&rdquo;<br>Dividing the spiritual from the material&mdash;the separation that keeps A.A. alive.</blockquote>
 
-<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">
-"An A.A. group ought never endorse, finance, or lend the A.A. name to any related facility or outside enterprise, lest problems of money, property, and prestige divert us from our primary purpose."
-</blockquote>
+<!-- ===== INTRO BANNER ===== -->
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<p class="text-sm text-gray-700">Tradition Six is the great firewall between A.A. and the world of money, property, and prestige. It answers one of the most dangerous questions the Fellowship has ever faced: <strong>Should A.A. use its name, its reputation, and its members to support worthy outside causes?</strong> The answer&mdash;learned through bitter experience&mdash;is <em>no</em>. Not because those causes are unworthy, but because the moment A.A. lends its name to anything other than carrying the message, it begins to die. Bill W. learned this lesson personally when he was tempted to turn A.A. into a professional enterprise. The story of his temptation at Towns Hospital is one of the most instructive episodes in A.A. history&mdash;and one of the most humbling. Tradition Six protects A.A. from well-intentioned destruction.</p>
+</div>
 
+<!-- ===== CONCEPT / CONDUCT / CONSEQUENCE ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">From Concept to Conduct to Consequence</h3>
+
+<p class="text-sm text-gray-700 mb-4">I study Tradition Six through three lenses: the <strong>Concept</strong> (the spiritual principle), the <strong>Conduct</strong> (the actions it requires), and the <strong>Consequence</strong> (what I see when it is practiced).</p>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-amber-600 font-bold text-lg">&#9670;</span>
+<h3 class="text-xl font-bold text-gray-800">Concept</h3>
+<span class="ref-tag twelve-ref ml-2">SOLIDARITY</span>
+</div>
+<p class="text-sm text-gray-700 mb-2"><strong>What is the spiritual concept I am learning?</strong></p>
+<p class="text-sm text-gray-700 mb-4">The concept underlying Tradition Six is <strong>Solidarity</strong>&mdash;the integrity that comes from keeping the spiritual separate from the material. A.A.&rsquo;s solidarity is not built on money, institutional power, or famous endorsements. It is built on a shared spiritual purpose. When we entangle ourselves with outside enterprises, we trade that spiritual solidarity for material entanglement&mdash;and we always lose the trade.</p>
+<p class="text-sm font-bold text-gray-800 mb-2">Why Solidarity?</p>
+<ul class="space-y-2 text-sm text-gray-700 mb-4">
+<li>Alcoholism made me chase money, property, and prestige; Solidarity teaches me that spiritual purpose is enough</li>
+<li>My disease made me believe bigger is always better; Solidarity shows me that staying small and focused is A.A.&rsquo;s strength</li>
+<li>Self-will led me to grandiose schemes that always collapsed; Solidarity grounds me in humble singleness of purpose</li>
+<li>I once confused prestige with worth; Solidarity teaches me that A.A.&rsquo;s worth comes from what it <em>does</em>, not what it <em>owns</em></li>
+</ul>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-2">
+<p class="text-sm text-gray-700"><strong>Personal Understanding:</strong> For me, Solidarity means understanding that A.A.&rsquo;s power comes from its <em>spiritual</em> nature, not from any material resources. The moment we start accumulating money, property, or prestige, we begin to look like every other institution that has been corrupted by those things. Tradition Six keeps A.A. spiritually clean by refusing to let it become entangled with the very things that alcoholics like me used to worship: money, status, and power.</p>
+</div>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-amber-600 font-bold text-lg">&#9671;</span>
+<h3 class="text-xl font-bold text-gray-800">Conduct</h3>
+<span class="ref-tag twelve-ref ml-2">WHAT WE DO</span>
+</div>
+<p class="text-sm text-gray-700 mb-2"><strong>What actions does this concept require of me?</strong></p>
+<p class="text-sm text-gray-700 mb-4">The concept of Solidarity demands specific <strong>conduct</strong> from me and from my group:</p>
+<ul class="space-y-2 text-sm text-gray-700 mb-4">
+<li><strong>Never endorsing:</strong> A.A. does not put its name on any outside enterprise, no matter how closely related to recovery</li>
+<li><strong>Never financing:</strong> A.A. money goes to A.A. purposes only&mdash;not to outside organizations, even worthy ones</li>
+<li><strong>Never lending the name:</strong> Treatment centers, clubs, and recovery houses may be helpful, but they are not A.A. and must not use the A.A. name</li>
+<li><strong>Separating the material from the spiritual:</strong> Any property or business activity should be separately incorporated and managed</li>
+<li><strong>Cooperating without affiliating:</strong> Working alongside outside agencies while maintaining clear boundaries</li>
+<li><strong>Resisting the prestige trap:</strong> Declining celebrity endorsements, institutional partnerships, and media alliances</li>
+</ul>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-2">
+<p class="text-sm text-gray-700"><strong>Personal Understanding:</strong> The conduct that challenges me most is <strong>&ldquo;cooperating without affiliating.&rdquo;</strong> In practice, the line between cooperation and affiliation can be blurry. When my group meets in a church, are we affiliated with that church? When a treatment center sends patients to our meeting, are we endorsing that center? Tradition Six helps me navigate these questions by focusing on the <em>name</em>: A.A.&rsquo;s name must never be attached to anything outside A.A. We can cooperate with anyone&mdash;but we bind ourselves to no one.</p>
+</div>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<div class="flex items-center gap-2 mb-3">
+<span class="text-amber-600 font-bold text-lg">&#9672;</span>
+<h3 class="text-xl font-bold text-gray-800">Consequence</h3>
+<span class="ref-tag twelve-ref ml-2">WHAT WE SEE</span>
+</div>
+<p class="text-sm text-gray-700 mb-2"><strong>What do I see when this concept is practiced?</strong></p>
+<ul class="space-y-2 text-sm text-gray-700 mb-4">
+<li><strong>A.A. remains universally trusted:</strong> Because A.A. endorses nothing, it has no enemies and no scandals</li>
+<li><strong>No one profits from A.A.:</strong> The Fellowship cannot be corrupted by money because it refuses to accumulate it</li>
+<li><strong>Spiritual focus is maintained:</strong> Without the distractions of business, property, and politics, groups can focus entirely on carrying the message</li>
+<li><strong>Freedom from institutional failure:</strong> When an outside enterprise fails, A.A. is not dragged down with it</li>
+</ul>
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-2">
+<p class="text-sm text-gray-700"><strong>Personal Understanding:</strong> The consequence I find most powerful is that <strong>A.A. has no enemies.</strong> Think about that. In a world of polarization and controversy, A.A. has managed to remain above the fray for nearly ninety years. Why? Because we endorse nothing, oppose nothing, and affiliate with nothing. We have no political position, no religious dogma, no institutional partnerships to defend. This neutrality is not weakness&mdash;it is our greatest strength. The person who walks through the door tomorrow knows that A.A. has no agenda other than helping them stay sober. <strong>That trust is priceless, and Tradition Six protects it.</strong></p>
+</div>
+</div>
+
+<!-- ===== REQUIRED READING ===== -->
 <div class="reading-card rounded-xl p-5 mb-6">
-<h4 class="font-bold text-amber-800 mb-3">Required Reading</h4>
+<h4 class="font-bold text-amber-800 mb-3">Required Reading for This Study</h4>
 <ul class="space-y-1 text-sm text-gray-700">
-<li><span class="ref-tag twelve-ref">12&amp;12 pp.153&ndash;157</span> Tradition Six</li>
+<li><span class="ref-tag twelve-ref">12&amp;12 pp.155&ndash;159</span> Tradition Six</li>
+<li><span class="ref-tag bb-ref">BB pp.562&ndash;563</span> Appendix I: The Twelve Traditions (Long Form)</li>
+</ul>
+</div>
+
+<!-- ===== 1. SHORT AND LONG FORMS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">1. The Short and Long Forms</h3>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Short Form</h4>
+<p class="text-sm text-gray-700 italic">&ldquo;An A.A. group ought never endorse, finance, or lend the A.A. name to any related facility or outside enterprise, lest problems of money, property, and prestige divert us from our primary purpose.&rdquo;</p>
+<p class="text-xs text-gray-500 mt-2">&mdash; Appendix I, Big Book, p. 562</p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Long Form</h4>
+<p class="text-sm text-gray-700 italic">&ldquo;Problems of money, property, and authority may easily divert us from our primary spiritual aim. We think, therefore, that any considerable property of genuine use to A.A. should be separately incorporated and managed, thus dividing the material from the spiritual. An A.A. group, as such, should never go into business. Secondary aids to A.A., such as clubs or hospitals which require much property or administration, ought to be incorporated and so set apart that, if necessary, they can be freely discarded by the groups. Hence such facilities ought not to use the A.A. name. Their management should be the sole responsibility of those people who financially sustain them. For clubs, A.A. managers are usually preferred. But hospitals, as well as other places of recuperation, ought to be well outside A.A.&mdash;and medically supervised. While an A.A. group may cooperate with anyone, such cooperation ought never go so far as affiliation or endorsement, actual or implied. An A.A. group can bind itself to no one.&rdquo;</p>
+<p class="text-xs text-gray-500 mt-2">&mdash; Appendix I, Big Book, pp. 562&ndash;563</p>
+</div>
+</div>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">Key Difference Between the Forms</h4>
+<p class="text-sm text-gray-700">The Long Form of Tradition Six is the longest of all twelve Long Forms. It reads almost like a legal document&mdash;and for good reason. The early Fellowship learned the hard way that vague language about outside enterprises led to disaster. The Long Form spells out in detail exactly how the spiritual and the material must be separated: separate incorporation, separate management, separate names. The phrase <strong>&ldquo;An A.A. group can bind itself to no one&rdquo;</strong> is the final, unequivocal statement of A.A.&rsquo;s independence.</p>
+</div>
+
+<!-- ===== 2. FROM THE 12&12 ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">2. From the Twelve Steps and Twelve Traditions</h3>
+
+<p class="text-sm text-gray-700 mb-4">The 12&amp;12&rsquo;s chapter on Tradition Six (pp. 155&ndash;159) explores the dangerous temptations of money, property, and prestige through vivid examples from A.A.&rsquo;s early history&mdash;including groups that tried to build hospital chains, the club problem, and the principle that A.A. must never endorse or affiliate with any outside enterprise. I study it passage by passage.</p>
+
+<!-- 12&12 Passage 1: The Temptation of Power and Prestige -->
+<h4 class="font-semibold text-gray-800 mb-2">1. The Temptation of Money, Property, and Prestige</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 p.155</span></p>
+
+<p class="text-sm text-gray-700 mb-3">Bill W. opens the chapter by naming the three great temptations that can divert A.A. from its purpose: <strong>money, property, and prestige</strong>. He writes candidly about how the early Fellowship was repeatedly tempted to use its growing reputation to launch outside ventures. Hospitals, educational programs, rehabilitation centers&mdash;all seemed like natural extensions of A.A.&rsquo;s work. But each represented a dangerous entanglement.</p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">Bill&rsquo;s honesty about these temptations teaches me that <strong>good people with good intentions can still make catastrophic decisions</strong>. The early members were not greedy; they were passionate about helping alcoholics. But passion without boundaries is dangerous. Tradition Six provides those boundaries. Every time I hear someone suggest that our group should &ldquo;partner with&rdquo; or &ldquo;endorse&rdquo; an outside organization, I remember Bill&rsquo;s warning about money, property, and prestige.</p>
+</div>
+
+<!-- 12&12 Passage 2: The Grandiose Dreams of Early A.A. -->
+<h4 class="font-semibold text-gray-800 mb-2">2. The Grandiose Dreams of Early A.A.</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 pp.155&ndash;157</span></p>
+
+<p class="text-sm text-gray-700 mb-3">The chapter describes how the early Fellowship, flush with success, dreamed of building hospital chains, launching educational projects, and reforming public policy on alcoholism. Bill W. writes candidly about how these &ldquo;grandiose&rdquo; plans&mdash;however well-intentioned&mdash;threatened to divert A.A. from its spiritual mission. The lesson of these early failures was clear: <strong>A.A. must never go into business, and its name must never be attached to outside enterprises.</strong></p>
+
+<p class="text-sm text-gray-700 mb-3">The most dramatic example from this era is the Towns Hospital temptation. In 1937, Charles B. Towns, the owner of Towns Hospital on Central Park West in New York&mdash;where Bill W. had his spiritual experience in December 1934&mdash;offered Bill a paid position as a lay therapist. Bill would have an office, a salary, and the prestige of a professional title. He was broke and deeply tempted.</p>
+
+<p class="text-sm text-gray-700 mb-3">But when he brought the idea to the early A.A. members gathered in his living room, they were unanimous: <strong>if Bill took the job, the alcoholic coming to Towns would see him as a professional motivated by money, and they would never identify with him the way they did when he gave it away freely.</strong> Bill turned the offer down. It was one of the most pivotal decisions in A.A. history.</p>
+
+<div class="warning-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-red-800 mb-2">Historical Warning: The Towns Hospital Story</h4>
+<p class="text-sm text-gray-700">If Bill W. had accepted the Towns Hospital offer, A.A. would likely have become a professional treatment organization. The unique power of the program&mdash;one alcoholic helping another, freely and without compensation&mdash;would have been replaced by a fee-for-service model. Every treatment center would have been an &ldquo;A.A. hospital.&rdquo; The spiritual foundation would have been replaced by a business plan. <strong>The Towns Hospital temptation is the cautionary tale that gave birth to Tradition Six.</strong> (Note: The Towns Hospital story also illustrates Tradition Eight&rsquo;s principle of nonprofessionalism and is discussed in the 12&amp;12&rsquo;s Tradition Eight chapter as well.)</p>
+<p class="text-xs text-gray-500 mt-2">&mdash; Pass It On, pp. 170&ndash;183; AA Comes of Age, pp. 106&ndash;110; see also 12&amp;12 Tradition Eight (pp. 166&ndash;171)</p>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">The Towns Hospital story is the most important historical lesson in all of the Traditions for me. <strong>Bill W. was the co-founder of A.A., and even he was tempted.</strong> If Bill could be tempted by money and prestige, what makes me think I am immune? Every time I see an opportunity for my group to profit from its reputation, to endorse a treatment center, or to lend the A.A. name to an outside venture, I remember Bill at Towns Hospital. I remember the early members who told him no. And I remember that their refusal saved A.A.</p>
+</div>
+
+<!-- 12&12 Passage 3: The Club Problem -->
+<h4 class="font-semibold text-gray-800 mb-2">3. The Club Problem &mdash; Separating the Material from the Spiritual</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 pp.156&ndash;157</span></p>
+
+<p class="text-sm text-gray-700 mb-3">The 12&amp;12 describes how early A.A. groups struggled with the club problem. Many groups established clubhouses&mdash;places where members could gather, hold meetings, and socialize. These clubs served a valuable purpose. But they also created problems: <strong>who owned the building? Who managed it? Whose name was on the lease?</strong></p>
+
+<p class="text-sm text-gray-700 mb-3">When clubs bore the A.A. name, any problem at the club became an A.A. problem. Financial difficulties, neighborhood complaints, management disputes&mdash;all of these reflected on A.A. itself. The solution was separation: clubs should be separately incorporated, separately managed, and should not use the A.A. name. They could serve A.A. members without being A.A. entities.</p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">The club problem teaches me the principle of <strong>separation</strong>. A.A. can <em>use</em> things without <em>owning</em> them. We meet in churches without being a church. We use clubhouses without being a club. We cooperate with hospitals without being a hospital. This separation protects A.A. from the inevitable problems that come with managing property, handling money, and navigating institutional politics. <strong>When the club has a problem, A.A. can walk away. When A.A. owns the club, A.A. is trapped.</strong></p>
+</div>
+
+<!-- 12&12 Passage 4: Cooperation Without Affiliation -->
+<h4 class="font-semibold text-gray-800 mb-2">4. &ldquo;An A.A. Group Can Bind Itself to No One&rdquo;</h4>
+<p class="text-xs text-gray-500 mb-2"><span class="ref-tag twelve-ref">12&amp;12 p.157</span></p>
+
+<p class="text-sm text-gray-700 mb-3">The chapter concludes with the definitive statement from the Long Form: &ldquo;An A.A. group can bind itself to no one.&rdquo; This does not mean A.A. is hostile to outside organizations. It means A.A. remains free. Free to cooperate with everyone, affiliated with no one. Free to serve its primary purpose without being dragged into the problems of outside enterprises.</p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">The phrase <strong>&ldquo;can bind itself to no one&rdquo;</strong> is one of the most liberating statements in all of A.A. literature. It means my group is free. We do not owe allegiance to any institution, any cause, or any organization. We are free to help anyone, cooperate with anyone, and serve anyone&mdash;as long as we do not surrender our independence or our name. This freedom is not selfishness; it is survival. The moment A.A. binds itself to an outside enterprise, it becomes hostage to that enterprise&rsquo;s fate.</p>
+</div>
+
+<!-- ===== 3. FROM THE BIG BOOK ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">3. From the Big Book (4th Edition)</h3>
+
+<p class="text-sm text-gray-700 mb-4">While the Big Book does not explicitly address endorsements or outside enterprises (the Traditions were written later), its foundational principles embody the spirit of Tradition Six:</p>
+
+<h4 class="font-semibold text-gray-800 mb-2">Foreword to the First Edition</h4>
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;To show other alcoholics precisely how we have recovered is the main purpose of this book.&rdquo;<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, Foreword to the First Edition, p. xiii</span></blockquote>
+
+<p class="text-sm text-gray-700 mb-3">The Big Book&rsquo;s stated purpose is singular: showing alcoholics how to recover. Not selling a product, not endorsing a treatment, not promoting an institution. This singularity of purpose is the spiritual foundation upon which Tradition Six was built.</p>
+
+<h4 class="font-semibold text-gray-800 mb-2">The A.A. Preamble</h4>
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">&ldquo;A.A. is not allied with any sect, denomination, politics, organization or institution; does not wish to engage in any controversy; neither endorses nor opposes any causes.&rdquo;<br><span class="text-sm not-italic text-gray-500">&mdash; The A.A. Preamble (adapted from the Foreword to the First Edition; first published in the AA Grapevine, June 1947)</span></blockquote>
+
+<p class="text-sm text-gray-700 mb-3">The A.A. Preamble, read aloud at meetings worldwide, directly reflects the spirit of Tradition Six (and Tradition Ten). Adapted from the Big Book&rsquo;s Foreword to the First Edition&mdash;which states, &ldquo;We are not allied with any particular faith, sect or denomination, nor do we oppose anyone&rdquo; (p. xiii)&mdash;the Preamble expanded this language after the Traditions were adopted. It declares A.A.&rsquo;s independence from all outside entanglements.</p>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">Reading the Foreword alongside the Preamble, I see the evolution of A.A.&rsquo;s understanding of its own identity. The First Edition Foreword declares the purpose. The Preamble, adopted after the Traditions were written, explicitly declares independence from all outside affiliations. <strong>A.A. learned through hard experience what it was&mdash;and, equally important, what it was not.</strong> Tradition Six codifies that hard-won wisdom.</p>
+</div>
+
+<!-- ===== 4. HISTORICAL CONTEXT ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">4. Historical Context &mdash; AA Comes of Age and Pass It On</h3>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">The Charles B. Towns Story in Full</h4>
+<p class="text-sm text-gray-700 mb-3">Charles B. Towns was the owner of Towns Hospital, a facility on Central Park West in New York City that specialized in treating alcoholism and drug addiction. Bill W. had been a patient there multiple times, and it was during his final stay in December 1934 that he had his famous spiritual experience&mdash;the &ldquo;hot flash&rdquo; that marked the beginning of his recovery.</p>
+<p class="text-sm text-gray-700 mb-3">Towns was impressed by the early results of A.A. He saw Bill W. and his small band of recovering alcoholics achieving something that medicine alone could not. In 1937, he proposed a bold plan: install Bill at the hospital as a paid lay therapist. Bill would have an office, a regular salary, and the backing of a well-known institution. Towns believed that professionalizing A.A.&rsquo;s approach would help it reach more people.</p>
+<p class="text-sm text-gray-700 mb-3">Bill was deeply tempted. He and Lois were living on the charity of friends. A regular income seemed like a godsend. But when he presented the idea to the small group of sober alcoholics gathered in his living room, their response was decisive. As Bill later recounted, they told him that if he took the job, <strong>&ldquo;the alcoholic coming to Towns would say he was a professional, motivated by money. They would never identify with him the way they did when he gave it away freely.&rdquo;</strong></p>
+<p class="text-sm text-gray-700">Bill turned down the offer. It was, he later wrote, one of the most pivotal decisions in A.A.&rsquo;s history.</p>
+<p class="text-xs text-gray-500 mt-2">&mdash; Pass It On, pp. 170&ndash;183; AA Comes of Age, pp. 106&ndash;110; 12&amp;12, pp. 155&ndash;156</p>
+</div>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">The Grandiose Projects of the 1940s</h4>
+<p class="text-sm text-gray-700 mb-3">In <em>AA Comes of Age</em>, Bill W. describes how the 1940s brought a wave of grandiose proposals. A.A. groups wanted to open their own hospitals, run rehabilitation programs, establish educational foundations, and launch public relations campaigns. Each project seemed like a natural extension of A.A.&rsquo;s mission.</p>
+<p class="text-sm text-gray-700">But experience quickly showed the dangers. Groups that operated hospitals found themselves entangled in licensing disputes, financial problems, and management crises. Groups that ran clubs found themselves arguing about property, maintenance, and money instead of carrying the message. <strong>Every outside enterprise, no matter how well-intentioned, diverted the group from its primary spiritual aim.</strong></p>
+<p class="text-xs text-gray-500 mt-2">&mdash; AA Comes of Age, pp. 106&ndash;110</p>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">The historical context of Tradition Six teaches me that <strong>A.A.&rsquo;s early members had to learn every lesson the hard way</strong>. They tried running hospitals. They tried running clubs. They tried endorsing outside enterprises. And every time, they discovered the same truth: money, property, and prestige are poisons to a spiritual fellowship. The genius of Tradition Six is that it takes all of that painful experience and distills it into a single principle: <strong>keep the spiritual separate from the material.</strong></p>
+</div>
+
+<!-- ===== 5. WORKSHOP TEACHINGS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">5. Common Workshop Teachings</h3>
+
+<p class="text-sm text-gray-700 mb-4">I have found these common analogies from A.A. workshops very helpful in bringing Tradition Six to life. They make the abstract concept of non-endorsement practical and memorable.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+
+<!-- Separation of Church and State -->
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The &ldquo;Separation of Church and State&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-2">Just as the founders of the United States separated church from state to protect both, A.A. separates the spiritual from the material. <strong>When A.A. gets into business, both the business and A.A. suffer.</strong></p>
+<p class="text-sm text-gray-700"><strong>The Lesson:</strong> The separation is not punishment; it is protection. It keeps A.A. spiritually pure and keeps outside ventures free from A.A.&rsquo;s influence.</p>
+</div>
+
+<!-- Do One Thing Well -->
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">&ldquo;Do One Thing Well&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-2">A.A. is a specialist, not a general practitioner. We specialize in one thing: carrying the message of recovery to alcoholics. When we try to be a hospital, a treatment center, a social club, and a lobbying organization, we become a jack of all trades and a master of none.</p>
+<p class="text-sm text-gray-700"><strong>The Lesson:</strong> Tradition Six is Tradition Five&rsquo;s enforcement mechanism. Five says our purpose is singular. Six says we must not let anything divert us from it.</p>
+</div>
+
+<!-- The Endorsement Trap -->
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The &ldquo;Endorsement Trap&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-2">If A.A. endorses a treatment center and that center has a scandal, A.A.&rsquo;s reputation is damaged. If A.A. endorses a political cause and that cause becomes controversial, A.A. loses credibility with half the population. <strong>Every endorsement is a hostage.</strong></p>
+<p class="text-sm text-gray-700"><strong>The Lesson:</strong> A.A.&rsquo;s credibility comes from having no agenda other than sobriety. The moment we endorse anything, we have an agenda.</p>
+</div>
+
+<!-- Bill's Living Room Vote -->
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">&ldquo;Bill&rsquo;s Living Room Vote&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-2">When Bill W. brought the Towns Hospital offer to the early members in his living room, they voted unanimously against it. <strong>A group of broke, newly sober alcoholics turned down money and prestige because they understood something Bill had temporarily forgotten: the message must be free.</strong></p>
+<p class="text-sm text-gray-700"><strong>The Lesson:</strong> The group conscience saved A.A. from its own co-founder. This is Traditions Two and Six working together.</p>
+</div>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">The &ldquo;endorsement trap&rdquo; analogy is the one I use most often. <strong>Every endorsement is a hostage.</strong> The moment my group lends its name to a treatment center, a therapist, or a cause, we have tied our reputation to something we cannot control. If that entity fails or behaves badly, we pay the price. A.A.&rsquo;s sterling reputation exists precisely because we have never endorsed anything. That reputation is our most valuable asset&mdash;and Tradition Six is the lock that protects it.</p>
+</div>
+
+<!-- ===== 6. FROM AS BILL SEES IT ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">6. From As Bill Sees It</h3>
+
+<p class="text-sm text-gray-700 mb-4">Several entries in <em>As Bill Sees It</em> illuminate the principles of Tradition Six:</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Page 220 &mdash; &ldquo;In Partnership&rdquo;</h4>
+<p class="text-sm text-gray-700">&ldquo;The unity, the effectiveness, and even the survival of A.A. will always depend upon our continued willingness to give up some of our personal ambitions and desires for the common safety and welfare. Just as sacrifice means survival for the individual alcoholic, so does sacrifice mean unity and survival for the group and for A.A.&rsquo;s entire Fellowship.&rdquo; <span class="text-xs text-gray-500">(Sources: 12&amp;12, pp. 115&ndash;116; AA Comes of Age, pp. 287&ndash;288)</span></p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Page 97 &mdash; &ldquo;Self-Respect Through Sacrifice&rdquo;</h4>
+<p class="text-sm text-gray-700">&ldquo;We had to toss self-justification, self-pity, and anger right out the window. We had to quit the crazy contest for personal prestige and big bank balances.&rdquo; Bill W. writes that to gain humility and self-respect, we had to give up &ldquo;our dearest possessions&mdash;our ambition and our illegitimate pride.&rdquo; <span class="text-xs text-gray-500">(Source: AA Comes of Age, p. 287)</span></p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Page 46 &mdash; &ldquo;True Ambition &mdash; and False&rdquo;</h4>
+<p class="text-sm text-gray-700">&ldquo;We simply had to be Number One people to cover up our deep-lying inferiorities.&rdquo; Bill W. contrasts the false pursuit of &ldquo;fame, money, and what we thought was leadership&rdquo; with true ambition: &ldquo;the profound desire to live usefully and walk humbly under the grace of God.&rdquo; <span class="text-xs text-gray-500">(Source: 12&amp;12, pp. 123&ndash;125)</span></p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Page 40 &mdash; &ldquo;Material Achievements&rdquo;</h4>
+<p class="text-sm text-gray-700">&ldquo;We demanded more than our share of security, prestige, and romance.&rdquo; Bill W. warns that the pursuit of material satisfactions as primary aims is the alcoholic&rsquo;s &ldquo;crippling handicap.&rdquo; The remedy: &ldquo;character-building and spiritual values had to come first, and material satisfactions were simply by-products.&rdquo; <span class="text-xs text-gray-500">(Source: 12&amp;12, p. 71)</span></p>
+</div>
+</div>
+
+<!-- ===== 7. DAILY REFLECTIONS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">7. Daily Reflections on Tradition Six</h3>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-3">June 30 &mdash; &ldquo;Sacrifice = Unity = Survival&rdquo;</h4>
+<p class="text-sm text-gray-700 mb-3"><strong>Reflection:</strong> The June 30 entry in <em>Daily Reflections</em> quotes <em>As Bill Sees It</em>, p. 220: &ldquo;The unity, the effectiveness, and even the survival of A.A. will always depend upon our continued willingness to give up some of our personal ambitions and desires for the common safety and welfare.&rdquo; The member&rsquo;s reflection explicitly applies this to Tradition Six: &ldquo;False pride can be inflated through prestige but, by living Tradition Six, I receive the gift of humility instead. If I remain unrelated to outside interests, I am free to keep A.A. autonomous.&rdquo; This reflection reminds me that every time I resist the temptation to entangle my group with an outside enterprise, I am practicing the sacrifice that keeps A.A. alive.</p>
+<p class="text-xs text-gray-500">&mdash; Daily Reflections, June 30</p>
+</div>
+
+<!-- ===== 8. FROM THE LANGUAGE OF THE HEART ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">8. From The Language of the Heart</h3>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">Bill W.&rsquo;s Tradition Six Essay (May 1948)</h4>
+<p class="text-sm text-gray-700 mb-3">In his monthly Grapevine series on the Traditions, Bill devoted the May 1948 essay to Tradition Six. This essay, reprinted in <em>The Language of the Heart</em> (pp. 83&ndash;86), tells the full story of A.A.&rsquo;s painful experiences with outside enterprises. Bill writes about the hospitals that failed, the clubs that created division, and the grandiose projects that collapsed. He reflects on his own temptation at Towns Hospital with characteristic humility and honesty. The essay concludes with the principle that A.A. must forever keep the spiritual and the material separate&mdash;not because material things are bad, but because they are dangerous to a spiritual fellowship.</p>
+<p class="text-xs text-gray-500">&mdash; The Language of the Heart, pp. 83&ndash;86</p>
+</div>
+
+<!-- ===== 9. SELF-INVENTORY ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">9. Practical Application &mdash; Self-Inventory</h3>
+<p class="text-xs text-gray-500 mb-3">Reference: AA Grapevine Traditions Checklist (SMF-131)</p>
+
+<p class="text-sm text-gray-700 mb-4">Here are the self-inventory questions for Tradition Six from the AA Grapevine Traditions Checklist:</p>
+
+<div class="question-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-cyan-800 mb-3">Tradition Six Self-Inventory Questions</h4>
+<ul class="space-y-3 text-sm text-gray-700">
+<li><strong>1.</strong> Should my fellow group members and I go out and raise money to endow several AA beds in our local hospital?</li>
+<li><strong>2.</strong> Is it good for a group to lease a small building?</li>
+<li><strong>3.</strong> Are all the officers and members of our local club for AAs familiar with &ldquo;Guidelines on Clubs&rdquo; (which is available free from GSO)?</li>
+<li><strong>4.</strong> Should the secretary of our group serve on the mayor&rsquo;s advisory committee on alcoholism?</li>
+<li><strong>5.</strong> Some alcoholics will stay around AA only if we have a TV and card room. If this is what is required to carry the message to them, should we have these facilities?</li>
+</ul>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">Questions 1 and 4 are the ones I encounter most in practice. <strong>Should we raise money for hospital beds? Should our secretary sit on the mayor&rsquo;s committee?</strong> These questions force me to think carefully about where cooperation ends and affiliation begins. Question 2 is deceptively simple&mdash;leasing a building seems harmless until the group becomes the landlord and meeting time becomes budget time. Question 5 reminds me that even well-intentioned amenities can distract a group from its primary purpose. Tradition Six helps me navigate these situations with clarity: I can support worthy causes without entangling A.A.&rsquo;s name.</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="promise-card rounded-xl p-5">
+<h4 class="font-bold text-green-800 mb-2">When I Practice Tradition Six:</h4>
+<ul class="space-y-2 text-sm text-gray-700">
+<li>I keep A.A.&rsquo;s name separate from all outside enterprises</li>
+<li>I cooperate with treatment centers without endorsing them</li>
+<li>I support members&rsquo; outside ventures without involving the group</li>
+<li>I remember that A.A.&rsquo;s reputation is more valuable than any partnership</li>
+<li>I keep the spiritual separate from the material</li>
+</ul>
+</div>
+<div class="warning-card rounded-xl p-5">
+<h4 class="font-bold text-red-800 mb-2">When I Violate Tradition Six:</h4>
+<ul class="space-y-2 text-sm text-gray-700">
+<li>I let the group endorse a treatment center, therapist, or outside program</li>
+<li>I use A.A.&rsquo;s name to promote a personal business or cause</li>
+<li>I confuse cooperation with affiliation</li>
+<li>I let money, property, or prestige influence group decisions</li>
+<li>I forget that every endorsement is a hostage</li>
+</ul>
+</div>
+</div>
+
+<!-- ===== 10. SERVICE MATERIALS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">10. Official Service Materials</h3>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">P-35/F-8: &ldquo;Problems Other Than Alcohol&rdquo;</h4>
+<p class="text-sm text-gray-700">This pamphlet reinforces Tradition Six by clarifying that A.A. does not treat other problems and does not affiliate with organizations that do. Members with dual issues are welcome in A.A., but A.A. meetings address alcoholism only.</p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">P-16: &ldquo;The A.A. Group&rdquo;</h4>
+<p class="text-sm text-gray-700">This pamphlet includes guidance on the relationship between A.A. groups and outside entities&mdash;meeting spaces, clubs, and treatment facilities. It emphasizes that A.A. groups should maintain clear boundaries with all outside organizations.</p>
+</div>
+</div>
+
+<!-- ===== 11. P-43 ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">11. The Twelve Traditions Illustrated (P-43)</h3>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-2">The Step Six / Tradition Six Parallel</h4>
+<p class="text-sm text-gray-700 mb-3">The <em>Twelve Traditions Illustrated</em> pamphlet (P-43) draws a parallel between Step Six and Tradition Six. Step Six asks the individual to become &ldquo;entirely ready to have God remove all these defects of character.&rdquo; Tradition Six asks the group to become entirely ready to let go of the temptation to use A.A.&rsquo;s name for outside purposes.</p>
+<p class="text-sm text-gray-700">The parallel is striking: just as my character defects (greed, pride, desire for prestige) can destroy my personal recovery, a group&rsquo;s &ldquo;character defects&rdquo; (endorsements, financial entanglements, desire for institutional prestige) can destroy the group. <strong>Step Six is the personal inventory; Tradition Six is the group inventory.</strong></p>
+</div>
+
+<!-- ===== 12. TWELVE CONCEPTS CONNECTIONS ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">12. Connections to the Twelve Concepts</h3>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">Tradition Six connects to several of the Twelve Concepts for World Service:</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li><strong>Concept VI</strong> &mdash; The Conference recognizes that the chief initiative and active responsibility in most world service matters should be exercised by the trustee members of the Conference acting as the General Service Board. This Concept establishes clear lines of responsibility for managing A.A.&rsquo;s material affairs&mdash;keeping them separate from the spiritual mission, as Tradition Six requires.</li>
+<li><strong>Concept XI</strong> &mdash; The trustees should always have the best possible committees, executives, and staff. These service roles exist to manage A.A.&rsquo;s necessary business affairs professionally&mdash;so that A.A. groups can remain focused on the spiritual.</li>
+<li><strong>Concept XII (Warranty Five)</strong> &mdash; No Conference member shall ever be placed in a position of unqualified authority over other members. This warranty protects against the accumulation of power that Tradition Six warns about.</li>
+<li><strong>Concept XII (Warranty Six)</strong> &mdash; The General Service Conference shall never become the seat of perilous wealth or power. This is the direct institutional application of Tradition Six: A.A.&rsquo;s service structure must never accumulate the money, property, or prestige that could divert the Fellowship from its purpose.</li>
+</ul>
+</div>
+
+<!-- ===== 13. WISDOM PRINCIPLES ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">13. Wisdom Principles &mdash; Step Six and Tradition Six</h3>
+
+<p class="text-sm text-gray-700 mb-4">Tradition Six has a deep connection to Step Six. Both are about <em>letting go</em>&mdash;the individual letting go of character defects, the group letting go of material entanglements.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The Readiness Principle</h4>
+<p class="text-sm text-gray-700">Step Six asks me to become &ldquo;entirely ready&rdquo; to have my defects removed. Tradition Six asks my group to be &ldquo;entirely ready&rdquo; to let go of outside entanglements. <strong>Both require willingness before action.</strong> I cannot fix what I am not willing to release.</p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Defects of Character &mdash; Group Edition</h4>
+<p class="text-sm text-gray-700">My personal defects include greed, pride, and desire for prestige. A group&rsquo;s &ldquo;defects&rdquo; include the desire for money, property, and institutional prestige. <strong>Tradition Six is the group&rsquo;s Sixth Step&mdash;acknowledging these defects and becoming willing to have them removed.</strong></p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">The Spiritual vs. The Material</h4>
+<p class="text-sm text-gray-700">Step Six addresses the internal spiritual work of removing defects. Tradition Six addresses the external work of removing material entanglements. Together, they teach me that recovery requires letting go of everything that distracts me from my primary spiritual aim&mdash;whether inside me or outside me.</p>
+</div>
+<div class="bg-white rounded-xl border border-gray-200 p-5">
+<h4 class="font-semibold text-gray-800 mb-2">Bill&rsquo;s Personal Sixth Step</h4>
+<p class="text-sm text-gray-700">Bill W.&rsquo;s refusal of the Towns Hospital offer was his personal Sixth Step in action. He became willing to let go of financial security and professional prestige to protect A.A.&rsquo;s spiritual mission. <strong>The co-founder of A.A. practiced Step Six and Tradition Six simultaneously.</strong></p>
+</div>
+</div>
+
+<!-- ===== CONCLUSION ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">Conclusion and Personal Reflection</h3>
+
+<p class="text-sm text-gray-700 mb-3">Through this study, Tradition Six has taught me that <strong>A.A.&rsquo;s greatest protection is its independence.</strong> The Fellowship has survived nearly ninety years because it has refused to endorse, finance, or lend its name to anything outside its primary purpose. Every time A.A. was tempted to expand, to diversify, to &ldquo;do more&rdquo;&mdash;the results were the same: distraction, division, and the dilution of the spiritual message.</p>
+
+<p class="text-sm text-gray-700 mb-3">Bill W.&rsquo;s story at Towns Hospital is the personal embodiment of this Tradition. When the co-founder of A.A. was tempted by money and prestige, a small group of sober alcoholics saved the Fellowship by saying &ldquo;no.&rdquo; <strong>That &ldquo;no&rdquo; was one of the most important words ever spoken in A.A. history.</strong></p>
+
+<div class="action-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-blue-800 mb-2">My Personal Commitment</h4>
+<p class="text-sm text-gray-700">Next time someone in my group suggests endorsing an outside enterprise&mdash;a treatment center, a recovery app, a therapist&mdash;I will practice Tradition Six. I will say: <em>&ldquo;We can cooperate with them, but we cannot lend them our name. Our name is the only thing A.A. owns, and Tradition Six tells us to guard it carefully.&rdquo;</em></p>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Final Personal Understanding</h4>
+<p class="text-sm text-gray-700">Tradition Six has transformed how I see A.A.&rsquo;s relationship with the outside world. I used to think A.A. was missing opportunities by refusing to partner with treatment centers, endorse recovery programs, or build institutional alliances. Now I understand that those refusals are A.A.&rsquo;s greatest strength. <strong>Every endorsement is a hostage. Every affiliation is a chain. Every outside enterprise is a potential distraction from the one thing A.A. does better than any organization on earth: carry the message of recovery from one alcoholic to another.</strong> A.A. has no enemies because it has no alliances. It has no scandals because it has no business ventures. It has no political controversies because it has no political positions. <strong>Tradition Six keeps A.A. free. And freedom is the foundation of everything we do.</strong></p>
+</div>
+
+<!-- ===== STUDY ASSIGNMENTS ===== -->
+<h4 class="font-semibold text-gray-800 mb-2">My Study Assignments</h4>
+<ol class="space-y-2 text-sm text-gray-700 list-decimal list-inside mb-6">
+<li><strong>I studied/read:</strong> Pages 155&ndash;159 in <em>Twelve Steps and Twelve Traditions</em> (Tradition Six)</li>
+<li><strong>I studied/read:</strong> Big Book Foreword to First Edition (p. xiii); the A.A. Preamble (Grapevine, June 1947)</li>
+<li><strong>I studied/read:</strong> Appendix I (pp. 562&ndash;563) for the Short and Long Forms</li>
+<li><strong>I studied/read:</strong> <em>AA Comes of Age</em>, pp. 106&ndash;110 (outside enterprise temptations)</li>
+<li><strong>I studied/read:</strong> <em>Pass It On</em>, pp. 170&ndash;183 (Towns Hospital story)</li>
+<li><strong>I studied/read:</strong> <em>The Language of the Heart</em>, pp. 83&ndash;86 (Tradition Six essay, May 1948)</li>
+<li><strong>I studied/read:</strong> <em>As Bill Sees It</em> entries on endorsements, money, property, and prestige</li>
+<li><strong>I studied/read:</strong> <em>Daily Reflections</em>, June 30</li>
+<li><strong>I studied/read:</strong> AA Grapevine Traditions Checklist (SMF-131), Tradition Six questions</li>
+<li><strong>I will reflect:</strong> Take the self-inventory above and write honestly about where I confuse cooperation with endorsement</li>
+<li><strong>I will reflect:</strong> Consider how Bill W.&rsquo;s Towns Hospital temptation applies to situations I encounter today</li>
+</ol>
+
+<!-- ===== SOURCES ===== -->
+<div class="reading-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-3">Sources I Referenced in This Study</h4>
+<ul class="space-y-2 text-sm text-gray-700">
+<li><span class="ref-tag twelve-ref">12&amp;12</span> <em>Twelve Steps and Twelve Traditions</em> &mdash; Tradition Six (pp. 155&ndash;159), Step Six (pp. 63&ndash;69)</li>
+<li><span class="ref-tag bb-ref">BB</span> <em>Alcoholics Anonymous</em> (Big Book, 4th Ed.) &mdash; Foreword to First Edition (p. xiii); A.A. Preamble (adapted from Foreword, published Grapevine June 1947); Appendix I (pp. 562&ndash;563)</li>
+<li><em>AA Comes of Age</em> &mdash; pp. 106&ndash;110 (grandiose projects and outside enterprise failures); pp. 287&ndash;288 (sacrifice and common welfare)</li>
+<li><em>Pass It On</em> &mdash; pp. 170&ndash;183 (Charles B. Towns Hospital story)</li>
+<li><em>The Language of the Heart</em> &mdash; pp. 83&ndash;86 (Tradition Six essay, May 1948)</li>
+<li><em>As Bill Sees It</em> &mdash; Pages 40, 46, 97, 220 (material achievements, true ambition, self-respect through sacrifice, and partnership entries)</li>
+<li><em>Daily Reflections</em> &mdash; June 30</li>
+<li>AA Grapevine Traditions Checklist (SMF-131) &mdash; Tradition Six questions</li>
+<li>P-35/F-8 &mdash; &ldquo;Problems Other Than Alcohol&rdquo;</li>
+<li>P-16 &mdash; &ldquo;The A.A. Group&rdquo;</li>
+<li>P-43 &mdash; &ldquo;The Twelve Traditions Illustrated&rdquo;</li>
 </ul>
 </div>
 
 <div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
-<p class="text-sm text-gray-700">Content coming soon &mdash; study the 12&amp;12 chapter on this Tradition.</p>
+<h4 class="font-bold text-amber-800 mb-2">Notes on Sources</h4>
+<p class="text-sm text-gray-700 mb-2"><strong>Charles B. Towns Hospital:</strong> Located at 293 Central Park West in New York City. Bill W. was treated there in 1933 and 1934. His spiritual experience occurred during his final stay in December 1934 (approximately December 11&ndash;14). Towns&rsquo;s offer to Bill came in 1937.</p>
+<p class="text-sm text-gray-700 mb-2"><strong>12&amp;12 page range:</strong> In the standard printing most commonly used in study groups, the Tradition Six chapter runs from p. 155 to p. 159. In newer AA.org printings, a one-page offset places it at pp. 156&ndash;160. The Towns Hospital job offer story is told most fully in <em>Pass It On</em> (pp. 170&ndash;183) and <em>AA Comes of Age</em> (pp. 106&ndash;110), and also appears in the 12&amp;12&rsquo;s Tradition Eight chapter (nonprofessionalism, pp. 166&ndash;171).</p>
+<p class="text-sm text-gray-700 mb-2"><strong>A.A. Preamble:</strong> The Preamble read at meetings (&ldquo;A.A. is not allied with any sect, denomination, politics, organization or institution&hellip;&rdquo;) was first published in the <em>AA Grapevine</em> in June 1947. It was adapted from the Foreword to the First Edition of the Big Book but expanded significantly after the Traditions were adopted.</p>
+<p class="text-sm text-gray-700 mb-2"><strong>&ldquo;An A.A. group can bind itself to no one&rdquo;:</strong> This phrase from the Long Form (Appendix I, pp. 562&ndash;563) is the strongest statement of A.A.&rsquo;s independence in all of its literature.</p>
+<p class="text-sm text-gray-700"><strong>Cooperation vs. affiliation:</strong> A.A. cooperates with hospitals, courts, treatment centers, and other agencies, but it never affiliates with them. Cooperation means working alongside; affiliation means being connected institutionally.</p>
 </div>
 
-<div class="promise-card rounded-xl p-5 mb-6">
-<h4 class="font-bold text-green-800 mb-3">Spiritual Principle: Solidarity</h4>
-<p class="text-sm text-gray-700">Tradition Six protects A.A. from the distractions of money, property, and prestige by ensuring that no group endorses, finances, or lends the A.A. name to any outside enterprise. Our solidarity comes from singleness of purpose, not from institutional affiliations.</p>
-</div>
 </section>
 
 
@@ -7785,7 +8756,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ── Section Navigation ───────────────────── */
     function showSection(targetId) {
-        if (!document.getElementById('sec-' + targetId)) targetId = 'welcome';
+        if (!document.getElementById('sec-' + targetId)) targetId = 'main';
 
         sections.forEach(function(s) { s.classList.remove('active'); });
         navItems.forEach(function(n) { n.classList.remove('active'); });
@@ -7810,6 +8781,7 @@ document.addEventListener('DOMContentLoaded', () => {
         history.replaceState(null, '', '#' + targetId);
         if (window.innerWidth < 768) closeSidebar();
     }
+    window.showSection = showSection;
 
     navItems.forEach(function(btn) {
         btn.addEventListener('click', function() { showSection(btn.dataset.target); });
@@ -7831,7 +8803,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     /* ── Init ─────────────────────────────────── */
     var hash = location.hash.slice(1);
-    showSection(hash || 'welcome');
+    showSection(hash || 'main');
 });
 </script>
 
