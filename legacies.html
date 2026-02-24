@@ -61,6 +61,7 @@
             .promise-card, .question-card, .science-card,
             .bg-white.rounded-xl, .bg-aa-50.rounded-xl,
             .bg-amber-50.rounded-xl, .bg-purple-50.rounded-xl,
+            .bg-gray-50.rounded-xl,
             blockquote, table, thead, tr, img {
                 break-inside: avoid;
                 page-break-inside: avoid;
@@ -70,9 +71,18 @@
             .ref-tag, .sci-tag, .bb-ref, .twelve-ref,
             .prayer-card, .warning-card, .promise-card, .science-card,
             .action-card, .reading-card, .question-card,
-            .bg-amber-50, .border-amber-200, .border-amber-400, .text-amber-800,
-            .bg-purple-50, .border-purple-200, .text-purple-800,
-            .bg-aa-50, .border-aa-200, .text-aa-800,
+            .bg-amber-50, .border-amber-200, .border-amber-400, .text-amber-800, .text-amber-600, .text-amber-700,
+            .bg-purple-50, .border-purple-200, .border-purple-400, .text-purple-800, .text-purple-600, .text-purple-900,
+            .bg-purple-300, .bg-purple-400, .bg-purple-500, .bg-purple-600, .bg-purple-700, .bg-purple-800,
+            .bg-aa-50, .border-aa-200, .border-aa-400, .text-aa-800, .text-aa-600,
+            .bg-blue-50, .border-blue-200, .border-blue-400, .text-blue-600, .text-blue-800,
+            .bg-green-50, .border-green-200, .border-green-400, .text-green-700, .text-green-800,
+            .bg-red-50, .border-red-200, .border-red-400, .text-red-700, .text-red-800,
+            .bg-orange-50, .text-orange-800,
+            .bg-yellow-50, .text-yellow-800,
+            .text-cyan-800, .text-teal-800,
+            .bg-gray-50, .border-gray-200, .border-gray-300, .border-gray-400,
+            .from-amber-50, .to-amber-100,
             thead tr, .checklist li::before {
                 -webkit-print-color-adjust: exact;
                 print-color-adjust: exact;
@@ -94,6 +104,21 @@
 
             /* Clean link appearance */
             a { color: inherit !important; text-decoration: none !important; }
+
+            /* CTA buttons: strip background, show URL */
+            .print-link-btn {
+                background: none !important;
+                color: #1e3a5f !important;
+                padding: 0 !important;
+                box-shadow: none !important;
+                font-size: 0.875rem !important;
+            }
+            .print-link-btn svg { display: none !important; }
+            .print-link-btn::after {
+                content: " (aa.org/self-assessment)";
+                font-weight: 400;
+                font-style: italic;
+            }
 
             /* Ensure headings stay with following content */
             h1, h2, h3, h4 { break-after: avoid; page-break-after: avoid; }
@@ -189,6 +214,32 @@
         html.dark .border-aa-400 { border-color: #3b82f6; }
         html.dark .border-amber-400 { border-color: #f59e0b; }
         html.dark .border-purple-400 { border-color: #a78bfa; }
+        html.dark .border-blue-400 { border-color: #60a5fa; }
+        html.dark .border-green-400 { border-color: #4ade80; }
+        html.dark .border-red-400 { border-color: #f87171; }
+        html.dark .border-gray-300 { border-color: #334155; }
+        html.dark .bg-blue-50 { background: rgba(59,130,246,0.1); }
+        html.dark .bg-yellow-50 { background: rgba(234,179,8,0.1); }
+        html.dark .bg-gray-100 { background: rgba(255,255,255,0.05); }
+        html.dark .bg-purple-300 { background: rgba(168,85,247,0.35); }
+        html.dark .bg-purple-400 { background: rgba(168,85,247,0.4); }
+        html.dark .bg-purple-500 { background: rgba(168,85,247,0.45); }
+        html.dark .bg-purple-600 { background: rgba(147,51,234,0.5); }
+        html.dark .bg-purple-700 { background: rgba(126,34,206,0.55); }
+        html.dark .bg-purple-800 { background: rgba(107,33,168,0.6); }
+        html.dark .text-blue-600 { color: #60a5fa; }
+        html.dark .text-blue-800 { color: #93c5fd; }
+        html.dark .text-purple-600 { color: #c4b5fd; }
+        html.dark .text-purple-900 { color: #e9d5ff; }
+        html.dark .text-amber-600 { color: #fbbf24; }
+        html.dark .text-amber-700 { color: #fbbf24; }
+        html.dark .text-red-700 { color: #fca5a5; }
+        html.dark .text-green-700 { color: #86efac; }
+        html.dark .text-orange-800 { color: #fdba74; }
+        html.dark .text-yellow-800 { color: #fde047; }
+        html.dark .text-aa-600 { color: #60a5fa; }
+        html.dark .from-amber-50 { --tw-gradient-from: rgba(245,158,11,0.12); }
+        html.dark .to-amber-100 { --tw-gradient-to: rgba(245,158,11,0.08); }
 
         /* ── Print: hide new UI elements ─────────── */
         @media print {
@@ -240,7 +291,7 @@
 
     <!-- === 12 STEPS === -->
     <div class="mb-2">
-        <button class="sidebar-group-toggle w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-aa-800 bg-aa-50 hover:bg-aa-100 transition-colors collapsed" data-group="steps-nav">
+        <button class="sidebar-group-toggle w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-aa-800 bg-aa-50 hover:bg-aa-100 transition-colors collapsed" data-group="steps-nav" aria-expanded="false">
             <span>12 Steps</span>
             <svg class="w-4 h-4 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
@@ -288,7 +339,7 @@
     </div>
     <!-- === 12 TRADITIONS === -->
     <div class="mb-2">
-        <button class="sidebar-group-toggle w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-50 hover:bg-amber-100 transition-colors" data-group="traditions-nav">
+        <button class="sidebar-group-toggle w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-amber-800 bg-amber-50 hover:bg-amber-100 transition-colors collapsed" data-group="traditions-nav" aria-expanded="false">
             <span>12 Traditions</span>
             <svg class="w-4 h-4 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
@@ -325,7 +376,7 @@
     </div>
     <!-- === 12 CONCEPTS === -->
     <div class="mb-2">
-        <button class="sidebar-group-toggle w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-purple-800 bg-purple-50 hover:bg-purple-100 transition-colors" data-group="concepts-nav">
+        <button class="sidebar-group-toggle w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider text-purple-800 bg-purple-50 hover:bg-purple-100 transition-colors collapsed" data-group="concepts-nav" aria-expanded="false">
             <span>12 Concepts</span>
             <svg class="w-4 h-4 transition-transform rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
         </button>
@@ -380,7 +431,44 @@
 </div>
 
 <h3 class="text-xl font-bold text-gray-800 mb-4">The Three Legacies</h3>
-<p class="text-sm text-gray-700 mb-4">Bill W. described Recovery, Unity, and Service as A.A.&rsquo;s Three Legacies&mdash;the inheritance that every generation of members passes on to the next. Each legacy is expressed through twelve principles:</p>
+
+<blockquote class="border-l-4 border-gray-400 pl-4 text-xl italic text-gray-700 mb-6">"The unity of Alcoholics Anonymous is the most cherished quality our Society has. Our lives, the lives of all to come, depend squarely upon it."<br><span class="text-sm not-italic text-gray-500">&mdash; 12&amp;12, p. 129</span></blockquote>
+
+<div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">When I first came into the rooms, I heard people talk about "the program" as though it were just the Twelve Steps. Over time, I learned that the Steps are only one-third of what A.A. has to offer. Bill W. described three distinct inheritances that the Fellowship passes from one generation to the next: <strong>Recovery</strong>, <strong>Unity</strong>, and <strong>Service</strong>. He called these the Three Legacies of Alcoholics Anonymous.</p>
+<p class="text-sm text-gray-700 mb-3">A legacy is something of value that is passed down&mdash;an inheritance that one generation entrusts to the next. In A.A., the Three Legacies are the sum total of everything our Fellowship has learned about how to help alcoholics recover, how to hold the Fellowship together, and how to ensure that the message reaches those who still suffer. Each legacy is expressed through twelve principles:</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li><strong>The First Legacy &mdash; Recovery:</strong> Carried in the <strong>Twelve Steps</strong>, this is the personal program by which each of us finds sobriety and a new way of life.</li>
+<li><strong>The Second Legacy &mdash; Unity:</strong> Carried in the <strong>Twelve Traditions</strong>, these are the principles that hold our groups together and protect the Fellowship from the forces that have destroyed other movements.</li>
+<li><strong>The Third Legacy &mdash; Service:</strong> Carried in the <strong>Twelve Concepts for World Service</strong>, these are the guidelines that ensure A.A.&rsquo;s message can reach every alcoholic who wants help, anywhere in the world.</li>
+</ul>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">For a long time, I treated my recovery like it was a solo project&mdash;just me and the Steps. I did not understand why old-timers talked so much about the Traditions or got excited about service structure. What did any of that have to do with staying sober? The answer, I eventually learned, is <strong>everything</strong>. The Steps taught me how to live. The Traditions taught me how to belong. The Concepts taught me how to give back. Without all three, my recovery is incomplete. I am like a person standing on one leg&mdash;upright for now, but one strong wind away from falling.</p>
+</div>
+
+<!-- Historical Origin -->
+<h4 class="font-semibold text-gray-800 mb-2">The Origin of the Three Legacies</h4>
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">The Three Legacies concept was formalized at A.A.&rsquo;s Twentieth Anniversary International Convention in St. Louis, Missouri, in July 1955. At this historic gathering, Bill W. symbolically entrusted the Fellowship with full responsibility for its own future. He described how A.A. had developed three distinct bodies of principle during its first twenty years&mdash;one for personal recovery, one for group unity, and one for worldwide service&mdash;and declared that these legacies now belonged to the membership as a whole.</p>
+<p class="text-sm text-gray-700 mb-3">Bill documented this history in <em>AA Comes of Age</em> (1957), which is structured around the three legacies. The first part covers Recovery (how the program of the Twelve Steps developed), the second covers Unity (how the Twelve Traditions emerged from years of group experience), and the third covers Service (how the service structure was built to carry the message worldwide).</p>
+<p class="text-sm text-gray-700">For me, the fact that Bill organized A.A.&rsquo;s entire history around these three legacies tells me something important: <strong>recovery alone is not enough</strong>. If all we had were the Steps, individual alcoholics might get sober, but there would be no Fellowship to sustain them and no structure to carry the message forward. The Three Legacies are the complete package&mdash;everything A.A. needs to survive and fulfill its purpose.</p>
+</div>
+
+<!-- The A.A. Triangle -->
+<h4 class="font-semibold text-gray-800 mb-2">The A.A. Triangle &mdash; A Symbol of the Three Legacies</h4>
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">The circle and triangle has long been recognized as a symbol associated with A.A. The three sides of the triangle represent the Three Legacies: <strong>Recovery</strong>, <strong>Unity</strong>, and <strong>Service</strong>. The circle surrounding the triangle represents the whole world of A.A. Together, they express a simple but profound truth: the Fellowship is held together by three equal, interdependent principles&mdash;none more important than the others.</p>
+<div class="promise-card rounded-xl p-5 mt-4">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">I think of the triangle as a visual reminder that my recovery rests on all three sides. If I neglect any one of them, the structure becomes unstable. I cannot stay sober through the Steps alone if my group is falling apart. I cannot maintain group unity if no one is doing the service work that keeps the doors open. And service without a personal program of recovery becomes hollow busyness. The Three Legacies are interdependent&mdash;like a three-legged stool, remove one leg and the whole thing collapses.</p>
+</div>
+</div>
+
+<h4 class="font-semibold text-gray-800 mb-3">Explore Each Legacy</h4>
+<p class="text-sm text-gray-700 mb-4">Click any card below to jump directly to that legacy, or use the sidebar to navigate to individual Steps, Traditions, or Concepts:</p>
 
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
 
@@ -429,6 +517,191 @@
 <p class="text-xs font-semibold text-purple-600 mt-3">Click to explore &rarr;</p>
 </div>
 
+</div>
+
+<!-- ===== LEGACY I: RECOVERY ===== -->
+<h3 class="text-xl font-bold text-aa-800 mb-4">Legacy I &mdash; Recovery: The Twelve Steps</h3>
+
+<blockquote class="border-l-4 border-blue-400 pl-4 text-xl italic text-gray-700 mb-6">"To show other alcoholics precisely how we have recovered is the main purpose of this book."<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, Foreword to First Edition, p. xiii</span></blockquote>
+
+<div class="bg-aa-50 border border-aa-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-aa-800 mb-3">What Is the First Legacy?</h4>
+<p class="text-sm text-gray-700 mb-3">The First Legacy is <strong>Recovery</strong>&mdash;the personal program of the Twelve Steps. This is where everything begins. Before there could be a Fellowship, before there could be a service structure, there had to be a solution that actually worked. The Twelve Steps are that solution. They are a set of spiritual principles that, when practiced as a way of life, produce a profound transformation&mdash;not just the removal of alcohol, but a fundamental change in how I think, feel, and relate to the world around me.</p>
+<p class="text-sm text-gray-700">The Big Book states it plainly: <em>&ldquo;Rarely have we seen a person fail who has thoroughly followed our path.&rdquo;</em> <span class="ref-tag bb-ref">BB p.58</span> That word <strong>&ldquo;thoroughly&rdquo;</strong> matters. Half-measures, the Big Book warns, avail us nothing. Recovery through the Steps requires rigorous honesty, willingness, and action.</p>
+</div>
+
+<h4 class="font-semibold text-gray-800 mb-2">How the Steps Developed</h4>
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">The Twelve Steps did not arrive fully formed. They grew out of the experiences of the earliest members. Bill W. described their origins in <em>AA Comes of Age</em>: the Oxford Group principles that Bill and Dr. Bob initially practiced, the influence of Dr. William Silkworth&rsquo;s medical understanding of alcoholism as an obsession of the mind coupled with an allergy of the body, and William James&rsquo;s <em>Varieties of Religious Experience</em>, which showed Bill that spiritual experiences could take many forms.</p>
+<p class="text-sm text-gray-700 mb-3">In late 1938, as Bill sat down to write what would become the Big Book, he expanded the original six Oxford Group principles into the Twelve Steps we know today. He later wrote that the number twelve was somewhat arbitrary&mdash;but the principles themselves were distilled from the actual experience of the first hundred members who had found sobriety.</p>
+
+<blockquote class="border-l-4 border-blue-400 pl-4 text-xl italic text-gray-700 mb-4">"A.A.&rsquo;s Twelve Steps are a group of principles, spiritual in their nature, which, if practiced as a way of life, can expel the obsession to drink and enable the sufferer to become happily and usefully whole."<br><span class="text-sm not-italic text-gray-500">&mdash; 12&amp;12, p. 15</span></blockquote>
+
+<p class="text-sm text-gray-700">This passage from the 12&amp;12 tells me three critical things about Recovery. First, the Steps are <strong>principles</strong>&mdash;not rules, not commandments, but guiding truths. Second, they are <strong>spiritual in their nature</strong>&mdash;they address the inner condition, not just the outward behavior. Third, they promise something remarkable: not just sobriety, but wholeness. The alcoholic who practices these principles can become &ldquo;happily and usefully whole.&rdquo; That is the promise of Recovery.</p>
+</div>
+
+<h4 class="font-semibold text-gray-800 mb-2">The Structure of Recovery</h4>
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">As I study the Steps, I see a clear structure&mdash;a progression that takes me from desperation to usefulness:</p>
+<ul class="space-y-2 text-sm text-gray-700 mb-4">
+<li><strong>Steps 1&ndash;3 (The Problem and the Decision):</strong> I admit I am powerless, I come to believe that a Power greater than myself can restore me, and I make a decision to turn my will and my life over to the care of God as I understand Him. These Steps establish the foundation: surrender, hope, and willingness.</li>
+<li><strong>Steps 4&ndash;7 (The Housecleaning):</strong> I take a fearless moral inventory, share it with another person, become entirely ready to have my defects removed, and humbly ask God to remove my shortcomings. These Steps address the root causes of my drinking&mdash;the resentments, fears, and selfishness that drove me to the bottle.</li>
+<li><strong>Steps 8&ndash;9 (The Amends):</strong> I make a list of all persons I have harmed, and I make direct amends wherever possible. These Steps repair the wreckage of my past and free me from the guilt and shame that once fueled my drinking.</li>
+<li><strong>Steps 10&ndash;12 (The Maintenance):</strong> I continue to take personal inventory, I seek through prayer and meditation to improve my conscious contact with God, and I carry the message to other alcoholics. These Steps ensure that my recovery is not a one-time event but a daily way of living.</li>
+</ul>
+
+<blockquote class="border-l-4 border-blue-400 pl-4 text-xl italic text-gray-700 mb-4">"There is a solution. Almost none of us liked the self-searching, the leveling of our pride, the confession of shortcomings which the process requires&hellip; But we saw that it really worked in others, and we had come to believe in the hopelessness and futility of life as we had been living it."<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, p. 25</span></blockquote>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700 mb-3">Recovery was the first legacy I encountered, and for a long time it was the only one I cared about. I was desperate to stop drinking, and the Steps gave me a way to do it. But as I worked through them, I began to see that Recovery is about far more than not drinking. The Steps changed my entire relationship with myself, with other people, and with a Power greater than myself.</p>
+<p class="text-sm text-gray-700">What strikes me most about the First Legacy is the word <strong>&ldquo;recovered.&rdquo;</strong> The Big Book does not say &ldquo;recovering&rdquo;&mdash;it says the first hundred members <em>&ldquo;have recovered.&rdquo;</em> <span class="ref-tag bb-ref">BB p. xiii</span> That past tense is deliberate. It does not mean I am cured or that I can drink safely. It means I have undergone a spiritual experience sufficient to arrest my disease&mdash;and that this experience is available to anyone willing to do the work. Recovery is not something I wait for; it is something I do.</p>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<h4 class="font-semibold text-gray-800 mb-2">Why Recovery Alone Is Not Enough</h4>
+<p class="text-sm text-gray-700 mb-3">If the Steps were all we needed, there would be no reason for the Traditions or the Concepts. But A.A.&rsquo;s history teaches me that individual recovery, powerful as it is, cannot survive in isolation. The Big Book itself points me beyond my personal program:</p>
+
+<blockquote class="border-l-4 border-blue-400 pl-4 text-xl italic text-gray-700 mb-4">"Practical experience shows that nothing will so much insure immunity from drinking as intensive work with other alcoholics. It works when other activities fail."<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, p. 89</span></blockquote>
+
+<p class="text-sm text-gray-700">Step Twelve sends me outward&mdash;to carry the message. But carrying the message requires a group to carry it through, and a structure to ensure it reaches those who need it most. That is why the First Legacy inevitably leads to the Second and Third. Recovery is the seed; Unity is the soil; Service is the hand that plants it.</p>
+</div>
+
+<!-- ===== LEGACY II: UNITY ===== -->
+<h3 class="text-xl font-bold text-amber-800 mb-4">Legacy II &mdash; Unity: The Twelve Traditions</h3>
+
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-6">"The unity of Alcoholics Anonymous is the most cherished quality our Society has. Our lives, the lives of all to come, depend squarely upon it. We stay whole, or A.A. dies."<br><span class="text-sm not-italic text-gray-500">&mdash; 12&amp;12, p. 129</span></blockquote>
+
+<div class="bg-amber-50 border border-amber-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-amber-800 mb-3">What Is the Second Legacy?</h4>
+<p class="text-sm text-gray-700 mb-3">The Second Legacy is <strong>Unity</strong>&mdash;the Twelve Traditions that govern how A.A. groups relate to each other, to the outside world, and to the individual member. If the Steps are the program by which I recover, the Traditions are the principles by which the Fellowship survives. They answer a question that haunted A.A.&rsquo;s early members: <em>&ldquo;How can a group of self-centered, rebellious alcoholics hold together long enough to help anyone?&rdquo;</em></p>
+<p class="text-sm text-gray-700">The answer, I have learned, is not through rules or authority but through shared experience, spiritual principles, and the hard-won wisdom of groups that failed so that others could succeed.</p>
+</div>
+
+<h4 class="font-semibold text-gray-800 mb-2">How the Traditions Developed</h4>
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">By the early 1940s, A.A. was growing rapidly&mdash;but so were the problems. Groups were splitting over money, property, prestige, and personality. Some groups tried to establish membership requirements beyond a desire to stop drinking. Others endorsed outside enterprises, accepted large donations, or allowed individual members to use the A.A. name for personal gain. A few groups even expelled members they disagreed with.</p>
+<p class="text-sm text-gray-700 mb-3">Bill W. and the early members recognized that A.A. could destroy itself from within if it did not learn from these failures. Bill studied the history of other movements&mdash;particularly the <strong>Washingtonian movement</strong> of the 1840s, a temperance society of reformed drunkards that attracted over 600,000 members before collapsing due to political involvement, public controversy, and the loss of its original purpose.</p>
+
+<blockquote class="border-l-4 border-amber-400 pl-4 text-xl italic text-gray-700 mb-4">"The moment they read the Traditions, most A.A. members say, &lsquo;Well, that&rsquo;s nothing new. We already do these things.&rsquo; In a sense they are right. Almost since the beginning, A.A. groups have practiced these principles&mdash;usually without being conscious that they were practicing them."<br><span class="text-sm not-italic text-gray-500">&mdash; AA Comes of Age, p. 81</span></blockquote>
+
+<p class="text-sm text-gray-700 mb-3">In April 1946, Bill published the Twelve Traditions as &ldquo;Twelve Suggested Points of A.A. Tradition&rdquo; in the AA Grapevine. Over the next several years, he wrote monthly essays expanding on each Tradition. They were formally adopted by the Fellowship at the <strong>First International Convention in Cleveland, Ohio, July 28&ndash;30, 1950</strong>. The <em>Twelve Steps and Twelve Traditions</em> book, published in April 1953, provided the definitive commentary on each Tradition that we study today.</p>
+</div>
+
+<h4 class="font-semibold text-gray-800 mb-2">What the Traditions Protect</h4>
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">As I study the Traditions, I see that they address every major threat that nearly destroyed A.A. in its early years:</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li><strong>Traditions 1&ndash;3 (Unity and Membership):</strong> Common welfare comes first; our only authority is a loving God expressed in the group conscience; the only requirement for membership is a desire to stop drinking. These protect A.A. from exclusion, power-seeking, and division.</li>
+<li><strong>Traditions 4&ndash;6 (Autonomy and Purpose):</strong> Each group is autonomous; each group has but one primary purpose; A.A. never endorses outside enterprises. These protect A.A. from entanglement, distraction, and the corrupting influence of money and prestige.</li>
+<li><strong>Traditions 7&ndash;9 (Self-Support and Service):</strong> Every group is self-supporting; A.A. remains non-professional; A.A. has no formal organization. These protect A.A. from dependence, professionalization, and the consolidation of power.</li>
+<li><strong>Traditions 10&ndash;12 (Public Relations and Anonymity):</strong> A.A. has no opinion on outside issues; our public relations policy is attraction rather than promotion; anonymity is the spiritual foundation of all our Traditions. These protect A.A. from controversy, publicity-seeking, and the ego that has destroyed countless movements before us.</li>
+</ul>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700 mb-3">The Second Legacy changed how I understand my place in A.A. The Steps are about <em>my</em> recovery&mdash;they are personal, inward, between me and my Higher Power. The Traditions are about <em>our</em> survival&mdash;they are communal, outward, about how I live with others in the Fellowship. When I practice the Traditions, I am not just following organizational guidelines; I am practicing the same spiritual principles the Steps teach me&mdash;humility, selflessness, trust in God&mdash;but now in the context of the group.</p>
+<p class="text-sm text-gray-700">I often tell my sponsees that the Steps protect me from alcohol, but the Traditions protect me from <strong>myself</strong>. My ego, my desire to control, my need to be right&mdash;these are the character defects that can tear a group apart just as surely as they tore my life apart. The Traditions give me a framework for practicing the principles of recovery in my relationships with other alcoholics. Unity is not something separate from Recovery; it is Recovery applied to community.</p>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<h4 class="font-semibold text-gray-800 mb-2">The Washingtonian Warning</h4>
+<p class="text-sm text-gray-700 mb-3">No study of the Second Legacy is complete without understanding why Unity matters by looking at what happens without it. The <strong>Washingtonian movement</strong> of the 1840s was a fellowship of reformed drunkards that bore a striking resemblance to early A.A.&mdash;mutual support, shared stories, the power of one alcoholic helping another. At its peak, the Washingtonians claimed over 600,000 members.</p>
+<p class="text-sm text-gray-700 mb-3">But they had no Traditions. They endorsed political causes, took sides in the slavery debate, accepted outside contributions, allowed members to use the movement&rsquo;s name for personal fame, and lost sight of their primary purpose. Within a decade, the movement had collapsed entirely.</p>
+<p class="text-sm text-gray-700">Bill W. studied this history carefully. In <em>AA Comes of Age</em>, he made clear that the Traditions were written, in part, to ensure that A.A. would not repeat the Washingtonians&rsquo; fate. Every Tradition addresses a specific way in which a fellowship of alcoholics can destroy itself. The Second Legacy is a guardrail built from the wreckage of those who came before us.</p>
+</div>
+
+<!-- ===== LEGACY III: SERVICE ===== -->
+<h3 class="text-xl font-bold text-purple-800 mb-4">Legacy III &mdash; Service: The Twelve Concepts for World Service</h3>
+
+<blockquote class="border-l-4 border-purple-400 pl-4 text-xl italic text-gray-700 mb-6">"Practical experience shows that nothing will so much insure immunity from drinking as intensive work with other alcoholics. It works when other activities fail."<br><span class="text-sm not-italic text-gray-500">&mdash; Big Book, p. 89</span></blockquote>
+
+<div class="bg-purple-50 border border-purple-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-purple-800 mb-3">What Is the Third Legacy?</h4>
+<p class="text-sm text-gray-700 mb-3">The Third Legacy is <strong>Service</strong>&mdash;the Twelve Concepts for World Service that describe how A.A.&rsquo;s service structure operates, from the group conscience to the General Service Conference. If the Steps show me how to recover and the Traditions show me how to belong, the Concepts show me how to <strong>give back</strong>&mdash;how to ensure that the message of recovery reaches every alcoholic who wants help, anywhere in the world.</p>
+<p class="text-sm text-gray-700">Service in A.A. is not optional extra credit. It is the lifeblood of the program. The Big Book makes clear that carrying the message is essential to maintaining my own sobriety. Step Twelve does not say &ldquo;Having had a spiritual awakening, we rested on our laurels.&rdquo; It says we <em>&ldquo;tried to carry this message to alcoholics.&rdquo;</em> <span class="ref-tag bb-ref">BB p.60</span> The Third Legacy provides the structure through which that message is carried.</p>
+</div>
+
+<h4 class="font-semibold text-gray-800 mb-2">How the Concepts Developed</h4>
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">The Twelve Concepts for World Service were the last major body of principle that Bill W. developed. He wrote them between 1960 and 1962, drawing on over two decades of experience building and refining A.A.&rsquo;s service structure. The Concepts were presented to the General Service Conference in 1962 and adopted by the Conference that same year.</p>
+<p class="text-sm text-gray-700 mb-3">Bill recognized that A.A. needed more than the Steps and Traditions. The Steps addressed the individual; the Traditions addressed the group. But who would handle the practical business of A.A. as a whole&mdash;publishing literature, managing finances, communicating with the public, supporting groups worldwide? Someone had to do this work, and it had to be done in a way that was consistent with A.A.&rsquo;s spiritual principles.</p>
+<p class="text-sm text-gray-700">The Concepts answer these questions by establishing clear principles of authority, delegation, responsibility, and accountability. They describe an &ldquo;upside-down&rdquo; service structure in which authority flows <strong>upward</strong> from the groups, not downward from leadership. The ultimate authority for A.A. world services resides in the collective conscience of the Fellowship as a whole.</p>
+</div>
+
+<h4 class="font-semibold text-gray-800 mb-2">What the Concepts Address</h4>
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">The Twelve Concepts cover the principles that govern how A.A.&rsquo;s service structure functions:</p>
+<ul class="space-y-2 text-sm text-gray-700 mb-4">
+<li><strong>Concepts 1&ndash;3 (Authority and Delegation):</strong> Final authority rests with the Fellowship; the General Service Conference acts as the voice and conscience of A.A.; leaders at all levels have the right of decision within their delegated responsibility. These ensure that power always flows from the groups upward.</li>
+<li><strong>Concepts 4&ndash;6 (Participation and Responsibility):</strong> Every member has the right to participate in the process; minority voices must be heard; the Conference recognizes that the responsibility for world services must be matched with corresponding authority. These protect against tyranny of the majority and ensure that every voice counts.</li>
+<li><strong>Concepts 7&ndash;9 (Structure and Leadership):</strong> The Charter defines the Conference&rsquo;s relationship with A.A.; trustees serve as custodians rather than governors; good personal leadership at all levels is essential. These prevent the consolidation of power and ensure servant leadership.</li>
+<li><strong>Concepts 10&ndash;12 (Operations and Safeguards):</strong> Service responsibility is carefully matched with clear authority; committees, staff, and boards each have distinct roles; the General Warranties of Article XII provide the ultimate safeguards against wealth, power, and prestige. These ensure that A.A.&rsquo;s service structure never becomes an end in itself.</li>
+</ul>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700 mb-3">I will be honest: the Third Legacy was the last one I came to understand, and for a long time I resisted it. The Concepts seemed dry and organizational&mdash;meeting minutes, committee structures, voting procedures. What did any of that have to do with staying sober? Everything, it turns out.</p>
+<p class="text-sm text-gray-700 mb-3">Service is where the rubber meets the road. It is one thing to work the Steps and feel the spiritual awakening. It is another to show up early and make the coffee, to serve as a Webmaster, to answer the sponsee call at two in the morning. Service takes my recovery out of my head and puts it into my hands. It makes it <strong>real</strong>.</p>
+<p class="text-sm text-gray-700">And the Concepts? They are the reason the hand of A.A. is there when a suffering alcoholic reaches out&mdash;anywhere in the world, in any language, at any hour. Someone has to keep the lights on, publish the books, staff the offices, organize the conferences. The Concepts ensure that this work gets done responsibly, accountably, and in a way that reflects the spiritual principles of the Fellowship. Without the Third Legacy, the message dies with the messenger.</p>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<h4 class="font-semibold text-gray-800 mb-2">Service Beyond the Group</h4>
+<p class="text-sm text-gray-700 mb-3">Service in A.A. operates at every level, from the most personal to the most global:</p>
+<ul class="space-y-2 text-sm text-gray-700">
+<li><strong>Individual Service:</strong> Answering the phone when a newcomer calls, giving someone a ride to a meeting, taking someone through the Steps as a sponsor. The Big Book is clear: <em>&ldquo;Helping others is the foundation stone of your recovery. A kindly act once in a while isn&rsquo;t enough. You have to act the Good Samaritan every day, if need be.&rdquo;</em> <span class="ref-tag bb-ref">BB p.97</span></li>
+<li><strong>Group Service:</strong> Making the coffee, chairing a meeting, serving as treasurer or secretary, setting up chairs, greeting newcomers at the door. These are the acts that keep the group alive.</li>
+<li><strong>District and Area Service:</strong> Serving as GSR (General Service Representative) or DCM (District Committee Member), attending assemblies, participating in the democratic process that links individual groups to A.A. as a whole.</li>
+<li><strong>World Service:</strong> The General Service Conference, the General Service Board, A.A. World Services, and the Grapevine. These bodies carry out the collective will of the Fellowship&mdash;publishing literature, supporting groups worldwide, and ensuring that the message reaches those who still suffer.</li>
+</ul>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700">My sponsor once told me, <strong>&ldquo;If you want to stay sober, work the Steps. If you want to stay happy, do service.&rdquo;</strong> I have found this to be true in my own experience. Service gets me out of myself. It reminds me that this program is not about <em>me</em>&mdash;it is about the next person who walks through the door, desperate and hopeless, the way I once was. When I serve, I am honoring the debt I owe to every person who was there for me when I had nothing to offer in return. The Third Legacy transforms gratitude into action.</p>
+</div>
+
+<!-- ===== HOW THE THREE LEGACIES CONNECT ===== -->
+<h3 class="text-xl font-bold text-gray-800 mb-4">How the Three Legacies Connect</h3>
+
+<div class="bg-gray-50 border border-gray-200 rounded-xl p-5 mb-6">
+<p class="text-sm text-gray-700 mb-3">The Three Legacies are not three separate programs&mdash;they are three dimensions of <strong>one</strong> program. They are interdependent, each one requiring and strengthening the other two:</p>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+<div class="bg-white rounded-xl border-2 border-blue-200 p-4 text-center">
+<p class="text-xs font-bold text-gray-500 tracking-widest mb-1">LEGACY I</p>
+<p class="text-lg font-bold text-aa-800 mb-1">Recovery</p>
+<p class="text-sm text-gray-600">The Twelve Steps &mdash; how I find sobriety and a new way of life</p>
+</div>
+<div class="bg-white rounded-xl border-2 border-amber-200 p-4 text-center">
+<p class="text-xs font-bold text-gray-500 tracking-widest mb-1">LEGACY II</p>
+<p class="text-lg font-bold text-amber-800 mb-1">Unity</p>
+<p class="text-sm text-gray-600">The Twelve Traditions &mdash; how the Fellowship holds together</p>
+</div>
+<div class="bg-white rounded-xl border-2 border-purple-200 p-4 text-center">
+<p class="text-xs font-bold text-gray-500 tracking-widest mb-1">LEGACY III</p>
+<p class="text-lg font-bold text-purple-800 mb-1">Service</p>
+<p class="text-sm text-gray-600">The Twelve Concepts &mdash; how the message reaches the world</p>
+</div>
+</div>
+<p class="text-sm text-gray-700 mb-3"><strong>Without Recovery,</strong> there is no message to carry&mdash;and no sober members to carry it. The Steps must come first because everything else depends on individual alcoholics finding sobriety.</p>
+<p class="text-sm text-gray-700 mb-3"><strong>Without Unity,</strong> there is no Fellowship to sustain recovery&mdash;and no groups through which the message can be shared. An isolated, sober alcoholic is one drink away from disaster. The Traditions hold together the community that keeps me alive.</p>
+<p class="text-sm text-gray-700"><strong>Without Service,</strong> the message dies with the current generation&mdash;and the alcoholic who has not yet found us never gets the chance. The Concepts ensure that A.A.&rsquo;s reach extends beyond any one group, any one city, any one lifetime.</p>
+</div>
+
+<div class="promise-card rounded-xl p-5 mb-6">
+<h4 class="font-bold text-green-800 mb-2">Personal Understanding</h4>
+<p class="text-sm text-gray-700 mb-3">When I first learned about the Three Legacies, I thought of them as separate courses in a curriculum&mdash;first I learn the Steps, then the Traditions, then the Concepts. But I have come to understand that they are not sequential; they are <strong>simultaneous</strong>. From my very first day in A.A., I am experiencing all three. When I walk into a meeting (Unity), hear the message of hope (Recovery), and someone hands me a cup of coffee (Service), the Three Legacies are already at work in my life&mdash;even before I can name them.</p>
+<p class="text-sm text-gray-700">Today, I try to practice all three every day. I work my Steps, I support my home group, and I look for ways to be useful to the Fellowship and to the alcoholic who still suffers. That, as I understand it, is the complete program of Alcoholics Anonymous&mdash;not just a way to stop drinking, but a way to <strong>live</strong>.</p>
+</div>
+
+<div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
+<h4 class="font-semibold text-gray-800 mb-2">A Note on This Study Guide</h4>
+<p class="text-sm text-gray-700 mb-3">This guide is organized around the Three Legacies. The <strong>12 Steps</strong> section covers the First Legacy in depth&mdash;each Step studied through the Big Book and 12&amp;12, with discussion questions, action items, prayers, and supplementary science cards. The <strong>12 Traditions</strong> section covers the Second Legacy with the Concept/Conduct/Consequence framework, historical context, and self-inventory grids. The <strong>12 Concepts</strong> section covers the Third Legacy&mdash;the service principles that complete the picture.</p>
+<p class="text-sm text-gray-700">Use the sidebar or the cards above to explore each legacy. I recommend studying them in order&mdash;Steps first, then Traditions, then Concepts&mdash;but you are welcome to begin wherever your recovery needs you most.</p>
 </div>
 
 <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
@@ -512,6 +785,16 @@
 <h1 class="text-3xl font-bold text-aa-800">Pre-Step: Qualifying the Sponsee</h1>
 </div>
 <p class="text-lg text-gray-600 mb-6">Before beginning the steps, establish whether the sponsee has the foundation necessary to begin this work.</p>
+
+<div class="bg-aa-50 border border-aa-200 rounded-xl p-5 mb-6">
+<h4 class="font-bold text-aa-800 mb-2">Am I an Alcoholic?</h4>
+<p class="text-sm text-gray-700 mb-3">The Big Book tells us that only the individual can determine whether they are truly alcoholic. <em>&ldquo;We do not like to pronounce any individual as alcoholic, but you can quickly diagnose yourself. Step over to the nearest barroom and try some controlled drinking.&rdquo;</em> <span class="ref-tag bb-ref">BB p.31</span> For those who are not ready for that experiment, A.A. offers a self-assessment based on the experience of thousands of recovered alcoholics. If you answer honestly, openly, and with willingness to face the truth, this assessment can help you determine whether the program of Alcoholics Anonymous may be right for you.</p>
+<a href="https://www.aa.org/self-assessment" target="_blank" rel="noopener noreferrer" class="print-link-btn inline-flex items-center gap-2 mt-2 px-5 py-3 font-semibold rounded-lg shadow-sm transition-colors text-sm" style="background:#2563eb;color:#ffffff;text-decoration:none" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">
+<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"/></svg>
+Take the A.A. Self-Assessment &rarr;
+</a>
+<p class="text-xs text-gray-500 mt-2">Official A.A. resource at aa.org &mdash; opens in a new tab</p>
+</div>
 
 <h3 class="text-xl font-bold text-gray-800 mb-4">Day 1: The First Sit-Down</h3>
 <div class="bg-white rounded-xl border border-gray-200 p-5 mb-6">
