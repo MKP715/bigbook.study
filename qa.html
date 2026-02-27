@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>76th GSC — Delegate Q&A: Ask Your Delegate</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            aa: { gold: '#c8a84b', dark: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    [data-active="true"] { background-color: rgb(30 41 59); color: rgb(251 191 36); }
+    .section { display: none; }
+    .section.active { display: block; }
+    #sidebar { transition: transform 0.3s ease; }
+    @media (max-width: 1023px) {
+      #sidebar.open { transform: translateX(0); }
+      #sidebar { transform: translateX(-100%); }
+    }
+    .arrow::after { content: ''; display: inline-block; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid currentColor; margin-left: 4px; vertical-align: middle; }
+    .flow-line { border-left: 3px solid #cbd5e1; margin-left: 12px; padding-left: 16px; }
+    .vote-badge { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.7} }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 font-sans antialiased">
+
+<!-- MOBILE TOPBAR -->
+<header class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-slate-900 flex items-center justify-between px-4 py-3 shadow-lg">
+  <div>
+    <div class="text-amber-400 font-bold text-sm leading-tight">76th GSC 2026</div>
+    <div class="text-slate-400 text-xs">Ask Your Delegate — Q&A Guide</div>
+  </div>
+  <button type="button" onclick="toggleSidebar()" class="text-white p-1 rounded hover:bg-slate-700">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+</header>
+
+<div class="flex">
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="fixed top-0 left-0 h-screen w-72 bg-slate-900 text-white flex flex-col z-40 shadow-2xl overflow-hidden lg:translate-x-0">
+  <div class="px-5 py-5 border-b border-slate-700 flex-shrink-0">
+    <div class="text-amber-400 font-extrabold text-base leading-snug">Ask Your Delegate</div>
+    <div class="text-slate-400 text-xs mt-0.5">76th GSC · Panel 76 · 2026</div>
+    <div class="text-slate-500 text-xs mt-2">14 Votes · 14 Committees · Rooted in Principles</div>
+  </div>
+  <nav class="flex-1 overflow-y-auto px-3 py-3 space-y-0.5">
+    <button onclick="nav('overview')" data-section="overview" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center gap-2">
+      <span>How to Use This Guide</span>
+    </button>
+    <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider px-3 pt-3 pb-1">Key Votes</div>
+    <button onclick="nav('v1f')" data-section="v1f" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>1f · La Vigne Presentation</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">PAI 91</span>
+    </button>
+    <button onclick="nav('v2e')" data-section="v2e" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>2e · CPC A/V Clips</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">PAI 82</span>
+    </button>
+    <button onclick="nav('v3b')" data-section="v3b" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>3b · P-11 Medications</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">PAI 50/56</span>
+    </button>
+    <button onclick="nav('v4b')" data-section="v4b" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>4b · GV in F-3 Pamphlet</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">PAI 99</span>
+    </button>
+    <button onclick="nav('v4c')" data-section="v4c" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>4c · 12-Step Workbook</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">PAI 70</span>
+    </button>
+    <button onclick="nav('v4d')" data-section="v4d" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>4d · GSC Location Study</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">PAI 22</span>
+    </button>
+    <button onclick="nav('v5f')" data-section="v5f" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>5f · GV Contributions</span><span class="text-xs bg-sky-500 text-white font-bold px-1.5 py-0.5 rounded-full">Standing</span>
+    </button>
+    <button onclick="nav('v6c')" data-section="v6c" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>6c · 5th Edition Big Book</span><span class="text-xs bg-sky-500 text-white font-bold px-1.5 py-0.5 rounded-full">Standing</span>
+    </button>
+    <button onclick="nav('v6e')" data-section="v6e" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>6e · ESH Vol 2 (30 stories)</span><span class="text-xs bg-sky-500 text-white font-bold px-1.5 py-0.5 rounded-full">Standing</span>
+    </button>
+    <button onclick="nav('v9b')" data-section="v9b" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>9b · Dr. Bob Quote</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">PAI 9</span>
+    </button>
+    <button onclick="nav('v10b')" data-section="v10b" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>10b · Safety Videos</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">84/90/107</span>
+    </button>
+    <button onclick="nav('v11bc')" data-section="v11bc" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>11b/c · Animated Videos</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">103/104</span>
+    </button>
+    <button onclick="nav('v12b')" data-section="v12b" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>12b · Geographic Eligibility</span><span class="text-xs bg-amber-500 text-slate-900 font-bold px-1.5 py-0.5 rounded-full">PAI 46</span>
+    </button>
+    <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider px-3 pt-3 pb-1">PI Committee</div>
+    <button onclick="nav('v8d')" data-section="v8d" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>8d · Membership Survey</span><span class="text-xs bg-violet-500 text-white font-bold px-1.5 py-0.5 rounded-full">PI</span>
+    </button>
+    <button onclick="nav('v8e')" data-section="v8e" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors flex items-center justify-between">
+      <span>8e · Google Ads Grant</span><span class="text-xs bg-violet-500 text-white font-bold px-1.5 py-0.5 rounded-full">PI</span>
+    </button>
+    <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider px-3 pt-3 pb-1">Structural</div>
+    <button onclick="nav('edw')" data-section="edw" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors">
+      7c · EDW & Structure
+    </button>
+    <button onclick="nav('crossimpact')" data-section="crossimpact" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors">
+      Cross-Committee Impacts
+    </button>
+    <button onclick="nav('principles')" data-section="principles" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors">
+      Traditions & Concepts Map
+    </button>
+    <div class="text-slate-500 text-xs font-semibold uppercase tracking-wider px-3 pt-3 pb-1">Reference</div>
+    <button onclick="nav('mechanics')" data-section="mechanics" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors">
+      Delegate Mechanics
+    </button>
+    <button onclick="nav('finances')" data-section="finances" class="nav-item w-full text-left px-3 py-2 rounded-lg text-sm text-slate-300 hover:bg-slate-700 hover:text-amber-400 transition-colors">
+      Financial Impact Summary
+    </button>
+  </nav>
+  <div class="px-5 py-3 border-t border-slate-700 text-xs text-slate-500 flex-shrink-0">
+    For area use · Panel 76 · <a href="index.html" class="text-amber-400 underline">Full Guide</a>
+  </div>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="lg:ml-72 flex-1 min-h-screen pt-14 lg:pt-0">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 py-6 lg:py-8">
+
+<!-- ═══ OVERVIEW ═══ -->
+<section id="overview" class="section active">
+  <div class="bg-gradient-to-br from-slate-900 to-slate-800 rounded-2xl p-6 sm:p-8 mb-6 text-white shadow-xl">
+    <div class="text-amber-400 text-xs font-bold uppercase tracking-widest mb-2">76th General Service Conference · 2026</div>
+    <h1 class="text-2xl sm:text-3xl font-extrabold leading-tight mb-2">Ask Your Delegate</h1>
+    <p class="text-slate-300 text-sm mb-4">Principled questions to ask your Area Delegate before the 76th GSC. Each question is rooted in A.A.'s Twelve Traditions, Twelve Concepts, and spiritual principles — and tied to specific agenda items.</p>
+    <div class="mt-5 flex flex-wrap gap-3">
+      <div class="bg-slate-700/50 rounded-xl px-4 py-2.5 text-center"><div class="text-2xl font-black text-amber-400">16</div><div class="text-xs text-slate-400">Key Votes</div></div>
+      <div class="bg-slate-700/50 rounded-xl px-4 py-2.5 text-center"><div class="text-2xl font-black text-emerald-400">12</div><div class="text-xs text-slate-400">Traditions Touched</div></div>
+      <div class="bg-slate-700/50 rounded-xl px-4 py-2.5 text-center"><div class="text-2xl font-black text-sky-400">12</div><div class="text-xs text-slate-400">Concepts in Play</div></div>
+      <div class="bg-slate-700/50 rounded-xl px-4 py-2.5 text-center"><div class="text-2xl font-black text-rose-400">6</div><div class="text-xs text-slate-400">Warranties Tested</div></div>
+    </div>
+  </div>
+
+  <div class="bg-amber-50 border border-amber-200 rounded-xl p-4 mb-6">
+    <div class="font-bold text-amber-800 text-sm mb-2">How to Use This Guide</div>
+    <ul class="text-amber-700 text-sm space-y-1.5">
+      <li><strong>At your Home Group:</strong> Pick 2-3 votes that matter most to your group. Read the questions aloud at a business meeting.</li>
+      <li><strong>At District:</strong> Use the visual diagrams to facilitate informed discussion. Each "consideration map" shows why a delegate might vote yes or no.</li>
+      <li><strong>At Area Assembly:</strong> Bring your group's conscience to the delegate. These questions help frame that conversation.</li>
+      <li><strong>Principle:</strong> The delegate votes her informed conscience (Concept III) — but your input IS the conscience she carries (Concept I).</li>
+    </ul>
+  </div>
+
+  <!-- Quick vote grid -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50"><h3 class="font-bold text-base">All Votes at a Glance</h3></div>
+    <div class="p-4 grid sm:grid-cols-2 gap-2 text-xs">
+      <div onclick="nav('v1f')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">1f</span> — Should La Vigne get 10 min at each GSC? <span class="text-slate-400">T1 T5 C4</span></div>
+      <div onclick="nav('v2e')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">2e</span> — Short A/V clips for professionals? <span class="text-slate-400">T5 T11 C1</span></div>
+      <div onclick="nav('v3b')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">3b</span> — Update the P-11 medications pamphlet? <span class="text-slate-400">T3 T10 C12</span></div>
+      <div onclick="nav('v4b')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">4b</span> — Add GV/LV language to F-3? <span class="text-slate-400">T7 C6</span></div>
+      <div onclick="nav('v4c')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">4c</span> — Create a 12-Step study guide? <span class="text-slate-400">T1 T4 C12</span></div>
+      <div onclick="nav('v4d')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">4d</span> — Study moving GSC outside NYC? <span class="text-slate-400">T7 T9 C12</span></div>
+      <div onclick="nav('v5f')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-sky-600">5f</span> — Allow GV to accept contributions? <span class="text-slate-400">T7 T9 C6</span></div>
+      <div onclick="nav('v6c')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-sky-600">6c</span> — Approve 5th Edition Big Book draft? <span class="text-slate-400">T1 T5 C12</span></div>
+      <div onclick="nav('v6e')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-sky-600">6e</span> — Publish 30 dropped stories (ESH Vol 2)? <span class="text-slate-400">T1 T5</span></div>
+      <div onclick="nav('v9b')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">9b</span> — Remove Dr. Bob quote from Manual? <span class="text-slate-400">T1 T2 C12</span></div>
+      <div onclick="nav('v10b')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">10b</span> — Adopt locally produced safety videos? <span class="text-slate-400">T4 T6 C9</span></div>
+      <div onclick="nav('v11bc')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">11b/c</span> — Animated Steps/Traditions videos? <span class="text-slate-400">T5 T11 C1</span></div>
+      <div onclick="nav('v12b')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-amber-600">12b</span> — Geographic eligibility for service? <span class="text-slate-400">T2 T4 T9</span></div>
+      <div onclick="nav('v8d')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-violet-600">8d</span> — Membership Survey: proceed or pilot? <span class="text-slate-400">T12 C11 C12</span></div>
+      <div onclick="nav('v8e')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-violet-600">8e</span> — Google Ads Grant strategy reset <span class="text-slate-400">T10 T11 C11</span></div>
+      <div onclick="nav('edw')" class="cursor-pointer hover:bg-slate-50 rounded-lg p-3 border border-slate-100"><span class="font-bold text-violet-600">7c</span> — EDW, Digital Comm, Kit reviews <span class="text-slate-400">T2 T9 C6</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ VOTE 1f: LA VIGNE ═══ -->
+<section id="v1f" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 1f</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 91</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should La Vigne Get 10 Minutes at Each GSC?</h2>
+  <p class="text-slate-500 text-sm mb-4">French-language magazine · All 4 Quebec areas support unanimously · Currently no GSC time</p>
+
+  <!-- Consideration Map -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map — How Principles Apply</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports YES</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 1 (Unity):</strong> French-speaking members feeling included strengthens Fellowship unity across the Conference</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 5 (Primary Purpose):</strong> La Vigne carries the message to 5,250 French-speaking members; awareness at GSC multiplies that reach</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept IV (Right of Participation):</strong> Every part of the Fellowship should have a voice at the Conference level</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Precedent:</strong> 61st GSC (2011) already recognized La Vigne's service</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports NO / Caution</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 9 (Organization):</strong> Creating a permanent slot may set precedent for other publications to request time</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Conference Time:</strong> The schedule is already compressed; delegates cite fatigue (Item 1d evaluations)</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Alternative:</strong> Trustees' GSCC suggested appending to Eastern Canada highlights instead of standalone slot</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Concept III (Decision):</strong> Is this a decision the Conference needs to make, or can it be handled administratively?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, how do you see the principle of <strong>unity (Tradition 1)</strong> applying here — does giving La Vigne formal GSC time strengthen or complicate the Conference's inclusivity?</li>
+      <li>The Trustees offered an alternative: append La Vigne to Eastern Canada's highlights. Do you lean toward a <strong>standalone slot</strong> or the <strong>Trustees' alternative</strong>? What principle guides that?</li>
+      <li>If La Vigne gets 10 minutes, would you support similar time for other Fellowship publications? Where's the line under <strong>Tradition 9</strong> (least possible organization)?</li>
+      <li>French-speaking members <strong>receive no GSB financial support</strong> for La Vigne, unlike La Vina. Does this inequity weigh on your vote? <em>(Ref: Item 1f background)</em></li>
+      <li>How does the <strong>Concept IV principle of participation</strong> apply — is presentation time an expression of participation, or is the right of participation already met through the 4 Quebec delegates?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 2e: CPC A/V CLIPS ═══ -->
+<section id="v2e" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 2e</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 82</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should AAWS Create Short A/V Clips for Professionals?</h2>
+  <p class="text-slate-500 text-sm mb-4">15-60 second soundbites · From new CPC videos · For professional outreach</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports YES</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 5 (Primary Purpose):</strong> Soundbites help carry the message to professionals who then refer alcoholics to A.A.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 11 (Attraction):</strong> Modern media format attracts professional attention without promotion</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept I (Final Authority):</strong> Passed unanimously at BC/Yukon Area 79 Assembly — strong group conscience signal</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Practical:</strong> Existing videos are 6+ minutes; busy professionals won't watch. Short clips extend shelf life of new content.</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports NO / Caution</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 11 (Public Relations):</strong> Are soundbites for social media promotion rather than attraction?</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Cost/Resources:</strong> IP watermarking and copyright disclaimers needed (Item 2d LLIP meeting)</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Redundancy:</strong> Item 2d already covers in-house video development — does this duplicate?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, does creating 15-60 second soundbites feel like <strong>attraction rather than promotion (Tradition 11)</strong>? How do we maintain that line with social media content?</li>
+      <li>The motion says these clips go in "welcome letters" to professionals. Is that CPC work — or does it edge into <strong>Public Information (Tradition 11)</strong> territory? <em>(Cross-ref: Items 2d, 8a)</em></li>
+      <li>How do you balance the <strong>cost of producing, watermarking, and distributing</strong> these clips against the existing 3 full-length CPC videos that already exist? <em>(Ref: Item 2d IP policy)</em></li>
+      <li>Under <strong>Concept XII (spiritual foundation for all services)</strong>, is this the best use of limited resources to carry the message to professionals, or are there higher priorities?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 3b: P-11 MEDICATIONS ═══ -->
+<section id="v3b" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 3b</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 50 & 56</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should the P-11 Medications Pamphlet Be Updated?</h2>
+  <p class="text-slate-500 text-sm mb-4">Last substantial update: 1984 · Stories added 2011 · Now addresses marijuana, pain meds, OTC drugs</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports YES</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 3 (Desire to Stop Drinking):</strong> Members on MAT/medications are members. The pamphlet should affirm this.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 10 (No Opinion on Outside Issues):</strong> Updated language can better avoid taking a medical position while still sharing experience</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Current Need:</strong> Legal marijuana, OTC addictive meds, pain management in sobriety — none addressed in current version</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Both PAIs passed unanimously</strong> in their respective areas</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports NO / Caution</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 10:</strong> Discussing specific drugs (marijuana, OTC meds) risks taking a position on outside issues</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Scope Creep:</strong> PAI 56 asks for expansion; PAI 50 asks for story updates. These are different scopes — which does the delegate support?</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Resources:</strong> Publishing Dept already working on 5th Ed BB, PLBB amendments, Living Sober revision — is there bandwidth?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, <strong>Tradition 10</strong> says A.A. has no opinion on outside issues. How do we update P-11 to address legal marijuana, MAT, and pain management <strong>without taking a medical position</strong>?</li>
+      <li>PAI 50 wants updated stories; PAI 56 wants expanded content. <strong>Which approach do you favor</strong>, and how does that align with the pamphlet's purpose under Tradition 3? <em>(Ref: Items 3b PAI 50 vs PAI 56)</em></li>
+      <li>The pamphlet's core content dates to <strong>1984</strong>. Under <strong>Concept XII</strong>, does A.A. have a spiritual responsibility to keep service material current, even when the topic is sensitive?</li>
+      <li>Bill W. said A.A. is not a "cure-all, even for alcoholism." How does this humility (cited in PAI 50's background) guide how far the update should go?</li>
+      <li>Given that the Publishing Dept is also revising the <strong>5th Edition (6c), Living Sober (6f), and PLBB process (6d)</strong>, should this be prioritized now or sequenced? What does prudence suggest?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 4b: GV IN F-3 PAMPHLET ═══ -->
+<section id="v4b" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 4b</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 99</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should the F-3 Self-Support Pamphlet Mention GV/La Vina?</h2>
+  <p class="text-slate-500 text-sm mb-4">Add language encouraging groups to support GV/LV through subscriptions and purchases</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports YES</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 7 (Self-Supporting):</strong> Groups should know that GV/LV can only be supported through purchases — this is self-support education</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Financial Reality:</strong> GV lost $867K in 2024; received $350K from Reserve Fund. La Vina has never been self-supporting</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept VI (Money & Spirituality):</strong> Informing groups about how to support all A.A. services is spiritually aligned</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Low Risk:</strong> This is adding informational text to an existing pamphlet — not changing policy</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports NO / Caution</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Advertising:</strong> Does adding "please consider purchasing" language cross from education into promotion?</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Timing:</strong> If Item 5f passes (allowing GV contributions), this language may need revision again immediately</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Scope:</strong> F-3 is about financial contributions — GV support is purchasing, not contributing. Does it belong?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, <strong>Tradition 7</strong> says every group ought to be self-supporting. Does adding GV/LV language to F-3 educate groups about self-support, or does it cross into <strong>advertising</strong>?</li>
+      <li>If <strong>Item 5f passes</strong> (allowing GV to accept contributions), this pamphlet language would be immediately outdated. Should we wait to see how 5f plays out first? <em>(Cross-ref: 5f)</em></li>
+      <li>Does your group currently <strong>include GV/LV in its budget</strong>? If not, would this pamphlet change influence that — and is that appropriate?</li>
+      <li>Under <strong>Concept VI</strong>, the Conference recognizes the need to define the relationship between money and spirituality. Is this the right vehicle for that conversation?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 4c: 12-STEP WORKBOOK ═══ -->
+<section id="v4c" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 4c</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 70</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should A.A. Create a Conference-Approved 12-Step Study Guide?</h2>
+  <p class="text-slate-500 text-sm mb-4">Originated from incarcerated women's group · 3 prior Advisory Actions said "not needed" · 24 permission requests denied 2024-25</p>
+
+  <!-- Decision Tree Diagram -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Historical Decision Tree</div>
+    <div class="space-y-2 text-xs">
+      <div class="flex items-center gap-2"><span class="bg-slate-600 text-white px-2 py-0.5 rounded font-bold">1964</span><span>13th GSC: "Explore need for step guide" → Result: <strong>Existing literature adequate</strong></span></div>
+      <div class="flex items-center gap-2"><span class="bg-slate-600 text-white px-2 py-0.5 rounded font-bold">1974</span><span>24th GSC: "Explore 4th/5th Step pamphlet" → Result: <strong>Tabled</strong></span></div>
+      <div class="flex items-center gap-2"><span class="bg-slate-600 text-white px-2 py-0.5 rounded font-bold">1985</span><span>35th GSC: "No need — existing literature covers it" → Result: <strong>Reaffirmed</strong></span></div>
+      <div class="flex items-center gap-2"><span class="bg-amber-500 text-white px-2 py-0.5 rounded font-bold">2023</span><span>Similar PAI: "Complete PLBB first" → Result: <strong>PLBB now published</strong></span></div>
+      <div class="flex items-center gap-2"><span class="bg-emerald-500 text-white px-2 py-0.5 rounded font-bold vote-badge">2026</span><span class="font-bold">76th GSC: PAI 70 forwarded — first time since PLBB is in circulation</span></div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports YES</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 1 (Unity):</strong> Incarcerated members can ONLY access Conference-approved literature. No sponsor, no outside books.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept XII (Spiritual Foundation):</strong> If members express a need, A.A. has a responsibility to explore meeting it</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>24 denied requests</strong> in 2 years shows real demand from the Fellowship</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>PLBB precedent:</strong> The stated barrier from 2023 is now resolved</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports NO / Caution</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 4 (Autonomy):</strong> Step work is inherently personal; a "workbook" may prescribe one approach and undermine sponsor-sponsee relationship</div>
+          <div class="bg-rose-50 rounded p-2"><strong>3 prior GSC decisions:</strong> "Existing literature adequately covers." Has the literature landscape truly changed?</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Concept XII (prudence):</strong> The Publishing Dept is already overloaded with 5th Ed BB, PLBB, Living Sober, Spanish BB</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 2 (Group Conscience):</strong> A standardized guide could replace the group conscience that evolves through individual sponsorship</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, this has been asked 3 times and denied 3 times. What's <strong>different now</strong> that makes this the right moment? Is the PLBB being published a meaningful change in context?</li>
+      <li>The request came from an <strong>incarcerated women's group</strong> where outside literature is banned and sponsors are scarce. Under <strong>Tradition 1</strong>, do we owe these members something we haven't provided?</li>
+      <li>Could a step guide inadvertently <strong>replace the sponsor-sponsee relationship (Tradition 4)</strong>? Or does it supplement it — especially behind the walls?</li>
+      <li>If you vote yes, what should it look like — a <strong>pamphlet, workbook, or study guide</strong>? Does the format matter under <strong>Concept XII</strong>?</li>
+      <li><strong>24 permission requests were denied</strong> in 2 years. Does that denial itself create a problem under Tradition 5 (primary purpose to carry the message)?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 4d: GSC LOCATION ═══ -->
+<section id="v4d" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 4d</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 22</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should A.A. Study Moving the GSC Outside NYC?</h2>
+  <p class="text-slate-500 text-sm mb-4">Cost per area: $10,250 (2025) · Projected: $17,000+ by 2030 · NYC locked through 2029</p>
+
+  <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-5 text-xs">
+    <div class="font-bold text-orange-800 mb-1">Cost Escalation Timeline</div>
+    <div class="grid grid-cols-4 gap-2 mt-2 text-center">
+      <div class="bg-white rounded p-2 border border-orange-200"><div class="font-bold text-orange-800">2022</div><div class="text-slate-700">$9,058</div><div class="text-slate-400">per member</div></div>
+      <div class="bg-white rounded p-2 border border-orange-200"><div class="font-bold text-orange-800">2024</div><div class="text-slate-700">$9,250</div><div class="text-slate-400">per area</div></div>
+      <div class="bg-white rounded p-2 border border-orange-200"><div class="font-bold text-amber-700">2025</div><div class="text-slate-700">$10,250</div><div class="text-slate-400">+10.8% YoY</div></div>
+      <div class="bg-white rounded p-2 border border-rose-300"><div class="font-bold text-rose-700">2030</div><div class="text-slate-700">$17,000+</div><div class="text-slate-400">projected</div></div>
+    </div>
+    <p class="text-orange-900 mt-2">79th GSC (2029) already confirmed at NY Marriott Marquis, Times Square (April 15-21, 2029). Earliest possible change: 80th GSC (2030).</p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports YES (study it)</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 7:</strong> Self-support means prudent stewardship. $10K+/area diverts 7th Tradition funds from carrying the message</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept XII (prudence):</strong> A study is just information gathering — it doesn't commit to a move</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>West Central regions 10-15% cheaper</strong> on lodging/meals (2022 data)</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Equity:</strong> Western delegates pay more for airfare; location equity matters under Tradition 2</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports NO (keep NYC)</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Conference Charter Sec. 9:</strong> "Meet yearly in the City of New York" — Bill W. intended this connection to GSO</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 9 (Organization):</strong> Moving adds complexity: staff housing, equipment rental, site visits — hidden costs may erase savings</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Spiritual value:</strong> Delegates visit GSO and Stepping Stones — "first-hand knowledge" replaces "guesswork and rumor" (Bill W.)</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Already locked through 2029</strong> — earliest possible change is 80th GSC (2030)</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Eastern Canada costs MORE</strong> (~5% above NYC), limiting viable alternatives</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, this is a vote to <strong>study</strong> a move, not to move. Under <strong>Concept XII</strong>, is there any reason NOT to gather information? Or does even studying it signal intent?</li>
+      <li>Bill W. wrote that delegates need "first-hand knowledge" of GSO operations <em>(Your Third Legacy, pp. 7-8)</em>. How heavily should that <strong>historical intent</strong> weigh against rising costs?</li>
+      <li><strong>Tradition 7:</strong> At $10,250/area and climbing, at what point does the NYC location <strong>burden the groups</strong> beyond what self-support can bear?</li>
+      <li>The PAI asks for an <strong>outside firm</strong> to conduct the study. Do you think A.A. should pay for an external consultant, or could this be done in-house? <em>(Ref: Concept XI — outside expertise)</em></li>
+      <li>Since contracts are already signed through <strong>2029</strong>, is this vote premature — or exactly the right time to plan 4 years ahead?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 5f: GV CONTRIBUTIONS ═══ -->
+<section id="v5f" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 5f</span>
+    <span class="bg-sky-100 text-sky-700 text-xs font-bold px-2 py-1 rounded-full">Standing Item</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should AA Grapevine Accept Direct Contributions?</h2>
+  <p class="text-slate-500 text-sm mb-4">70+ years sales-only · 1994 Advisory Action: "self-supporting through subscriptions" · $867K loss in 2024</p>
+
+  <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-5 text-xs">
+    <div class="font-bold text-orange-800 mb-1">GV 5-Year Strategic Plan (Item 5c) — Financial Context</div>
+    <div class="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-2 text-center">
+      <div class="bg-white rounded p-2 border border-rose-200"><div class="font-bold text-rose-700">2024</div><div class="text-slate-700">–$867K</div><div class="text-slate-400">actual loss</div></div>
+      <div class="bg-white rounded p-2 border border-rose-200"><div class="font-bold text-rose-700">2026</div><div class="text-slate-700">–$208K</div><div class="text-slate-400">projected</div></div>
+      <div class="bg-white rounded p-2 border border-amber-200"><div class="font-bold text-amber-700">2027</div><div class="text-slate-700">–$85K</div><div class="text-slate-400">projected</div></div>
+      <div class="bg-white rounded p-2 border border-amber-200"><div class="font-bold text-amber-700">2028</div><div class="text-slate-700">+$38K</div><div class="text-slate-400">breakeven</div></div>
+      <div class="bg-white rounded p-2 border border-emerald-200"><div class="font-bold text-emerald-700">2030</div><div class="text-slate-700">+$178K</div><div class="text-slate-400">target</div></div>
+    </div>
+    <p class="text-orange-900 mt-2"><strong>Key:</strong> Plan shows breakeven by 2028 WITHOUT contributions. 28% staff reduction already implemented ($420K savings). GV reaches ~25M instances/year — majority from zero-revenue services (Daily Quote, Podcast, Prison Tablets, ASL). La Viña has <strong>never been self-supporting</strong>.</p>
+    <p class="text-orange-900 mt-1"><strong>Spider Insights Survey (5d):</strong> ~500 members surveyed June-Aug 2025 on willingness to contribute. Results may inform this vote.</p>
+  </div>
+
+  <!-- Impact Diagram -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">What Changes If Contributions Are Allowed</div>
+    <div class="text-center mb-3">
+      <div class="inline-block bg-amber-100 rounded-xl px-4 py-2 text-amber-800 font-bold text-sm">Current: GV funded ONLY by sales & subscriptions</div>
+    </div>
+    <div class="flex justify-center mb-3"><div class="text-slate-400 text-2xl arrow"></div></div>
+    <div class="grid sm:grid-cols-3 gap-2 text-xs text-center">
+      <div class="bg-emerald-50 rounded-xl p-3 border border-emerald-200"><div class="font-bold text-emerald-700 mb-1">Revenue Diversification</div>Members/groups can contribute directly. Reduces dependency on declining print.</div>
+      <div class="bg-amber-50 rounded-xl p-3 border border-amber-200"><div class="font-bold text-amber-700 mb-1">Policy Change</div>Supersedes 1994 Advisory Action. Requires 2/3 Conference vote.</div>
+      <div class="bg-rose-50 rounded-xl p-3 border border-rose-200"><div class="font-bold text-rose-700 mb-1">Possible Impact</div>May divert contributions from AAWS/GSO. Needs governance framework.</div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports YES</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 7 (Self-Supporting):</strong> GV is drawing $350K from Reserve Fund — that's NOT self-supporting. Contributions restore Tradition 7</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Scale:</strong> 25M+ instances/year of service (daily quotes, podcasts, tablets) with zero revenue. Tradition 5 demands we sustain this.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Consistency:</strong> AAWS and GSO accept contributions — why should GV be treated differently? <em>(Concept VI)</em></div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports NO</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>1994 Advisory Action:</strong> "Strongly urged to be self-supporting through subscriptions." 30+ years of standing Conference policy.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 9:</strong> Blurs the line between GV and other service entities. Creates new administrative overhead.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>5-Year Plan:</strong> GV projects profitability by 2029 WITHOUT contributions. Is this premature?</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Diversion:</strong> Groups already struggle to fully fund AAWS/GSO — adding GV may reduce those contributions</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, the <strong>1994 Advisory Action</strong> says GV should be self-supporting through subscriptions. Would you vote to <strong>supersede 30 years of Conference policy</strong>? What principle justifies that?</li>
+      <li><strong>Tradition 7:</strong> GV took $350K from the Reserve Fund last year. Is that already a violation of self-support — making contributions the <em>more</em> traditional path?</li>
+      <li>GV's <strong>5-Year Plan projects profitability by 2029</strong> without contributions <em>(Ref: 5c financials)</em>. Is this vote about urgency or about principle?</li>
+      <li>If GV can accept contributions, will our group's <strong>7th Tradition pie</strong> now split 3 ways (District/Area/GSO <em>and</em> GV)? What does that do to AAWS funding? <em>(Cross-ref: 4b, F-3 pamphlet)</em></li>
+      <li>The survey questions (Item 5d) directly ask members about willingness to contribute. Should the delegate <strong>wait for those results</strong> before voting, or vote on principle now?</li>
+      <li>Under <strong>Concept IX (the best possible leadership)</strong>, is the GV Board demonstrating that leadership by requesting contributions, or by executing the cost-savings plan?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 6c: 5TH EDITION ═══ -->
+<section id="v6c" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 6c</span>
+    <span class="bg-sky-100 text-sky-700 text-xs font-bold px-2 py-1 rounded-full">Standing Item</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Approve the Draft 5th Edition Big Book?</h2>
+  <p class="text-slate-500 text-sm mb-4">2,393 submissions · 26 new stories · 12 retained · 30 dropped · First 164 pages unchanged</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">What's Changing (and What's Not)</div>
+    <div class="grid sm:grid-cols-2 gap-3 text-xs">
+      <div class="bg-green-50 rounded-xl p-3 border border-green-200">
+        <div class="font-bold text-green-800 mb-1">UNCHANGED (1995 Advisory Action)</div>
+        <ul class="text-green-700 space-y-0.5"><li>First 164 pages</li><li>Preface & Forewords</li><li>"The Doctor's Opinion"</li><li>"Dr. Bob's Nightmare"</li><li>Core Appendices</li></ul>
+      </div>
+      <div class="bg-amber-50 rounded-xl p-3 border border-amber-200">
+        <div class="font-bold text-amber-800 mb-1">CHANGED</div>
+        <ul class="text-amber-700 space-y-0.5"><li>26 new personal stories</li><li>New Foreword to 5th Ed</li><li>Revised Preface</li><li>Updated Appendix III & V</li><li>Revised Appendix VI</li></ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, the draft is "for committee eyes only." Once you've read it, can you share your <strong>general impression</strong> of whether the new stories reflect "current membership" as the 2021 Advisory Action intended? <em>(Ref: 6c)</em></li>
+      <li><strong>Tradition 1 (Unity):</strong> 30 stories are being dropped. Do the 26 new stories maintain the Big Book's power to help newcomers identify — regardless of background?</li>
+      <li>The subcommittee noted the need for an <strong>"anonymity conscious jacketless cover."</strong> How important is that to you under <strong>Tradition 11/12</strong>?</li>
+      <li>Bill W. said: <em>"The audience for the book is people coming to A.A. now."</em> Does the new story selection honor that principle? <em>(Ref: 6c subcommittee quote)</em></li>
+      <li>If you have concerns about specific stories, will you voice them as <strong>minority opinion (Concept V)</strong> even if the committee vote passes?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 6e: ESH VOL 2 ═══ -->
+<section id="v6e" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 6e</span>
+    <span class="bg-sky-100 text-sky-700 text-xs font-bold px-2 py-1 rounded-full">Standing Item</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should the 30 Dropped Stories Be Published?</h2>
+  <p class="text-slate-500 text-sm mb-4">Possible ESH Vol 2 · 2022 recommendation FAILED on Conference floor · TLC re-forwarding in 2026</p>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, this <strong>failed on the Conference floor in 2022</strong>. What has changed to justify bringing it back? <em>(Ref: 6e — 2022 Final Report)</em></li>
+      <li>Under <strong>Tradition 5</strong>, do these 30 stories still carry the message effectively, or were they dropped for a reason?</li>
+      <li>The original ESH (2003) preserved stories from the 1st-3rd editions and still sells ~6,760 copies/year. Is there <strong>demonstrated demand</strong> for a Vol 2?</li>
+      <li>Would you support a <strong>digital-only release</strong> rather than print? Does format matter under Tradition 5?</li>
+      <li>Some members feel deeply connected to dropped stories like "Acceptance Was the Answer" (which IS being retained). For stories NOT retained, does A.A. have a <strong>spiritual obligation</strong> to preserve them?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 9b: DR. BOB QUOTE ═══ -->
+<section id="v9b" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 9b</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 9</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should the Dr. Bob Quote Be Removed from the Service Manual?</h2>
+  <p class="text-slate-500 text-sm mb-4">1939 quote · "The Service Sponsor" section, p.10 of Service Manual · Dr. Bob died Nov 16 1950 — 5 months before the 1st GSC (April 1951)</p>
+
+  <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-5 text-xs">
+    <div class="font-bold text-orange-800 mb-1">Key Context: Individual Submission</div>
+    <p class="text-orange-900">PAI 9 was submitted by an <strong>individual member</strong>, not a group, district, or area. No group conscience stands behind this request. Under <strong>Concept I</strong>, the Conference must weigh whether an individual proposal to alter a co-founder's legacy carries the same weight as one arising from the collective conscience process.</p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports REMOVAL</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Historical Accuracy:</strong> The quote is from 1939. Dr. Bob died Nov 16, 1950 — five months before the first GSC in April 1951. He never saw the service structure he's quoted about.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 2 (Group Conscience):</strong> If the quote discourages service participation, it undermines group conscience at the GSR level</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept I:</strong> The Conference is the voice of the Fellowship — if it decides the quote is misleading in context, removing it honors that authority</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept VII (Conference Charter):</strong> The Service Manual is a Conference-owned document. The Conference has full authority to edit its own materials.</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports KEEPING</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 1 (Unity):</strong> Erasing a co-founder's words from our own service manual threatens the historical unity of A.A.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 12 (Anonymity):</strong> Principles before personalities — but Dr. Bob IS a principle in A.A. history</div>
+          <div class="bg-rose-50 rounded p-2"><strong>No Group Conscience:</strong> This is an individual submission. No group, district, or area voted to request this change. Under <strong>Concept V</strong>, even individual voices deserve hearing — but does an individual proposal warrant altering a co-founder's words?</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Warranty 5:</strong> Removing a co-founder's quote could be perceived as personally punitive toward his legacy.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Alternative:</strong> Add context rather than remove. Explain the 1939 date and what the quote meant in its era.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Precedent:</strong> Once we start removing co-founder quotes, where does it end?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, this PAI was submitted by <strong>an individual member — not a group or area</strong>. Under Concept I, should the Conference act on a proposal that didn't emerge from any group conscience process? <em>(Ref: 9b — PAI 9 submission)</em></li>
+      <li>Dr. Bob died on <strong>November 16, 1950</strong> — five months before the first GSC in April 1951. The 1939 quote in "The Service Sponsor" section (p.10) predates the entire service structure. Does it still serve our members in context, or has it become misleading?</li>
+      <li>Rather than removal, would you support <strong>adding historical context</strong> (e.g., a footnote explaining the 1939 date and that Dr. Bob never witnessed the GSC)? Is that a compromise that honors both Tradition 1 and accuracy?</li>
+      <li>Under <strong>Warranty 5</strong>, "no Conference action shall ever be personally punitive." Could removing a co-founder's quote be perceived as punitive toward his legacy, even if that's not the intent?</li>
+      <li>Under <strong>Tradition 12</strong>, we place principles above personalities. But our co-founders' words carry weight. How do you weigh a co-founder's quote against historical accuracy?</li>
+      <li>If this quote is removed, does it set a <strong>precedent</strong> for removing other historical quotes from the Service Manual that some find problematic?</li>
+      <li>Has your area discussed this, and does the <strong>group conscience (Concept I)</strong> lean toward removal, context, or keeping it as-is?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 10b: SAFETY VIDEOS ═══ -->
+<section id="v10b" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 10b</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 84/90/107</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should AAWS Adopt Locally Produced Safety Videos?</h2>
+  <p class="text-slate-500 text-sm mb-4">3 PAIs (84/90/107) · District 22, Area 93 origin · Based on F-228 &amp; F-211 materials · Videos in EN &amp; ES on YouTube</p>
+
+  <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-5 text-xs">
+    <div class="font-bold text-orange-800 mb-1">Origin Context: Real Safety Incidents</div>
+    <p class="text-orange-900 mb-2">These PAIs arose from <strong>actual reported incidents</strong> in District 22, Area 93 — including racial slurs directed at members, physical intimidation, and harassment. The videos were created locally in response using existing A.A. safety materials <strong>F-228</strong> ("Safety and A.A.") and <strong>F-211</strong> ("Safety Card").</p>
+    <div class="text-orange-800"><strong>3 Video Chapters:</strong> (1) Safety awareness for groups (2) Trusted servants &amp; group inventory (3) Resources &amp; reporting. Available in English &amp; Spanish playlists on YouTube.</div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports ADOPTION</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 1 (Unity):</strong> Safety protects our primary purpose. A member who feels unsafe cannot carry the message.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Real Incidents:</strong> These videos exist because real members were harmed. Racial slurs, intimidation, and harassment happened in AA rooms.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept IX (Leadership):</strong> Taking a proactive stance on safety IS good leadership. The videos already use official F-228/F-211 content.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept IV:</strong> Bilingual (EN/ES) availability shows right of participation across language barriers.</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports CAUTION / NO</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Warranty 6 (No Governance):</strong> Adopting safety videos Fellowship-wide could cross from service into governance of autonomous groups.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Warranty 3 (No Authority):</strong> "Adopting" local content places one area's approach in authority over all groups.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 4 (Autonomy):</strong> Each group handles safety its own way. Conference-wide adoption may override local autonomy.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Concept IX Alternative:</strong> AAWS should produce its OWN videos rather than adopting locally produced content.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, these videos arose from <strong>real safety incidents — racial slurs, intimidation, harassment</strong> — in District 22, Area 93. Does the urgency of safety override concerns about local-to-Conference adoption? <em>(Ref: 10b — PAIs 84/90/107)</em></li>
+      <li>The videos are based on official materials <strong>F-228 ("Safety and A.A.") and F-211 ("Safety Card")</strong>. Since the content already exists in approved literature, is video adaptation a natural extension or a new precedent?</li>
+      <li>Under <strong>Warranty 6</strong>, the Conference "shall never perform any acts of government." Does adopting safety videos for all groups cross from service into governance?</li>
+      <li>Under <strong>Warranty 3</strong>, no member shall hold unqualified authority over others. If AAWS "adopts" one area's videos, does that place District 22/Area 93's approach in authority over all groups?</li>
+      <li>Under <strong>Concept IX</strong>, should AAWS produce its OWN safety videos rather than adopting locally produced ones? Would that ensure quality/consistency and avoid Tradition 4 concerns?</li>
+      <li><strong>Tradition 10 (No Outside Issues):</strong> Some argue safety (predatory behavior, harassment) is an "outside issue." How does your conscience navigate safety concerns within A.A.'s non-affiliation principle?</li>
+      <li>The videos exist in English and Spanish. Is <strong>French-language</strong> representation needed before Fellowship-wide adoption? <em>(Concept IV — right of participation)</em></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 11b/c: ANIMATED VIDEOS ═══ -->
+<section id="v11bc" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Items 11b & 11c</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 103 & 104</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should AAWS Create Animated Videos of the Steps & Traditions Illustrated?</h2>
+  <p class="text-slate-500 text-sm mb-4">P-55 (Steps) and P-43 (Traditions) · Both from Area 73 · Assigned to Trustees via EDW</p>
+
+  <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-5 text-xs">
+    <div class="font-bold text-orange-800 mb-1">Key Context: Precedent Exists + Alternative Already Available</div>
+    <p class="text-orange-900 mb-2">The <strong>72nd GSC (2022)</strong> approved an animated video of <strong>P-8 "The Twelve Concepts Illustrated"</strong> — so there IS precedent for animating illustrated pamphlets. That project was completed and released.</p>
+    <p class="text-orange-900">Also note: <strong>P-91 "Experience Has Taught Us: An Introduction to the Twelve Traditions"</strong> already exists as an alternative to P-43 (Traditions Illustrated). If animation of P-43 is about reaching newcomers, does P-91 already serve that purpose in print?</p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports YES</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>72nd GSC Precedent:</strong> P-8 Concepts Illustrated was animated and approved. The same logic applies to P-55 and P-43.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 5 (Carry the Message):</strong> Visual/video content reaches newcomers who don't engage with text pamphlets.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept VIII (Trustees):</strong> Assigned to Trustees Committee via EDW — Trustees are the "principal planners" and have multimedia capability.</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports NO / Defer</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Warranty 2 (Prudent Finance):</strong> AAWS multimedia staff is already stretched. 5th Edition, PLBB, CPC reels, and safety videos are all in queue.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 11 (Attraction):</strong> Does animation trivialize the Steps and Traditions, or does it attract?</div>
+          <div class="bg-rose-50 rounded p-2"><strong>P-91 Already Exists:</strong> "Experience Has Taught Us" (P-91) serves as an alternative to P-43. Is animation needed when a simplified written version exists?</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Single-Area Origin:</strong> Both PAIs from Area 73. No broad Fellowship demand demonstrated.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, the <strong>72nd GSC approved animating P-8 (Concepts Illustrated)</strong>. Does that precedent settle the question for P-55 and P-43, or are there meaningful differences? <em>(Ref: 11b &amp; 11c — PAIs 103 &amp; 104)</em></li>
+      <li><strong>P-91 "Experience Has Taught Us"</strong> already exists as a simplified introduction to the Traditions. Does this pamphlet reduce the need for an animated P-43? Or is video a different medium entirely?</li>
+      <li><strong>Tradition 5 (Primary Purpose):</strong> Would animated videos help carry the A.A. message to newcomers who connect better with visual/video content?</li>
+      <li>Under <strong>Tradition 11 (Attraction not Promotion):</strong> Animated content is widely used in media. Does animation help attract without promoting, or does it trivialize the Steps and Traditions?</li>
+      <li>Both PAIs are from <strong>the same area (73)</strong>. Does that signal focused advocacy or broad Fellowship demand? Has your area discussed this? <em>(Concept I)</em></li>
+      <li>AAWS is already developing CPC video reels (Item 2d), processing the 5th Edition, and has limited multimedia staff. Under <strong>Warranty 2 (prudent finance)</strong>, should animation be prioritized NOW?</li>
+      <li>Would you vote YES on one but not the other? Is there a reason to treat the <strong>Steps (P-55) and Traditions (P-43)</strong> differently in animation format?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 12b: GEOGRAPHIC ELIGIBILITY ═══ -->
+<section id="v12b" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 12b</span>
+    <span class="bg-emerald-100 text-emerald-700 text-xs font-bold px-2 py-1 rounded-full">PAI 46</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should Geographic Eligibility for Area Service Be Addressed?</h2>
+  <p class="text-slate-500 text-sm mb-4">From Area 13 Policy & Procedures · Assigned to Archives via EDW · Online meetings blur all geographic lines</p>
+
+  <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-5 text-xs">
+    <div class="font-bold text-orange-800 mb-1">Origin Context: Real Cases from Area 13</div>
+    <p class="text-orange-900 mb-2">Area 13 (Connecticut) discovered a <strong>DCM living in Rhode Island</strong> and an <strong>area chair simultaneously serving two areas</strong>. With online meetings, members increasingly participate in groups outside their physical geography. The question: who "belongs" to which area for service purposes?</p>
+    <p class="text-orange-900"><strong>Linguistic Area Concern:</strong> Some areas are organized by language (e.g., Hispanic/Spanish-speaking areas). Geographic rules could inadvertently restrict representation for linguistic minorities, impacting the pathway to Hispanic trustee positions at the General Service Board level.</p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports Conference Action</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 2 (Group Conscience):</strong> A Conference-level position would provide shared guidance for all areas facing this new reality.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept II (Delegated Authority):</strong> The Conference speaking on this issue helps areas navigate an unprecedented structural question.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Real Problems:</strong> A DCM from another state, a chair serving two areas — these are not hypotheticals. Areas need clarity.</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports Local Autonomy / No Action</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Warranty 6 (No Governance):</strong> Setting geographic eligibility rules for areas IS an act of government. The Conference should not dictate who can serve where.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Concept X (No Authority):</strong> Service boards and committees have no authority over each other. Each area defines its own service boundaries.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 4 (Autonomy):</strong> Each area is autonomous. Area 13 can solve its own geographic problem without Conference action.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Linguistic Areas at Risk:</strong> Geographic rules could harm language-based areas and restrict Hispanic/Spanish-speaking representation pathways to the General Service Board.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, Area 13 found a <strong>DCM living in Rhode Island</strong> and a <strong>chair serving two areas simultaneously</strong>. Has our area faced similar situations? Would Conference guidance help? <em>(Ref: 12b — PAI 46)</em></li>
+      <li>Under <strong>Warranty 6</strong>, the Conference "shall never perform any acts of government." Does setting geographic eligibility rules for area service cross that line?</li>
+      <li>Under <strong>Concept X</strong>, no service body has authority over another. Should the Conference tell areas who can serve, or should each area decide for itself under <strong>Tradition 4</strong>?</li>
+      <li>With <strong>online meetings</strong> blurring geographic boundaries, is our service structure's reliance on geography still relevant? How does your conscience navigate this?</li>
+      <li><strong>Linguistic areas</strong> (Spanish-speaking, etc.) are organized by language, not geography. Could geographic eligibility rules inadvertently restrict these areas and harm the <strong>Hispanic trustee pathway</strong> to the General Service Board?</li>
+      <li>Under <strong>Concept IV (right of participation)</strong>, does every member have the right to serve where they feel called — regardless of physical address? Or does structure require geographic accountability?</li>
+      <li>This was assigned to <strong>Archives via EDW</strong> — not the committee that typically handles policy/structure. Does that assignment affect how seriously this will be considered? <em>(Ref: EDW item 7c)</em></li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 8d: MEMBERSHIP SURVEY ═══ -->
+<section id="v8d" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 8d</span>
+    <span class="bg-violet-100 text-violet-700 text-xs font-bold px-2 py-1 rounded-full">PI Committee</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Should the 2026 Membership Survey Proceed — or Delay for a Pilot?</h2>
+  <p class="text-slate-500 text-sm mb-4">35% female (probability) vs 52% female (convenience) · Dr. Cooper recommends delay · Unlisted groups problem · $18,500 cost</p>
+
+  <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-5 text-xs">
+    <div class="font-bold text-orange-800 mb-1">The Gender Discrepancy Problem</div>
+    <p class="text-orange-900 mb-2">The <strong>probability sample</strong> (statistically random) shows A.A. is <strong>35% female</strong>. The <strong>convenience sample</strong> (voluntary) shows <strong>52% female</strong>. This 17-point gap raises fundamental questions about which number is real — and whether our survey methodology has been valid for decades.</p>
+    <p class="text-orange-900 mb-2"><strong>Unlisted groups:</strong> Many groups don't register with GSO and can't be sampled. This creates a systematic blind spot in any probability-based survey.</p>
+    <p class="text-orange-900"><strong>Dr. Cooper's recommendation:</strong> Delay the full survey and conduct a <strong>methodological pilot first</strong> to resolve the discrepancy before publishing potentially misleading data to professionals, the media, and the Fellowship.</p>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Consideration Map</div>
+    <div class="grid sm:grid-cols-2 gap-4 text-xs">
+      <div>
+        <div class="font-bold text-emerald-700 mb-2">Supports PROCEED Now</div>
+        <div class="flow-line space-y-2 pb-2 border-emerald-300">
+          <div class="bg-emerald-50 rounded p-2"><strong>Tradition 5 (Primary Purpose):</strong> Professionals rely on our survey data to refer people to A.A. Outdated data from 2014 hampers outreach.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Concept XI (Expertise):</strong> The survey is designed by qualified researchers. Imperfect data is better than 12-year-old data.</div>
+          <div class="bg-emerald-50 rounded p-2"><strong>Momentum:</strong> The 21-question draft is ready. Further delay risks losing the research team and institutional knowledge.</div>
+        </div>
+      </div>
+      <div>
+        <div class="font-bold text-rose-700 mb-2">Supports DELAY for Pilot</div>
+        <div class="flow-line space-y-2 pb-2 border-rose-300">
+          <div class="bg-rose-50 rounded p-2"><strong>Tradition 12 (Anonymity/Accuracy):</strong> Publishing data with a known 17-point gender gap undermines A.A.'s credibility with professionals and the public.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Warranty 5 (No Public Controversy):</strong> A survey with known flaws, if published and questioned, could create public controversy about A.A.'s demographics.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Concept XII (Prudence):</strong> Spending $18,500 on a survey with known methodology problems is not prudent stewardship.</div>
+          <div class="bg-rose-50 rounded p-2"><strong>Dr. Cooper (Outside Expert):</strong> The researcher hired under Concept XI is recommending delay. Should we override our own expert?</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, the probability sample says A.A. is <strong>35% female</strong> while the convenience sample says <strong>52%</strong>. Which number would you publish? And what does the 17-point gap tell us about our survey methodology? <em>(Ref: 8d)</em></li>
+      <li><strong>Dr. Cooper recommends a pilot first.</strong> Under Concept XI (outside expertise), if the expert we hired says "wait," should the Conference override that advice?</li>
+      <li>The last membership survey was <strong>2014 — twelve years ago</strong>. Under Tradition 5, do professionals and the public need updated data NOW, even if imperfect? Or does bad data hurt more than old data?</li>
+      <li>Under <strong>Warranty 5</strong>, could publishing a survey with a known gender discrepancy create public controversy about A.A.'s demographics?</li>
+      <li>The <strong>unlisted groups problem</strong> means many groups can't be reached by the probability sample. Does this systematically exclude certain populations (rural, online, newer groups)?</li>
+      <li>At <strong>$18,500</strong> total cost, is a pilot study a prudent investment under Warranty 2 — or is it more cost-effective to proceed now and refine later?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ VOTE 8e: GOOGLE ADS ═══ -->
+<section id="v8e" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 8e</span>
+    <span class="bg-violet-100 text-violet-700 text-xs font-bold px-2 py-1 rounded-full">PI Committee</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">Google Ads Grant — Strategy Reset After 48% Click Drop</h2>
+  <p class="text-slate-500 text-sm mb-4">$10K/month grant · 48% click drop from campaign error · 2/3 content disapproved under Google's "Addiction Services" policy</p>
+
+  <div class="bg-orange-50 border border-orange-200 rounded-xl p-4 mb-5 text-xs">
+    <div class="font-bold text-orange-800 mb-1">What Happened</div>
+    <p class="text-orange-900 mb-2">AAWS receives a <strong>$10,000/month Google Ads Grant</strong> (since July 2025). Two problems emerged: (1) A <strong>campaign strategy error + Google Tag deployment issue</strong> caused a 48% drop in clicks. (2) Google's <strong>"Addiction Services" advertising policy</strong> resulted in 2/3 of A.A. content being disapproved — limiting what A.A. can advertise.</p>
+    <p class="text-orange-900"><strong>Key insight:</strong> The top 100 search terms ALL relate to <strong>finding meetings</strong>. People searching for A.A. online want to find a meeting — not read about us.</p>
+  </div>
+
+  <div class="bg-blue-50 border border-blue-200 rounded-xl p-5 mb-5">
+    <div class="font-bold text-blue-800 mb-3">Questions to Ask Your Delegate</div>
+    <ol class="space-y-3 text-sm text-blue-900 list-decimal list-inside leading-relaxed">
+      <li>Delegate, Google classified 2/3 of our content as <strong>"Addiction Services"</strong> and disapproved it. Under <strong>Tradition 10 (no opinion on outside issues)</strong>, how should A.A. navigate a tech platform's definition of what we are? <em>(Ref: 8e)</em></li>
+      <li>The top 100 search terms are ALL about <strong>finding meetings</strong>. Should our digital strategy focus entirely on connecting seekers to Meeting Guide, rather than content marketing?</li>
+      <li>Under <strong>Tradition 11 (attraction)</strong>, is paid search advertising consistent with our principle of "attraction rather than promotion"? Or is making ourselves findable just good Tradition 5?</li>
+      <li>The 48% click drop was caused by a <strong>campaign error and tag deployment issue</strong>. Under Concept IX (leadership), does AAWS have the technical expertise to manage digital advertising, or should this be handled by outside professionals <em>(Concept XI)</em>?</li>
+      <li>This connects to the proposed <strong>Conference Committee on Digital Communications (7c-C.3)</strong>. Does the Google Ads experience prove we need a dedicated committee for digital work?</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ═══ EDW & STRUCTURE (7c) ═══ -->
+<section id="edw" class="section">
+  <div class="flex items-center gap-3 mb-4">
+    <span class="bg-slate-800 text-amber-400 text-xs font-bold px-3 py-1 rounded-full">Item 7c</span>
+  </div>
+  <h2 class="text-xl font-extrabold mb-1">EDW, Kit Reviews & Digital Communications Committee</h2>
+  <p class="text-slate-500 text-sm mb-4">3 sub-items: Discontinue annual kit reviews · Nonspecific committees · New Digital Comm committee</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">Three Structural Questions</div>
+    <div class="space-y-4">
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="font-bold text-slate-800 mb-1 text-sm">C.1 — Stop Annual Kit/Workbook Reviews?</div>
+        <p class="text-xs text-slate-600 mb-2">Currently 6 committees review kits annually. This is convention, not policy — no Advisory Action requires it. Suggestions can go to GSO Staff year-round.</p>
+        <div class="bg-blue-50 rounded p-2 text-xs text-blue-800"><strong>Ask:</strong> Under <strong>Tradition 2</strong>, does the annual review ensure group conscience oversight, or has it become routine with little value? Would removing it free up precious Conference committee time?</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="font-bold text-slate-800 mb-1 text-sm">C.2 — Nonspecific (Topic-Blind) Committees?</div>
+        <p class="text-xs text-slate-600 mb-2">Committees would receive equal numbers of items regardless of topic. This balances workload but disrupts continuity and institutional knowledge.</p>
+        <div class="bg-blue-50 rounded p-2 text-xs text-blue-800"><strong>Ask:</strong> Under <strong>Concept IX</strong>, does topic expertise matter for good decisions? Or does fresh perspective from non-specialist delegates produce better outcomes?</div>
+      </div>
+      <div class="bg-slate-50 rounded-xl p-4">
+        <div class="font-bold text-slate-800 mb-1 text-sm">C.3 — New "Conference Committee on Digital Communications"?</div>
+        <p class="text-xs text-slate-600 mb-2">Would mirror the existing AAWS Services & Technology Committee at the Conference level. Currently PI handles all digital items (11 items this year).</p>
+        <div class="bg-blue-50 rounded p-2 text-xs text-blue-800"><strong>Ask:</strong> Under <strong>Tradition 9</strong>, does A.A. need MORE committees, or should we redistribute? Is the PI Committee's 11-item agenda proof that digital work needs its own home?</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CROSS-COMMITTEE IMPACTS ═══ -->
+<section id="crossimpact" class="section">
+  <h2 class="text-xl font-extrabold mb-4">Cross-Committee Impacts — Hidden Connections Between Votes</h2>
+  <p class="text-slate-500 text-sm mb-5">These votes don't exist in isolation. Decisions in one committee ripple across others. Ask your delegate how she plans to weigh these interconnections.</p>
+
+  <div class="space-y-5">
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">4b + 5f — F-3 Pamphlet May Be Immediately Outdated</div>
+      <p class="text-xs text-slate-600 mb-3">Vote 4b adds Grapevine language to the self-support pamphlet F-3. But vote 5f asks whether GV should accept direct contributions. If 5f passes, the F-3 language from 4b may need immediate revision.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, if you vote YES on 4b (add GV to F-3) AND YES on 5f (GV contributions), does the F-3 pamphlet need to be rewritten again immediately? Should 4b wait until 5f is decided? <em>(Ref: 4b, 5f)</em>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">5f GV Contributions + GV Financial Reality</div>
+      <p class="text-xs text-slate-600 mb-3">GV lost <strong>$867K in 2024</strong> and drew <strong>$350K from its reserve fund</strong>. La Viña has <strong>never been self-supporting</strong>. The GV 5-year plan targets $1.5M in new revenue. Direct contributions (5f) are positioned as a financial lifeline — not just a policy question.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, is the vote on GV contributions really a vote on whether Grapevine <strong>survives</strong> as a separate entity? Under Warranty 2, can GV maintain an "ample reserve" without contributions? What's the alternative — merge GV into AAWS? <em>(Ref: 5f, GV 5-year plan)</em>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">Literature Committee Overload — 6c + 6e + PLBB + Living Sober + Spanish BB</div>
+      <p class="text-xs text-slate-600 mb-3">The Literature Committee is simultaneously considering: the <strong>5th Edition Big Book</strong> (2,393 submissions, 26 new stories), <strong>ESH Vol 2</strong> (30 dropped stories), the <strong>Plain Language Big Book</strong> (deferred to 77th), <strong>Living Sober</strong> update, and the <strong>Spanish 4th Edition</strong>. All compete for the same editorial and publishing resources.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, under <strong>Warranty 2 (prudent finance)</strong>, can AAWS realistically handle the 5th Edition, PLBB, ESH Vol 2, Living Sober revision, AND the Spanish 4th Edition at the same time? What gets prioritized, and what gets delayed? <em>(Ref: 6c, 6e, PLBB, Literature standing items)</em>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">10b + 11b/c — Multimedia Resource Competition</div>
+      <p class="text-xs text-slate-600 mb-3">Safety videos (10b), animated Steps/Traditions (11b/c), CPC video reels (2d/2e), and Class A trustee videos ALL compete for AAWS's limited multimedia production capacity.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, if all multimedia items pass, how does AAWS prioritize? Under <strong>Concept IX (leadership)</strong>, should safety videos take precedence over animated pamphlets? Or should the multimedia queue be disclosed before voting? <em>(Ref: 10b, 11b/c, 2d, 2e)</em>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">Inventory Implementation Finding: PAI Process Itself</div>
+      <p class="text-xs text-slate-600 mb-3">The 2023-2025 Inventory Implementation found that the <strong>PAI process "encourages complaints rather than solutions"</strong> and that <strong>40% of GSO staff time</strong> is spent responding to fellowship confusion about the process. Of 110 PAIs submitted this year, only 14 were forwarded.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, knowing that 96 of 110 PAIs were NOT forwarded, and that GSO staff spends 40% of their time on process confusion — does the PAI system itself need reform? Should EDW (Item 7c) address PAI quality, not just workload distribution? <em>(Ref: 7c, Inventory Implementation)</em>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">4c Step Guide + 6c 5th Edition — Defining How AA Works the Program</div>
+      <p class="text-xs text-slate-600 mb-3">Vote 4c proposes an official 12-Step study guide/workbook. Vote 6c updates the Big Book itself. Both touch the core question: <strong>who defines how we work the Steps?</strong> Under Warranty 5, an official study guide could be seen as Conference-endorsed instruction.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, if the 5th Edition is already being rewritten with new stories and updated language (6c), does a separate study guide (4c) complement it or conflict? Under <strong>Warranty 6 (no governance)</strong>, does an official "how to work the steps" book cross into governing how members practice the program? <em>(Ref: 4c, 6c)</em>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">3c Transgender Pamphlet + 6h Asian/Asian American Pamphlet — Literature Pipeline Capacity</div>
+      <p class="text-xs text-slate-600 mb-3">Two working groups are actively developing new pamphlets: <strong>3c (Transgender alcoholics)</strong> with 11 story submissions and 5 thematic areas, and <strong>6h (Asian/Asian American alcoholics)</strong> with 4 virtual workshops planned. Both collaborate on video content. These join the 5th Edition, PLBB, ESH Vol 2, Living Sober, Spanish 4th Edition, and step guide in the same publishing pipeline.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, with the publishing department handling 7+ major projects simultaneously, under <strong>Warranty 2 (prudent finance)</strong>, how are these working groups prioritized? Does <strong>Tradition 5 (primary purpose)</strong> demand we serve underrepresented populations even when resources are stretched? <em>(Ref: 3c, 6h, Literature pipeline)</em>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">6d PLBB Amendment Process — Deferred but Not Dead</div>
+      <p class="text-xs text-slate-600 mb-3">The Plain Language Big Book was deferred to the <strong>77th GSC (2027)</strong>. But the amendment process is being built NOW — a <strong>6-key-actor workflow</strong> defining who can make editorial vs substantive changes. 9 forwarded PAIs on the PLBB were not acted upon. Plus, a study of Spanish-speaking members' tools is underway. Decisions made about the PLBB process THIS year affect next year's vote.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, the PLBB amendment process being designed NOW will govern how the 77th GSC reviews it. Under <strong>Concept III (right of decision)</strong>, should this year's Conference weigh in on the process — or leave it entirely to next year's delegates? Are the 9 unacted PAIs being ignored or deferred? <em>(Ref: 6d, PLBB standing items)</em>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-1 text-sm">8d Survey + 8e Google Ads + 7c Digital Committee — The Digital Strategy Question</div>
+      <p class="text-xs text-slate-600 mb-3">The membership survey (8d) has methodology problems. Google Ads (8e) lost 48% of clicks and 2/3 of content was disapproved. The PI Committee handles 11 digital items. And item 7c-C.3 proposes a <strong>new Conference Committee on Digital Communications</strong>. These are all symptoms of the same problem: A.A.'s digital capacity doesn't match the digital world.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, are these digital struggles (survey methodology, ad campaign errors, content disapprovals) evidence that we need the <strong>proposed Digital Communications Committee (7c-C.3)</strong>? Or would creating another committee add bureaucracy without expertise? <em>(Ref: 8d, 8e, 7c-C.3)</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TRADITIONS & CONCEPTS MAP ═══ -->
+<section id="principles" class="section">
+  <h2 class="text-xl font-extrabold mb-4">Traditions & Concepts Map — Where They Apply</h2>
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-5">
+    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50"><h3 class="font-bold text-base">Tradition Impact by Vote</h3></div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead><tr class="border-b border-slate-200 bg-slate-50">
+          <th class="px-3 py-2 text-left font-bold">Vote</th>
+          <th class="px-2 py-2 text-center font-bold">T1</th><th class="px-2 py-2 text-center font-bold">T2</th><th class="px-2 py-2 text-center font-bold">T3</th><th class="px-2 py-2 text-center font-bold">T4</th><th class="px-2 py-2 text-center font-bold">T5</th><th class="px-2 py-2 text-center font-bold">T7</th><th class="px-2 py-2 text-center font-bold">T9</th><th class="px-2 py-2 text-center font-bold">T10</th><th class="px-2 py-2 text-center font-bold">T11</th><th class="px-2 py-2 text-center font-bold">T12</th>
+        </tr></thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v1f')"><td class="px-3 py-2 font-medium">1f La Vigne</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v2e')"><td class="px-3 py-2 font-medium">2e CPC Clips</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v3b')"><td class="px-3 py-2 font-medium">3b P-11 Meds</td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v4b')"><td class="px-3 py-2 font-medium">4b GV in F-3</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v4c')"><td class="px-3 py-2 font-medium">4c Step Guide</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v4d')"><td class="px-3 py-2 font-medium">4d GSC Location</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v5f')"><td class="px-3 py-2 font-medium">5f GV Contributions</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v6c')"><td class="px-3 py-2 font-medium">6c 5th Edition</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v9b')"><td class="px-3 py-2 font-medium">9b Dr. Bob Quote</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v10b')"><td class="px-3 py-2 font-medium">10b Safety Videos</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v11bc')"><td class="px-3 py-2 font-medium">11b/c Animated</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v12b')"><td class="px-3 py-2 font-medium">12b Geographic</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="px-6 py-3 text-xs text-slate-500 border-t border-slate-100">
+      <span class="text-emerald-600 font-bold">*</span> = supports YES &nbsp;&nbsp;
+      <span class="text-rose-600 font-bold">*</span> = supports NO/caution &nbsp;&nbsp;
+      <span class="text-amber-600 font-bold">*</span> = tension/both sides
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-5">
+    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50"><h3 class="font-bold text-base">Concept Impact by Vote</h3></div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead><tr class="border-b border-slate-200 bg-slate-50">
+          <th class="px-3 py-2 text-left font-bold">Vote</th>
+          <th class="px-2 py-2 text-center font-bold" title="Final Authority">C1</th><th class="px-2 py-2 text-center font-bold" title="Delegated Authority">C2</th><th class="px-2 py-2 text-center font-bold" title="Right of Decision">C3</th><th class="px-2 py-2 text-center font-bold" title="Right of Participation">C4</th><th class="px-2 py-2 text-center font-bold" title="Minority Opinion">C5</th><th class="px-2 py-2 text-center font-bold" title="Money &amp; Spirituality">C6</th><th class="px-2 py-2 text-center font-bold" title="Conference Charter">C7</th><th class="px-2 py-2 text-center font-bold" title="Board of Trustees">C8</th><th class="px-2 py-2 text-center font-bold" title="Best Leadership">C9</th><th class="px-2 py-2 text-center font-bold" title="No Authority Over Each Other">C10</th><th class="px-2 py-2 text-center font-bold" title="Outside Expertise">C11</th><th class="px-2 py-2 text-center font-bold" title="Spiritual Foundation / Warranties">C12</th>
+        </tr></thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v1f')"><td class="px-3 py-2 font-medium">1f La Vigne</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v2e')"><td class="px-3 py-2 font-medium">2e CPC Clips</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v3b')"><td class="px-3 py-2 font-medium">3b P-11 Meds</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v4b')"><td class="px-3 py-2 font-medium">4b GV in F-3</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v4c')"><td class="px-3 py-2 font-medium">4c Step Guide</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v4d')"><td class="px-3 py-2 font-medium">4d GSC Location</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-amber-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v5f')"><td class="px-3 py-2 font-medium">5f GV Contributions</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v6c')"><td class="px-3 py-2 font-medium">6c 5th Edition</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v9b')"><td class="px-3 py-2 font-medium">9b Dr. Bob Quote</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v10b')"><td class="px-3 py-2 font-medium">10b Safety Videos</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-amber-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v11bc')"><td class="px-3 py-2 font-medium">11b/c Animated</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td></tr>
+          <tr class="hover:bg-slate-50 cursor-pointer" onclick="nav('v12b')"><td class="px-3 py-2 font-medium">12b Geographic</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-emerald-600 font-bold">*</td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center"></td><td class="text-center text-rose-600 font-bold">*</td><td class="text-center text-amber-600 font-bold">*</td><td class="text-center"></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="px-6 py-3 text-xs text-slate-500 border-t border-slate-100">
+      <span class="text-emerald-600 font-bold">*</span> = supports YES &nbsp;&nbsp;
+      <span class="text-rose-600 font-bold">*</span> = supports NO/caution &nbsp;&nbsp;
+      <span class="text-amber-600 font-bold">*</span> = tension/both sides
+    </div>
+    <div class="px-6 pb-4">
+      <details class="text-xs text-slate-600">
+        <summary class="cursor-pointer font-bold text-slate-700 hover:text-slate-900">Concept Quick Reference (hover column headers for full names)</summary>
+        <div class="grid sm:grid-cols-2 gap-1 mt-2">
+          <div><strong>C1</strong> — Final Authority (group conscience)</div>
+          <div><strong>C2</strong> — Delegated Authority (Conference = Fellowship voice)</div>
+          <div><strong>C3</strong> — Right of Decision (delegate's informed conscience)</div>
+          <div><strong>C4</strong> — Right of Participation (every member heard)</div>
+          <div><strong>C5</strong> — Right of Appeal / Minority Opinion</div>
+          <div><strong>C6</strong> — Money &amp; Spirituality (trustees handle finances)</div>
+          <div><strong>C7</strong> — Conference Charter (AA's binding agreement)</div>
+          <div><strong>C8</strong> — Board of Trustees (principal planners)</div>
+          <div><strong>C9</strong> — Best Possible Leadership</div>
+          <div><strong>C10</strong> — No Authority Over Each Other</div>
+          <div><strong>C11</strong> — Outside Expertise (professionals when needed)</div>
+          <div><strong>C12</strong> — Spiritual Foundation + Six Warranties</div>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <!-- SIX WARRANTIES (Article 12 of the Conference Charter — Concept XII) -->
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-5">
+    <div class="px-6 py-4 border-b border-slate-100 bg-amber-50"><h3 class="font-bold text-base text-amber-900">The Six Warranties of Article 12 — Vote Impact</h3>
+      <p class="text-xs text-amber-700 mt-1">Concept XII's "General Warranties of the Conference" protect A.A. from concentrations of wealth, power, governance, and controversy. These are the guardrails.</p>
+    </div>
+    <div class="p-5 space-y-4">
+      <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+        <div class="font-bold text-amber-900 text-sm mb-1">Warranty 1 — No Seat of Perilous Wealth or Power</div>
+        <p class="text-xs text-slate-700 mb-2">"The Conference shall never become the seat of perilous wealth or power."</p>
+        <div class="text-xs text-slate-600 space-y-1">
+          <div><span class="font-bold text-rose-700">5f GV Contributions:</span> Allowing direct contributions to GV expands Conference-controlled financial streams. Does this concentrate wealth?</div>
+          <div><span class="font-bold text-amber-700">4d GSC Location:</span> Moving the Conference from NYC could shift power dynamics — or decentralize them. Both sides cite this warranty.</div>
+        </div>
+      </div>
+      <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+        <div class="font-bold text-amber-900 text-sm mb-1">Warranty 2 — Ample Reserve / Prudent Financial Principle</div>
+        <p class="text-xs text-slate-700 mb-2">"Sufficient operating funds, plus an ample reserve, should be its prudent financial principle."</p>
+        <div class="text-xs text-slate-600 space-y-1">
+          <div><span class="font-bold text-rose-700">5f GV Contributions:</span> GV lost $867K in 2024, drew $350K from reserve. La Viña has never been self-supporting. Without contributions, is the "ample reserve" sustainable?</div>
+          <div><span class="font-bold text-amber-700">4b GV in F-3:</span> Adding GV to the self-support pamphlet addresses awareness. But is awareness alone sufficient for financial prudence?</div>
+          <div><span class="font-bold text-amber-700">4c Step Guide:</span> Creating a new book draws from the same publication budget that serves the 5th Edition, PLBB, and other projects already in queue.</div>
+        </div>
+      </div>
+      <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+        <div class="font-bold text-amber-900 text-sm mb-1">Warranty 3 — No Unqualified Authority Over Others</div>
+        <p class="text-xs text-slate-700 mb-2">"None of the Conference members shall ever be placed in a position of unqualified authority over any of the others."</p>
+        <div class="text-xs text-slate-600 space-y-1">
+          <div><span class="font-bold text-rose-700">10b Safety Videos:</span> If Conference "adopts" safety policy for all groups, does that impose authority on autonomous groups?</div>
+          <div><span class="font-bold text-rose-700">12b Geographic:</span> Conference-level geographic rules could override local area autonomy to define their own service boundaries.</div>
+        </div>
+      </div>
+      <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+        <div class="font-bold text-amber-900 text-sm mb-1">Warranty 4 — Substantial Unanimity for Important Decisions</div>
+        <p class="text-xs text-slate-700 mb-2">"All important decisions shall be reached by discussion, vote, and wherever possible, by substantial unanimity."</p>
+        <div class="text-xs text-slate-600 space-y-1">
+          <div><span class="font-bold text-amber-700">6c 5th Edition:</span> A new edition of the Big Book is arguably the most important decision in a generation. 2/3 majority should be expected, not bare majority.</div>
+          <div><span class="font-bold text-amber-700">4c Step Guide:</span> A "how to work the steps" book is deeply divisive. Warranty 4 suggests this needs broad consensus before proceeding.</div>
+          <div><span class="font-bold text-amber-700">5f GV Contributions:</span> This item has been brought and defeated multiple times. Recurring lack of unanimity is itself a signal under Warranty 4.</div>
+        </div>
+      </div>
+      <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+        <div class="font-bold text-amber-900 text-sm mb-1">Warranty 5 — No Punitive Action, No Public Controversy</div>
+        <p class="text-xs text-slate-700 mb-2">"No Conference action shall ever be personally punitive or an incitement to public controversy."</p>
+        <div class="text-xs text-slate-600 space-y-1">
+          <div><span class="font-bold text-amber-700">9b Dr. Bob Quote:</span> Removing a co-founder's quote could be perceived as punitive toward his legacy, even if unintended.</div>
+          <div><span class="font-bold text-amber-700">10b Safety Videos:</span> Safety discussions inevitably touch on sensitive topics (predatory behavior, harassment). Can the Conference address safety without inciting controversy?</div>
+        </div>
+      </div>
+      <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+        <div class="font-bold text-amber-900 text-sm mb-1">Warranty 6 — Conference Shall Never Perform Any Act of Government</div>
+        <p class="text-xs text-slate-700 mb-2">"Though the Conference may act for the service of Alcoholics Anonymous, it shall never perform any acts of government."</p>
+        <div class="text-xs text-slate-600 space-y-1">
+          <div><span class="font-bold text-rose-700">12b Geographic:</span> Setting geographic eligibility rules for area service IS an act of government over local areas.</div>
+          <div><span class="font-bold text-rose-700">10b Safety Videos:</span> Mandating specific safety materials crosses from service into governance of groups.</div>
+          <div><span class="font-bold text-amber-700">4c Step Guide:</span> An official "how to work the steps" book could be seen as Conference-sanctioned instruction — governing how members practice the program.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ DELEGATE MECHANICS ═══ -->
+<section id="mechanics" class="section">
+  <h2 class="text-xl font-extrabold mb-4">Delegate Mechanics — How Voting Actually Works</h2>
+  <p class="text-slate-500 text-sm mb-5">Understanding the mechanics helps you have a more informed conversation with your delegate. These aren't just procedural details — they shape outcomes.</p>
+
+  <div class="space-y-5">
+    <!-- Voting Thresholds -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-3 text-sm">Voting Thresholds — Simple Majority vs 2/3</div>
+      <div class="grid sm:grid-cols-2 gap-4 text-xs">
+        <div class="bg-amber-50 rounded-xl p-4 border border-amber-200">
+          <div class="font-bold text-amber-800 mb-2">Requires 2/3 Majority</div>
+          <ul class="text-amber-900 space-y-1">
+            <li><strong>5f</strong> — GV contributions (supersedes 1994 Advisory Action)</li>
+            <li><strong>6c</strong> — 5th Edition Big Book (new Conference-approved literature)</li>
+            <li><strong>9b</strong> — Dr. Bob quote removal (Service Manual/Charter change)</li>
+            <li>Any change to the <strong>Conference Charter</strong></li>
+            <li>Any <strong>new Conference-approved literature</strong></li>
+          </ul>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <div class="font-bold text-slate-700 mb-2">Simple Majority</div>
+          <ul class="text-slate-600 space-y-1">
+            <li><strong>Most other items</strong> — recommendations, studies, reports</li>
+            <li><strong>1f</strong> — La Vigne presentation (procedural)</li>
+            <li><strong>4d</strong> — GSC location study (study only, not a move)</li>
+            <li><strong>4c</strong> — Step guide (to begin development, not final approval)</li>
+            <li>Committee recommendations and progress reports</li>
+          </ul>
+        </div>
+      </div>
+      <div class="bg-blue-50 rounded p-3 mt-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, for items requiring 2/3 — if the vote is close (e.g., 60-40), will you voice your position as <strong>minority opinion (Concept V)</strong>? Minority opinions are recorded and can influence future Conferences.
+      </div>
+    </div>
+
+    <!-- Advisory Actions vs Recommendations -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-3 text-sm">Advisory Actions vs Committee Recommendations</div>
+      <div class="grid sm:grid-cols-2 gap-4 text-xs">
+        <div class="bg-emerald-50 rounded-xl p-4 border border-emerald-200">
+          <div class="font-bold text-emerald-800 mb-2">Advisory Action</div>
+          <p class="text-emerald-900">A formal Conference decision that carries the <strong>weight of the group conscience of A.A. as a whole</strong>. Published in the Final Report. Becomes policy that future Conferences generally respect (though they can overturn). Advisory Actions are what "sticks."</p>
+        </div>
+        <div class="bg-slate-50 rounded-xl p-4 border border-slate-200">
+          <div class="font-bold text-slate-700 mb-2">Committee Recommendation</div>
+          <p class="text-slate-600">A suggestion from a Conference committee to the full Conference floor. It becomes an Advisory Action only <strong>if approved by the full Conference</strong>. Committees can also "take no action," "refer back," or "request more information" — none of which become Advisory Actions.</p>
+        </div>
+      </div>
+      <div class="bg-blue-50 rounded p-3 mt-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, for items you feel strongly about, will you advocate in committee for a <strong>floor action</strong> if the committee takes no action? Or respect the committee process under Concept III?
+      </div>
+    </div>
+
+    <!-- Right of Decision -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-3 text-sm">Concept III — The Delegate's Right of Decision</div>
+      <p class="text-xs text-slate-600 mb-3">Your delegate has the <strong>right to vote her own informed conscience</strong> after hearing Conference discussion — even if it differs from the area's instruction. This is not a betrayal of the area; it IS the design of our service structure.</p>
+      <div class="grid sm:grid-cols-2 gap-3 text-xs">
+        <div class="bg-slate-50 rounded-lg p-3">
+          <div class="font-bold text-slate-700 mb-1">What the area CAN do:</div>
+          <ul class="text-slate-600 space-y-0.5">
+            <li>Share your group conscience clearly</li>
+            <li>Provide context and reasoning</li>
+            <li>Ask the delegate to explain her vote afterward</li>
+            <li>Express strong feelings on specific items</li>
+          </ul>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-3">
+          <div class="font-bold text-slate-700 mb-1">What the area CANNOT do:</div>
+          <ul class="text-slate-600 space-y-0.5">
+            <li>Mandate how the delegate votes</li>
+            <li>Recall the delegate for voting differently</li>
+            <li>Treat a different vote as a breach of trust</li>
+            <li>Ignore new information the delegate learned at Conference</li>
+          </ul>
+        </div>
+      </div>
+      <div class="bg-blue-50 rounded p-3 mt-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, on which items do you feel <strong>bound by the area's conscience</strong>, and on which do you feel you need the freedom to vote differently after Conference discussion? How will you communicate your decisions to us afterward?
+      </div>
+    </div>
+
+    <!-- Floor Actions -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-3 text-sm">Floor Actions — The Votes You Can't Prepare For</div>
+      <p class="text-xs text-slate-600 mb-3">Any Conference member can introduce a <strong>floor action</strong> — a motion not on the original agenda. These are debated and voted on the Conference floor. Floor actions can amend, expand, or introduce entirely new items. Your delegate will face votes you haven't discussed.</p>
+      <div class="bg-blue-50 rounded p-3 text-xs text-blue-800">
+        <strong>Ask:</strong> Delegate, when a floor action comes up that our area hasn't discussed, what <strong>principles</strong> will you use to decide? Can you commit to filtering unexpected motions through the Traditions and Concepts — even under time pressure?
+      </div>
+    </div>
+
+    <!-- Sense of the Area -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-3 text-sm">Capturing the "Sense of the Area"</div>
+      <p class="text-xs text-slate-600 mb-3">Before Conference, your area assembly should formally capture positions on key items. This gives the delegate a clear record of the area's group conscience to carry — even when she exercises her Right of Decision.</p>
+      <div class="text-xs text-slate-600 space-y-2">
+        <div class="bg-slate-50 rounded-lg p-3">
+          <div class="font-bold text-slate-700 mb-1">Recommended Process:</div>
+          <ol class="list-decimal list-inside space-y-1">
+            <li><strong>Pre-Assembly:</strong> Share this Q&A guide with groups 30+ days before assembly. Ask GSRs to bring group conscience.</li>
+            <li><strong>At Assembly:</strong> Workshop the top 5-7 items. Use the Consideration Maps for balanced discussion.</li>
+            <li><strong>Formal Vote:</strong> For each item discussed, take a sense-of-the-area vote: YES / NO / NO INSTRUCTION (delegate decides).</li>
+            <li><strong>Record:</strong> Give the delegate a written summary of each vote with the reasoning discussed.</li>
+            <li><strong>Follow-Up:</strong> After Conference, ask the delegate to report back on how she voted and why — including any floor actions.</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+
+    <!-- After the Vote -->
+    <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+      <div class="font-bold text-slate-800 mb-3 text-sm">What Happens After the Vote</div>
+      <div class="text-xs text-slate-600 space-y-2">
+        <div class="grid sm:grid-cols-2 gap-3">
+          <div class="bg-emerald-50 rounded-lg p-3 border border-emerald-200">
+            <div class="font-bold text-emerald-800 mb-1">If it PASSES (becomes Advisory Action)</div>
+            <ul class="text-emerald-900 space-y-0.5">
+              <li>Published in the Final Report (typically fall)</li>
+              <li>GSO/AAWS begins implementation</li>
+              <li>Literature projects: 1-3 year development cycle</li>
+              <li>Policy changes: effective immediately</li>
+              <li>Studies: report back to next year's Conference</li>
+            </ul>
+          </div>
+          <div class="bg-slate-50 rounded-lg p-3 border border-slate-200">
+            <div class="font-bold text-slate-700 mb-1">If it FAILS</div>
+            <ul class="text-slate-600 space-y-0.5">
+              <li>Item can be resubmitted as a PAI next year</li>
+              <li>Minority opinion is recorded</li>
+              <li>Committee may request further study</li>
+              <li>"No action" ≠ "never" — it means "not now"</li>
+              <li>Standing items automatically return next year</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FINANCIAL IMPACT SUMMARY ═══ -->
+<section id="finances" class="section">
+  <h2 class="text-xl font-extrabold mb-4">Financial Impact Summary — What Do YES Votes Cost?</h2>
+  <p class="text-slate-500 text-sm mb-5">Under Warranty 2, every vote has a resource dimension. Here's the financial picture if key items pass.</p>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-5">
+    <div class="px-6 py-4 border-b border-slate-100 bg-slate-50"><h3 class="font-bold text-base">Resource Impact by Vote</h3></div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead><tr class="border-b border-slate-200 bg-slate-50">
+          <th class="px-3 py-2 text-left font-bold">Vote</th>
+          <th class="px-3 py-2 text-left font-bold">If YES — What It Costs</th>
+          <th class="px-3 py-2 text-center font-bold">Type</th>
+        </tr></thead>
+        <tbody class="divide-y divide-slate-100">
+          <tr><td class="px-3 py-2 font-medium">6c 5th Edition</td><td class="px-3 py-2">Major publishing project: typesetting, printing, distribution for 38 stories + new foreword/preface/appendices. Multi-year, multi-million dollar endeavor. Revenue-generating long-term.</td><td class="text-center"><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-bold">Revenue</span></td></tr>
+          <tr><td class="px-3 py-2 font-medium">5f GV Contributions</td><td class="px-3 py-2">Administrative setup for contribution infrastructure. Potential to offset GV's $867K annual loss. May divert some contributions from AAWS/GSO.</td><td class="text-center"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Mixed</span></td></tr>
+          <tr><td class="px-3 py-2 font-medium">4d GSC Location Study</td><td class="px-3 py-2">Outside consulting firm fees for site analysis. One-time cost. Potential long-term savings: $5,000-$7,000/area/year if location changes.</td><td class="text-center"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">Cost</span></td></tr>
+          <tr><td class="px-3 py-2 font-medium">4c Step Guide</td><td class="px-3 py-2">Multi-year development: working group, draft review, Conference approval cycle. Staff time competes with 5th Ed, PLBB, Living Sober.</td><td class="text-center"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">Cost</span></td></tr>
+          <tr><td class="px-3 py-2 font-medium">11b/c Animated Videos</td><td class="px-3 py-2">Animation production for 2 pamphlets. AAWS multimedia staff already stretched across CPC reels, safety videos, Class A trustee videos.</td><td class="text-center"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">Cost</span></td></tr>
+          <tr><td class="px-3 py-2 font-medium">10b Safety Videos</td><td class="px-3 py-2">If adopted: distribution, hosting, translation costs. If AAWS produces its own: full production budget. Videos already exist on YouTube at no cost to AAWS.</td><td class="text-center"><span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">Mixed</span></td></tr>
+          <tr><td class="px-3 py-2 font-medium">8d Membership Survey</td><td class="px-3 py-2">$18,500 in two installments. If delayed for pilot, additional cost for pilot study + full survey later.</td><td class="text-center"><span class="bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full font-bold">Cost</span></td></tr>
+          <tr><td class="px-3 py-2 font-medium">4b GV in F-3</td><td class="px-3 py-2">Minimal: pamphlet text revision and reprint. May need immediate re-revision if 5f also passes.</td><td class="text-center"><span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold">Minimal</span></td></tr>
+          <tr><td class="px-3 py-2 font-medium">1f La Vigne</td><td class="px-3 py-2">10 minutes of Conference time annually. No direct financial cost.</td><td class="text-center"><span class="bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full font-bold">Minimal</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5 mb-5">
+    <div class="font-bold text-slate-800 mb-3 text-sm">The Big Picture: Publishing Pipeline Capacity</div>
+    <p class="text-xs text-slate-600 mb-3">AAWS has one publishing department handling ALL literature projects. If every literature-related YES vote passes, here's the queue:</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs text-center">
+      <div class="bg-rose-50 rounded-lg p-2 border border-rose-200"><div class="font-bold text-rose-700">5th Edition BB</div><div class="text-slate-500">Active now</div></div>
+      <div class="bg-rose-50 rounded-lg p-2 border border-rose-200"><div class="font-bold text-rose-700">PLBB</div><div class="text-slate-500">Deferred to 77th</div></div>
+      <div class="bg-amber-50 rounded-lg p-2 border border-amber-200"><div class="font-bold text-amber-700">ESH Vol 2</div><div class="text-slate-500">If approved</div></div>
+      <div class="bg-amber-50 rounded-lg p-2 border border-amber-200"><div class="font-bold text-amber-700">Step Guide</div><div class="text-slate-500">If approved</div></div>
+      <div class="bg-sky-50 rounded-lg p-2 border border-sky-200"><div class="font-bold text-sky-700">Living Sober</div><div class="text-slate-500">In revision</div></div>
+      <div class="bg-sky-50 rounded-lg p-2 border border-sky-200"><div class="font-bold text-sky-700">Spanish 4th Ed</div><div class="text-slate-500">Target 77th</div></div>
+      <div class="bg-violet-50 rounded-lg p-2 border border-violet-200"><div class="font-bold text-violet-700">Trans Pamphlet</div><div class="text-slate-500">Working group</div></div>
+      <div class="bg-violet-50 rounded-lg p-2 border border-violet-200"><div class="font-bold text-violet-700">Asian/AA Pamphlet</div><div class="text-slate-500">Working group</div></div>
+    </div>
+    <div class="bg-blue-50 rounded p-3 mt-3 text-xs text-blue-800">
+      <strong>Ask:</strong> Delegate, under <strong>Warranty 2</strong>, can AAWS realistically deliver all of these? What's the honest prioritization? And under <strong>Tradition 5</strong>, which projects most urgently carry the message to the alcoholic who still suffers?
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-5">
+    <div class="font-bold text-slate-800 mb-3 text-sm">GV/La Viña Financial Health</div>
+    <div class="text-xs text-slate-600 space-y-2">
+      <div class="grid sm:grid-cols-3 gap-3">
+        <div class="bg-rose-50 rounded-lg p-3 border border-rose-200 text-center">
+          <div class="font-bold text-rose-700 text-lg">$867K</div>
+          <div class="text-slate-500">2024 Net Loss</div>
+        </div>
+        <div class="bg-amber-50 rounded-lg p-3 border border-amber-200 text-center">
+          <div class="font-bold text-amber-700 text-lg">$350K</div>
+          <div class="text-slate-500">Reserve Fund Draw</div>
+        </div>
+        <div class="bg-slate-50 rounded-lg p-3 border border-slate-200 text-center">
+          <div class="font-bold text-slate-700 text-lg">~25M</div>
+          <div class="text-slate-500">Annual Service Instances</div>
+        </div>
+      </div>
+      <p class="text-slate-500 mt-2">La Viña has <strong>never been self-supporting</strong>. GV's 5-year plan targets breakeven by 2028 through 28% staff reduction ($420K savings) and digital growth. The question for votes 4b and 5f: is the plan working fast enough, or does GV need contributions NOW?</p>
+    </div>
+  </div>
+</section>
+
+</div>
+</main>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+function nav(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => b.setAttribute('data-active', 'false'));
+  const sec = document.getElementById(id);
+  if (sec) { sec.classList.add('active'); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+  const btn = document.querySelector(`[data-section="${id}"]`);
+  if (btn) btn.setAttribute('data-active', 'true');
+  const sb = document.getElementById('sidebar');
+  if (sb.classList.contains('open')) sb.classList.remove('open');
+  history.replaceState(null, '', '#' + id);
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+}
+window.addEventListener('hashchange', () => {
+  const h = location.hash.slice(1);
+  if (h) nav(h);
+});
+window.addEventListener('DOMContentLoaded', () => {
+  const h = location.hash.slice(1);
+  if (h) nav(h);
+});
+</script>
+</body>
+</html>
