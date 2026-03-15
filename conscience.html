@@ -58,9 +58,24 @@
         /* Scroll to top button */
         #scroll-top { position: fixed; bottom: 24px; right: 24px; z-index: 60; display: none; }
 
+        /* Flowchart modal */
+        #flowchart-modal { position: fixed; inset: 0; z-index: 200; display: none; }
+        #flowchart-modal.open { display: flex; }
+        #flowchart-modal-backdrop { position: absolute; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        #flowchart-modal-content { position: relative; z-index: 1; display: flex; flex-direction: column; width: 100%; height: 100%; background: white; }
+        #flowchart-modal-body > svg { flex: 1; width: 100%; height: 100%; }
+        #flowchart-modal-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid #e5e7eb; flex-shrink: 0; }
+        #flowchart-modal-body { flex: 1; overflow: auto; padding: 16px; display: flex; flex-direction: column; }
+        #modal-flow-detail { flex-shrink: 0; }
+        html.dark #flowchart-modal-content { background: #1e293b; color: #e2e8f0; }
+        html.dark #flowchart-modal-header { border-color: #334155; }
+        html.dark #flowchart-modal-header button { background: #334155; color: #e2e8f0; }
+        html.dark #flowchart-modal-header button:hover { background: #ef4444 !important; color: white !important; }
+        html.dark #flowchart-modal-body { background: #0f172a; }
+
         /* ======================= PRINT STYLES ======================= */
         @media print {
-            .noprint, #scroll-top { display: none !important; }
+            .noprint, #scroll-top, #flowchart-modal { display: none !important; }
             html, body { background: white !important; color: black !important; font-size: 11pt; }
             main { margin-left: 0 !important; margin-top: 0 !important; padding: 0 !important; max-width: 100% !important; }
             section { page-break-inside: avoid; margin-bottom: 18pt !important; }
@@ -157,6 +172,23 @@
         html.dark .bg-pink-50 { background: #2d1b2b !important; }
         html.dark .bg-yellow-50 { background: #2d2b1b !important; }
         html.dark .bg-emerald-50 { background: #1b2d1b !important; }
+
+        /* Dark mode: live tool status bar colors */
+        html.dark .bg-rose-50 { background: #2d1b1e !important; }
+        html.dark .bg-sky-50 { background: #1b2530 !important; }
+        html.dark .bg-fuchsia-50 { background: #2d1b2d !important; }
+        html.dark .bg-orange-50 { background: #2d2518 !important; }
+        html.dark .border-rose-200 { border-color: #f43f5e !important; }
+        html.dark .border-sky-200 { border-color: #38bdf8 !important; }
+        html.dark .border-fuchsia-200 { border-color: #d946ef !important; }
+        html.dark .border-orange-200 { border-color: #fb923c !important; }
+        html.dark .text-rose-800 { color: #fda4af !important; }
+        html.dark .text-sky-800 { color: #7dd3fc !important; }
+        html.dark .text-fuchsia-800 { color: #e879f9 !important; }
+        html.dark .text-orange-800 { color: #fdba74 !important; }
+        html.dark .bg-gray-100 { background: #1e293b !important; }
+        html.dark .border-yellow-200 { border-color: #fbbf24 !important; }
+        html.dark .text-yellow-800 { color: #fde68a !important; }
 
         /* Dark mode: border-top colored cards */
         html.dark .border-blue-200 { border-color: #3b82f6 !important; }
@@ -473,154 +505,260 @@
 <!-- SECTION 4: Interactive Motion Flowchart -->
 <!-- ============================================================ -->
 <section id="flowchart" class="mb-12">
-    <h2 class="text-3xl font-bold mb-4">Motion Flowchart</h2>
-    <p class="mb-4 text-gray-600">Click any step to see details. This shows the complete lifecycle of a motion — including subsidiary motions, the Previous Question bypass, and the AA practice of hearing minority opinion with the option to reconsider.</p>
+    <div class="flex items-center gap-3 mb-4">
+        <h2 class="text-3xl font-bold">Motion Flowchart</h2>
+        <button onclick="openFlowchartModal()" class="noprint px-3 py-1.5 bg-aa-600 text-white rounded-lg text-sm font-semibold hover:bg-aa-700 transition flex items-center gap-1.5" title="View fullscreen">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"/></svg>
+            Fullscreen
+        </button>
+    </div>
+    <p class="mb-4 text-gray-600">Click any step to see details. This shows <strong>every path</strong> a motion can take — withdraw, table (and take from table), postpone, refer to committee, postpone indefinitely, objection to consideration, previous question, amendments, minority opinion, and reconsider.</p>
 
     <div id="flowchart-container" class="bg-white rounded-lg shadow-sm p-4 overflow-x-auto">
-        <svg id="flow-svg" viewBox="0 0 920 790" class="w-full" style="min-width:700px; max-width:920px; margin:0 auto; display:block;">
+        <svg id="flow-svg" viewBox="0 0 960 1120" class="w-full" style="min-width:740px; min-height:900px; margin:0 auto; display:block;">
             <defs>
                 <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
                     <polygon points="0 0, 10 3.5, 0 7" fill="#94a3b8"/>
                 </marker>
             </defs>
 
-            <!-- Annotation: Incidental & Privileged Motions -->
+            <!-- ===== Annotation: Incidental & Privileged Motions ===== -->
             <g class="flow-node" data-step="incidental" onclick="showFlowDetail(this)">
-                <rect x="645" y="10" width="260" height="65" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3"/>
-                <text x="775" y="30" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">At any time during a meeting:</text>
-                <text x="775" y="47" text-anchor="middle" font-size="10" fill="#64748b">Point of Order &#8226; Parliamentary Inquiry</text>
-                <text x="775" y="62" text-anchor="middle" font-size="10" fill="#64748b">Recess &#8226; Adjourn &#8226; Question of Privilege</text>
+                <rect x="660" y="3" width="280" height="90" rx="8" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3"/>
+                <text x="800" y="20" text-anchor="middle" font-size="11" font-weight="600" fill="#475569">Available at any time:</text>
+                <text x="800" y="35" text-anchor="middle" font-size="9" fill="#64748b">Point of Order &#8226; Appeal Chair &#8226; Parl. Inquiry</text>
+                <text x="800" y="48" text-anchor="middle" font-size="9" fill="#64748b">Recess &#8226; Adjourn &#8226; Fix Time to Adjourn</text>
+                <text x="800" y="61" text-anchor="middle" font-size="9" fill="#64748b">Question of Privilege &#8226; Request for Info</text>
+                <text x="800" y="74" text-anchor="middle" font-size="9" fill="#64748b">Limit/Extend Debate &#8226; Suspend Rules</text>
+                <text x="800" y="87" text-anchor="middle" font-size="9" fill="#64748b">Division (recount) &#8226; Divide the Question</text>
             </g>
 
-            <!-- Node: Member Makes Motion -->
+            <!-- ===== 1. Member Makes Motion ===== -->
             <g class="flow-node" data-step="make-motion" onclick="showFlowDetail(this)">
-                <rect x="280" y="10" width="240" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-                <text x="400" y="40" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a5f">Member Makes a Motion</text>
+                <rect x="310" y="10" width="240" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="430" y="40" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a5f">Member Makes a Motion</text>
             </g>
-            <line x1="400" y1="60" x2="400" y2="85" class="flow-arrow"/>
+            <line x1="430" y1="60" x2="430" y2="85" class="flow-arrow"/>
 
-            <!-- Node: Is there a Second? -->
+            <!-- ===== 2. Objection to Consideration? ===== -->
+            <g class="flow-node" data-step="objection" onclick="showFlowDetail(this)">
+                <polygon points="430,85 550,120 430,155 310,120" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                <text x="430" y="117" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Objection to</text>
+                <text x="430" y="130" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Consideration?</text>
+            </g>
+            <!-- Objection sustained → motion killed -->
+            <line x1="310" y1="120" x2="160" y2="120" class="flow-arrow"/>
+            <text x="235" y="112" text-anchor="middle" font-size="10" fill="#94a3b8">&#8532; vote against</text>
+            <g class="flow-node" data-step="objection-sustained" onclick="showFlowDetail(this)">
+                <rect x="40" y="97" width="120" height="46" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+                <text x="100" y="118" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">Not</text>
+                <text x="100" y="132" text-anchor="middle" font-size="11" font-weight="600" fill="#b91c1c">Considered</text>
+            </g>
+            <!-- No objection → continue -->
+            <line x1="430" y1="155" x2="430" y2="175" class="flow-arrow"/>
+            <text x="447" y="168" font-size="10" fill="#94a3b8">No obj.</text>
+
+            <!-- ===== 3. Is there a Second? ===== -->
             <g class="flow-node" data-step="second" onclick="showFlowDetail(this)">
-                <polygon points="400,85 520,125 400,165 280,125" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
-                <text x="400" y="130" text-anchor="middle" font-size="13" font-weight="600" fill="#92400e">Is There a Second?</text>
+                <polygon points="430,175 550,210 430,245 310,210" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                <text x="430" y="215" text-anchor="middle" font-size="13" font-weight="600" fill="#92400e">Is There a Second?</text>
             </g>
-            <!-- No second branch -->
-            <line x1="280" y1="125" x2="140" y2="125" class="flow-arrow"/>
+            <!-- No second → dies -->
+            <line x1="310" y1="210" x2="160" y2="210" class="flow-arrow"/>
             <g class="flow-node" data-step="dies" onclick="showFlowDetail(this)">
-                <rect x="40" y="100" width="100" height="50" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
-                <text x="90" y="128" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">Motion Dies</text>
+                <rect x="40" y="187" width="120" height="46" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+                <text x="100" y="214" text-anchor="middle" font-size="12" font-weight="600" fill="#b91c1c">Motion Dies</text>
             </g>
-            <text x="210" y="118" text-anchor="middle" font-size="11" fill="#94a3b8">No</text>
+            <text x="235" y="203" text-anchor="middle" font-size="11" fill="#94a3b8">No</text>
+            <!-- Yes → discussion -->
+            <line x1="430" y1="245" x2="430" y2="275" class="flow-arrow"/>
+            <text x="442" y="263" font-size="11" fill="#94a3b8">Yes</text>
 
-            <!-- Yes arrow down -->
-            <line x1="400" y1="165" x2="400" y2="195" class="flow-arrow"/>
-            <text x="412" y="183" font-size="11" fill="#94a3b8">Yes</text>
-
-            <!-- Node: Discussion -->
+            <!-- ===== 4. Chair Opens Discussion ===== -->
             <g class="flow-node" data-step="discussion" onclick="showFlowDetail(this)">
-                <rect x="280" y="195" width="240" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-                <text x="400" y="225" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a5f">Chair Opens Discussion</text>
+                <rect x="310" y="275" width="240" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="430" y="305" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a5f">Chair Opens Discussion</text>
             </g>
 
-            <!-- LEFT BRANCH: Subsidiary Motion → Motion Deferred -->
-            <line x1="280" y1="220" x2="185" y2="220" class="flow-arrow"/>
-            <text x="233" y="212" text-anchor="middle" font-size="10" fill="#94a3b8">Subsidiary</text>
-            <text x="233" y="223" text-anchor="middle" font-size="10" fill="#94a3b8">Motion</text>
-            <g class="flow-node" data-step="deferred" onclick="showFlowDetail(this)">
-                <rect x="20" y="198" width="165" height="46" rx="8" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
-                <text x="102" y="217" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Motion Deferred</text>
-                <text x="102" y="233" text-anchor="middle" font-size="9" fill="#64748b">Table / Postpone / Refer</text>
+            <!-- ===== LEFT BRANCH: Subsidiary Motions (expanded) ===== -->
+            <!-- Arrow from Discussion left -->
+            <line x1="310" y1="300" x2="240" y2="300" class="flow-arrow"/>
+            <text x="275" y="293" text-anchor="middle" font-size="9" fill="#94a3b8">Subsidiary</text>
+
+            <!-- Lay on the Table -->
+            <g class="flow-node" data-step="table" onclick="showFlowDetail(this)">
+                <rect x="40" y="270" width="200" height="36" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+                <text x="140" y="285" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Lay on the Table</text>
+                <text x="140" y="298" text-anchor="middle" font-size="8" fill="#64748b">Majority &#8226; No debate</text>
+            </g>
+            <!-- Take from Table return arrow (dashed) -->
+            <path d="M 40 288 L 15 288 L 15 275 Q 15 265 25 260 L 300 260 Q 310 260 310 270 L 310 275" class="flow-arrow" fill="none" stroke-dasharray="5 3"/>
+            <text x="155" y="257" text-anchor="middle" font-size="8" fill="#94a3b8">Take from Table (later)</text>
+
+            <!-- Postpone to Certain Time -->
+            <g class="flow-node" data-step="postpone-time" onclick="showFlowDetail(this)">
+                <rect x="40" y="312" width="200" height="36" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+                <text x="140" y="327" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Postpone to Certain Time</text>
+                <text x="140" y="340" text-anchor="middle" font-size="8" fill="#64748b">Majority &#8226; Limited debate</text>
+            </g>
+            <line x1="240" y1="330" x2="240" y2="300" class="flow-arrow" stroke-dasharray="4 3"/>
+
+            <!-- Refer to Committee -->
+            <g class="flow-node" data-step="refer-committee" onclick="showFlowDetail(this)">
+                <rect x="40" y="354" width="200" height="36" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+                <text x="140" y="369" text-anchor="middle" font-size="10" font-weight="600" fill="#334155">Refer to Committee</text>
+                <text x="140" y="382" text-anchor="middle" font-size="8" fill="#64748b">Majority &#8226; Limited debate</text>
+            </g>
+            <line x1="240" y1="372" x2="240" y2="300" class="flow-arrow" stroke-dasharray="4 3"/>
+
+            <!-- Postpone Indefinitely -->
+            <g class="flow-node" data-step="postpone-indef" onclick="showFlowDetail(this)">
+                <rect x="40" y="396" width="200" height="36" rx="6" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+                <text x="140" y="411" text-anchor="middle" font-size="10" font-weight="600" fill="#b91c1c">Postpone Indefinitely</text>
+                <text x="140" y="424" text-anchor="middle" font-size="8" fill="#64748b">Kills motion &#8226; Full debate</text>
+            </g>
+            <line x1="240" y1="414" x2="240" y2="300" class="flow-arrow" stroke-dasharray="4 3"/>
+
+            <!-- ===== RIGHT BRANCH: Withdraw Motion ===== -->
+            <line x1="550" y1="300" x2="640" y2="300" class="flow-arrow"/>
+            <text x="595" y="293" text-anchor="middle" font-size="9" fill="#94a3b8">Maker</text>
+            <g class="flow-node" data-step="withdraw" onclick="showFlowDetail(this)">
+                <rect x="640" y="275" width="195" height="50" rx="8" fill="#f1f5f9" stroke="#64748b" stroke-width="2"/>
+                <text x="737" y="296" text-anchor="middle" font-size="11" font-weight="600" fill="#334155">Motion Withdrawn</text>
+                <text x="737" y="312" text-anchor="middle" font-size="9" fill="#64748b">By maker &#8226; No objection</text>
             </g>
 
-            <!-- Call the Question bypass path (Discussion → Vote, dashed) -->
-            <path d="M 285 245 Q 245 327 285 410" class="flow-arrow" fill="none" stroke-dasharray="6 3"/>
+            <!-- ===== Call the Question bypass (Discussion → Vote, dashed) ===== -->
             <g class="flow-node" data-step="call-question" onclick="showFlowDetail(this)">
-                <rect x="215" y="295" width="50" height="60" rx="4" fill="transparent" stroke="none"/>
-                <text x="252" y="315" text-anchor="end" font-size="9" fill="#94a3b8">Previous</text>
-                <text x="252" y="326" text-anchor="end" font-size="9" fill="#94a3b8">Question</text>
-                <text x="252" y="337" text-anchor="end" font-size="9" fill="#94a3b8">(&#8532; vote)</text>
+                <rect x="245" y="370" width="50" height="60" rx="4" fill="transparent" stroke="none"/>
+                <text x="282" y="388" text-anchor="end" font-size="9" fill="#94a3b8">Previous</text>
+                <text x="282" y="399" text-anchor="end" font-size="9" fill="#94a3b8">Question</text>
+                <text x="282" y="410" text-anchor="end" font-size="9" fill="#94a3b8">(&#8532; vote)</text>
             </g>
+            <path d="M 315 325 Q 275 400 315 485" class="flow-arrow" fill="none" stroke-dasharray="6 3"/>
+            <!-- PQ fails → back to discussion label -->
+            <text x="280" y="430" text-anchor="end" font-size="8" fill="#94a3b8">If PQ fails:</text>
+            <text x="280" y="440" text-anchor="end" font-size="8" fill="#94a3b8">back to discussion</text>
 
-            <!-- Main path: Discussion → Amendment check -->
-            <line x1="400" y1="245" x2="400" y2="275" class="flow-arrow"/>
+            <!-- ===== Main path: Discussion → Amendment check ===== -->
+            <line x1="430" y1="325" x2="430" y2="355" class="flow-arrow"/>
 
-            <!-- Node: Amendment? -->
+            <!-- ===== 5. Amendment Proposed? ===== -->
             <g class="flow-node" data-step="amend-check" onclick="showFlowDetail(this)">
-                <polygon points="400,275 520,315 400,355 280,315" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
-                <text x="400" y="312" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">Amendment</text>
-                <text x="400" y="326" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">Proposed?</text>
+                <polygon points="430,355 550,395 430,435 310,395" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                <text x="430" y="392" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">Amendment</text>
+                <text x="430" y="406" text-anchor="middle" font-size="12" font-weight="600" fill="#92400e">Proposed?</text>
             </g>
             <!-- Yes: amendment loop -->
-            <line x1="520" y1="315" x2="640" y2="315" class="flow-arrow"/>
+            <line x1="550" y1="395" x2="660" y2="395" class="flow-arrow"/>
             <g class="flow-node" data-step="amend-process" onclick="showFlowDetail(this)">
-                <rect x="640" y="290" width="140" height="50" rx="8" fill="#ede9fe" stroke="#7e57c2" stroke-width="2"/>
-                <text x="710" y="312" text-anchor="middle" font-size="11" font-weight="600" fill="#5b21b6">Discuss &amp; Vote</text>
-                <text x="710" y="326" text-anchor="middle" font-size="11" font-weight="600" fill="#5b21b6">on Amendment</text>
+                <rect x="660" y="370" width="150" height="50" rx="8" fill="#ede9fe" stroke="#7e57c2" stroke-width="2"/>
+                <text x="735" y="392" text-anchor="middle" font-size="11" font-weight="600" fill="#5b21b6">Discuss &amp; Vote</text>
+                <text x="735" y="406" text-anchor="middle" font-size="11" font-weight="600" fill="#5b21b6">on Amendment</text>
             </g>
-            <text x="580" y="308" text-anchor="middle" font-size="11" fill="#94a3b8">Yes</text>
-            <!-- Loop back -->
-            <path d="M 710 340 L 710 370 Q 710 380 700 380 L 420 380 Q 400 380 400 370 L 400 355" class="flow-arrow" fill="none"/>
-            <text x="560" y="393" text-anchor="middle" font-size="10" fill="#94a3b8">Back to main motion</text>
+            <text x="605" y="388" text-anchor="middle" font-size="11" fill="#94a3b8">Yes</text>
+            <!-- Loop back from amendment -->
+            <path d="M 735 420 L 735 450 Q 735 460 725 460 L 450 460 Q 430 460 430 450 L 430 435" class="flow-arrow" fill="none" stroke-dasharray="5 3"/>
+            <text x="585" y="473" text-anchor="middle" font-size="10" fill="#94a3b8">Back to main motion (as amended or not)</text>
 
             <!-- No: continue to vote -->
-            <line x1="400" y1="355" x2="400" y2="410" class="flow-arrow"/>
-            <text x="370" y="388" font-size="11" fill="#94a3b8">No</text>
+            <line x1="430" y1="435" x2="430" y2="485" class="flow-arrow"/>
+            <text x="400" y="465" font-size="11" fill="#94a3b8">No</text>
 
-            <!-- Node: Vote -->
+            <!-- ===== 6. Chair Calls the Vote ===== -->
             <g class="flow-node" data-step="vote" onclick="showFlowDetail(this)">
-                <rect x="280" y="410" width="240" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
-                <text x="400" y="440" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a5f">Chair Calls the Vote</text>
+                <rect x="310" y="485" width="240" height="50" rx="8" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+                <text x="430" y="515" text-anchor="middle" font-size="14" font-weight="600" fill="#1e3a5f">Chair Calls the Vote</text>
             </g>
-            <line x1="400" y1="460" x2="400" y2="490" class="flow-arrow"/>
+            <line x1="430" y1="535" x2="430" y2="565" class="flow-arrow"/>
 
-            <!-- Node: Passes? -->
+            <!-- ===== 7. Does It Pass? ===== -->
             <g class="flow-node" data-step="result" onclick="showFlowDetail(this)">
-                <polygon points="400,490 510,525 400,560 290,525" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
-                <text x="400" y="530" text-anchor="middle" font-size="13" font-weight="600" fill="#92400e">Does It Pass?</text>
+                <polygon points="430,565 540,600 430,635 320,600" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                <text x="430" y="605" text-anchor="middle" font-size="13" font-weight="600" fill="#92400e">Does It Pass?</text>
             </g>
 
             <!-- Passes -->
-            <line x1="510" y1="525" x2="630" y2="525" class="flow-arrow"/>
+            <line x1="540" y1="600" x2="660" y2="600" class="flow-arrow"/>
             <g class="flow-node" data-step="passes" onclick="showFlowDetail(this)">
-                <rect x="630" y="500" width="130" height="50" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
-                <text x="695" y="530" text-anchor="middle" font-size="13" font-weight="600" fill="#166534">Motion Passes</text>
+                <rect x="660" y="575" width="130" height="50" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+                <text x="725" y="605" text-anchor="middle" font-size="13" font-weight="600" fill="#166534">Motion Passes</text>
             </g>
-            <text x="570" y="518" text-anchor="middle" font-size="11" fill="#94a3b8">Yes</text>
+            <text x="600" y="593" text-anchor="middle" font-size="11" fill="#94a3b8">Yes</text>
 
             <!-- Fails -->
-            <line x1="290" y1="525" x2="170" y2="525" class="flow-arrow"/>
+            <line x1="320" y1="600" x2="170" y2="600" class="flow-arrow"/>
             <g class="flow-node" data-step="fails" onclick="showFlowDetail(this)">
-                <rect x="40" y="500" width="130" height="50" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
-                <text x="105" y="530" text-anchor="middle" font-size="13" font-weight="600" fill="#b91c1c">Motion Fails</text>
+                <rect x="40" y="575" width="130" height="50" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="2"/>
+                <text x="105" y="605" text-anchor="middle" font-size="13" font-weight="600" fill="#b91c1c">Motion Fails</text>
             </g>
-            <text x="230" y="518" text-anchor="middle" font-size="11" fill="#94a3b8">No</text>
+            <text x="245" y="593" text-anchor="middle" font-size="11" fill="#94a3b8">No</text>
 
-            <!-- Minority opinion -->
-            <line x1="400" y1="560" x2="400" y2="585" class="flow-arrow"/>
+            <!-- ===== 8. Minority Opinion ===== -->
+            <line x1="430" y1="635" x2="430" y2="660" class="flow-arrow"/>
+            <text x="455" y="650" font-size="9" fill="#7e57c2" font-style="italic">Either outcome</text>
             <g class="flow-node" data-step="minority" onclick="showFlowDetail(this)">
-                <rect x="250" y="585" width="300" height="40" rx="8" fill="#ede9fe" stroke="#7e57c2" stroke-width="2"/>
-                <text x="400" y="610" text-anchor="middle" font-size="12" font-weight="600" fill="#5b21b6">Minority Opinion Heard (AA Practice)</text>
+                <rect x="280" y="660" width="300" height="40" rx="8" fill="#ede9fe" stroke="#7e57c2" stroke-width="2"/>
+                <text x="430" y="685" text-anchor="middle" font-size="12" font-weight="600" fill="#5b21b6">Minority Opinion Heard (AA Practice)</text>
             </g>
 
-            <!-- Reconsider? -->
-            <line x1="400" y1="625" x2="400" y2="650" class="flow-arrow"/>
+            <!-- ===== 9. Reconsider? ===== -->
+            <line x1="430" y1="700" x2="430" y2="725" class="flow-arrow"/>
             <g class="flow-node" data-step="reconsider" onclick="showFlowDetail(this)">
-                <polygon points="400,650 500,685 400,720 300,685" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
-                <text x="400" y="688" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Move to</text>
-                <text x="400" y="701" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Reconsider?</text>
+                <polygon points="430,725 530,760 430,795 330,760" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                <text x="430" y="758" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Move to</text>
+                <text x="430" y="771" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Reconsider?</text>
             </g>
             <!-- Yes: loop back to discussion -->
-            <line x1="500" y1="685" x2="570" y2="685" class="flow-arrow" stroke-dasharray="6 3"/>
-            <path d="M 570 685 L 870 685 L 870 220 L 520 220" class="flow-arrow" fill="none" stroke-dasharray="6 3"/>
-            <text x="545" y="678" font-size="11" fill="#94a3b8">Yes</text>
-            <text x="882" y="460" font-size="10" fill="#94a3b8" transform="rotate(-90, 882, 460)">Return to Discussion</text>
+            <line x1="530" y1="760" x2="600" y2="760" class="flow-arrow" stroke-dasharray="6 3"/>
+            <path d="M 600 760 L 860 760 L 860 300 L 550 300" class="flow-arrow" fill="none" stroke-dasharray="6 3"/>
+            <text x="575" y="753" font-size="11" fill="#94a3b8">Yes</text>
+            <text x="872" y="530" font-size="10" fill="#94a3b8" transform="rotate(-90, 872, 530)">Return to Discussion</text>
+
+            <!-- No: next decision -->
+            <line x1="430" y1="795" x2="430" y2="820" class="flow-arrow"/>
+            <text x="400" y="812" font-size="11" fill="#94a3b8">No</text>
+
+            <!-- ===== 10. Rescind Later? ===== -->
+            <g class="flow-node" data-step="rescind" onclick="showFlowDetail(this)">
+                <polygon points="430,820 540,855 430,890 320,855" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+                <text x="430" y="852" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Rescind at a</text>
+                <text x="430" y="865" text-anchor="middle" font-size="11" font-weight="600" fill="#92400e">Future Meeting?</text>
+            </g>
+            <!-- Yes: rescind -->
+            <line x1="540" y1="855" x2="660" y2="855" class="flow-arrow" stroke-dasharray="6 3"/>
+            <g class="flow-node" data-step="rescinded" onclick="showFlowDetail(this)">
+                <rect x="660" y="835" width="150" height="40" rx="8" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="5 3"/>
+                <text x="735" y="852" text-anchor="middle" font-size="10" font-weight="600" fill="#b91c1c">Decision Rescinded</text>
+                <text x="735" y="866" text-anchor="middle" font-size="8" fill="#64748b">&#8532; (no notice) or majority</text>
+            </g>
+            <text x="600" y="848" text-anchor="middle" font-size="10" fill="#94a3b8">Yes</text>
 
             <!-- No: business complete -->
-            <line x1="400" y1="720" x2="400" y2="745" class="flow-arrow"/>
-            <text x="370" y="738" font-size="11" fill="#94a3b8">No</text>
+            <line x1="430" y1="890" x2="430" y2="915" class="flow-arrow"/>
+            <text x="400" y="907" font-size="11" fill="#94a3b8">No</text>
             <g class="flow-node" data-step="complete" onclick="showFlowDetail(this)">
-                <rect x="320" y="745" width="160" height="36" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
-                <text x="400" y="768" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">Business Complete</text>
+                <rect x="350" y="915" width="160" height="36" rx="8" fill="#f0fdf4" stroke="#22c55e" stroke-width="2"/>
+                <text x="430" y="938" text-anchor="middle" font-size="12" font-weight="600" fill="#166534">Business Complete</text>
+            </g>
+
+            <!-- ===== LEGEND ===== -->
+            <g transform="translate(40, 980)">
+                <text x="0" y="0" font-size="11" font-weight="600" fill="#475569">Legend:</text>
+                <rect x="0" y="10" width="16" height="12" rx="3" fill="#dbeafe" stroke="#2563eb" stroke-width="1.5"/>
+                <text x="22" y="20" font-size="9" fill="#64748b">Main process steps</text>
+                <rect x="160" y="10" width="16" height="12" rx="3" fill="#fef3c7" stroke="#f59e0b" stroke-width="1.5"/>
+                <text x="182" y="20" font-size="9" fill="#64748b">Decision points</text>
+                <rect x="310" y="10" width="16" height="12" rx="3" fill="#f0fdf4" stroke="#22c55e" stroke-width="1.5"/>
+                <text x="332" y="20" font-size="9" fill="#64748b">Motion adopted / complete</text>
+                <rect x="500" y="10" width="16" height="12" rx="3" fill="#fef2f2" stroke="#ef4444" stroke-width="1.5"/>
+                <text x="522" y="20" font-size="9" fill="#64748b">Motion dies / killed / rescinded</text>
+                <rect x="0" y="32" width="16" height="12" rx="3" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+                <text x="22" y="42" font-size="9" fill="#64748b">Subsidiary / side actions</text>
+                <rect x="160" y="32" width="16" height="12" rx="3" fill="#ede9fe" stroke="#7e57c2" stroke-width="1.5"/>
+                <text x="182" y="42" font-size="9" fill="#64748b">Amendment / AA practice</text>
+                <line x1="310" y1="38" x2="340" y2="38" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="5 3"/>
+                <text x="346" y="42" font-size="9" fill="#64748b">Optional / loopback path</text>
             </g>
         </svg>
     </div>
@@ -1584,16 +1722,51 @@
             Ready to begin — click "New Motion" to start
         </div>
 
-        <div class="flex flex-wrap gap-2 mb-6 justify-center">
+        <!-- Row 1: Main flow -->
+        <div class="flex flex-wrap gap-2 mb-2 justify-center">
             <button type="button" onclick="liveAction('new')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition">New Motion</button>
+            <button type="button" onclick="liveAction('take-from-table')" class="px-4 py-2 bg-blue-500 text-white rounded-lg text-sm font-semibold hover:bg-blue-600 transition hidden" id="btn-take-table">Take from Table</button>
+            <button type="button" onclick="liveAction('rescind')" class="px-4 py-2 bg-red-700 text-white rounded-lg text-sm font-semibold hover:bg-red-800 transition hidden" id="btn-rescind">Rescind Prior Decision</button>
+            <button type="button" onclick="liveAction('ratify')" class="px-4 py-2 bg-teal-600 text-white rounded-lg text-sm font-semibold hover:bg-teal-700 transition hidden" id="btn-ratify">Ratify Action</button>
+            <button type="button" onclick="liveAction('discharge')" class="px-4 py-2 bg-teal-500 text-white rounded-lg text-sm font-semibold hover:bg-teal-600 transition hidden" id="btn-discharge">Discharge Committee</button>
+            <button type="button" onclick="liveAction('objection')" class="px-3 py-1.5 bg-rose-600 text-white rounded text-xs font-semibold hover:bg-rose-700 transition hidden" id="btn-objection">Object to Consideration</button>
             <button type="button" onclick="liveAction('second')" class="px-4 py-2 bg-green-600 text-white rounded-lg text-sm font-semibold hover:bg-green-700 transition" disabled id="btn-second">Second</button>
             <button type="button" onclick="liveAction('no-second')" class="px-4 py-2 bg-gray-500 text-white rounded-lg text-sm font-semibold hover:bg-gray-600 transition hidden" id="btn-no-second">No Second</button>
             <button type="button" onclick="liveAction('discuss')" class="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition" disabled id="btn-discuss">Open Discussion</button>
             <button type="button" onclick="liveAction('vote')" class="px-4 py-2 bg-purple-600 text-white rounded-lg text-sm font-semibold hover:bg-purple-700 transition" disabled id="btn-vote">Call Vote</button>
+        </div>
+        <!-- Row 2: Privileged, Incidental & Procedural (available any time during active meeting) -->
+        <div class="flex flex-wrap gap-1.5 mb-2 justify-center text-xs" id="privileged-actions">
+            <button type="button" onclick="liveAction('point-of-order')" class="px-3 py-1.5 bg-rose-500 text-white rounded text-xs font-semibold hover:bg-rose-600 transition hidden" id="btn-point-order">Point of Order</button>
+            <button type="button" onclick="liveAction('appeal')" class="px-3 py-1.5 bg-rose-400 text-white rounded text-xs font-semibold hover:bg-rose-500 transition hidden" id="btn-appeal">Appeal Chair</button>
+            <button type="button" onclick="liveAction('parl-inquiry')" class="px-3 py-1.5 bg-cyan-500 text-white rounded text-xs font-semibold hover:bg-cyan-600 transition hidden" id="btn-parl-inquiry">Parliamentary Inquiry</button>
+            <button type="button" onclick="liveAction('request-info')" class="px-3 py-1.5 bg-cyan-400 text-white rounded text-xs font-semibold hover:bg-cyan-500 transition hidden" id="btn-request-info">Request for Info</button>
+            <button type="button" onclick="liveAction('question-privilege')" class="px-3 py-1.5 bg-pink-500 text-white rounded text-xs font-semibold hover:bg-pink-600 transition hidden" id="btn-q-privilege">Question of Privilege</button>
+            <button type="button" onclick="liveAction('orders-of-day')" class="px-3 py-1.5 bg-pink-400 text-white rounded text-xs font-semibold hover:bg-pink-500 transition hidden" id="btn-orders-day">Orders of the Day</button>
+            <button type="button" onclick="liveAction('recess')" class="px-3 py-1.5 bg-sky-500 text-white rounded text-xs font-semibold hover:bg-sky-600 transition hidden" id="btn-recess">Recess</button>
+            <button type="button" onclick="liveAction('adjourn')" class="px-3 py-1.5 bg-sky-600 text-white rounded text-xs font-semibold hover:bg-sky-700 transition hidden" id="btn-adjourn">Adjourn</button>
+            <button type="button" onclick="liveAction('fix-adjourn')" class="px-3 py-1.5 bg-sky-700 text-white rounded text-xs font-semibold hover:bg-sky-800 transition hidden" id="btn-fix-adjourn">Fix Time to Adjourn</button>
+        </div>
+        <!-- Row 3: Discussion-phase actions (subsidiary, incidental during debate) -->
+        <div class="flex flex-wrap gap-2 mb-2 justify-center" id="discussion-actions">
             <button type="button" onclick="liveAction('amend')" class="px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-semibold hover:bg-indigo-700 transition hidden" id="btn-amend">Amend</button>
-            <button type="button" onclick="liveAction('table')" class="px-4 py-2 bg-slate-600 text-white rounded-lg text-sm font-semibold hover:bg-slate-700 transition hidden" id="btn-table">Table / Defer</button>
+            <button type="button" onclick="liveAction('withdraw')" class="px-4 py-2 bg-gray-600 text-white rounded-lg text-sm font-semibold hover:bg-gray-700 transition hidden" id="btn-withdraw">Withdraw</button>
+            <button type="button" onclick="liveAction('call-question')" class="px-4 py-2 bg-orange-600 text-white rounded-lg text-sm font-semibold hover:bg-orange-700 transition hidden" id="btn-call-q">Call the Question</button>
+            <button type="button" onclick="liveAction('limit-debate')" class="px-4 py-2 bg-orange-500 text-white rounded-lg text-sm font-semibold hover:bg-orange-600 transition hidden" id="btn-limit-debate">Limit/Extend Debate</button>
+            <button type="button" onclick="liveAction('table')" class="px-4 py-2 bg-slate-600 text-white rounded-lg text-sm font-semibold hover:bg-slate-700 transition hidden" id="btn-table">Table</button>
+            <button type="button" onclick="liveAction('postpone')" class="px-4 py-2 bg-slate-500 text-white rounded-lg text-sm font-semibold hover:bg-slate-600 transition hidden" id="btn-postpone">Postpone</button>
+            <button type="button" onclick="liveAction('refer')" class="px-4 py-2 bg-slate-500 text-white rounded-lg text-sm font-semibold hover:bg-slate-600 transition hidden" id="btn-refer">Refer to Committee</button>
+            <button type="button" onclick="liveAction('postpone-indef')" class="px-4 py-2 bg-red-500 text-white rounded-lg text-sm font-semibold hover:bg-red-600 transition hidden" id="btn-postpone-indef">Postpone Indefinitely</button>
+            <button type="button" onclick="liveAction('divide-question')" class="px-4 py-2 bg-slate-400 text-white rounded-lg text-sm font-semibold hover:bg-slate-500 transition hidden" id="btn-divide">Divide the Question</button>
+            <button type="button" onclick="liveAction('suspend-rules')" class="px-4 py-2 bg-slate-400 text-white rounded-lg text-sm font-semibold hover:bg-slate-500 transition hidden" id="btn-suspend">Suspend Rules</button>
+            <button type="button" onclick="liveAction('nominations')" class="px-3 py-1.5 bg-fuchsia-500 text-white rounded text-xs font-semibold hover:bg-fuchsia-600 transition hidden" id="btn-nominations">Nominations</button>
+            <button type="button" onclick="liveAction('voting-method')" class="px-3 py-1.5 bg-fuchsia-400 text-white rounded text-xs font-semibold hover:bg-fuchsia-500 transition hidden" id="btn-voting-method">Change Voting Method</button>
+        </div>
+        <!-- Row 4: Vote results + post-vote actions -->
+        <div class="flex flex-wrap gap-2 mb-6 justify-center" id="result-actions">
             <button type="button" onclick="liveAction('pass')" class="px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm font-semibold hover:bg-emerald-700 transition hidden" id="btn-pass">Passes</button>
             <button type="button" onclick="liveAction('fail')" class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition hidden" id="btn-fail">Fails</button>
+            <button type="button" onclick="liveAction('division')" class="px-3 py-1.5 bg-yellow-600 text-white rounded text-xs font-semibold hover:bg-yellow-700 transition hidden" id="btn-division">Division! (Recount)</button>
             <button type="button" onclick="liveAction('minority')" class="px-4 py-2 bg-violet-600 text-white rounded-lg text-sm font-semibold hover:bg-violet-700 transition hidden" id="btn-minority">Hear Minority</button>
             <button type="button" onclick="liveAction('next-item')" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-semibold hover:bg-blue-700 transition hidden" id="btn-next">Next Item</button>
             <button type="button" onclick="liveAction('reconsider-vote')" class="px-4 py-2 bg-amber-600 text-white rounded-lg text-sm font-semibold hover:bg-amber-700 transition hidden" id="btn-reconsider">Reconsider</button>
@@ -1620,6 +1793,9 @@
             </div>
             <div class="tool-step rounded p-3 text-sm" id="ls-discuss">
                 <span class="font-bold">3. Discussion:</span> <span class="text-gray-500">—</span>
+            </div>
+            <div class="tool-step rounded p-3 text-sm" id="ls-subsidiary">
+                <span class="font-bold">3a. Subsidiary/Actions:</span> <span class="text-gray-500">—</span>
             </div>
             <div class="tool-step rounded p-3 text-sm" id="ls-vote">
                 <span class="font-bold">4. Vote:</span> <span class="text-gray-500">—</span>
@@ -2284,21 +2460,29 @@ function toggleAcc(el) {
 // --- Flowchart detail ---
 var flowDetails = {
     'make-motion': ['Member Makes a Motion', 'A member raises their hand, is recognized by the chair, and states: "I move that [specific proposal]." The motion should be clear, specific, and actionable. The chair restates the motion for clarity.'],
+    'objection': ['Objection to Consideration', 'Immediately after a motion is stated — before any debate — any member may say: "I object to the consideration of this question!" This is used when a motion is clearly inappropriate, offensive, or a waste of time. No second is needed. The chair immediately puts it to a vote: "Shall the question be considered?" If two-thirds vote AGAINST consideration, the motion is killed without any discussion. If the objection fails, the motion proceeds normally. This applies only to original main motions, not reports or required business.'],
+    'objection-sustained': ['Motion Not Considered', 'Two-thirds voted against considering this motion. It is removed from the floor without any discussion or debate. The chair announces: "There are two-thirds opposed — the question will not be considered." The group moves on. This is rarely used at the group level; more common at district/area assemblies to avoid wasting time on clearly out-of-order proposals.'],
     'second': ['Is There a Second?', 'Another member says "I second that" (or "Second"). A second means at least one other person thinks the motion is worth discussing — it does NOT mean they support it. No second = the motion dies without discussion.'],
     'dies': ['Motion Dies', 'Without a second, the motion is not considered. The chair says: "The motion dies for lack of a second." The group moves on to other business. The same motion can be brought up again at a future meeting.'],
-    'discussion': ['Chair Opens Discussion', 'The chair says: "It has been moved and seconded that [restates motion]. Is there any discussion?" Members raise their hands to be recognized. No one speaks twice until everyone has spoken once. Discussion must be relevant to the motion.'],
-    'amend-check': ['Amendment Proposed?', 'During discussion, any member may propose to change the wording of the motion. "I move to amend the motion by [change]." If an amendment is proposed, it must be seconded, discussed, and voted on before returning to the main motion.'],
-    'amend-process': ['Discuss & Vote on Amendment', 'The amendment is treated like a mini-motion: it needs a second, gets discussed, and is voted on. If it passes, the main motion is now modified. Discussion then continues on the main motion (as amended).'],
-    'vote': ['Chair Calls the Vote', 'When discussion is complete, the chair says: "Is there any further discussion? Hearing none, we will now vote. All in favor of [restates motion] say Aye. All opposed say No." The chair announces the result.'],
-    'result': ['Does It Pass?', 'The chair counts or estimates the vote. Most motions require a simple majority (more than half of those voting). The chair announces: "The motion passes" or "The motion fails."'],
-    'passes': ['Motion Passes', 'The proposal is adopted and becomes the group\'s decision. The secretary records it in the minutes. Implementation begins as specified in the motion.'],
-    'fails': ['Motion Fails', 'The proposal is rejected. The secretary records the result. The same motion generally cannot be brought up again at the same meeting unless someone moves to reconsider.'],
-    'minority': ['Minority Opinion Heard', 'This is a distinctive AA practice rooted in Concept V. After announcing the vote result, the chair asks: "Would anyone in the minority like to share why they voted as they did?" After hearing the minority, the group may stand by its vote or someone may move to reconsider.'],
-    'deferred': ['Motion Deferred (Table / Postpone / Refer)', 'During discussion, any member may move to Table the motion (set aside for later — can be taken from the table at a future meeting), Postpone to a Certain Time (delay to a specific date/meeting), Refer to Committee (send to a smaller group for study and recommendation), or Postpone Indefinitely (effectively kill the motion for this session). Each subsidiary motion requires a second and a vote. If passed, the main motion leaves the floor. If the subsidiary motion fails, discussion on the main motion continues.'],
-    'call-question': ['Previous Question (Call the Question)', 'A member moves the previous question to end debate immediately and proceed to a vote. This requires a second and a two-thirds (2/3) vote — because it restricts members\' right to speak. If it passes, the chair immediately takes the vote on the pending motion with no further discussion. If it fails, discussion continues. Important: Simply shouting "Question!" does NOT end debate — a formal motion, second, and 2/3 vote are required.'],
-    'reconsider': ['Move to Reconsider', 'After hearing the minority opinion, any member who voted on the PREVAILING side may move to reconsider the vote. This requires a second and a majority vote. If passed, the motion returns to the floor for further discussion and a new vote. This honors the AA principle of hearing the minority — sometimes the minority opinion carries wisdom that changes minds. The motion to reconsider can only be made at the same meeting (or the next meeting in some rules).'],
-    'complete': ['Business Complete', 'This item of business is concluded. The secretary records the final result in the minutes. The chair moves on to the next item on the agenda, or asks: "Is there any further new business?" When all business is complete, someone may move to adjourn.'],
-    'incidental': ['Incidental & Privileged Motions', 'At any point during a meeting, members may raise: a Point of Order (the rules are being violated), a Parliamentary Inquiry (asking how to do something procedurally), or a Question of Privilege (comfort, safety, or noise issue). The chair may also entertain motions to Recess (take a break) or Adjourn (end the meeting). These motions take priority over pending business and are handled immediately by the chair.']
+    'discussion': ['Chair Opens Discussion', 'The chair says: "It has been moved and seconded that [restates motion]. Is there any discussion?" Members raise their hands to be recognized. No one speaks twice until everyone has spoken once. Discussion must be relevant to the motion. During discussion, many things can happen: amendments, subsidiary motions (table, postpone, refer to committee), the maker can withdraw the motion, or a member can call the previous question to end debate.'],
+    'table': ['Lay on the Table', 'A member says: "I move to table this motion." Requires a second. NOT debatable — the chair immediately calls a vote (majority needed). If it passes, the motion is set aside. IMPORTANT: Tabling is NOT the same as killing a motion. The motion can be brought back later via "I move to take from the table the motion to [topic]." This must happen at the same meeting or the next regular meeting, otherwise the tabled motion dies. In AA, people sometimes say "table it" when they mean postpone — the chair should clarify the intent.'],
+    'postpone-time': ['Postpone to a Certain Time', 'A member says: "I move to postpone this motion until [specific date/meeting]." Requires a second. Limited debate is allowed (only about whether to postpone and to when — not the merits of the main motion). Amendable (the date can be changed). Majority vote to adopt. The motion automatically comes back at the specified time as unfinished business. Unlike tabling, this guarantees the item returns to the floor.'],
+    'refer-committee': ['Refer to Committee', 'A member says: "I move to refer this matter to a committee of [number] members, to report back at [date]." Requires a second. Limited debate allowed. Amendable (committee size, deadline, instructions). Majority vote. The motion leaves the floor and goes to a smaller group for research and recommendation. The committee reports back at the specified time. If the committee fails to act, the group can "discharge" the committee and bring the matter back to the floor (requires 2/3 vote without notice, or majority with notice).'],
+    'postpone-indef': ['Postpone Indefinitely', 'A member says: "I move to postpone this motion indefinitely." Requires a second. FULLY debatable — debate can go into the merits of the main motion itself. Majority vote. If it passes, the motion is effectively KILLED for the rest of this session — it cannot come back unless reconsidered. This is sometimes used strategically to test support for a motion without taking a direct vote, or to avoid voting on a sensitive issue. In AA, it is generally better to be transparent and vote directly.'],
+    'withdraw': ['Motion Withdrawn', 'The maker of the motion says: "I wish to withdraw my motion." The chair asks: "The maker requests to withdraw the motion. Is there any objection?" If NO ONE objects, the motion is withdrawn — it disappears as if it were never made. If ANYONE objects, the group votes on whether to allow the withdrawal (majority vote). A motion can be withdrawn at any point before the final vote. After withdrawal, the maker or anyone else can introduce a new (possibly modified) motion. The withdrawal and any reason given should be recorded in the minutes.'],
+    'amend-check': ['Amendment Proposed?', 'During discussion, any member may propose to change the wording of the motion. "I move to amend the motion by [change]." If an amendment is proposed, it must be seconded, discussed, and voted on before returning to the main motion. An amendment can also be withdrawn by its maker (same rules as withdrawing a motion). A "friendly amendment" — where the maker simply agrees to incorporate the change — is common in AA but technically requires unanimous consent.'],
+    'amend-process': ['Discuss & Vote on Amendment', 'The amendment is treated like a mini-motion: it needs a second, gets discussed, and is voted on (majority). If it PASSES, the main motion is now modified. If it FAILS, the main motion stands as originally worded. You can amend an amendment (2nd degree) but NOT amend an amendment to an amendment (no 3rd degree). Discussion then continues on the main motion (as amended or not). An amendment can also be withdrawn by its maker, tabled, or postponed — though this is uncommon.'],
+    'call-question': ['Previous Question (Call the Question)', 'A member moves the previous question to end debate immediately and proceed to a vote. This requires a second and a two-thirds (2/3) vote — because it restricts members\' right to speak. If it PASSES, the chair immediately takes the vote on the pending motion with no further discussion. If it FAILS, discussion CONTINUES as if nothing happened — members keep debating. Important: Simply shouting "Question!" does NOT end debate — a formal motion, second, and 2/3 vote are required. This protects the minority\'s right to be heard.'],
+    'vote': ['Chair Calls the Vote', 'When discussion is complete (or the Previous Question passes), the chair says: "Is there any further discussion? Hearing none, we will now vote. The motion is: [restates motion, including any adopted amendments]. All in favor say Aye. All opposed say No." If the result is unclear, any member may call "Division!" to demand a counted vote (show of hands or standing). Any member may also request a ballot (secret written) vote.'],
+    'result': ['Does It Pass?', 'The chair counts or estimates the vote. Most motions require a simple majority (more than half of those voting). Two-thirds is needed for: ending debate, suspending rules, closing nominations, amending bylaws, and some others. The chair announces: "The motion passes" or "The motion fails." Abstentions are noted but do not count for or against.'],
+    'passes': ['Motion Passes', 'The proposal is adopted and becomes the group\'s decision. The secretary records it in the minutes with the vote count. Implementation begins as specified in the motion. The decision stands unless later rescinded or reconsidered.'],
+    'fails': ['Motion Fails', 'The proposal is rejected. The secretary records the result with the vote count. The same motion generally cannot be brought up again at the same meeting unless someone moves to reconsider. It CAN be brought up at a future meeting as new business.'],
+    'minority': ['Minority Opinion Heard', 'This is a distinctive AA practice rooted in Concept V (Right of Appeal). After announcing the vote result, the chair asks: "Would anyone in the minority like to share why they voted as they did?" This is NOT just a courtesy — it is a principle embedded in AA\'s service structure. The minority may carry wisdom the majority initially missed. After hearing the minority, the group may: (1) stand by its vote, (2) someone on the prevailing side may move to reconsider, or (3) someone may move to table the matter for further reflection.'],
+    'reconsider': ['Move to Reconsider', 'After hearing the minority opinion, any member who voted on the PREVAILING (winning) side may move to reconsider the vote. This requires a second and a majority vote. If passed, the motion returns to the floor for further discussion and a new vote — as if the original vote never happened. If the motion to reconsider fails, the original result stands. This can only be made at the same meeting or the next regular business meeting. This is the group conscience process at its best — minds can change after hearing different perspectives.'],
+    'rescind': ['Rescind at a Future Meeting?', 'Even after a motion is finalized, ANY member (not just the prevailing side) can move to rescind (repeal/annul) the decision at a FUTURE meeting. "I move to rescind the motion adopted on [date] that [describes it]." Requires a second. Fully debatable. Vote required: two-thirds without prior notice, OR majority if notice was given at a previous meeting. This is different from Reconsider: Rescind can be done by anyone, at any future meeting, and completely cancels the prior action.'],
+    'rescinded': ['Decision Rescinded', 'The group has voted to undo a previous decision. The secretary records that the earlier motion has been rescinded. The matter may be re-introduced as new business with a fresh motion if desired, or the group may simply revert to the status quo before the original decision.'],
+    'complete': ['Business Complete', 'This item of business is concluded. The secretary records the final result in the minutes (including vote count, amendments, whether minority opinion was heard). The chair moves on to the next item on the agenda, or asks: "Is there any further new business?" When all business is complete, someone may move to adjourn.'],
+    'incidental': ['Incidental, Privileged & Procedural Motions', 'These motions can arise at any point during a meeting and take priority over pending business. PRIVILEGED: Fix the Time to Which to Adjourn (set a continuation meeting — highest rank), Adjourn (end the meeting), Recess (take a break), Question of Privilege (comfort/safety/noise — chair decides), Call for the Orders of the Day (return to agenda — no vote needed, single member demand). INCIDENTAL: Point of Order (rule violation — chair rules, can be appealed), Appeal the Chair\'s Decision (group overrules chair — majority vote, tie sustains), Parliamentary Inquiry (ask chair about procedure), Request for Information (ask for facts), Suspend the Rules (2/3 vote — cannot suspend bylaws or Traditions), Divide the Question (split multi-part motion), Division of the Assembly (demand a counted recount after close vote — no second needed), Motions Relating to Nominations (open/close/reopen — 2/3 to close), Motions Relating to Voting Methods (change to ballot, show of hands, etc.). All of these are available as buttons in the Live Meeting Tool when a motion is active.']
 };
 
 function showFlowDetail(el) {
@@ -2315,6 +2499,7 @@ function showFlowDetail(el) {
 // --- Live Meeting Tool ---
 var liveState = 'idle';
 var motionLog = [];
+var tabledMotions = []; // motions that have been tabled and can be brought back
 var currentMotionText = '';
 var currentAmendments = [];
 var meetingStartTime = null;
@@ -2331,7 +2516,32 @@ function liveAction(action) {
     var btnDiscuss = document.getElementById('btn-discuss');
     var btnVote = document.getElementById('btn-vote');
     var btnAmend = document.getElementById('btn-amend');
+    var btnWithdraw = document.getElementById('btn-withdraw');
+    var btnCallQ = document.getElementById('btn-call-q');
+    var btnLimitDebate = document.getElementById('btn-limit-debate');
     var btnTable = document.getElementById('btn-table');
+    var btnPostpone = document.getElementById('btn-postpone');
+    var btnRefer = document.getElementById('btn-refer');
+    var btnPostponeIndef = document.getElementById('btn-postpone-indef');
+    var btnDivide = document.getElementById('btn-divide');
+    var btnSuspend = document.getElementById('btn-suspend');
+    var btnTakeTable = document.getElementById('btn-take-table');
+    var btnRatify = document.getElementById('btn-ratify');
+    var btnDischarge = document.getElementById('btn-discharge');
+    var btnPointOrder = document.getElementById('btn-point-order');
+    var btnAppeal = document.getElementById('btn-appeal');
+    var btnRecess = document.getElementById('btn-recess');
+    var btnAdjourn = document.getElementById('btn-adjourn');
+    var btnFixAdjourn = document.getElementById('btn-fix-adjourn');
+    var btnDivision = document.getElementById('btn-division');
+    var btnParlInquiry = document.getElementById('btn-parl-inquiry');
+    var btnRequestInfo = document.getElementById('btn-request-info');
+    var btnQPrivilege = document.getElementById('btn-q-privilege');
+    var btnOrdersDay = document.getElementById('btn-orders-day');
+    var btnObjection = document.getElementById('btn-objection');
+    var btnRescind = document.getElementById('btn-rescind');
+    var btnNominations = document.getElementById('btn-nominations');
+    var btnVotingMethod = document.getElementById('btn-voting-method');
     var btnPass = document.getElementById('btn-pass');
     var btnFail = document.getElementById('btn-fail');
     var btnMinority = document.getElementById('btn-minority');
@@ -2339,8 +2549,73 @@ function liveAction(action) {
     var btnReconsider = document.getElementById('btn-reconsider');
     var voteArea = document.getElementById('vote-count-area');
 
-    function hideVoteResults() { btnPass.classList.add('hidden'); btnFail.classList.add('hidden'); btnMinority.classList.add('hidden'); btnNext.classList.add('hidden'); btnReconsider.classList.add('hidden'); voteArea.classList.add('hidden'); }
-    function disableAll() { btnSecond.disabled = true; btnNoSecond.classList.add('hidden'); btnDiscuss.disabled = true; btnVote.disabled = true; btnAmend.classList.add('hidden'); btnTable.classList.add('hidden'); hideVoteResults(); }
+    function hideDiscussionActions() {
+        btnAmend.classList.add('hidden');
+        btnWithdraw.classList.add('hidden');
+        btnCallQ.classList.add('hidden');
+        btnLimitDebate.classList.add('hidden');
+        btnTable.classList.add('hidden');
+        btnPostpone.classList.add('hidden');
+        btnRefer.classList.add('hidden');
+        btnPostponeIndef.classList.add('hidden');
+        btnDivide.classList.add('hidden');
+        btnSuspend.classList.add('hidden');
+        btnNominations.classList.add('hidden');
+        btnVotingMethod.classList.add('hidden');
+    }
+    function hidePrivileged() {
+        btnPointOrder.classList.add('hidden');
+        btnAppeal.classList.add('hidden');
+        btnParlInquiry.classList.add('hidden');
+        btnRequestInfo.classList.add('hidden');
+        btnQPrivilege.classList.add('hidden');
+        btnOrdersDay.classList.add('hidden');
+        btnRecess.classList.add('hidden');
+        btnAdjourn.classList.add('hidden');
+        btnFixAdjourn.classList.add('hidden');
+    }
+    function showPrivileged() {
+        btnPointOrder.classList.remove('hidden');
+        btnAppeal.classList.remove('hidden');
+        btnParlInquiry.classList.remove('hidden');
+        btnRequestInfo.classList.remove('hidden');
+        btnQPrivilege.classList.remove('hidden');
+        btnOrdersDay.classList.remove('hidden');
+        btnRecess.classList.remove('hidden');
+        btnAdjourn.classList.remove('hidden');
+        btnFixAdjourn.classList.remove('hidden');
+    }
+    function hideVoteResults() { btnPass.classList.add('hidden'); btnFail.classList.add('hidden'); btnDivision.classList.add('hidden'); btnMinority.classList.add('hidden'); btnNext.classList.add('hidden'); btnReconsider.classList.add('hidden'); voteArea.classList.add('hidden'); }
+    function disableAll() { btnSecond.disabled = true; btnNoSecond.classList.add('hidden'); btnObjection.classList.add('hidden'); btnDiscuss.disabled = true; btnVote.disabled = true; btnTakeTable.classList.add('hidden'); btnRescind.classList.add('hidden'); btnRatify.classList.add('hidden'); btnDischarge.classList.add('hidden'); hideDiscussionActions(); hideVoteResults(); hidePrivileged(); }
+    function showDiscussionActions() {
+        btnAmend.classList.remove('hidden');
+        btnWithdraw.classList.remove('hidden');
+        btnCallQ.classList.remove('hidden');
+        btnLimitDebate.classList.remove('hidden');
+        btnTable.classList.remove('hidden');
+        btnPostpone.classList.remove('hidden');
+        btnRefer.classList.remove('hidden');
+        btnPostponeIndef.classList.remove('hidden');
+        btnDivide.classList.remove('hidden');
+        btnSuspend.classList.remove('hidden');
+        btnNominations.classList.remove('hidden');
+        btnVotingMethod.classList.remove('hidden');
+    }
+    function showIdleExtras() {
+        showTakeFromTable();
+        btnRescind.classList.remove('hidden');
+        btnRatify.classList.remove('hidden');
+        btnDischarge.classList.remove('hidden');
+        // Privileged motions available any time during an active meeting (between motions)
+        if (meetingStartTime) {
+            btnAdjourn.classList.remove('hidden');
+            btnRecess.classList.remove('hidden');
+            btnFixAdjourn.classList.remove('hidden');
+            btnParlInquiry.classList.remove('hidden');
+            btnQPrivilege.classList.remove('hidden');
+            btnOrdersDay.classList.remove('hidden');
+        }
+    }
     function setStep(id, text, active) {
         var el = document.getElementById(id);
         el.querySelector('span:last-child').textContent = text;
@@ -2362,13 +2637,20 @@ function liveAction(action) {
         document.getElementById('vote-no').value = '0';
         document.getElementById('vote-abstain').value = '0';
     }
+    function showTakeFromTable() {
+        if (tabledMotions.length > 0) btnTakeTable.classList.remove('hidden');
+        else btnTakeTable.classList.add('hidden');
+    }
+    function resetSteps() {
+        ['ls-motion','ls-second','ls-discuss','ls-subsidiary','ls-vote','ls-result','ls-minority'].forEach(function(id) {
+            setStep(id, '\u2014', false);
+        });
+    }
 
-    if (action === 'reset' || action === 'new') {
+    if (action === 'reset' || action === 'new' || action === 'take-from-table') {
         disableAll();
         resetVoteInputs();
-        ['ls-motion','ls-second','ls-discuss','ls-vote','ls-result','ls-minority'].forEach(function(id) {
-            setStep(id, '—', false);
-        });
+        resetSteps();
     }
 
     if (action === 'new') {
@@ -2378,130 +2660,529 @@ function liveAction(action) {
         currentAmendments = [];
         liveState = 'motion-made';
         setStep('ls-motion', '[' + timeStamp() + '] "I move ' + currentMotionText + '"', true);
-        status.textContent = 'Motion made — waiting for a second (or "No Second" if none)';
+        status.textContent = 'Motion made \u2014 waiting for a second (or "No Second" if none)';
         status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
         btnSecond.disabled = false;
         btnNoSecond.classList.remove('hidden');
-    } else if (action === 'no-second') {
-        liveState = 'died';
-        setStep('ls-second', 'No second received — motion dies', true);
-        setStep('ls-result', 'MOTION DIES (no second)', false);
-        status.textContent = 'Motion died for lack of a second — ready for next item';
-        status.className = 'mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-center font-semibold text-red-800';
-        btnSecond.disabled = true;
-        btnNoSecond.classList.add('hidden');
-        motionLog.push({text: currentMotionText, result: 'DIED (no second)', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
-        updateLog();
-    } else if (action === 'second') {
-        liveState = 'seconded';
-        setStep('ls-second', '[' + timeStamp() + '] Seconded', true);
-        status.textContent = 'Motion seconded — open discussion';
-        status.className = 'mb-4 p-3 rounded-lg bg-green-50 border border-green-200 text-center font-semibold text-green-800';
-        btnSecond.disabled = true;
-        btnNoSecond.classList.add('hidden');
-        btnDiscuss.disabled = false;
-    } else if (action === 'discuss') {
+        btnObjection.classList.remove('hidden');
+        btnTakeTable.classList.add('hidden');
+        btnRescind.classList.add('hidden');
+        btnRatify.classList.add('hidden');
+        btnDischarge.classList.add('hidden');
+        showPrivileged();
+
+    } else if (action === 'take-from-table') {
+        if (tabledMotions.length === 0) { alert('No tabled motions to bring back.'); return; }
+        var choices = tabledMotions.map(function(m, i) { return (i+1) + '. ' + m.text; }).join('\n');
+        var pick = prompt('Which tabled motion to bring back?\n\n' + choices + '\n\nEnter the number:');
+        var idx = parseInt(pick) - 1;
+        if (isNaN(idx) || idx < 0 || idx >= tabledMotions.length) return;
+        var restored = tabledMotions.splice(idx, 1)[0];
+        currentMotionText = restored.text;
+        currentAmendments = restored.amendments || [];
         liveState = 'discussion';
-        setStep('ls-discuss', '[' + timeStamp() + '] Discussion open — members sharing', true);
-        status.textContent = 'Discussion in progress — amend, call vote, or table/defer when ready';
+        setStep('ls-motion', '[' + timeStamp() + '] Taken from table: "I move ' + currentMotionText + '"', false);
+        setStep('ls-second', 'Previously seconded', false);
+        setStep('ls-discuss', '[' + timeStamp() + '] Discussion reopened (taken from table)', true);
+        if (currentAmendments.length > 0) {
+            setStep('ls-subsidiary', currentAmendments.length + ' prior amendment(s) carried over', false);
+        }
+        status.textContent = 'Motion taken from table \u2014 discussion reopened';
         status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
         btnDiscuss.disabled = true;
         btnVote.disabled = false;
-        btnAmend.classList.remove('hidden');
-        btnTable.classList.remove('hidden');
+        showDiscussionActions();
+        showPrivileged();
+        // Update the tabled log entry
+        motionLog.push({text: currentMotionText, result: 'TAKEN FROM TABLE', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'no-second') {
+        liveState = 'died';
+        setStep('ls-second', 'No second received \u2014 motion dies', true);
+        setStep('ls-result', 'MOTION DIES (no second)', false);
+        status.textContent = 'Motion died for lack of a second \u2014 ready for next item';
+        status.className = 'mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-center font-semibold text-red-800';
+        btnSecond.disabled = true;
+        btnNoSecond.classList.add('hidden');
+        hidePrivileged();
+        showIdleExtras();
+        motionLog.push({text: currentMotionText, result: 'DIED (no second)', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'second') {
+        liveState = 'seconded';
+        setStep('ls-second', '[' + timeStamp() + '] Seconded', true);
+        status.textContent = 'Motion seconded \u2014 open discussion';
+        status.className = 'mb-4 p-3 rounded-lg bg-green-50 border border-green-200 text-center font-semibold text-green-800';
+        btnSecond.disabled = true;
+        btnNoSecond.classList.add('hidden');
+        btnObjection.classList.add('hidden');
+        btnDiscuss.disabled = false;
+        showPrivileged();
+
+    } else if (action === 'discuss') {
+        liveState = 'discussion';
+        setStep('ls-discuss', '[' + timeStamp() + '] Discussion open \u2014 members sharing', true);
+        status.textContent = 'Discussion in progress \u2014 amend, withdraw, call question, table, postpone, refer, or call vote';
+        status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+        btnDiscuss.disabled = true;
+        btnVote.disabled = false;
+        showDiscussionActions();
+        showPrivileged();
+
     } else if (action === 'amend') {
         var amendText = prompt('Enter the amendment (e.g., "change $100 to $150"):');
         if (!amendText) return;
         var amendPassed = confirm('Did the amendment pass?\n\nOK = Amendment Passed\nCancel = Amendment Failed');
         var amendResult = amendPassed ? 'ADOPTED' : 'DEFEATED';
         currentAmendments.push({text: amendText, result: amendResult, time: timeStamp()});
-        var amendCount = currentAmendments.length;
-        var amendSummary = amendCount + ' amendment(s): ' + currentAmendments.map(function(a) { return a.result; }).join(', ');
-        setStep('ls-discuss', '[' + timeStamp() + '] Discussion open — ' + amendSummary, true);
-        status.textContent = 'Amendment ' + amendResult.toLowerCase() + ' — discussion continues' + (amendPassed ? ' on motion as amended' : '');
+        var amendSummary = currentAmendments.length + ' amendment(s): ' + currentAmendments.map(function(a) { return a.result; }).join(', ');
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Amendment: "' + amendText + '" \u2014 ' + amendResult, false);
+        setStep('ls-discuss', '[' + timeStamp() + '] Discussion open \u2014 ' + amendSummary, true);
+        status.textContent = 'Amendment ' + amendResult.toLowerCase() + ' \u2014 discussion continues' + (amendPassed ? ' on motion as amended' : '');
         status.className = 'mb-4 p-3 rounded-lg bg-indigo-50 border border-indigo-200 text-center font-semibold text-indigo-800';
+
+    } else if (action === 'withdraw') {
+        var objection = confirm('Does anyone object to the withdrawal?\n\nOK = Someone objects (vote needed)\nCancel = No objection (motion withdrawn)');
+        if (objection) {
+            var withdrawVote = confirm('The group votes on whether to allow withdrawal.\n\nOK = Withdrawal allowed (majority voted yes)\nCancel = Withdrawal denied (discussion continues)');
+            if (!withdrawVote) {
+                status.textContent = 'Withdrawal denied \u2014 discussion continues on original motion';
+                status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
+                setStep('ls-subsidiary', '[' + timeStamp() + '] Withdrawal attempted \u2014 denied by vote', false);
+                return;
+            }
+        }
+        liveState = 'withdrawn';
+        hideDiscussionActions();
+        btnVote.disabled = true;
+        hidePrivileged();
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Motion WITHDRAWN by maker' + (objection ? ' (approved by vote)' : ' (no objection)'), true);
+        setStep('ls-result', 'WITHDRAWN', false);
+        status.textContent = 'Motion withdrawn \u2014 ready for next item';
+        status.className = 'mb-4 p-3 rounded-lg bg-gray-100 border border-gray-300 text-center font-semibold text-gray-700';
+        showIdleExtras();
+        motionLog.push({text: currentMotionText, result: 'WITHDRAWN', time: timeStamp(), votes: null, minorityHeard: false, amendments: currentAmendments.slice()});
+        updateLog();
+
+    } else if (action === 'call-question') {
+        var pqPassed = confirm('Previous Question (Call the Question) requires a 2/3 vote to end debate.\n\nOK = 2/3 vote achieved (debate ends, proceed to vote)\nCancel = Failed (debate continues)');
+        if (pqPassed) {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Previous Question ADOPTED \u2014 debate ended', false);
+            liveState = 'voting';
+            hideDiscussionActions();
+            setStep('ls-vote', '[' + timeStamp() + '] Vote called (debate ended by Previous Question)', true);
+            status.textContent = 'Debate ended \u2014 voting now. Enter counts and record the result';
+            status.className = 'mb-4 p-3 rounded-lg bg-purple-50 border border-purple-200 text-center font-semibold text-purple-800';
+            btnVote.disabled = true;
+            btnPass.classList.remove('hidden');
+            btnFail.classList.remove('hidden');
+            btnDivision.classList.remove('hidden');
+            voteArea.classList.remove('hidden');
+        } else {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Previous Question FAILED \u2014 debate continues', false);
+            status.textContent = 'Call the question failed (less than 2/3) \u2014 discussion continues';
+            status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
+        }
+
+    } else if (action === 'limit-debate') {
+        var limitText = prompt('Set debate limit (e.g., "2 minutes per speaker" or "extend 10 more minutes"):');
+        if (!limitText) return;
+        var limitPassed = confirm('Limit/Extend Debate requires a 2/3 vote.\n\nOK = 2/3 vote achieved (limit adopted)\nCancel = Failed (current rules continue)');
+        if (limitPassed) {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Debate limit ADOPTED: ' + limitText, false);
+            status.textContent = 'Debate limit adopted: ' + limitText + ' \u2014 discussion continues under new limit';
+            status.className = 'mb-4 p-3 rounded-lg bg-orange-50 border border-orange-200 text-center font-semibold text-orange-800';
+        } else {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Limit debate FAILED \u2014 current rules continue', false);
+            status.textContent = 'Limit debate failed \u2014 discussion continues';
+            status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+        }
+
+    } else if (action === 'divide-question') {
+        var divideText = prompt('How should the motion be divided? (e.g., "Vote separately on time change and format change"):');
+        if (!divideText) return;
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Question DIVIDED: ' + divideText, false);
+        status.textContent = 'Motion divided \u2014 each part will be voted on separately';
+        status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+
+    } else if (action === 'suspend-rules') {
+        var suspendText = prompt('Suspend rules to allow what? (e.g., "allow a non-member to speak"):');
+        if (!suspendText) return;
+        var suspendPassed = confirm('Suspend the Rules requires a 2/3 vote.\n\nOK = 2/3 vote achieved (rules suspended)\nCancel = Failed (rules remain in effect)');
+        if (suspendPassed) {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Rules SUSPENDED: ' + suspendText, false);
+            status.textContent = 'Rules suspended: ' + suspendText;
+            status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
+        } else {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Suspend rules FAILED \u2014 rules remain', false);
+            status.textContent = 'Motion to suspend rules failed \u2014 rules remain in effect';
+            status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+        }
+
     } else if (action === 'table') {
         liveState = 'tabled';
-        setStep('ls-result', 'MOTION TABLED / DEFERRED', true);
-        status.textContent = 'Motion tabled or deferred — ready for next item';
-        status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
+        hideDiscussionActions();
         btnVote.disabled = true;
-        btnAmend.classList.add('hidden');
-        btnTable.classList.add('hidden');
+        hidePrivileged();
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Motion TABLED (laid on the table)', true);
+        setStep('ls-result', 'TABLED \u2014 can be taken from the table later', false);
+        status.textContent = 'Motion tabled \u2014 can be brought back with "Take from Table"';
+        status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
+        tabledMotions.push({text: currentMotionText, amendments: currentAmendments.slice(), time: timeStamp()});
         motionLog.push({text: currentMotionText, result: 'TABLED', time: timeStamp(), votes: null, minorityHeard: false, amendments: currentAmendments.slice()});
         updateLog();
-    } else if (action === 'vote') {
-        liveState = 'voting';
-        setStep('ls-vote', '[' + timeStamp() + '] Vote called', true);
-        status.textContent = 'Voting — enter counts and record the result';
-        status.className = 'mb-4 p-3 rounded-lg bg-purple-50 border border-purple-200 text-center font-semibold text-purple-800';
+        showIdleExtras();
+
+    } else if (action === 'postpone') {
+        var postponeDate = prompt('Postpone until when? (e.g., "next business meeting on April 5"):');
+        if (!postponeDate) return;
+        liveState = 'postponed';
+        hideDiscussionActions();
         btnVote.disabled = true;
-        btnAmend.classList.add('hidden');
-        btnTable.classList.add('hidden');
+        hidePrivileged();
+        setStep('ls-subsidiary', '[' + timeStamp() + '] POSTPONED to ' + postponeDate, true);
+        setStep('ls-result', 'POSTPONED to ' + postponeDate, false);
+        status.textContent = 'Motion postponed to ' + postponeDate + ' \u2014 ready for next item';
+        status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
+        showIdleExtras();
+        motionLog.push({text: currentMotionText, result: 'POSTPONED to ' + postponeDate, time: timeStamp(), votes: null, minorityHeard: false, amendments: currentAmendments.slice()});
+        updateLog();
+
+    } else if (action === 'refer') {
+        var committee = prompt('Refer to which committee? (e.g., "ad hoc committee of 3 members, report back May 1"):');
+        if (!committee) return;
+        liveState = 'referred';
+        hideDiscussionActions();
+        btnVote.disabled = true;
+        hidePrivileged();
+        setStep('ls-subsidiary', '[' + timeStamp() + '] REFERRED to ' + committee, true);
+        setStep('ls-result', 'REFERRED to committee', false);
+        status.textContent = 'Motion referred to committee \u2014 ready for next item';
+        status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
+        showIdleExtras();
+        motionLog.push({text: currentMotionText, result: 'REFERRED (' + committee + ')', time: timeStamp(), votes: null, minorityHeard: false, amendments: currentAmendments.slice()});
+        updateLog();
+
+    } else if (action === 'postpone-indef') {
+        var piPassed = confirm('Postpone Indefinitely effectively kills the motion for this session.\n\nOK = Motion to postpone indefinitely PASSES\nCancel = Motion to postpone indefinitely FAILS (discussion continues)');
+        if (piPassed) {
+            liveState = 'killed';
+            hideDiscussionActions();
+            btnVote.disabled = true;
+            hidePrivileged();
+            setStep('ls-subsidiary', '[' + timeStamp() + '] POSTPONED INDEFINITELY (motion killed)', true);
+            setStep('ls-result', 'POSTPONED INDEFINITELY (killed)', false);
+            status.textContent = 'Motion killed by postpone indefinitely \u2014 ready for next item';
+            status.className = 'mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-center font-semibold text-red-800';
+            showIdleExtras();
+            motionLog.push({text: currentMotionText, result: 'POSTPONED INDEFINITELY', time: timeStamp(), votes: null, minorityHeard: false, amendments: currentAmendments.slice()});
+            updateLog();
+        } else {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Postpone indefinitely FAILED \u2014 discussion continues', false);
+            status.textContent = 'Postpone indefinitely failed \u2014 discussion continues';
+            status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+        }
+
+    // --- Privileged & Incidental Motions (available during active meeting) ---
+
+    } else if (action === 'point-of-order') {
+        var poText = prompt('State the point of order (e.g., "the motion was not seconded"):');
+        if (!poText) return;
+        var poRuling = prompt('Chair\'s ruling:\n\n1 = Point well taken (violation corrected)\n2 = Point not well taken (proceedings continue)\n\nEnter 1 or 2:');
+        var wellTaken = poRuling === '1';
+        setStep('ls-subsidiary', '[' + timeStamp() + '] POINT OF ORDER: "' + poText + '" \u2014 ' + (wellTaken ? 'Well taken' : 'Not well taken'), false);
+        status.textContent = 'Point of order ' + (wellTaken ? 'sustained \u2014 violation corrected' : 'overruled \u2014 proceedings continue');
+        status.className = 'mb-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-center font-semibold text-rose-800';
+        motionLog.push({text: 'POINT OF ORDER: ' + poText, result: wellTaken ? 'WELL TAKEN' : 'NOT WELL TAKEN', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'appeal') {
+        var appealPassed = confirm('Appeal the Chair\'s Decision.\nThe group votes: "Shall the decision of the chair be sustained?"\n\nOK = Chair\'s decision SUSTAINED (majority or tie)\nCancel = Chair\'s decision OVERRULED (majority voted against)');
+        if (appealPassed) {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] APPEAL: Chair\'s decision SUSTAINED', false);
+            status.textContent = 'Chair\'s decision sustained by the group';
+        } else {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] APPEAL: Chair\'s decision OVERRULED', false);
+            status.textContent = 'Chair\'s decision overruled by the group';
+        }
+        status.className = 'mb-4 p-3 rounded-lg bg-rose-50 border border-rose-200 text-center font-semibold text-rose-800';
+        motionLog.push({text: 'APPEAL OF CHAIR\'S DECISION', result: appealPassed ? 'CHAIR SUSTAINED' : 'CHAIR OVERRULED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'recess') {
+        var recessTime = prompt('Recess for how long? (e.g., "5 minutes"):');
+        if (!recessTime) return;
+        setStep('ls-subsidiary', '[' + timeStamp() + '] RECESS for ' + recessTime, false);
+        status.textContent = 'Meeting in recess for ' + recessTime + ' \u2014 click any action to continue when resumed';
+        status.className = 'mb-4 p-3 rounded-lg bg-sky-50 border border-sky-200 text-center font-semibold text-sky-800';
+        motionLog.push({text: 'RECESS (' + recessTime + ')', result: 'RECESS', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'adjourn') {
+        var adjPassed = confirm('Motion to adjourn (end the meeting).\n\nOK = Motion passes (meeting ends)\nCancel = Motion fails (meeting continues)');
+        if (adjPassed) {
+            liveState = 'adjourned';
+            disableAll();
+            hidePrivileged();
+            setStep('ls-result', 'MEETING ADJOURNED at ' + timeStamp(), true);
+            status.textContent = 'Meeting adjourned. Export minutes to save your record.';
+            status.className = 'mb-4 p-3 rounded-lg bg-sky-50 border border-sky-200 text-center font-semibold text-sky-800';
+            motionLog.push({text: 'ADJOURN', result: 'ADJOURNED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+            updateLog();
+        } else {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Motion to adjourn FAILED \u2014 meeting continues', false);
+            status.textContent = 'Motion to adjourn failed \u2014 meeting continues';
+            status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+        }
+
+    } else if (action === 'fix-adjourn') {
+        var fixDate = prompt('Set continuation meeting date/time (e.g., "next Tuesday at 7pm, same location"):');
+        if (!fixDate) return;
+        setStep('ls-subsidiary', '[' + timeStamp() + '] FIX TIME TO ADJOURN: ' + fixDate, false);
+        status.textContent = 'When meeting adjourns, it will continue on: ' + fixDate;
+        status.className = 'mb-4 p-3 rounded-lg bg-sky-50 border border-sky-200 text-center font-semibold text-sky-800';
+        motionLog.push({text: 'FIX TIME TO ADJOURN: ' + fixDate, result: 'ADOPTED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'parl-inquiry') {
+        var pqText = prompt('What is the parliamentary inquiry? (e.g., "Is it in order to amend this motion?"):');
+        if (!pqText) return;
+        var chairAnswer = prompt('Chair\'s response:');
+        setStep('ls-subsidiary', '[' + timeStamp() + '] PARLIAMENTARY INQUIRY: "' + pqText + '" \u2014 Chair: "' + (chairAnswer || 'Addressed') + '"', false);
+        status.textContent = 'Parliamentary inquiry addressed \u2014 proceedings continue';
+        status.className = 'mb-4 p-3 rounded-lg bg-cyan-50 border border-cyan-200 text-center font-semibold text-cyan-800';
+        motionLog.push({text: 'PARLIAMENTARY INQUIRY: ' + pqText, result: 'INQUIRY ADDRESSED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'request-info') {
+        var riText = prompt('What information is being requested? (e.g., "What is our current treasury balance?"):');
+        if (!riText) return;
+        setStep('ls-subsidiary', '[' + timeStamp() + '] REQUEST FOR INFO: "' + riText + '"', false);
+        status.textContent = 'Information requested \u2014 proceedings continue';
+        status.className = 'mb-4 p-3 rounded-lg bg-cyan-50 border border-cyan-200 text-center font-semibold text-cyan-800';
+        motionLog.push({text: 'REQUEST FOR INFO: ' + riText, result: 'INFO PROVIDED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'question-privilege') {
+        var qpText = prompt('State the question of privilege (e.g., "Can we close the window? It\'s too noisy."):');
+        if (!qpText) return;
+        var chairGranted = confirm('Did the chair grant the request?\n\nOK = Granted\nCancel = Not granted');
+        setStep('ls-subsidiary', '[' + timeStamp() + '] QUESTION OF PRIVILEGE: "' + qpText + '" \u2014 ' + (chairGranted ? 'Granted' : 'Not granted'), false);
+        status.textContent = 'Question of privilege ' + (chairGranted ? 'granted' : 'not granted') + ' \u2014 proceedings continue';
+        status.className = 'mb-4 p-3 rounded-lg bg-pink-50 border border-pink-200 text-center font-semibold text-pink-800';
+        motionLog.push({text: 'QUESTION OF PRIVILEGE: ' + qpText, result: chairGranted ? 'PRIVILEGE GRANTED' : 'PRIVILEGE DENIED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'orders-of-day') {
+        var odOverride = confirm('Call for the Orders of the Day!\nA member demands the assembly return to its adopted agenda.\n\nDoes the group wish to SET ASIDE the orders and continue current business? (requires 2/3 vote)\n\nOK = 2/3 vote to set aside (continue current business)\nCancel = Orders enforced (return to agenda)');
+        if (odOverride) {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] ORDERS OF THE DAY called \u2014 set aside by 2/3 vote', false);
+            status.textContent = 'Orders of the day set aside \u2014 continuing current business';
+        } else {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] ORDERS OF THE DAY enforced \u2014 returning to agenda', false);
+            status.textContent = 'Orders of the day enforced \u2014 returning to scheduled agenda';
+        }
+        status.className = 'mb-4 p-3 rounded-lg bg-pink-50 border border-pink-200 text-center font-semibold text-pink-800';
+        motionLog.push({text: 'CALL FOR ORDERS OF THE DAY', result: odOverride ? 'SET ASIDE' : 'ORDERS ENFORCED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'objection') {
+        var objSustained = confirm('Objection to Consideration raised!\n"Shall the question be considered?"\nRequires 2/3 vote AGAINST consideration to sustain.\n\nOK = 2/3 voted against consideration (motion killed)\nCancel = Objection fails (motion proceeds normally)');
+        if (objSustained) {
+            liveState = 'objected';
+            btnSecond.disabled = true;
+            btnNoSecond.classList.add('hidden');
+            btnObjection.classList.add('hidden');
+            hidePrivileged();
+            setStep('ls-second', 'OBJECTION TO CONSIDERATION SUSTAINED \u2014 motion not considered', true);
+            setStep('ls-result', 'NOT CONSIDERED (objection sustained)', false);
+            status.textContent = 'Motion killed by objection to consideration \u2014 ready for next item';
+            status.className = 'mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-center font-semibold text-red-800';
+            showIdleExtras();
+            motionLog.push({text: currentMotionText, result: 'NOT CONSIDERED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+            updateLog();
+        } else {
+            setStep('ls-subsidiary', '[' + timeStamp() + '] Objection to consideration FAILED \u2014 motion proceeds', false);
+            status.textContent = 'Objection failed \u2014 motion proceeds. Waiting for a second.';
+            status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
+            // Per Robert's Rules, objection to consideration can only be raised once per motion
+            btnObjection.classList.add('hidden');
+        }
+
+    } else if (action === 'rescind') {
+        var rescindText = prompt('Which prior decision to rescind? (e.g., "the motion adopted on March 1 to change meeting time to 7pm"):');
+        if (!rescindText) return;
+        var hadNotice = confirm('Was prior notice given that this rescission would be proposed?\n\nOK = Yes (majority vote required)\nCancel = No (2/3 vote required)');
+        var rescindPassed = confirm('Does the motion to rescind pass?\n(' + (hadNotice ? 'Majority' : 'Two-thirds') + ' vote required)\n\nOK = Rescission passes (prior decision undone)\nCancel = Rescission fails (prior decision stands)');
+        motionLog.push({text: 'RESCIND: ' + rescindText, result: rescindPassed ? 'RESCINDED' : 'RESCISSION FAILED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Rescind: "' + rescindText + '" \u2014 ' + (rescindPassed ? 'RESCINDED' : 'FAILED'), false);
+        status.textContent = rescindPassed ? 'Prior decision rescinded' : 'Motion to rescind failed \u2014 prior decision stands';
+        status.className = rescindPassed ? 'mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-center font-semibold text-red-800' : 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+
+    } else if (action === 'nominations') {
+        var nomAction = prompt('Nomination action:\n1 = Open nominations for a position\n2 = Close nominations (requires 2/3)\n3 = Reopen nominations\n\nEnter 1, 2, or 3:');
+        if (!nomAction) return;
+        var nomPosition = prompt('For which position?');
+        if (!nomPosition) return;
+        var nomResult;
+        if (nomAction === '1') {
+            nomResult = 'NOMINATIONS OPENED for ' + nomPosition;
+        } else if (nomAction === '2') {
+            var closePassed = confirm('Close nominations requires a 2/3 vote.\n\nOK = Nominations closed\nCancel = Motion to close failed');
+            nomResult = closePassed ? 'NOMINATIONS CLOSED for ' + nomPosition : 'CLOSE NOMINATIONS FAILED for ' + nomPosition;
+        } else if (nomAction === '3') {
+            nomResult = 'NOMINATIONS REOPENED for ' + nomPosition;
+        } else { return; }
+        setStep('ls-subsidiary', '[' + timeStamp() + '] ' + nomResult, false);
+        status.textContent = nomResult;
+        status.className = 'mb-4 p-3 rounded-lg bg-fuchsia-50 border border-fuchsia-200 text-center font-semibold text-fuchsia-800';
+        motionLog.push({text: nomResult, result: 'NOMINATION ACTION', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'voting-method') {
+        var vmText = prompt('Change voting method to:\n(e.g., "written ballot", "show of hands", "standing count", "roll call")');
+        if (!vmText) return;
+        var vmPassed = confirm('Motion to change voting method to "' + vmText + '".\n\nOK = Adopted (voting method changed)\nCancel = Failed (current method continues)');
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Voting method: ' + vmText + ' \u2014 ' + (vmPassed ? 'ADOPTED' : 'FAILED'), false);
+        status.textContent = vmPassed ? 'Voting method changed to: ' + vmText : 'Motion to change voting method failed';
+        status.className = 'mb-4 p-3 rounded-lg bg-fuchsia-50 border border-fuchsia-200 text-center font-semibold text-fuchsia-800';
+        motionLog.push({text: 'CHANGE VOTING METHOD: ' + vmText, result: vmPassed ? 'METHOD ADOPTED' : 'METHOD FAILED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+
+    } else if (action === 'division') {
+        // Division of the Assembly — demand a recount
+        resetVoteInputs();
+        setStep('ls-vote', '[' + timeStamp() + '] DIVISION called \u2014 recount by show of hands/standing', true);
+        status.textContent = 'Division! Recount in progress \u2014 enter new counts and record the result';
+        status.className = 'mb-4 p-3 rounded-lg bg-yellow-50 border border-yellow-200 text-center font-semibold text-yellow-800';
+        // Pop previous result from log if it was just recorded
+        if (motionLog.length > 0 && (motionLog[motionLog.length-1].result === 'PASSED' || motionLog[motionLog.length-1].result === 'FAILED')) {
+            motionLog.pop();
+        }
         btnPass.classList.remove('hidden');
         btnFail.classList.remove('hidden');
+        btnDivision.classList.add('hidden');
         voteArea.classList.remove('hidden');
+        btnMinority.classList.add('hidden');
+        btnNext.classList.add('hidden');
+
+    // --- Restorative motions (available when idle / between motions) ---
+
+    } else if (action === 'ratify') {
+        var ratifyText = prompt('What action needs to be ratified/confirmed?\n(e.g., "treasurer\'s emergency purchase of $75 coffee maker on March 1"):');
+        if (!ratifyText) return;
+        var ratifyPassed = confirm('Does the group ratify this action?\n\nOK = Ratified (approved)\nCancel = Not ratified');
+        motionLog.push({text: 'RATIFY: ' + ratifyText, result: ratifyPassed ? 'RATIFIED' : 'NOT RATIFIED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Ratify: "' + ratifyText + '" \u2014 ' + (ratifyPassed ? 'RATIFIED' : 'NOT RATIFIED'), false);
+        status.textContent = ratifyPassed ? 'Action ratified' : 'Action not ratified';
+        status.className = ratifyPassed ? 'mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-center font-semibold text-emerald-800' : 'mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-center font-semibold text-red-800';
+
+    } else if (action === 'discharge') {
+        var dischargeText = prompt('Discharge which committee from what topic?\n(e.g., "ad hoc committee from the format change study"):');
+        if (!dischargeText) return;
+        var dischargePassed = confirm('Discharge a Committee requires 2/3 vote (without notice) or majority (with notice).\n\nOK = Committee discharged\nCancel = Motion to discharge failed');
+        motionLog.push({text: 'DISCHARGE COMMITTEE: ' + dischargeText, result: dischargePassed ? 'COMMITTEE DISCHARGED' : 'DISCHARGE FAILED', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
+        updateLog();
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Discharge: "' + dischargeText + '" \u2014 ' + (dischargePassed ? 'DISCHARGED' : 'FAILED'), false);
+        status.textContent = dischargePassed ? 'Committee discharged \u2014 matter returned to the floor' : 'Motion to discharge committee failed';
+        status.className = dischargePassed ? 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800' : 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+
+    // --- Vote results ---
+
+    } else if (action === 'vote') {
+        liveState = 'voting';
+        hideDiscussionActions();
+        setStep('ls-vote', '[' + timeStamp() + '] Vote called', true);
+        status.textContent = 'Voting \u2014 enter counts and record the result';
+        status.className = 'mb-4 p-3 rounded-lg bg-purple-50 border border-purple-200 text-center font-semibold text-purple-800';
+        btnVote.disabled = true;
+        btnPass.classList.remove('hidden');
+        btnFail.classList.remove('hidden');
+        btnDivision.classList.remove('hidden');
+        voteArea.classList.remove('hidden');
+
     } else if (action === 'pass') {
         liveState = 'passed';
         var vc = getVoteCounts();
         var vcText = vc.yes + '-' + vc.no + (vc.abstain > 0 ? ' (' + vc.abstain + ' abstain)' : '');
-        setStep('ls-result', 'MOTION PASSES — Vote: ' + vcText, true);
-        status.textContent = 'Motion passed — hear minority opinion';
+        setStep('ls-result', 'MOTION PASSES \u2014 Vote: ' + vcText, true);
+        status.textContent = 'Motion passed \u2014 hear minority opinion';
         status.className = 'mb-4 p-3 rounded-lg bg-emerald-50 border border-emerald-200 text-center font-semibold text-emerald-800';
+        hideDiscussionActions();
         hideVoteResults();
         btnMinority.classList.remove('hidden');
+        btnNext.classList.remove('hidden');
         motionLog.push({text: currentMotionText, result: 'PASSED', time: timeStamp(), votes: vc, minorityHeard: false, amendments: currentAmendments.slice()});
         updateLog();
+
     } else if (action === 'fail') {
         liveState = 'failed';
         var vc = getVoteCounts();
         var vcText = vc.yes + '-' + vc.no + (vc.abstain > 0 ? ' (' + vc.abstain + ' abstain)' : '');
-        setStep('ls-result', 'MOTION FAILS — Vote: ' + vcText, true);
-        status.textContent = 'Motion failed — hear minority opinion';
+        setStep('ls-result', 'MOTION FAILS \u2014 Vote: ' + vcText, true);
+        status.textContent = 'Motion failed \u2014 hear minority opinion';
         status.className = 'mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-center font-semibold text-red-800';
+        hideDiscussionActions();
         hideVoteResults();
         btnMinority.classList.remove('hidden');
+        btnNext.classList.remove('hidden');
         motionLog.push({text: currentMotionText, result: 'FAILED', time: timeStamp(), votes: vc, minorityHeard: false, amendments: currentAmendments.slice()});
         updateLog();
+
     } else if (action === 'minority') {
         liveState = 'minority-heard';
         setStep('ls-minority', '[' + timeStamp() + '] Minority opinion heard', true);
-        status.textContent = 'Minority heard — finalize this item or move to reconsider?';
+        status.textContent = 'Minority heard \u2014 finalize this item or move to reconsider?';
         status.className = 'mb-4 p-3 rounded-lg bg-purple-50 border border-purple-200 text-center font-semibold text-purple-800';
         btnMinority.classList.add('hidden');
         btnNext.classList.remove('hidden');
         btnReconsider.classList.remove('hidden');
         if (motionLog.length > 0) motionLog[motionLog.length - 1].minorityHeard = true;
         updateLog();
+
     } else if (action === 'next-item') {
         liveState = 'complete';
-        status.textContent = 'Motion complete — ready for next item of business';
+        status.textContent = 'Motion complete \u2014 ready for next item of business';
         status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
         btnNext.classList.add('hidden');
         btnReconsider.classList.add('hidden');
+        btnMinority.classList.add('hidden');
+        hidePrivileged();
+        showIdleExtras();
+
     } else if (action === 'reconsider-vote') {
         liveState = 'discussion';
-        // Remove the original vote result from the log (will be re-recorded after new vote)
-        motionLog.pop();
+        // Mark the previous result as reconsidered instead of deleting it
+        if (motionLog.length > 0) {
+            motionLog[motionLog.length - 1].result += ' (RECONSIDERED)';
+        }
+        motionLog.push({text: currentMotionText, result: 'RECONSIDERED \u2014 reopened for discussion', time: timeStamp(), votes: null, minorityHeard: false, amendments: []});
         updateLog();
-        // Reset steps back to discussion
-        setStep('ls-vote', '—', false);
-        setStep('ls-result', '—', false);
-        setStep('ls-minority', '—', false);
+        setStep('ls-vote', '\u2014', false);
+        setStep('ls-result', '\u2014', false);
+        setStep('ls-minority', '\u2014', false);
+        setStep('ls-subsidiary', '[' + timeStamp() + '] Motion RECONSIDERED \u2014 returned to discussion', false);
         setStep('ls-discuss', '[' + timeStamp() + '] Discussion reopened (reconsidered)', true);
-        status.textContent = 'Motion reconsidered — discussion reopened';
+        status.textContent = 'Motion reconsidered \u2014 discussion reopened';
         status.className = 'mb-4 p-3 rounded-lg bg-amber-50 border border-amber-200 text-center font-semibold text-amber-800';
         btnNext.classList.add('hidden');
         btnReconsider.classList.add('hidden');
+        btnMinority.classList.add('hidden');
         btnVote.disabled = false;
-        btnAmend.classList.remove('hidden');
-        btnTable.classList.remove('hidden');
-        currentAmendments = [];
+        showDiscussionActions();
+        showPrivileged();
+        // Preserve prior amendments — per Robert's Rules, adopted amendments carry forward on reconsideration
         resetVoteInputs();
+
     } else if (action === 'reset') {
         liveState = 'idle';
-        status.textContent = 'Ready to begin — click "New Motion" to start';
+        status.textContent = 'Ready to begin \u2014 click "New Motion" to start' + (tabledMotions.length > 0 ? ' or "Take from Table" to bring back a tabled motion' : '');
         status.className = 'mb-4 p-3 rounded-lg bg-blue-50 border border-blue-200 text-center font-semibold text-blue-800';
+        showIdleExtras();
     }
 }
 
@@ -2511,9 +3192,45 @@ function updateLog() {
         logEl.innerHTML = '<span class="italic text-gray-500">No motions recorded yet.</span>';
         return;
     }
+    var resultColors = {
+        'PASSED': 'text-green-700',
+        'FAILED': 'text-red-700',
+        'TABLED': 'text-amber-800',
+        'WITHDRAWN': 'text-gray-600',
+        'POSTPONED INDEFINITELY': 'text-red-700',
+        'TAKEN FROM TABLE': 'text-blue-700',
+        'NOT CONSIDERED': 'text-red-700',
+        'WELL TAKEN': 'text-rose-700',
+        'NOT WELL TAKEN': 'text-gray-600',
+        'CHAIR SUSTAINED': 'text-rose-700',
+        'CHAIR OVERRULED': 'text-amber-800',
+        'INQUIRY ADDRESSED': 'text-cyan-700',
+        'INFO PROVIDED': 'text-cyan-700',
+        'PRIVILEGE GRANTED': 'text-pink-700',
+        'PRIVILEGE DENIED': 'text-pink-600',
+        'SET ASIDE': 'text-pink-700',
+        'ORDERS ENFORCED': 'text-pink-700',
+        'RECESS': 'text-sky-700',
+        'ADJOURNED': 'text-sky-700',
+        'ADOPTED': 'text-green-700',
+        'RATIFIED': 'text-green-700',
+        'NOT RATIFIED': 'text-red-700',
+        'RESCINDED': 'text-red-700',
+        'RESCISSION FAILED': 'text-gray-600',
+        'COMMITTEE DISCHARGED': 'text-amber-800',
+        'DISCHARGE FAILED': 'text-gray-600',
+        'NOMINATION ACTION': 'text-fuchsia-700',
+        'METHOD ADOPTED': 'text-fuchsia-700',
+        'METHOD FAILED': 'text-gray-600'
+    };
     var html = '<ol class="list-decimal ml-5 space-y-2 not-italic text-gray-800">';
     motionLog.forEach(function(m) {
-        var color = m.result === 'PASSED' ? 'text-green-700' : (m.result === 'TABLED' ? 'text-amber-800' : 'text-red-700');
+        var color = resultColors[m.result]
+            || (m.result.indexOf('RECONSIDERED') !== -1 ? 'text-amber-700' : null)
+            || (m.result.indexOf('POSTPONED') === 0 ? 'text-amber-800' : null)
+            || (m.result.indexOf('REFERRED') === 0 ? 'text-amber-800' : null)
+            || (m.result.indexOf('NOMINATIONS') !== -1 ? 'text-fuchsia-700' : null)
+            || 'text-gray-600';
         var voteStr = '';
         if (m.votes) {
             voteStr = ' (Vote: ' + m.votes.yes + '-' + m.votes.no;
@@ -2525,7 +3242,7 @@ function updateLog() {
         if (m.amendments && m.amendments.length > 0) {
             amendStr = ' <span class="text-indigo-800 text-xs">[' + m.amendments.length + ' amendment(s)]</span>';
         }
-        html += '<li><span class="text-gray-400 text-xs">[' + m.time + ']</span> "I move ' + escapeHtml(m.text) + '" — <strong class="' + color + '">' + m.result + '</strong>' + voteStr + amendStr + minorityStr + '</li>';
+        html += '<li><span class="text-gray-400 text-xs">[' + m.time + ']</span> "I move ' + escapeHtml(m.text) + '" \u2014 <strong class="' + color + '">' + escapeHtml(m.result) + '</strong>' + voteStr + amendStr + minorityStr + '</li>';
     });
     html += '</ol>';
     logEl.innerHTML = html;
@@ -2548,10 +3265,10 @@ function exportMinutes() {
     if (meetingStartTime) txt += 'Meeting started: ' + meetingStartTime.toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + '\n';
     txt += '========================================\n\n';
 
-    var passed = 0, failed = 0, tabled = 0, died = 0;
+    var counts = {};
     motionLog.forEach(function(m, i) {
-        txt += 'Motion #' + (i+1) + ' [' + m.time + ']\n';
-        txt += '  Motion: "I move ' + m.text + '"\n';
+        txt += 'Item #' + (i+1) + ' [' + m.time + ']\n';
+        txt += '  Motion: "' + m.text + '"\n';
         txt += '  Result: ' + m.result + '\n';
         if (m.votes) {
             txt += '  Vote: ' + m.votes.yes + ' in favor, ' + m.votes.no + ' opposed';
@@ -2561,29 +3278,81 @@ function exportMinutes() {
         if (m.amendments && m.amendments.length > 0) {
             txt += '  Amendments:\n';
             m.amendments.forEach(function(a, j) {
-                txt += '    ' + (j+1) + '. "' + a.text + '" — ' + a.result + ' [' + a.time + ']\n';
+                txt += '    ' + (j+1) + '. "' + a.text + '" \u2014 ' + a.result + ' [' + a.time + ']\n';
             });
         }
-        if (m.result !== 'DIED (no second)' && m.result !== 'TABLED') {
+        // Show minority opinion line only for motions that went to a full vote
+        var showMinority = (m.result === 'PASSED' || m.result === 'FAILED' || m.result.indexOf('RECONSIDERED') !== -1);
+        if (showMinority) {
             txt += '  Minority opinion heard: ' + (m.minorityHeard ? 'Yes' : 'No') + '\n';
         }
         txt += '\n';
 
-        if (m.result === 'PASSED') passed++;
-        else if (m.result === 'FAILED') failed++;
-        else if (m.result === 'TABLED') tabled++;
-        else died++;
+        // Categorize for summary
+        var r = m.result;
+        var cat;
+        // Substantive motion results
+        if (r === 'PASSED') cat = 'passed';
+        else if (r === 'FAILED') cat = 'failed';
+        else if (r === 'TABLED') cat = 'tabled';
+        else if (r === 'WITHDRAWN') cat = 'withdrawn';
+        else if (r === 'POSTPONED INDEFINITELY') cat = 'postponed indefinitely';
+        else if (r === 'NOT CONSIDERED') cat = 'not considered (objection)';
+        else if (r === 'DIED (no second)') cat = 'died (no second)';
+        else if (r === 'TAKEN FROM TABLE') cat = 'taken from table';
+        else if (r.indexOf('POSTPONED') === 0) cat = 'postponed';
+        else if (r.indexOf('REFERRED') === 0) cat = 'referred to committee';
+        else if (r.indexOf('RECONSIDERED') !== -1) cat = 'reconsidered';
+        // Restorative
+        else if (r === 'RESCINDED') cat = 'rescinded';
+        else if (r === 'RESCISSION FAILED') cat = 'rescission failed';
+        else if (r === 'RATIFIED') cat = 'ratified';
+        else if (r === 'NOT RATIFIED') cat = 'not ratified';
+        else if (r === 'COMMITTEE DISCHARGED') cat = 'committee discharged';
+        else if (r === 'DISCHARGE FAILED') cat = 'discharge failed';
+        // Privileged
+        else if (r === 'ADJOURNED') cat = 'adjourned';
+        else if (r === 'RECESS') cat = 'recess';
+        else if (r === 'ADOPTED') cat = 'adopted';
+        // Incidental — points of order, appeals, inquiries
+        else if (r === 'WELL TAKEN' || r === 'NOT WELL TAKEN') cat = 'point of order';
+        else if (r === 'CHAIR SUSTAINED' || r === 'CHAIR OVERRULED') cat = 'appeal';
+        else if (r === 'INQUIRY ADDRESSED') cat = 'parliamentary inquiry';
+        else if (r === 'INFO PROVIDED') cat = 'request for info';
+        else if (r === 'PRIVILEGE GRANTED' || r === 'PRIVILEGE DENIED') cat = 'question of privilege';
+        else if (r === 'SET ASIDE' || r === 'ORDERS ENFORCED') cat = 'orders of the day';
+        // Nominations & voting methods
+        else if (r === 'NOMINATION ACTION') cat = 'nomination action';
+        else if (r === 'METHOD ADOPTED' || r === 'METHOD FAILED') cat = 'voting method';
+        else cat = 'procedural';
+        counts[cat] = (counts[cat] || 0) + 1;
     });
 
     txt += '========================================\n';
-    txt += 'SUMMARY: ' + motionLog.length + ' motion(s) — ';
+    txt += 'SUMMARY: ' + motionLog.length + ' item(s) \u2014 ';
     var parts = [];
-    if (passed > 0) parts.push(passed + ' passed');
-    if (failed > 0) parts.push(failed + ' failed');
-    if (tabled > 0) parts.push(tabled + ' tabled/deferred');
-    if (died > 0) parts.push(died + ' died (no second)');
+    // Show substantive results first, then procedural/incidental
+    var order = ['passed','failed','tabled','withdrawn','postponed','referred to committee','postponed indefinitely','not considered (objection)','died (no second)','reconsidered','rescinded','ratified','taken from table','committee discharged','adjourned','recess','adopted','point of order','appeal','parliamentary inquiry','request for info','question of privilege','orders of the day','nomination action','voting method','procedural'];
+    order.forEach(function(cat) {
+        if (counts[cat]) parts.push(counts[cat] + ' ' + cat);
+    });
+    // Add any remaining categories not in the order list
+    Object.keys(counts).forEach(function(cat) {
+        if (order.indexOf(cat) === -1 && counts[cat]) parts.push(counts[cat] + ' ' + cat);
+    });
     txt += parts.join(', ') + '\n';
-    txt += 'Meeting ended: ' + timeStamp() + '\n';
+    // Note any motions still tabled (not yet taken from table)
+    if (tabledMotions.length > 0) {
+        txt += '\nMOTIONS STILL TABLED (pending for next meeting):\n';
+        tabledMotions.forEach(function(m, i) {
+            txt += '  ' + (i+1) + '. "' + m.text + '" (tabled at ' + m.time + ')';
+            if (m.amendments && m.amendments.length > 0) {
+                txt += ' [' + m.amendments.length + ' amendment(s) pending]';
+            }
+            txt += '\n';
+        });
+    }
+    txt += '\nMeeting ended: ' + timeStamp() + '\n';
     txt += 'Minutes generated by BigBook.Study Group Conscience Tool\n';
 
     var blob = new Blob([txt], {type: 'text/plain'});
@@ -2597,13 +3366,96 @@ function exportMinutes() {
 }
 
 function clearLog() {
-    if (motionLog.length === 0) return;
-    if (!confirm('Clear all recorded motions? This cannot be undone.')) return;
+    if (motionLog.length === 0 && tabledMotions.length === 0) return;
+    if (!confirm('Clear all recorded motions and tabled items? This cannot be undone.')) return;
     motionLog = [];
+    tabledMotions = [];
     meetingStartTime = null;
+    document.getElementById('btn-take-table').classList.add('hidden');
     updateLog();
 }
+
+// --- Flowchart Modal ---
+function openFlowchartModal() {
+    var modal = document.getElementById('flowchart-modal');
+    // Clone the SVG into the modal
+    var origSvg = document.getElementById('flow-svg');
+    var modalBody = document.getElementById('flowchart-modal-body');
+    var existingSvg = modalBody.querySelector('svg');
+    if (existingSvg) existingSvg.remove();
+    var clonedSvg = origSvg.cloneNode(true);
+    clonedSvg.removeAttribute('id');
+    clonedSvg.style.minWidth = '';
+    clonedSvg.style.maxWidth = '';
+    clonedSvg.style.width = '100%';
+    clonedSvg.style.height = '100%';
+    clonedSvg.style.flex = '1';
+    // Re-wire click handlers on cloned nodes
+    clonedSvg.querySelectorAll('.flow-node').forEach(function(node) {
+        node.addEventListener('click', function() { showModalFlowDetail(this); });
+    });
+    modalBody.insertBefore(clonedSvg, modalBody.firstChild);
+    // Clear previous detail
+    document.getElementById('modal-flow-detail').classList.add('hidden');
+    modal.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeFlowchartModal() {
+    var modal = document.getElementById('flowchart-modal');
+    modal.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function showModalFlowDetail(el) {
+    var step = el.getAttribute('data-step');
+    var info = flowDetails[step];
+    if (!info) return;
+    // Clear active state on all modal nodes
+    var modalBody = document.getElementById('flowchart-modal-body');
+    modalBody.querySelectorAll('.flow-node').forEach(function(n) { n.classList.remove('active-node'); });
+    el.classList.add('active-node');
+    var detailEl = document.getElementById('modal-flow-detail');
+    document.getElementById('modal-flow-detail-title').textContent = info[0];
+    document.getElementById('modal-flow-detail-text').textContent = info[1];
+    detailEl.classList.remove('hidden');
+}
+
+// Close modal on Escape key
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        var modal = document.getElementById('flowchart-modal');
+        if (modal.classList.contains('open')) {
+            closeFlowchartModal();
+        }
+    }
+});
 </script>
+
+<!-- Flowchart Fullscreen Modal -->
+<div id="flowchart-modal">
+    <div id="flowchart-modal-backdrop" onclick="closeFlowchartModal()"></div>
+    <div id="flowchart-modal-content">
+        <div id="flowchart-modal-header">
+            <h3 class="text-lg font-bold font-serif">Motion Flowchart</h3>
+            <div class="flex items-center gap-3">
+                <span class="text-xs text-gray-500 hidden sm:inline">Click any step for details</span>
+                <span class="text-xs text-gray-400 border border-gray-300 rounded px-1.5 py-0.5 font-mono hidden sm:inline">Esc</span>
+                <button onclick="closeFlowchartModal()" class="inline-flex items-center gap-1.5 px-3 py-2 bg-gray-200 hover:bg-red-500 hover:text-white text-gray-700 rounded-lg text-sm font-semibold transition-colors" title="Close (Esc)">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+                    <span class="hidden sm:inline">Close</span>
+                </button>
+            </div>
+        </div>
+        <div id="flowchart-modal-body">
+            <!-- SVG will be cloned here -->
+            <div id="modal-flow-detail" class="concept-card rounded-lg p-5 mt-3 hidden">
+                <h4 id="modal-flow-detail-title" class="font-bold mb-2"></h4>
+                <p id="modal-flow-detail-text" class="text-sm"></p>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
