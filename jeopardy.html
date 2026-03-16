@@ -23,7 +23,7 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 .toolbar{position:fixed;top:0;left:0;right:0;background:var(--bg2);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;z-index:100;border-bottom:2px solid var(--card);gap:8px;max-height:140px;overflow-y:auto}
 .toolbar button{padding:6px 14px;font-size:.85em}
 .toolbar .scores{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;flex:1;min-width:0}
-.toolbar .score-chip{background:var(--card);padding:4px 12px;border-radius:20px;font-size:.85em;white-space:nowrap;transition:all .3s}
+.toolbar .score-chip{background:var(--card);padding:4px 12px;border-radius:20px;font-size:.85em;white-space:nowrap;transition:all .3s;max-width:180px;overflow:hidden;text-overflow:ellipsis}
 .toolbar .score-chip.active-turn{outline:3px solid var(--gold);animation:activePulse 2s infinite}
 .tb-group{display:flex;gap:6px;align-items:center;flex-shrink:0}
 .streak-badge{font-size:.75em;margin-left:4px}
@@ -44,7 +44,7 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 .cat-picker{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
 .cat-picker label{display:flex;align-items:center;gap:4px;color:var(--text);font-size:.95em;cursor:pointer}
 .cat-picker input[type="checkbox"]{width:auto}
-#board{padding-top:150px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+#board{padding-top:150px;min-height:100vh;display:flex;flex-direction:column;overflow-x:hidden;overflow-y:auto}
 .board-progress{text-align:center;padding:4px 0;font-size:.8em;color:var(--text2)}
 .board-progress .bar{display:inline-block;width:200px;height:4px;background:var(--card);border-radius:2px;vertical-align:middle;margin-left:8px;overflow:hidden}
 .board-progress .bar .fill{height:100%;background:var(--gold);border-radius:2px;transition:width .3s}
@@ -927,7 +927,7 @@ let G={
   usedQuestions:new Set(),paused:false,splashActive:false,
   fjQuestion:null,fjWagers:{},fjJudgeIdx:0,fjQualified:[],
   fjTimer:null,fjTimerVal:60,fjTimerMax:60,fjTimerStart:0,fjTimerStartVal:60,fjRevealed:false,_fjRevealTimeout:null,
-  _splashTimeout:null,_roundCompleteTimeout:null,_autoCloseTimeout:null,_roundTransTimeout:null
+  _splashTimeout:null,_roundCompleteTimeout:null,_autoCloseTimeout:null,_roundTransTimeout:null,_fjEndTimeout:null
 };
 
 // ===== AUDIO =====
@@ -961,7 +961,7 @@ function escHtml(s){if(s==null)return'';let d=document.createElement('div');d.te
 function fmtScore(n){return n<0?'-$'+Math.abs(n):'$'+n}
 let _toastTimeout;
 function toast(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');if(_toastTimeout)clearTimeout(_toastTimeout);_toastTimeout=setTimeout(()=>{t.classList.remove('show');_toastTimeout=null},2500)}
-function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');if(id==='setup')updateQStats()}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');if(id==='setup'){updateQStats();if(_confettiTimer){clearTimeout(_confettiTimer);_confettiTimer=null}$('confettiBox').innerHTML=''}}
 function countQuestions(){
 let total=0,byCat={};
 CAT_KEYS.forEach(c=>{byCat[c]=0;for(let d=1;d<=5;d++){let n=(QUESTIONS[c][d]||[]).length;byCat[c]+=n;total+=n}});
@@ -1030,6 +1030,7 @@ if(G._roundCompleteTimeout){clearTimeout(G._roundCompleteTimeout);G._roundComple
 if(G._autoCloseTimeout){clearTimeout(G._autoCloseTimeout);G._autoCloseTimeout=null}
 if(G._roundTransTimeout){clearTimeout(G._roundTransTimeout);G._roundTransTimeout=null}
 if(G._fjRevealTimeout){clearTimeout(G._fjRevealTimeout);G._fjRevealTimeout=null}
+if(G._fjEndTimeout){clearTimeout(G._fjEndTimeout);G._fjEndTimeout=null}
 $('ddSplash').classList.remove('active');$('roundSplash').classList.remove('active');G.splashActive=false;
 if(_confettiTimer){clearTimeout(_confettiTimer);_confettiTimer=null;$('confettiBox').innerHTML=''}
 buildBoard(1);
@@ -1133,7 +1134,7 @@ $('boardProgress').innerHTML=`${G.usedCells}/${G.totalCells} questions <span cla
 
 // ===== QUESTION FLOW =====
 function selectCell(c,r){
-if(G.paused||G.splashActive||_roundTransition||!$('board').classList.contains('active'))return;
+if(G.paused||G.splashActive||_roundTransition||!$('board').classList.contains('active')||$('questionModal').classList.contains('active'))return;
 let cell=G.board[c][r];
 if(cell.used)return;
 if(cell.a==='N/A'){
@@ -1221,7 +1222,9 @@ $('buzzArea').innerHTML=h;
 }
 
 function buzzIn(i){
-if(G.buzzedPlayer!==null||G.wrongBuzzers.includes(i)||G.paused||$('qAnswer').style.display!=='none'||G.timerVal<=0)return;
+// Use wall-clock time to prevent ~100ms race window between interval ticks
+let realTimeLeft=G.timer?Math.max(0,G.timerStartVal-(Date.now()-G.timerStart)/1000):G.timerVal;
+if(_markingAnswer||G.buzzedPlayer!==null||G.wrongBuzzers.includes(i)||G.paused||$('qAnswer').style.display!=='none'||realTimeLeft<=0)return;
 G.buzzedPlayer=i;
 stopTimer();
 sfx('tick');
@@ -1479,7 +1482,7 @@ fjJudgeNext();
 function fjJudgeNext(){
 if(G.fjJudgeIdx>=G.fjQualified.length){
 // All judged - keep _fjJudging locked to prevent race condition during endGame delay
-setTimeout(()=>endGame(),500);
+G._fjEndTimeout=setTimeout(()=>{G._fjEndTimeout=null;endGame()},500);
 return;
 }
 _fjJudging=false;
@@ -1530,6 +1533,7 @@ if(G._roundCompleteTimeout){clearTimeout(G._roundCompleteTimeout);G._roundComple
 if(G._autoCloseTimeout){clearTimeout(G._autoCloseTimeout);G._autoCloseTimeout=null}
 if(G._roundTransTimeout){clearTimeout(G._roundTransTimeout);G._roundTransTimeout=null}
 if(G._fjRevealTimeout){clearTimeout(G._fjRevealTimeout);G._fjRevealTimeout=null}
+if(G._fjEndTimeout){clearTimeout(G._fjEndTimeout);G._fjEndTimeout=null}
 $('ddSplash').classList.remove('active');$('roundSplash').classList.remove('active');
 $('pauseOverlay').classList.remove('active');
 G.splashActive=false;G.paused=false;_roundTransition=false;
@@ -1593,7 +1597,7 @@ if(!lb.length){$('lbContent').innerHTML='<p style="color:var(--text2);text-align
 let h='<table class="qb-table"><thead><tr><th>Date</th><th>Winner</th><th>Score</th><th>Players</th></tr></thead><tbody>';
 lb.slice().reverse().forEach(g=>{
 let winner=g.winner||'N/A';
-let wScore=g.tie?g.players.reduce((max,p)=>(!max||p.score>max.score)?p:max,null):g.players.find(p=>p.name===winner);
+let wScore=g.tie?g.players.reduce((max,p)=>(!max||p.score>max.score)?p:max,null):(g.players.find(p=>p.name===winner)||g.players[0]||null);
 let displayWinner=g.tie?winner+' (tie)':winner;
 h+=`<tr><td>${g.date}</td><td style="color:var(--gold)">${escHtml(displayWinner)}</td><td>${wScore?fmtScore(wScore.score):'-'}</td><td>${g.players.length}</td></tr>`;
 });
@@ -1686,6 +1690,9 @@ if(!q||!a){toast('Question and answer are required');return}
 let entry=ex?[q,a,ex]:[q,a];
 if(!QUESTIONS[cat])QUESTIONS[cat]={};
 if(!QUESTIONS[cat][diff])QUESTIONS[cat][diff]=[];
+// Warn if duplicate question text exists in same category/difficulty
+let isNew=!qeEditRef||(qeEditRef.cat!==cat||qeEditRef.diff!==diff);
+if(isNew&&(QUESTIONS[cat][diff]||[]).some(qa=>qa[0]===q)){if(!confirm('A question with this exact text already exists in this category/difficulty. Add anyway?'))return}
 if(qeEditRef){
 // If cat/diff changed, remove from old and add to new
 if(qeEditRef.cat===cat&&qeEditRef.diff===diff){
@@ -1727,6 +1734,8 @@ let data;
 if(f.name.endsWith('.json'))data=JSON.parse(ev.target.result);
 else data=ev.target.result.split(/\n/).map(s=>s.trim().replace(/^"|"$/g,'')).filter(Boolean);
 if(Array.isArray(data)){
+data=data.map(v=>typeof v==='string'?v.trim():String(v||'')).filter(Boolean);
+if(!data.length){toast('No valid player names found');return}
 $('numPlayers').value=Math.min(8,data.length);
 G.players=data.slice(0,8);
 updatePlayerInputs();
@@ -1766,8 +1775,7 @@ r.readAsText(f);e.target.value='';
 function downloadBlob(blob,filename){
 let a=document.createElement('a');let url=URL.createObjectURL(blob);
 a.href=url;a.download=filename;document.body.appendChild(a);
-try{a.click()}finally{document.body.removeChild(a)}
-setTimeout(()=>URL.revokeObjectURL(url),1000);
+try{a.click()}finally{document.body.removeChild(a);setTimeout(()=>URL.revokeObjectURL(url),1000)}
 }
 function exportResults(){
 let data={date:new Date().toISOString(),players:G.players.map(p=>({name:p,score:G.scores[p]}))};
@@ -1892,8 +1900,8 @@ if(e.key.toLowerCase()==='x'&&modal&&$('resultBtns').style.display==='flex'){mar
 let fjJudge=$('fjJudgePhase').classList.contains('active');
 if(e.key.toLowerCase()==='c'&&fjJudge){fjJudgeAnswer(true);return}
 if(e.key.toLowerCase()==='x'&&fjJudge){fjJudgeAnswer(false);return}
-// Practice mode keyboard shortcuts
-let practice=$('practiceOverlay').classList.contains('active');
+// Practice mode keyboard shortcuts (skip if another overlay is on top)
+let practice=$('practiceOverlay').classList.contains('active')&&!$('qeOverlay').classList.contains('active')&&!qb&&!$('lbOverlay').classList.contains('active');
 if(practice){
 if(e.key===' '){e.preventDefault();if(!practiceState.revealed)practiceReveal();return}
 if(e.key.toLowerCase()==='c'&&practiceState.revealed){practiceGrade(true);return}
