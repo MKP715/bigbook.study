@@ -195,7 +195,7 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 </div>
 </div>
 <div class="board-progress" id="boardProgress"></div>
-<div class="board-grid" id="boardGrid"></div>
+<div class="board-grid" id="boardGrid" tabindex="-1"></div>
 <div class="kb-hints" style="padding:4px 0">
 <span><kbd>1</kbd>-<kbd>8</kbd> Buzz</span><span><kbd>Space</kbd> Reveal</span>
 <span><kbd>C</kbd>orrect <kbd>X</kbd> Wrong</span><span><kbd>P</kbd>ause <kbd>U</kbd>ndo</span>
@@ -980,7 +980,11 @@ let sel=[];boxes.forEach(b=>{if(b.checked)sel.push(b.value)});return sel;
 }
 function updatePlayerInputs(){
 let n=parseInt($('numPlayers').value)||2;n=Math.max(1,Math.min(8,n));
-let h='';for(let i=0;i<n;i++)h+=`<input type="text" placeholder="Player ${i+1}" id="p${i}" value="${escHtml(G.players[i]||'')}">`;
+// Preserve any currently-typed values before recreating inputs
+let cur=[];
+let old=document.querySelectorAll('#playerInputs input');
+old.forEach((el,i)=>{cur[i]=el.value});
+let h='';for(let i=0;i<n;i++){let v=cur[i]!==undefined?cur[i]:(G.players[i]||'');h+=`<input type="text" placeholder="Player ${i+1}" id="p${i}" value="${escHtml(v)}">`}
 $('playerInputs').innerHTML=h;
 }
 function updateQStats(){
@@ -1008,7 +1012,7 @@ G.players=[];G.scores={};G.streaks={};G.bestStreaks={};G.answeredBy={};
 G.usedQuestions=new Set();G.undoStack=[];G.currentPlayerIdx=0;G.round=1;
 G.selectedCats=sel;G.paused=false;G.splashActive=false;_gameEnded=false;G._preQ=null;
 // Reset Final Jeopardy state from any previous game
-if(G.fjTimer){clearInterval(G.fjTimer);G.fjTimer=null}
+if(G.fjTimer&&G.fjTimer!=='paused'){clearInterval(G.fjTimer)}G.fjTimer=null;
 G.fjQuestion=null;G.fjWagers={};G.fjJudgeIdx=0;G.fjQualified=[];G.fjRevealed=false;G.fjTimerStart=0;G.fjTimerStartVal=60;
 _markingAnswer=false;_fjJudging=false;
 G.diffMin=parseInt($('diffMin').value);G.diffMax=parseInt($('diffMax').value);
@@ -1289,6 +1293,8 @@ _markingAnswer=false;
 if(!$('questionModal').classList.contains('active'))return;
 $('questionModal').classList.remove('active');
 stopTimer();
+// Return focus to the board for keyboard accessibility
+let board=$('boardGrid');if(board)board.focus();
 if(G._autoCloseTimeout){clearTimeout(G._autoCloseTimeout);G._autoCloseTimeout=null}
 if(G._preQ)G.undoStack.push(G._preQ);
 G._preQ=null;
@@ -1324,7 +1330,6 @@ G.timerStart=Date.now();G.timerStartVal=G.timerVal;
 $('timerFill').style.width=Math.max(0,(G.timerVal/G.timerMax)*100)+'%';
 let lastTick=-1;
 G.timer=setInterval(()=>{
-if(G.paused)return;
 G.timerVal=Math.max(0,G.timerStartVal-(Date.now()-G.timerStart)/1000);
 let pct=(G.timerVal/G.timerMax)*100;
 $('timerFill').style.width=pct+'%';
@@ -1333,18 +1338,30 @@ if(sec<=5&&sec>0&&sec!==lastTick){lastTick=sec;sfx('tick');$('timerAnnounce').te
 if(G.timerVal<=0){stopTimer();sfx('buzzer');revealAnswer()}
 },100);
 }
-function stopTimer(){if(G.timer){clearInterval(G.timer);G.timer=null;if(!G.paused)G.timerVal=Math.max(0,G.timerStartVal-(Date.now()-G.timerStart)/1000)}}
+function stopTimer(){if(G.timer&&G.timer!=='paused'){clearInterval(G.timer);G.timerVal=Math.max(0,G.timerStartVal-(Date.now()-G.timerStart)/1000)}G.timer=null}
 
 // ===== PAUSE =====
 function togglePause(){
 if(!$('board').classList.contains('active')&&!$('questionModal').classList.contains('active')&&!$('finalJep').classList.contains('active'))return;
 G.paused=!G.paused;
-if(G.paused){$('pauseOverlay').classList.add('active')}
-else{
+if(G.paused){
+$('pauseOverlay').classList.add('active');
+// Freeze timer values and stop intervals to save CPU
+if(G.timer){G.timerVal=Math.max(0,G.timerStartVal-(Date.now()-G.timerStart)/1000);clearInterval(G.timer);G.timer='paused'}
+if(G.fjTimer){G.fjTimerVal=Math.max(0,G.fjTimerStartVal-(Date.now()-G.fjTimerStart)/1000);clearInterval(G.fjTimer);G.fjTimer='paused'}
+}else{
 $('pauseOverlay').classList.remove('active');
-// Reset timer references on unpause so no time is lost
-if(G.timer){G.timerStart=Date.now();G.timerStartVal=G.timerVal}
-if(G.fjTimer){G.fjTimerStart=Date.now();G.fjTimerStartVal=G.fjTimerVal}
+// Restart intervals from frozen values
+if(G.timer==='paused'){G.timer=null;startTimer(true)}
+if(G.fjTimer==='paused'){
+G.fjTimerStart=Date.now();G.fjTimerStartVal=G.fjTimerVal;
+G.fjTimer=setInterval(()=>{
+G.fjTimerVal=Math.max(0,G.fjTimerStartVal-(Date.now()-G.fjTimerStart)/1000);
+$('fjTimerFill').style.width=(G.fjTimerVal/G.fjTimerMax)*100+'%';
+$('fjTimeLeft').textContent=Math.ceil(G.fjTimerVal)+'s';
+if(G.fjTimerVal<=0){clearInterval(G.fjTimer);G.fjTimer=null;fjReveal()}
+},100);
+}
 }
 }
 
@@ -1368,6 +1385,7 @@ G._splashTimeout=setTimeout(()=>{
 G._splashTimeout=null;
 $('roundSplash').classList.remove('active');G.splashActive=false;
 G.undoStack=[];
+G.answeredBy={};
 buildBoard(2);
 $('roundLabel').textContent='ROUND 2';
 renderBoard();renderScores();renderProgress();
@@ -1412,7 +1430,7 @@ sfx('fanfare');
 
 function fjLockWagers(){
 if(!$('fjWagerPhase').classList.contains('active'))return;
-if(G.fjTimer){clearInterval(G.fjTimer);G.fjTimer=null}
+if(G.fjTimer&&G.fjTimer!=='paused'){clearInterval(G.fjTimer)}G.fjTimer=null;
 G.fjQualified.forEach((p,i)=>{
 let inp=document.getElementById('fjw_'+i);
 let sc=G.scores[p];
@@ -1433,7 +1451,6 @@ $('fjTimerFill').style.width='100%';
 $('fjTimeLeft').textContent=fjTimerMax+'s';
 G.fjTimerStart=Date.now();G.fjTimerStartVal=G.fjTimerVal;G.fjTimerMax=fjTimerMax;
 G.fjTimer=setInterval(()=>{
-if(G.paused)return;
 G.fjTimerVal=Math.max(0,G.fjTimerStartVal-(Date.now()-G.fjTimerStart)/1000);
 $('fjTimerFill').style.width=(G.fjTimerVal/G.fjTimerMax)*100+'%';
 $('fjTimeLeft').textContent=Math.ceil(G.fjTimerVal)+'s';
@@ -1444,7 +1461,7 @@ if(G.fjTimerVal<=0){clearInterval(G.fjTimer);G.fjTimer=null;fjReveal()}
 function fjReveal(){
 if(G.fjRevealed)return;
 G.fjRevealed=true;
-if(G.fjTimer){clearInterval(G.fjTimer);G.fjTimer=null}
+if(G.fjTimer&&G.fjTimer!=='paused'){clearInterval(G.fjTimer)}G.fjTimer=null;
 $('fjAnswer').style.display='block';
 $('fjRevealBtn').style.display='none';
 $('fjTimeLeft').textContent='';
@@ -1505,7 +1522,7 @@ function endGame(){
 if(_gameEnded)return;
 _gameEnded=true;
 stopTimer();
-if(G.fjTimer){clearInterval(G.fjTimer);G.fjTimer=null}
+if(G.fjTimer&&G.fjTimer!=='paused'){clearInterval(G.fjTimer)}G.fjTimer=null;
 // Clear any active splashes and pending timeouts
 if(G._splashTimeout){clearTimeout(G._splashTimeout);G._splashTimeout=null}
 if(G._roundCompleteTimeout){clearTimeout(G._roundCompleteTimeout);G._roundCompleteTimeout=null}
