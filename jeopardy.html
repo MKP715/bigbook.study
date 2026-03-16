@@ -1389,6 +1389,7 @@ G.answeredBy={};
 buildBoard(2);
 $('roundLabel').textContent='ROUND 2';
 renderBoard();renderScores();renderProgress();
+_roundTransition=false;
 },2500);
 }
 
@@ -1476,12 +1477,12 @@ fjJudgeNext();
 }
 
 function fjJudgeNext(){
-_fjJudging=false;
 if(G.fjJudgeIdx>=G.fjQualified.length){
-// All judged, end game
+// All judged - keep _fjJudging locked to prevent race condition during endGame delay
 setTimeout(()=>endGame(),500);
 return;
 }
+_fjJudging=false;
 let p=G.fjQualified[G.fjJudgeIdx];
 let w=G.fjWagers[p];
 $('fjJudgeArea').innerHTML=`<div style="margin-bottom:12px;padding:8px;background:var(--card);border-radius:var(--radius);font-size:.9em">${fjScoreSummary()}</div>
