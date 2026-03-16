@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AA Jeopardy - Recovery Game</title>
+<style>
+:root{--bg:#1a0a2e;--bg2:#16213e;--card:#0f3460;--card-hover:#1a4a8a;--accent:#e94560;--gold:#ffd700;--text:#eee;--text2:#aaa;--correct:#28a745;--wrong:#dc3545;--radius:8px;--shadow:0 4px 15px rgba(0,0,0,.3);--accent-text:#fff;--board-cols:4}
+[data-theme="light"]{--bg:#f0f0f0;--bg2:#fff;--card:#3498db;--card-hover:#2980b9;--accent:#e74c3c;--text:#222;--text2:#555;--shadow:0 4px 15px rgba(0,0,0,.1);--accent-text:#fff}
+[data-theme="high-contrast"]{--bg:#000;--bg2:#111;--card:#333;--card-hover:#555;--accent:#ff0;--gold:#ff0;--text:#fff;--text2:#ccc;--accent-text:#000}
+*{margin:0;padding:0;box-sizing:border-box}
+*:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+.screen{display:none;width:100%;min-height:100vh;padding:20px}.screen.active{display:flex;flex-direction:column;align-items:center}
+h1{font-size:2.2em;color:var(--gold);text-align:center;margin:10px 0;text-shadow:2px 2px 4px rgba(0,0,0,.5)}
+h2{color:var(--gold);margin:10px 0}
+h3{color:var(--gold);margin:8px 0}
+button{background:var(--accent);color:var(--accent-text);border:none;padding:10px 24px;border-radius:var(--radius);cursor:pointer;font-size:1em;transition:all .2s}
+button:hover{transform:translateY(-2px);filter:brightness(1.2)}
+button:active{transform:translateY(0)}
+input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid var(--card);background:var(--bg2);color:var(--text);font-size:1em}
+.toolbar{position:fixed;top:0;left:0;right:0;background:var(--bg2);padding:8px 16px;display:flex;align-items:center;justify-content:space-between;z-index:100;border-bottom:2px solid var(--card);gap:8px;max-height:140px;overflow-y:auto}
+.toolbar button{padding:6px 14px;font-size:.85em}
+.toolbar .scores{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center;flex:1;min-width:0}
+.toolbar .score-chip{background:var(--card);padding:4px 12px;border-radius:20px;font-size:.85em;white-space:nowrap;transition:all .3s}
+.toolbar .score-chip.active-turn{outline:3px solid var(--gold);animation:activePulse 2s infinite}
+.tb-group{display:flex;gap:6px;align-items:center;flex-shrink:0}
+.streak-badge{font-size:.75em;margin-left:4px}
+@keyframes activePulse{0%,100%{box-shadow:0 0 0 0 rgba(255,215,0,.4)}50%{box-shadow:0 0 0 6px rgba(255,215,0,0)}}
+@keyframes scoreUp{0%{background:var(--correct)}100%{background:var(--card)}}
+@keyframes scoreDown{0%{background:var(--wrong)}100%{background:var(--card)}}
+.score-flash-up{animation:scoreUp .8s ease-out}
+.score-flash-down{animation:scoreDown .8s ease-out}
+#setup{justify-content:center;gap:20px;padding-top:20px}
+.setup-box{background:var(--bg2);padding:30px;border-radius:12px;max-width:650px;width:100%;box-shadow:var(--shadow)}
+.setup-box label{display:block;margin:12px 0 4px;color:var(--text2);font-size:.9em}
+.setup-box input,.setup-box select{width:100%}
+.player-list{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.player-list input{padding:8px}
+.btn-row{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.q-stats{background:var(--card);padding:10px 16px;border-radius:var(--radius);margin-top:14px;font-size:.9em;color:var(--text2);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.q-stats span{color:var(--gold)}
+.cat-picker{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.cat-picker label{display:flex;align-items:center;gap:4px;color:var(--text);font-size:.95em;cursor:pointer}
+.cat-picker input[type="checkbox"]{width:auto}
+#board{padding-top:150px;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+.board-progress{text-align:center;padding:4px 0;font-size:.8em;color:var(--text2)}
+.board-progress .bar{display:inline-block;width:200px;height:4px;background:var(--card);border-radius:2px;vertical-align:middle;margin-left:8px;overflow:hidden}
+.board-progress .bar .fill{height:100%;background:var(--gold);border-radius:2px;transition:width .3s}
+.board-grid{display:grid;grid-template-columns:repeat(var(--board-cols,4),1fr);grid-template-rows:auto repeat(5,1fr);gap:8px;width:100%;margin:0 auto;padding:10px;flex:1;max-height:calc(100vh - 200px)}
+.cat-header{background:var(--card);padding:10px 8px;text-align:center;border-radius:var(--radius);font-weight:700;font-size:clamp(.9em,1.5vw,1.2em);color:var(--gold)}
+.cell{background:var(--card);text-align:center;border-radius:var(--radius);cursor:pointer;font-size:clamp(1.2em,2.5vw,2em);font-weight:700;color:var(--gold);transition:all .2s;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow);position:relative}
+.cell:hover:not(.used){background:var(--card-hover);transform:scale(1.03)}
+.cell.used{background:var(--bg2);color:var(--text2);cursor:default;opacity:.3;pointer-events:none}
+.cell.used.answered-border{opacity:.5;pointer-events:none}
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:200;align-items:center;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal{background:var(--bg2);padding:40px;border-radius:16px;max-width:800px;width:95%;text-align:center;box-shadow:0 0 40px rgba(233,69,96,.3);position:relative;max-height:90vh;overflow-y:auto}
+.modal .category-label{color:var(--accent);font-size:.9em;text-transform:uppercase;letter-spacing:2px}
+.question-text{font-size:1.6em;margin:20px 0;line-height:1.4}
+.answer-text{font-size:1.3em;color:var(--gold);margin:16px 0;padding:16px;background:rgba(255,215,0,.1);border-radius:var(--radius);display:none}
+.explanation-text{font-size:1em;color:var(--text2);margin:8px 0;padding:12px;background:rgba(255,255,255,.05);border-radius:var(--radius);display:none;font-style:italic}
+.timer-bar{height:6px;background:var(--card);border-radius:3px;margin:16px 0;overflow:hidden}
+.timer-bar .fill{height:100%;background:var(--accent);transition:width .1s linear;border-radius:3px}
+.modal .buzz-area{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:16px 0}
+.modal .buzz-btn{padding:12px 24px;font-size:1.1em;border-radius:30px}
+.modal .buzz-btn.buzzed{outline:3px solid var(--gold);animation:buzzAnim .3s}
+.modal .buzz-btn.wrong-buzz{opacity:.4;pointer-events:none;text-decoration:line-through}
+@keyframes buzzAnim{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+.modal .result-btns{display:flex;gap:10px;justify-content:center;margin-top:12px}
+.modal .result-btns button{padding:10px 30px;font-size:1.1em}
+.btn-correct{background:var(--correct)}
+.btn-wrong{background:var(--wrong)}
+.dd-wager{margin:16px 0}
+.dd-wager input{width:150px;text-align:center;font-size:1.2em}
+#results{justify-content:center;gap:20px}
+.results-box{background:var(--bg2);padding:30px;border-radius:12px;max-width:700px;width:100%;box-shadow:var(--shadow)}
+.result-row{display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--card);font-size:1.2em}
+.result-row:first-child{font-size:1.5em;color:var(--gold)}
+.result-row .rank{color:var(--text2);margin-right:10px}
+.dd-splash,.round-splash{position:fixed;inset:0;background:var(--bg);z-index:250;display:none;align-items:center;justify-content:center;font-size:4em;color:var(--gold);font-weight:700;text-shadow:0 0 30px var(--gold);flex-direction:column}
+.dd-splash.active,.round-splash.active{display:flex;animation:ddIn .5s}
+@keyframes ddIn{0%{transform:scale(0);opacity:0}100%{transform:scale(1);opacity:1}}
+.pause-overlay{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:350;display:none;align-items:center;justify-content:center;flex-direction:column;gap:20px;font-size:3em;color:var(--gold);font-weight:700}
+.pause-overlay.active{display:flex}
+.qb-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;overflow-y:auto;padding:20px}
+.qb-overlay.active{display:block}
+.qb-container{max-width:1100px;margin:0 auto;background:var(--bg2);border-radius:12px;padding:24px;position:relative}
+.qb-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:16px}
+.qb-filters{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.qb-filters select,.qb-filters input{padding:8px 12px;font-size:.9em}
+.qb-filters input[type="text"]{min-width:200px;flex:1}
+.qb-table{width:100%;border-collapse:collapse}
+.qb-table th{background:var(--card);padding:10px 12px;text-align:left;font-size:.85em;color:var(--gold);position:sticky;top:0;z-index:1}
+.qb-table td{padding:10px 12px;border-bottom:1px solid rgba(255,255,255,.05);font-size:.9em;vertical-align:top}
+.qb-table tr:hover td{background:rgba(255,255,255,.03)}
+.qb-table .cat-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.8em;font-weight:600}
+.cat-history{background:#2c3e50;color:#ecf0f1}
+.cat-steps{background:#27ae60;color:#fff}
+.cat-traditions{background:#8e44ad;color:#fff}
+.cat-concepts{background:#d35400;color:#fff}
+.diff-badge{display:inline-block;padding:2px 8px;border-radius:10px;font-size:.8em}
+.diff-1{background:#27ae60;color:#fff}.diff-2{background:#2ecc71;color:#000}.diff-3{background:#f39c12;color:#000}.diff-4{background:#e67e22;color:#fff}.diff-5{background:#e74c3c;color:#fff}
+.qb-count{color:var(--text2);font-size:.9em}
+.qb-answer{color:var(--gold);cursor:pointer;-webkit-user-select:none;user-select:none}
+.qb-answer.hidden{color:transparent;background:var(--card);border-radius:4px;display:inline-block;min-width:80px}
+.qb-answer.hidden:hover{color:var(--gold);background:transparent}
+.qb-toggle-all{font-size:.85em;padding:6px 14px}
+.kb-hints{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:8px;font-size:.75em;color:var(--text2)}
+.kb-hints kbd{background:var(--card);padding:2px 6px;border-radius:4px;font-family:monospace;color:var(--gold)}
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:var(--card);color:var(--text);padding:12px 24px;border-radius:var(--radius);box-shadow:var(--shadow);z-index:400;opacity:0;transition:opacity .3s;pointer-events:none}
+.toast.show{opacity:1}
+#confettiBox{position:fixed;inset:0;pointer-events:none;z-index:500;overflow:hidden}
+.confetti-piece{position:absolute;width:10px;height:10px;top:-20px;animation:confettiFall 3s ease-in forwards}
+@keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+.overlay-panel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:300;overflow-y:auto;padding:20px}
+.overlay-panel.active{display:block}
+.overlay-inner{max-width:700px;margin:0 auto;background:var(--bg2);border-radius:12px;padding:24px}
+.fj-section{display:none;flex-direction:column;align-items:center;gap:16px;text-align:center;width:100%}
+.fj-section.active{display:flex}
+.fj-wager-row{display:flex;justify-content:space-between;align-items:center;padding:10px;background:var(--card);border-radius:var(--radius);width:100%;max-width:400px;margin-bottom:8px}
+.fj-wager-row input{width:100px;text-align:center}
+.practice-card{background:var(--card);padding:30px;border-radius:12px;max-width:600px;width:100%;text-align:center;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px}
+.practice-stats{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;font-size:.9em;color:var(--text2)}
+.practice-stats span{color:var(--gold)}
+</style>
+</head>
+<body data-theme="dark">
+
+<div id="setup" class="screen active">
+<h1>&#9878; AA JEOPARDY &#9878;</h1>
+<div class="setup-box">
+<h2>Game Setup</h2>
+<label for="numPlayers">Number of Players (1-8)</label>
+<input type="number" id="numPlayers" min="1" max="8" value="2">
+<div id="playerInputs" class="player-list"></div>
+<label>Categories (pick at least 2 for game, 1 for practice)</label>
+<div class="cat-picker" id="catPicker"></div>
+<label id="diffRangeLabel">Difficulty Range</label>
+<div style="display:flex;gap:10px">
+<select id="diffMin" aria-label="Minimum difficulty"><option value="1">Easy</option><option value="2">Medium-Easy</option><option value="3">Medium</option><option value="4">Medium-Hard</option><option value="5">Hard</option></select>
+<span style="align-self:center">to</span>
+<select id="diffMax" aria-label="Maximum difficulty"><option value="1">Easy</option><option value="2">Medium-Easy</option><option value="3">Medium</option><option value="4">Medium-Hard</option><option value="5" selected>Hard</option></select>
+</div>
+<label for="diffWeight">Difficulty Weighting</label>
+<select id="diffWeight"><option value="lean-easy">Lean Easy</option><option value="balanced" selected>Balanced</option><option value="lean-hard">Lean Hard</option></select>
+<label for="timerSec">Timer (seconds per question)</label>
+<input type="number" id="timerSec" min="10" max="120" value="30">
+<label for="themeSelect">Color Theme</label>
+<select id="themeSelect"><option value="dark">Dark</option><option value="light">Light</option><option value="high-contrast">High Contrast</option></select>
+<label for="soundToggle">Sound Effects</label>
+<select id="soundToggle"><option value="on">On</option><option value="off">Off</option></select>
+<div class="q-stats" id="qStats"></div>
+<div class="btn-row">
+<button onclick="startGame()">&#9654; Start Game</button>
+<button onclick="startPractice()" aria-label="Practice Mode">&#128218; Practice</button>
+<button onclick="openQuestionBrowser()" aria-label="Question Pool">&#128270; Question Pool</button>
+<button onclick="openEditor()" aria-label="Question Editor">&#9998; Editor</button>
+<button onclick="openLeaderboard()" aria-label="Leaderboard">&#127942; Leaderboard</button>
+</div>
+<div class="btn-row">
+<button onclick="importPlayers()">&#128229; Import Players</button>
+<button onclick="document.getElementById('qImport').click()">&#128228; Import Questions</button>
+<input type="file" id="qImport" accept=".json" style="display:none" onchange="importQuestions(event)">
+<input type="file" id="pImport" accept=".json,.csv" style="display:none" onchange="handlePlayerImport(event)">
+<button onclick="toggleFullscreen()" aria-label="Fullscreen">&#9974; Fullscreen</button>
+</div>
+<div class="kb-hints">
+<span><kbd>1</kbd>-<kbd>8</kbd> Buzz</span>
+<span><kbd>Space</kbd> Reveal</span>
+<span><kbd>C</kbd> Correct</span>
+<span><kbd>X</kbd> Wrong</span>
+<span><kbd>P</kbd> Pause</span>
+<span><kbd>U</kbd> Undo</span>
+<span><kbd>Esc</kbd> Close</span>
+</div>
+</div>
+</div>
+
+<div id="board" class="screen">
+<div class="toolbar">
+<div class="tb-group">
+<button onclick="toggleFullscreen()" title="Fullscreen" aria-label="Fullscreen">&#9974;</button>
+<button onclick="changeTheme()" title="Theme" aria-label="Change Theme">&#127912;</button>
+<button onclick="toggleSound()" id="soundBtn" title="Sound" aria-label="Toggle Sound">&#128264;</button>
+<button onclick="openQuestionBrowser()" title="Browse" aria-label="Browse Questions">&#128218;</button>
+<button onclick="doUndo()" title="Undo (U)" aria-label="Undo" id="undoBtn">&#8617;</button>
+<button onclick="togglePause()" title="Pause (P)" aria-label="Pause" id="pauseBtn">&#9208;</button>
+<span id="roundLabel" style="color:var(--gold);font-weight:700;font-size:.85em">ROUND 1</span>
+</div>
+<div class="scores" id="scoreBoard" aria-live="polite"></div>
+<div class="tb-group">
+<button onclick="confirmEndGame()">End Game</button>
+</div>
+</div>
+<div class="board-progress" id="boardProgress"></div>
+<div class="board-grid" id="boardGrid"></div>
+<div class="kb-hints" style="padding:4px 0">
+<span><kbd>1</kbd>-<kbd>8</kbd> Buzz</span><span><kbd>Space</kbd> Reveal</span>
+<span><kbd>C</kbd>orrect <kbd>X</kbd> Wrong</span><span><kbd>P</kbd>ause <kbd>U</kbd>ndo</span>
+</div>
+</div>
+
+<div id="finalJep" class="screen">
+<h1>FINAL JEOPARDY</h1>
+<div class="setup-box" style="max-width:700px">
+<div id="fjWagerPhase" class="fj-section active">
+<h2 id="fjCatLabel">Category</h2>
+<p style="color:var(--text2)">Players with positive scores, enter your wagers (min $5 or your score if less, max = your score):</p>
+<div id="fjWagerInputs"></div>
+<button onclick="fjLockWagers()" style="margin-top:16px">Lock All Wagers</button>
+</div>
+<div id="fjQuestionPhase" class="fj-section">
+<h2 id="fjCatLabel2">Category</h2>
+<div class="question-text" id="fjQText"></div>
+<div class="timer-bar"><div class="fill" id="fjTimerFill"></div></div>
+<p id="fjTimeLeft" style="color:var(--text2)"></p>
+<button onclick="fjReveal()" id="fjRevealBtn" style="display:none">Reveal Answer</button>
+<div class="answer-text" id="fjAnswer" style="display:none"></div>
+</div>
+<div id="fjJudgePhase" class="fj-section">
+<h2>Judge Each Player</h2>
+<div id="fjJudgeArea"></div>
+</div>
+<div style="margin-top:20px"><button onclick="if(confirm('Skip Final Jeopardy and go to results?'))endGame()" style="background:var(--card);font-size:.85em">Skip to Results</button></div>
+</div>
+</div>
+
+<div id="results" class="screen">
+<h1>&#127942; Final Results &#127942;</h1>
+<div class="results-box" id="resultsList"></div>
+<div class="btn-row" style="justify-content:center;margin-top:16px">
+<button onclick="exportResults()">&#128190; Export</button>
+<button onclick="showScreen('setup')">&#128260; New Game</button>
+</div>
+</div>
+
+<div class="modal-overlay" id="questionModal">
+<div class="modal" role="dialog" aria-modal="true" tabindex="-1">
+<div class="category-label" id="qCategory"></div>
+<div class="question-text" id="qText"></div>
+<div class="timer-bar" role="timer" aria-live="off"><div class="fill" id="timerFill"></div></div><span class="sr-only" id="timerAnnounce" aria-live="assertive"></span>
+<div class="dd-wager" id="ddWager" style="display:none">
+<label>Player:</label>
+<select id="ddPlayer" style="width:auto;margin:0 8px"></select>
+<label>Wager: $</label>
+<input type="number" id="wagerInput" min="5" value="5" style="width:120px">
+<span id="ddWagerHint" style="color:var(--text2);font-size:.8em"></span>
+<button onclick="submitWager()">Lock Wager</button>
+</div>
+<div class="buzz-area" id="buzzArea"></div>
+<div class="answer-text" id="qAnswer"></div>
+<div class="explanation-text" id="qExplanation"></div>
+<div class="result-btns" id="resultBtns" style="display:none">
+<button class="btn-correct" onclick="markAnswer(true)" aria-label="Correct">&#10004; Correct</button>
+<button class="btn-wrong" onclick="markAnswer(false)" aria-label="Wrong">&#10008; Wrong</button>
+</div>
+<button id="revealBtn" style="display:none;margin-top:10px" onclick="revealAnswer()">Reveal Answer</button>
+<button id="closeModal" style="display:none;margin-top:10px" onclick="closeQuestion()">Close</button>
+</div>
+</div>
+
+<div class="dd-splash" id="ddSplash" role="alert" aria-live="assertive">DAILY DOUBLE!</div>
+<div class="round-splash" id="roundSplash" role="alert" aria-live="assertive"><span id="roundSplashText">DOUBLE JEOPARDY!</span></div>
+<div class="pause-overlay" id="pauseOverlay">PAUSED<button onclick="togglePause()" style="font-size:.4em">Resume</button></div>
+
+<div id="practiceOverlay" class="overlay-panel">
+<div class="overlay-inner" style="max-width:650px">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+<h2>Practice Mode</h2>
+<button onclick="closePractice()" style="font-size:.85em;padding:6px 14px">&#10005; Exit</button>
+</div>
+<div class="practice-stats" id="practiceStats"></div>
+<div class="practice-card" id="practiceCard">
+<p style="color:var(--text2)" id="practiceCatLabel"></p>
+<div class="question-text" id="practiceQ"></div>
+<div class="answer-text" id="practiceA" style="display:none"></div>
+<div id="practiceButtons">
+<button onclick="practiceReveal()" id="practiceRevealBtn">Reveal Answer</button>
+</div>
+</div>
+<div class="kb-hints" style="margin-top:12px">
+<span><kbd>Space</kbd> Reveal</span><span><kbd>C</kbd> Correct</span>
+<span><kbd>X</kbd> Wrong</span><span><kbd>N</kbd> Next</span><span><kbd>Esc</kbd> Exit</span>
+</div>
+</div>
+</div>
+
+<div class="qb-overlay" id="qbOverlay">
+<div class="qb-container">
+<div class="qb-header">
+<h2>&#128218; Question Pool</h2>
+<div style="display:flex;gap:8px;align-items:center">
+<button onclick="exportQuestionPool()" style="font-size:.85em;padding:6px 14px">&#128190; Export</button>
+<button onclick="closeQuestionBrowser()" style="font-size:.85em;padding:6px 14px">&#10005; Close</button>
+</div>
+</div>
+<div class="qb-filters">
+<select id="qbCatFilter"><option value="all">All Categories</option><option value="history">AA History</option><option value="steps">12 Steps</option><option value="traditions">12 Traditions</option><option value="concepts">12 Concepts</option></select>
+<select id="qbDiffFilter"><option value="0">All Difficulties</option><option value="1">Easy</option><option value="2">Medium-Easy</option><option value="3">Medium</option><option value="4">Medium-Hard</option><option value="5">Hard</option></select>
+<input type="text" id="qbSearch" placeholder="Search questions or answers...">
+<button class="qb-toggle-all" onclick="toggleAllAnswers()">Show/Hide Answers</button>
+</div>
+<div class="qb-count" id="qbCount"></div>
+<div style="max-height:65vh;overflow-y:auto;margin-top:8px">
+<table class="qb-table"><thead><tr><th style="width:4%">#</th><th style="width:13%">Cat</th><th style="width:8%">Diff</th><th style="width:35%">Question</th><th style="width:28%">Answer</th><th style="width:12%">Actions</th></tr></thead><tbody id="qbBody"></tbody></table>
+</div>
+</div>
+</div>
+
+<div id="qeOverlay" class="overlay-panel">
+<div class="overlay-inner">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+<h2 id="qeTitle">Add Question</h2>
+<button onclick="closeEditor()" style="font-size:.85em;padding:6px 14px">&#10005; Close</button>
+</div>
+<label for="qeCat">Category</label>
+<select id="qeCat" style="width:100%"><option value="history">AA History</option><option value="steps">12 Steps</option><option value="traditions">12 Traditions</option><option value="concepts">12 Concepts</option></select>
+<label for="qeDiff">Difficulty</label>
+<select id="qeDiff" style="width:100%"><option value="1">1 - Easy</option><option value="2">2 - Medium-Easy</option><option value="3">3 - Medium</option><option value="4">4 - Medium-Hard</option><option value="5">5 - Hard</option></select>
+<label for="qeQuestion">Question</label>
+<textarea id="qeQuestion" rows="3" style="width:100%"></textarea>
+<label for="qeAnswer">Answer</label>
+<textarea id="qeAnswer" rows="2" style="width:100%"></textarea>
+<label for="qeExplanation">Explanation (optional)</label>
+<textarea id="qeExplanation" rows="2" style="width:100%"></textarea>
+<div class="btn-row" style="margin-top:16px">
+<button onclick="qeSave()">Save</button>
+<button onclick="closeEditor()" style="background:var(--card)">Cancel</button>
+</div>
+</div>
+</div>
+
+<div id="lbOverlay" class="overlay-panel">
+<div class="overlay-inner">
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+<h2>&#127942; Leaderboard</h2>
+<div style="display:flex;gap:8px">
+<button onclick="clearLeaderboard()" style="font-size:.85em;padding:6px 14px;background:var(--wrong)">Clear</button>
+<button onclick="closeLeaderboard()" style="font-size:.85em;padding:6px 14px">&#10005; Close</button>
+</div>
+</div>
+<div id="lbContent"></div>
+</div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<div id="confettiBox"></div>
+
+<script>
+// ===== QUESTION DATA =====
+let QUESTIONS={
+history:{
+1:[
+["Year AA was founded?","1935"],
+["City where AA was founded?","Akron, Ohio"],
+["Bill W.'s last name?","Wilson"],
+["Dr. Bob's last name?","Smith"],
+["AA's basic text is commonly called?","The Big Book"],
+["How many Steps does AA have?","12"],
+["How many Traditions does AA have?","12"],
+["Dr. Bob's sobriety date: June 10, ____?","1935"],
+["What group influenced early AA?","The Oxford Group"],
+["AA's monthly magazine?","The AA Grapevine"],
+["What prayer opens most AA meetings?","The Serenity Prayer"],
+["The AA symbol is a triangle inside a?","Circle"],
+["AA's three legacies: Recovery, Unity, and?","Service"],
+["What chapter of the Big Book is read most at meetings?","Chapter 5 - How It Works"],
+["Who wrote 'The Doctor's Opinion'?","Dr. William Silkworth"],
+["Bill W. lived in what city?","New York"],
+["Name of Bill W.'s wife?","Lois Wilson"],
+["Name of Dr. Bob's wife?","Anne Smith"],
+["What hospital did Bill W. have his spiritual experience?","Towns Hospital"],
+["Who carried the message to Bill W.?","Ebby Thacher"],
+["The triangle in the AA symbol represents?","Recovery, Unity, Service"],
+["Big Book first published in what year?","1939"],
+["The only requirement for AA membership?","A desire to stop drinking"],
+["AA's primary purpose?","Carry its message to the alcoholic who still suffers"],
+["How many Concepts for World Service?","12"]
+],
+2:[
+["First female member with long-term sobriety in AA?","Marty Mann"],
+["1941 article that brought national attention to AA?","Jack Alexander's Saturday Evening Post article"],
+["The 12&12 was published in what year?","1952"],
+["What award was given to AA in 1951?","The Lasker Award"],
+["Bill W. died in what year?","1971"],
+["Dr. Bob died in what year?","1950"],
+["Hospital where Dr. Bob and Sister Ignatia worked?","St. Thomas Hospital, Akron"],
+["Who typed the Big Book manuscript?","Ruth Hock"],
+["AA's first international convention location?","Cleveland, Ohio (1950)"],
+["General Service Conference first met in?","1951"],
+["Chapter 3 of the Big Book is titled?","More About Alcoholism"],
+["Chapter 4 of the Big Book is titled?","We Agnostics"],
+["How many chapters in the Big Book's basic text?","11"],
+["Lois Wilson co-founded what fellowship?","Al-Anon"],
+["Bill W.'s biography is titled?","Pass It On"],
+["Dr. Bob's biography is titled?","Dr. Bob and the Good Oldtimers"],
+["Serenity Prayer is commonly attributed to?","Reinhold Niebuhr"],
+["Second city where an AA group formed?","New York"],
+["Who started the Cleveland AA group?","Clarence Snyder"],
+["Where is AA's General Service Office?","New York City"],
+["What does GSO stand for?","General Service Office"],
+["The Grapevine started publication in?","1944"],
+["Chapter 11 of the Big Book is titled?","A Vision For You"],
+["What is 'Living Sober'?","An AA book of practical tips for staying sober"],
+["The Responsibility Declaration begins with?","I am responsible"]
+],
+3:[
+["How many copies in the first Big Book printing?","4,730"],
+["Bill W.'s spiritual experience: what month/year?","December 1934"],
+["Responsibility Declaration adopted at what convention?","1965 International Convention, Toronto"],
+["Dr. Silkworth described alcoholism as allergy of body and?","Obsession of the mind"],
+["Hank P.'s role in AA history?","Helped get the Big Book published"],
+["Oxford Group was founded by?","Frank Buchman"],
+["Bill W. declined an honorary degree from?","Yale University"],
+["Why did Bill W. decline the Yale degree?","To uphold the tradition of anonymity"],
+["Second edition of the Big Book published?","1955"],
+["Third edition published?","1976"],
+["Fourth edition published?","2001"],
+["'Rarely have we seen a person fail' is from which chapter?","Chapter 5 - How It Works"],
+["AA Comes of Age was published in?","1957"],
+["What is 'Came to Believe'?","Collection of AA members' spiritual experiences"],
+["Dr. Bob's last major talk was at what event?","First International Convention, 1950"],
+["Dr. Bob's last words of advice?","Keep it simple"],
+["The Washingtonians were a 19th-century?","Temperance/sobriety movement"],
+["Why are the Washingtonians relevant to AA?","Example of a movement that failed without traditions"],
+["Chapter 8 of the Big Book?","To Wives"],
+["What is the full name of the Big Book?","Alcoholics Anonymous"],
+["The Saturday Evening Post article appeared in?","March 1941"],
+["How many members when the Big Book was published?","About 100"],
+["The Liberty magazine article about AA year?","1939"],
+["Title of the Liberty magazine article?","Alcoholics and God"],
+["What token did Sister Ignatia give patients?","A Sacred Heart medallion"]
+],
+4:[
+["Original price of the first edition Big Book?","$3.50"],
+["Why was the Big Book printed on thick paper?","To justify the $3.50 price"],
+["Business formed to publish the Big Book?","Works Publishing"],
+["Roland Hazard sought treatment from?","Carl Jung"],
+["What did Carl Jung tell Roland Hazard?","His only hope was a spiritual experience"],
+["Oxford Group's four absolutes?","Honesty, Purity, Unselfishness, Love"],
+["Date Bill W. first met Dr. Bob?","Mother's Day, May 12, 1935"],
+["Who arranged the meeting between Bill and Dr. Bob?","Henrietta Seiberling"],
+["Dr. Bob's medical specialty?","Surgery/Proctology"],
+["Bill W.'s profession before AA?","Stockbroker"],
+["AA membership grew to what after the SEP article?","About 8,000"],
+["Cleveland Plain Dealer articles about AA appeared in?","1939"],
+["Sister Ignatia's full title?","Sister Mary Ignatia"],
+["How many Oxford Group steps before the 12?","Six"],
+["Bill W.'s spiritual experience occurred at?","Towns Hospital, New York"],
+["Who was AA member number 3?","Bill D."],
+["Bill D. was hospitalized at?","Akron City Hospital"],
+["The meeting was arranged at?","The Gatehouse at Stan Hywet Hall"],
+["What year did AA adopt the 12 Traditions formally?","1950"],
+["Long form Traditions first published where?","The AA Grapevine, 1946"],
+["Big Book says the root of our troubles is?","Selfishness - self-centeredness"],
+["'How It Works' opens on what page (4th ed)?","Page 58"],
+["Did Ebby Thacher stay permanently sober?","No, he relapsed"],
+["What happened to Hank P.?","He relapsed and left AA"],
+["Bill W. wrote the 12 Concepts in?","1962"]
+],
+5:[
+["Original Big Book manuscript had how many steps?","Six"],
+["Who suggested expanding from 6 to 12 steps?","Bill W."],
+["Dr. Silkworth's 'allergy' refers to?","Physical craving triggered by the first drink"],
+["The 'mental obsession' Silkworth described?","The belief an alcoholic can drink normally"],
+["First edition had how many personal stories?","29"],
+["AA's first clubhouse was called?","The 24th Street Clubhouse, New York"],
+["Alcoholic Foundation was later renamed to?","The General Service Board"],
+["Year it was renamed?","1954"],
+["Dr. Bob performed surgery on how many alcoholics?","About 5,000"],
+["Bill W. called 1935-1939 the?","Flying-blind period"],
+["AA Preamble was adapted from?","The Grapevine (1947)"],
+["Bill W. said 12 Steps inspired by three sources?","Medicine, religion, and early member experience"],
+["'Spiritus contra spiritum' means?","Spirit against spirits"],
+["Who told Bill W. about the spiritual remedy?","Carl Jung (through Roland H. and Ebby T.)"],
+["The phrase 'God as we understood Him' was added to address?","Atheists and agnostics in early AA"],
+["What book influenced Bill W.'s view of spiritual experiences?","Varieties of Religious Experience by William James"],
+["Jim B. is associated with adding what phrase?","'God as we understood Him'"],
+["Fitz M. wrote what Big Book story?","Our Southern Friend"],
+["How many printings of the first edition?","16 printings before the 2nd edition"],
+["What was the Akron pamphlet?","A guide used before the Big Book existed"],
+["Bill W. called the period of writing traditions?","The era of consolidation"],
+["The 'Big Book' nickname came from?","The thick paper making it physically large"],
+["First AA meeting outside the US was likely in?","Canada (early 1940s, before UK and Ireland)"],
+["How many personal stories in the 4th edition?","42"],
+["Who was the first non-alcoholic trustee?","John D. Rockefeller Jr.'s associates helped establish this role"]
+]
+},
+steps:{
+1:[
+["Step 1: We admitted we were powerless over?","Alcohol"],
+["Step 2 promises to restore us to?","Sanity"],
+["Step 3: Turn our will and lives over to?","The care of God as we understood Him"],
+["Step 4: Make a ___ moral inventory?","Searching and fearless"],
+["Step 5: Admit wrongs to God, ourselves, and?","Another human being"],
+["Step 6: Entirely ready to have God remove our?","Defects of character"],
+["Step 7: Humbly asked Him to remove our?","Shortcomings"],
+["Step 8: Made a list of all persons we had?","Harmed"],
+["Step 9: Made direct ___ wherever possible?","Amends"],
+["Step 10: Continued to take personal?","Inventory"],
+["Step 11: Sought through prayer and?","Meditation"],
+["Step 12 begins with 'Having had a ___'?","Spiritual awakening"],
+["Which step involves making a list?","Step 8"],
+["Which step is the 'action step' for amends?","Step 9"],
+["Steps 1-3 are often summarized as?","I can't, He can, I'll let Him"],
+["Steps 4 and 5 deal primarily with?","Self-examination and admission"],
+["Steps 6 and 7 deal with?","Character defects and removal"],
+["Steps 8 and 9 deal with?","Making amends"],
+["Steps 10-12 are called?","The maintenance steps"],
+["Step 12: Practice these principles in all our?","Affairs"],
+["The 12 Steps are listed in which chapter?","Chapter 5 - How It Works"],
+["Step 3 involves making a?","Decision"],
+["Step 1: Lives had become?","Unmanageable"],
+["Which step mentions 'exact nature of our wrongs'?","Step 5"],
+["How many steps mention God directly?","Six (Steps 2,3,5,6,7,11)"]
+],
+2:[
+["Step 4 inventory commonly examines what areas?","Resentments, fears, sex conduct, harms"],
+["Big Book Step 4 instructions begin with a list of?","Resentments"],
+["What prayer is associated with Step 3?","The Third Step Prayer"],
+["What prayer is associated with Step 7?","The Seventh Step Prayer"],
+["Step 9 exception: 'except when to do so would ___'?","Injure them or others"],
+["Step 11: Pray for knowledge of God's ___ ?","Will"],
+["In Step 2, 'Power greater than ourselves' refers to?","A Higher Power / God as we understood Him"],
+["After resentments in Step 4, the Big Book asks?","Where were we selfish, dishonest, self-seeking, frightened?"],
+["Step 5 is done with what kind of person?","Someone trusted - sponsor, clergy, close friend"],
+["Big Book suggests doing what after Step 5?","Review Steps 1-5 and thank God"],
+["Step 6: The 12&12 says this is about?","Willingness, not perfection"],
+["Step 8 requires willingness to make amends to?","All persons we had harmed"],
+["Daily inventory is part of which step?","Step 10"],
+["Step 10: When wrong, promptly ___?","Admitted it"],
+["Step 11 mentions two specific practices?","Prayer and meditation"],
+["Step 12: Carry the message to?","Alcoholics"],
+["What is a 'spiritual awakening' per Step 12?","Personality change sufficient for recovery"],
+["Big Book appendix says spiritual experiences are usually?","Of the educational variety (gradual)"],
+["The Steps are suggested as a?","Program of recovery"],
+["The 12&12 discusses each step in roughly?","8-12 pages each"],
+["Step 3 is described in the 12&12 as?","A decision step"],
+["What does the Big Book suggest before Step 4?","The Third Step Prayer"],
+["Step 9 mentions three types of amends?","Direct, delayed, and those we cannot make"],
+["Step 11 suggests morning meditation includes?","Asking God for direction"],
+["Step 11 evening review includes?","Reviewing the day's conduct"]
+],
+3:[
+["Third Step Prayer begins with?","God, I offer myself to Thee"],
+["Seventh Step Prayer begins with?","My Creator, I am now willing that you should have all of me"],
+["Big Book Step 4 uses a three-column format for?","Resentment inventory"],
+["'Exact nature of our wrongs' in Step 5 means?","Underlying patterns, not just individual acts"],
+["Step 6 in the 12&12: aim for willingness rather than?","Perfection"],
+["The 12&12 says Step 7 is about?","Humility"],
+["Step 8 requires: making a list and becoming?","Willing to make amends to all"],
+["Step 9 warns against exposing?","Others to harm or legal jeopardy"],
+["Step 10 describes what type of daily inventory?","Spot-check or daily review"],
+["12&12 describes Step 10 as what kind of process?","Continuous and ongoing"],
+["Step 11 evening: 'Were we resentful, selfish, dishonest, or ___'?","Afraid"],
+["The 'spiritual awakening' is in what Big Book appendix?","Appendix II"],
+["12&12 says Step 12 includes what three ideas?","Spiritual awakening, carrying message, practicing principles"],
+["After Step 9, 'we will be amazed' is known as?","The Promises (Ninth Step Promises)"],
+["The Promises say 'intuitively know how to handle situations that ___'?","Used to baffle us"],
+["Step 1 in 12&12 discusses what analogy?","Each person's bottom is different"],
+["'Half measures availed us ___'?","Nothing"],
+["Step 3 in 12&12 compares the step to?","A key that opens a door"],
+["Steps 1-3 are sometimes called?","The surrender steps"],
+["Big Book says main problem of the alcoholic is in the?","Mind"],
+["'The Great Reality deep down within us' refers to?","God / a Higher Power within each person"],
+["'We had to quit playing God. It didn't ___'?","Work"],
+["How many Promises are traditionally counted?","9 or 12, depending on the count"],
+["Step 4's fear inventory asks why we rely on?","Self (self-reliance failed us)"],
+["After Step 5, ask if we've omitted?","Anything"]
+],
+4:[
+["Step 4: 'Was it our self-esteem, security, ambitions, or ___'?","Personal or sex relations interfered with"],
+["12&12 says Step 6 'separates the men from the ___'?","Boys"],
+["12&12 Step 7 chapter opens discussing?","Humility"],
+["Step 10: Resentment is the 'number one ___'?","Offender"],
+["'You can't transmit something you haven't ___' (Step 12)?","Got"],
+["Working with others is essential to?","Maintaining sobriety"],
+["'Working With Others' chapter relates to which step?","Step 12"],
+["'Nothing will so much insure immunity from drinking as ___'?","Intensive work with other alcoholics"],
+["Step 2 in 12&12 discusses the 'belligerent one' who?","Won't believe in any God"],
+["12&12 says Step 3 requires what kind of willingness?","Willingness to act"],
+["Selfishness is the root of our troubles on what page (4th ed)?","Page 62"],
+["Step 4: 'A business which takes no regular inventory ___'?","Usually goes broke"],
+["12&12 describes the moment after Step 5 as?","Sense of belonging and peace"],
+["Big Book says 'Our liquor was but a symptom. So we had to ___'?","Get down to causes and conditions"],
+["Step 5: If no religious advisor, the Big Book suggests?","A doctor or psychologist"],
+["The actor metaphor in the Big Book follows which step?","Step 3"],
+["Step 6 in the Big Book receives how many paragraphs?","Very few - one of the shortest sections"],
+["Big Book defines 'amends' vs 'apology' how?","Amends means changing behavior, not just saying sorry"],
+["Step 12 says awakening is 'the result of' what?","These Steps (all 12 together)"],
+["Step 4 instructions say to put resentments on paper because?","We need to be thorough"],
+["Step 9: 'Be sensible, tactful, considerate and ___'?","Humble"],
+["Step 11 in 12&12 discusses meditation as?","Quiet time for listening to God's guidance"],
+["Steps were written by Bill W. in what year?","1938"],
+["The Big Book says a 'spiritual experience' and 'spiritual awakening' are?","The same thing (per Appendix II)"],
+["Step 1 acceptance is the foundation of?","Recovery"]
+],
+5:[
+["Big Book's alcoholic is like a 'tornado roaring through' where?","The lives of others"],
+["Bill W. said Steps inspired by what three sources?","Medicine (Silkworth), religion (Oxford Group), early members"],
+["Original six Oxford Group steps expanded to?","Twelve"],
+["Which step was most controversial during writing?","Step 2 - the 'God' question"],
+["The Third Step Prayer in full begins?","God, I offer myself to Thee - to build with me and to do with me as Thou wilt"],
+["Seventh Step Prayer full opening?","My Creator, I am now willing that you should have all of me, good and bad"],
+["The Promises specifically say 'we will not regret the past nor wish to ___'?","Shut the door on it"],
+["William James's book that influenced Bill W.?","The Varieties of Religious Experience"],
+["Step 11: Begin the day by?","Considering plans and asking God for direction"],
+["On what pages are the 12 Steps listed (4th ed)?","Pages 59-60"],
+["Dr. Carl Jung's formula: 'spiritus contra spiritum'?","Spirit against spirits"],
+["Step 3 is followed by what metaphor?","The actor who wants to run the whole show"],
+["In Step 4, after resentments, Big Book says ask God to?","Show us the truth / help us be willing"],
+["How does Big Book define spiritual experience (Appendix II)?","Profound alteration in reaction to life"],
+["Step 4 three columns are?","Who/institution, the cause, what it affects"],
+["Big Book Step 9: disclosure should not damage?","The person's family or reputation"],
+["Step 12: 'practice these principles' refers to?","The spiritual principles in all 12 Steps"],
+["The Big Book says isolation is the companion of?","Unrevealed wrongs / keeping secrets"],
+["Step 11 Big Book: pray for knowledge of His will and?","The power to carry that out"],
+["How does the 12&12 define the Step 12 awakening?","All 12 steps together produce it, not any single step"],
+["Step 10 includes what three types of inventory?","Spot-check, end of day, periodic (annual)"],
+["Step 6: What virtue does the 12&12 emphasize?","Willingness"],
+["Step 7: What virtue does the 12&12 emphasize?","Humility"],
+["Step 8: Two separate actions required?","Making the list AND becoming willing"],
+["Step 9 Big Book says 'we don't pick and choose' what?","Which amends to make"]
+]
+},
+traditions:{
+1:[
+["Tradition 1: Our common welfare should come?","First"],
+["Tradition 2: Our leaders are but?","Trusted servants; they do not govern"],
+["Tradition 3: Only requirement for membership?","A desire to stop drinking"],
+["Tradition 4: Each group should be?","Autonomous"],
+["Tradition 5: Each group has but one primary?","Purpose"],
+["Tradition 6: AA group ought never?","Endorse, finance, or lend the AA name to outside enterprises"],
+["Tradition 7: Every AA group ought to be fully?","Self-supporting"],
+["Tradition 8: AA should remain forever?","Nonprofessional"],
+["Tradition 9: AA ought never be?","Organized"],
+["Tradition 10: AA has no opinion on?","Outside issues"],
+["Tradition 11: Public relations based on?","Attraction rather than promotion"],
+["Tradition 12: Anonymity is the spiritual foundation of?","All our Traditions"],
+["Which tradition discusses leadership?","Tradition 2"],
+["Which tradition discusses self-support?","Tradition 7"],
+["Which tradition protects against outside controversy?","Tradition 10"],
+["Which tradition discusses anonymity at public level?","Tradition 11"],
+["Which tradition says 'principles before personalities'?","Tradition 12"],
+["Tradition 7: AA should decline?","Outside contributions"],
+["Tradition 5: Carry message to?","The alcoholic who still suffers"],
+["Which tradition discusses group autonomy?","Tradition 4"],
+["Tradition 1: Personal recovery depends upon?","AA unity"],
+["Tradition 2: Ultimate authority is?","A loving God in our group conscience"],
+["Tradition 9 allows creating?","Service boards or committees"],
+["Tradition 11: Maintain anonymity at level of?","Press, radio, and films"],
+["Tradition 8: Service centers may employ?","Special workers"]
+],
+2:[
+["Traditions grew out of experience during?","The 1930s and 1940s"],
+["Who primarily authored the 12 Traditions?","Bill W."],
+["Long form of Traditions first published where?","The AA Grapevine (1946)"],
+["Short form adopted at what event?","1950 International Convention, Cleveland"],
+["Tradition 3 originally had what extra requirements?","Various rules removed; only desire to stop drinking remained"],
+["Tradition 4 exception: 'except in matters affecting ___'?","Other groups or AA as a whole"],
+["Tradition 6 warns about problems of?","Money, property, and prestige"],
+["Tradition 7: Groups should not accept donations from?","Non-members / outside sources"],
+["Tradition 8: Difference between nonprofessional and hiring?","Members don't charge for 12th Step work; offices can hire staff"],
+["Tradition 9: 'Directly responsible to those they ___'?","Serve"],
+["Tradition 10 in 12&12 discusses what historical example?","The Washingtonians"],
+["Tradition 12: Place principles before?","Personalities"],
+["Tradition 2 'group conscience' means?","Collective wisdom of the group's members"],
+["Tradition 5: Primary purpose is NOT?","Social events, therapy, or business"],
+["Tradition 6 influenced by AA's experience with?","Hospitals and clubs that used the AA name"],
+["The traditions protect AA's?","Unity and survival"],
+["Tradition 3: AA cannot refuse membership to?","Anyone with a desire to stop drinking"],
+["Tradition 10: AA does not take sides on?","Political, social, or religious issues"],
+["Tradition 7: What is AA's prudent reserve?","Operating expenses for a set period"],
+["Tradition 11: Members should not identify as AA in?","Public media"],
+["Tradition 9: Boards 'directly responsible' to whom?","Those they serve"],
+["Tradition 1 relates closely to?","Unity"],
+["Tradition 11 historically added what media?","Films (later interpreted for all media)"],
+["Traditions are sometimes called AA's?","Protective principles for group unity"],
+["What year were Traditions formally adopted?","1950"]
+],
+3:[
+["12&12 Tradition 1: Each AA must obey?","Their own conscience while considering group welfare"],
+["Tradition 2 distinguishes ultimate authority from?","Group leadership (trusted servants)"],
+["Tradition 4 protects the group's 'right to be wrong' with what check?","Matters affecting other groups or AA as a whole"],
+["12&12: A group that forgets primary purpose will?","Deteriorate and fail"],
+["Tradition 6: 'Lend the AA name' protects against?","Diversion from primary purpose"],
+["Tradition 7 response: Rockefeller gave AA modest sum and said?","AA's poverty would be its greatest asset"],
+["Tradition 8 distinguishes 'twelfth stepping' from?","Professional service work"],
+["Tradition 9 in 12&12: AA's structure resembles?","An inverted pyramid"],
+["Tradition 10: Individual members CAN have opinions but?","Shouldn't represent them as AA's position"],
+["Tradition 11: 'Attraction' means growth comes from?","Members' sobriety and example"],
+["Tradition 12: Breaking anonymity publicly can lead to?","Problems of ego, money, and prestige"],
+["Tradition 1 balances individual freedom with?","Group welfare"],
+["Tradition 2's 'loving God' is expressed through?","The group conscience"],
+["Tradition 4's autonomy allows groups to?","Set their own formats and procedures"],
+["Tradition 5: 'Primary purpose' means focus on?","Helping alcoholics achieve sobriety"],
+["Tradition 6 prevented AA from opening?","Hospitals and rehabs under the AA name"],
+["Tradition 7 self-support: groups pay for?","Rent, literature, and service contributions"],
+["Traditions originally called?","Twelve Points to Assure Our Future"],
+["Tradition 9 'service boards' include?","GSB, intergroups, area committees"],
+["Traditions address what aspect of AA?","Group's relationship with itself and the world"],
+["Tradition 3 was debated regarding?","Those with drug problems in addition to alcohol"],
+["John D. Rockefeller Jr. wisely limited his donation because?","Large money might spoil AA"],
+["Tradition 11 word 'attraction' contrasts with?","Promotion"],
+["Tradition 12 reminds us we are?","Part of something greater than ourselves"],
+["Traditions are AA's Second Legacy of?","Unity"]
+],
+4:[
+["12&12 Tradition 2: Early Akron group used what model?","Authoritarian rule by founders, evolved to group conscience"],
+["12&12 Tradition 3: Even someone with serious issues can join if?","They have a desire to stop drinking"],
+["Tradition 4 example: A group affecting AA as a whole by?","Using the AA name to operate a business"],
+["12&12 Tradition 5: Groups becoming 'social clubs' tend to?","Lose their effectiveness"],
+["12&12 Tradition 6 discusses AA's experience with?","An 'AA' hospital that failed"],
+["12&12 Tradition 7: The Rockefeller dinner tested?","AA's principle of self-support"],
+["Tradition 8 in 12&12: Paying for 12th Step work is not same as?","Employing staff for service center work"],
+["Tradition 9 in 12&12 addresses fear AA would?","Fall apart without formal organization"],
+["Tradition 10: Bill W. warned about taking positions on?","Controversial public issues like prohibition"],
+["Tradition 12: 12&12 calls anonymity greatest protection against?","Temptations of fame and power"],
+["Tradition 2 group conscience requires?","Informed participation and hearing all sides"],
+["Tradition 3: 'Desire to stop drinking' does NOT require?","Actual sobriety - just the desire"],
+["Tradition 6: Three distractors?","Money, property, and prestige"],
+["Tradition 7: AA limits individual contributions to?","A set annual amount"],
+["Tradition 7: AA accepts no contributions from?","Non-members, including excessive bequests"],
+["Tradition 9: Lack of formal organization is?","A strength, not a weakness"],
+["Tradition 10 references what movement's failure?","The Washingtonian movement"],
+["Tradition 11 in digital age covers?","Social media, websites, online platforms"],
+["Tradition 12 in practice: don't reveal others'?","AA membership"],
+["Tradition 4 gives groups freedom to?","Determine their own meeting format"],
+["Relationship between Steps and Traditions?","Steps for personal recovery; Traditions for group unity"],
+["Tradition 1 was 'hammered out on the anvil of'?","Mass experience"],
+["Bill W.'s original Traditions draft published in Grapevine?","April 1946"],
+["Before group conscience, early AA used?","Oxford Group's authoritarian guidance model"],
+["Tradition 3 evolved from era when groups had?","Membership rules, dues, and requirements"]
+],
+5:[
+["Tradition 5: Bill W. said it expressed AA's?","Reason for existence"],
+["Earliest AA clubs caused problems because?","Mixed AA with business and property management"],
+["Rockefeller's aide said about AA and money?","Money might spoil the thing"],
+["Tradition 7: Bill W. said self-support was?","Spiritual basis of all our Traditions"],
+["Tradition 8 responded to members wanting to?","Become paid AA counselors"],
+["Tradition 9: Bill W. said if AA got organized it would?","Die like other movements"],
+["Tradition 10: AA's stance on prohibition?","No opinion"],
+["Tradition 11: Bill W. saw members breaking anonymity for?","Prestige, money, and personal glory"],
+["Tradition 12: Anonymity is spiritual foundation because?","Reminds us to place principles before personalities"],
+["How do Traditions relate to Concepts?","Traditions govern groups; Concepts govern service structure"],
+["Tradition 6: Affiliation vs cooperation - AA may cooperate but never?","Affiliate with outside organizations"],
+["Traditions are considered AA's?","Second Legacy (Unity)"],
+["Tradition 5: 'To carry its message' - what message?","Recovery from alcoholism through the 12 Steps"],
+["Which tradition most cited for non-alcoholics at meetings?","Tradition 3"],
+["Tradition 2 in long form: leaders are but?","Trusted servants; they do not govern"],
+["What convinced Bill W. that AA needed traditions?","Problems in early groups - infighting, money, personalities"],
+["Tradition 7 originally about 'declining outside contributions' later included?","Bequests and government grants"],
+["Tradition 11 at public level: 'press, radio, and films' now means?","All public media including internet"],
+["Tradition 1 principle that individual recovery depends on?","AA unity - the group must survive for individuals to recover"],
+["Tradition 9: Service boards are 'directly responsible' meaning?","They serve the groups, not govern them"],
+["Tradition 3: An AA group 'may not refuse' anyone who?","Has a desire to stop drinking"],
+["Tradition 6: 'Lest problems of money, property, prestige ___'?","Divert us from our primary purpose"],
+["Tradition 8: 'Forever nonprofessional' means?","No one is paid for doing 12th Step work"],
+["Tradition 4 autonomy's limit?","Matters affecting other groups or AA as a whole"],
+["Tradition 10: 'Hence the AA name ought never be drawn into ___'?","Public controversy"]
+]
+},
+concepts:{
+1:[
+["How many Concepts for World Service?","12"],
+["Who wrote the 12 Concepts?","Bill W."],
+["Concepts were published in?","1962"],
+["Concepts govern what?","AA's world service structure"],
+["Concept 1: Final authority rests with?","Collective conscience of the Fellowship"],
+["Concept 2: General Service Conference is AA's?","Active voice and effective conscience"],
+["Concept 3: 'Right of Decision' means?","Trusted servants can decide how to best serve"],
+["Concept 4: 'Right of Participation' means?","Voting representation in proportion to responsibility"],
+["Concept 5: 'Right of Appeal' means?","Minority opinions will be heard"],
+["Concept 6: Chief initiative belongs to?","Trustee members / General Service Board"],
+["Conference Charter is a legal document: true or false?","False"],
+["Trustees are AA's principal?","Planners and administrators of policy and finance"],
+["Concept 9: Good service leadership is?","Indispensable"],
+["Concept 10: Responsibility matched by?","Equal service authority"],
+["Concept 11: Importance of what for positions?","Best possible committees, directors, executives"],
+["Concept 12: Conference should avoid becoming seat of?","Perilous wealth or power"],
+["Concepts are AA's Third Legacy of?","Service"],
+["General Service Conference meets how often?","Annually"],
+["Delegates come from?","AA areas across the US and Canada"],
+["What does GSB stand for?","General Service Board"],
+["Trustees include alcoholic and?","Non-alcoholic members"],
+["Class A trustees are?","Non-alcoholic"],
+["Class B trustees are?","Alcoholic members of AA"],
+["AA's three Legacies in order?","Recovery, Unity, Service"],
+["Concepts relate to what level of AA?","World services and service structure"]
+],
+2:[
+["Concept 1: Ultimate authority in 'collective conscience' of?","Our whole Fellowship"],
+["Concept 2: Conference became active voice because founders?","Could not serve forever"],
+["Concept 3: Trusted servants don't have to?","Get approval for every minor decision"],
+["Concept 4 ensures those with responsibility have?","Proportional voice"],
+["Concept 5 protects what type of opinion?","Minority opinion"],
+["Concept 6: 'Chief initiative' in world service to?","The General Service Board"],
+["Concept 7: Conference Charter relies on what for enforcement?","Tradition and the AA purse"],
+["Concept 8: Trustees have oversight through ability to?","Elect directors of service entities"],
+["Concept 9: Primary leadership was once exercised by?","The founders"],
+["Concept 10 warns against responsibility without?","Corresponding authority"],
+["Concept 11 addresses having?","Qualified people in service positions"],
+["Concept 12: Decisions by discussion, vote, and?","Whenever possible, substantial unanimity"],
+["'Substantial unanimity' means?","A strong majority, typically two-thirds"],
+["The Concepts help prevent?","Concentration of power and authority"],
+["Conference has how many delegate areas approximately?","93"],
+["Each delegate serves a term of?","Two years (rotating panels)"],
+["General Service Representative represents?","The home group"],
+["District Committee Member serves?","A district of AA groups"],
+["Service structure goes from groups to?","Districts, areas, regions, Conference"],
+["Concepts address what Traditions don't?","Details of service structure and governance"],
+["Concept 12: Conference should never perform acts of?","Government"],
+["Conference is described as guardian of?","AA's Traditions and services"],
+["Bill W. wanted Concepts to prevent?","Problems that destroyed other organizations"],
+["Concept 5 ensures minority viewpoints?","Are not silenced by majority rule"],
+["Concept 9: Leadership must be assumed by?","The trustees"]
+],
+3:[
+["Concept 1 draws from which tradition?","Tradition 2 (group conscience as ultimate authority)"],
+["Concept 2: Conference is 'for nearly every practical purpose' the?","Active voice and effective conscience"],
+["Concept 3 grants Right of Decision to ensure?","Effective leadership without micromanagement"],
+["Concept 4 ensures participation from?","All levels of the service structure"],
+["Minority opinion in Concept 5 is heard when?","Before and after votes at the Conference"],
+["Concept 6: Trustees have broadest perspective on?","AA's overall needs"],
+["Concept 7: Conference Charter derives power from?","Moral authority, not legal authority"],
+["Concept 8 service corporations include?","AA World Services and AA Grapevine"],
+["Concept 9: Transition from founders to?","The General Service Board and Conference"],
+["Concept 10 prevents what organizational problem?","Responsibility without authority"],
+["Concept 11: 'Induction procedures' are?","Matters of serious concern"],
+["Concept 12 is the longest because it contains?","Six warranties of the Conference"],
+["The six warranties address?","Wealth, power, authority, punishment, controversy, government"],
+["Concept 12: Conference should remain?","Democratic in thought and action"],
+["Concepts influenced by what governance principles?","Democratic principles"],
+["Bill W. wrote Concepts to ensure?","AA's survival after the founders' deaths"],
+["Concept 3 Right of Decision applies to?","All levels of trusted servants"],
+["Concept 4 voting in 'reasonable proportion' to?","Responsibility each must discharge"],
+["Concept 5: Personal grievances receive?","Careful consideration"],
+["GSB has oversight of what two corporations?","AA World Services and AA Grapevine"],
+["Concept 12 warns against positions of?","Undue authority over others"],
+["Conference 'shall observe the spirit of'?","AA tradition"],
+["Concept 12: Actions should never be?","Personally punitive or incitement to controversy"],
+["How Concepts relate to Steps and Traditions?","Steps=Recovery, Traditions=Unity, Concepts=Service"],
+["The Concepts complete AA's?","Three Legacies"]
+],
+4:[
+["Bill W. spent roughly what years developing Concepts?","1958-1962"],
+["Concept 1 'collective conscience' vs 'group conscience'?","Collective = whole Fellowship, group = one group"],
+["Concept 2 was necessary because?","Founders' passing required permanent structure"],
+["Concept 3 warns against what leadership?","Rubber-stamp leadership"],
+["Concept 4 was controversial because?","Some felt non-trustees shouldn't vote on certain matters"],
+["Concept 5 appeal mirrors what democratic principle?","Minority rights / protection of dissent"],
+["Concept 6: Conference authority vs Board's?","Conference has authority; Board has initiative"],
+["Concept 7: Legal vs moral authority distinction matters because?","Keeps service structure voluntary"],
+["Concept 8: Why separately incorporated?","Legal and practical reasons under trustee oversight"],
+["Concept 9: 'Leadership vacuum' after?","Founders could no longer serve"],
+["Concept 10 in practice means?","Don't assign tasks without tools and authority"],
+["Concept 11 reflects Bill W.'s concern about?","Mediocre leadership threatening AA services"],
+["Warranties in Concept 12 compared to?","A bill of rights for AA's service structure"],
+["Bill W. called the Concepts AA's?","Third Legacy document"],
+["Conference's 'power of the purse' means?","Conference controls AA's finances"],
+["Concept 3 Right of Decision can be overridden by?","Conference's collective wisdom"],
+["Concept 4: Staff members and service workers have?","A voice in decisions affecting their work"],
+["Concept 5: Before final vote, chair asks if?","Minority wishes to speak"],
+["Concept 6: 'Chief' initiative means?","Primary but not exclusive"],
+["Conference Charter adopted at what event?","1955 Convention in St. Louis"],
+["What book details Concepts history?","AA Comes of Age and the AA Service Manual"],
+["Concept 9: Leadership qualities include?","Vision, responsibility, ability to plan"],
+["Concept 10 matching principle prevents?","Frustration and inefficiency"],
+["Concept 11 includes what about 'rights and duties'?","Always matters of serious concern"],
+["Concept 12: Operating funds and reserve are AA's?","Prudent financial principle"]
+],
+5:[
+["Concept 1 modeled after what democratic principle?","Sovereignty of the people"],
+["Concept 2: 'Effective conscience' replaced?","The founders' personal guidance"],
+["Concept 3: Without Right of Decision, servants become?","Order-takers unable to exercise leadership"],
+["Concept 4 'reasonable proportion' was debated because?","Different levels have different responsibilities"],
+["Concept 5 inspired by what tradition?","Parliamentary protection of minority rights"],
+["Concept 6: Conference vs Board - Conference has?","Final authority; Board has initiative/administration"],
+["Concept 7: Charter kept non-legal so that?","AA remains free from legal entanglement"],
+["Concept 8: Separately incorporated for?","Legal reasons while under trustee oversight"],
+["Concept 9: Without clear succession, services would?","Deteriorate"],
+["Concept 10: Mismatches between responsibility and authority caused?","Early service structure problems"],
+["Concept 11: Attention to personnel reflects?","Bill W.'s experience with early staffing challenges"],
+["Concept 12 six warranties protect against?","Wealth, power concentration, punitive actions, controversy"],
+["Concepts formally adopted by Conference in?","1962"],
+["Bill W. saw Concepts complementing?","Steps and Traditions"],
+["'Power of the purse' means groups can?","Withhold support if they disagree with Conference"],
+["Concept 3 is critical because?","Allows responsive decision-making at all levels"],
+["Concept 4 addresses tension between?","Authority and participation"],
+["Concept 5 appeal especially important when?","Significant minority feels strongly"],
+["Concept 6 assigning initiative to trustees was controversial because?","Some felt it gave too much Board power"],
+["Concepts text revised since 1962?","Largely remains as Bill W. wrote it"],
+["Concept 12 'substantial unanimity' means?","Major decisions need more than simple majority"],
+["Concepts are published in?","The AA Service Manual"],
+["Bill W. said Concepts help AA avoid fate of?","Other movements with poor governance"],
+["Final Concept (12) is longest because?","Contains the warranties for the Conference"],
+["Concept 12: Conference shall remain?","Democratic in thought and action"]
+]
+}
+};
+
+// ===== QUESTION PERSISTENCE =====
+function saveQuestions(){try{localStorage.setItem('aa_jeopardy_questions',JSON.stringify(QUESTIONS))}catch(e){}}
+function loadSavedQuestions(){
+try{
+let saved=localStorage.getItem('aa_jeopardy_questions');
+if(saved){let parsed=JSON.parse(saved);if(parsed&&typeof parsed==='object'&&!Array.isArray(parsed)&&CAT_KEYS.some(k=>parsed[k]&&typeof parsed[k]==='object'))QUESTIONS=parsed}
+}catch(e){}
+}
+// ===== GAME STATE =====
+const DIFF_NAMES={1:"Easy",2:"Medium-Easy",3:"Medium",4:"Medium-Hard",5:"Hard"};
+const CAT_NAMES={history:"AA History",steps:"12 Steps",traditions:"12 Traditions",concepts:"12 Concepts"};
+const CAT_KEYS=["history","steps","traditions","concepts"];
+loadSavedQuestions();
+const POINTS=[200,400,600,800,1000];
+let qbAnswersVisible=false;
+let qeEditRef=null;
+
+let G={
+  players:[],scores:{},currentQ:null,board:[],usedCells:0,totalCells:20,
+  timer:null,timerVal:30,timerMax:30,timerStart:0,timerStartVal:30,buzzedPlayer:null,wrongBuzzers:[],
+  ddCells:[],ddWager:0,isDD:false,sound:true,round:1,
+  currentPlayerIdx:0,selectedCats:[],diffMin:1,diffMax:5,diffWeight:'balanced',
+  undoStack:[],streaks:{},bestStreaks:{},answeredBy:{},
+  usedQuestions:new Set(),paused:false,splashActive:false,
+  fjQuestion:null,fjWagers:{},fjJudgeIdx:0,fjQualified:[],
+  fjTimer:null,fjTimerVal:60,fjTimerMax:60,fjTimerStart:0,fjTimerStartVal:60,fjRevealed:false,
+  _splashTimeout:null,_roundCompleteTimeout:null,_autoCloseTimeout:null,_roundTransTimeout:null
+};
+
+// ===== AUDIO =====
+let audioCtx;
+function initAudio(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}
+function playTone(freq,dur,type='sine',vol=.3){
+if(!G.sound)return;initAudio();
+let o=audioCtx.createOscillator(),g=audioCtx.createGain();
+o.type=type;o.frequency.value=freq;g.gain.value=vol;
+o.connect(g);g.connect(audioCtx.destination);
+o.start();g.gain.exponentialRampToValueAtTime(.001,audioCtx.currentTime+dur);
+o.stop(audioCtx.currentTime+dur);
+o.onended=()=>{o.disconnect();g.disconnect()};
+}
+function sfx(name){
+if(!G.sound)return;initAudio();
+switch(name){
+case'select':playTone(440,.15);setTimeout(()=>playTone(660,.15),100);break;
+case'correct':playTone(523,.1);setTimeout(()=>playTone(659,.1),100);setTimeout(()=>playTone(784,.2),200);break;
+case'wrong':[200,180].forEach((f,i)=>setTimeout(()=>playTone(f,.2,'sawtooth',.2),i*150));break;
+case'dd':for(let i=0;i<5;i++)setTimeout(()=>playTone(440+i*100,.1,'triangle'),i*80);break;
+case'tick':playTone(800,.05,'square',.1);break;
+case'buzzer':playTone(200,.5,'sawtooth',.2);break;
+case'fanfare':[523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,.3),i*200));break;
+}
+}
+
+// ===== HELPERS =====
+const $=id=>document.getElementById(id);
+function escHtml(s){if(s==null)return'';let d=document.createElement('div');d.textContent=String(s);return d.innerHTML.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}
+function fmtScore(n){return n<0?'-$'+Math.abs(n):'$'+n}
+let _toastTimeout;
+function toast(msg){let t=$('toast');t.textContent=msg;t.classList.add('show');if(_toastTimeout)clearTimeout(_toastTimeout);_toastTimeout=setTimeout(()=>{t.classList.remove('show');_toastTimeout=null},2500)}
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));$(id).classList.add('active');if(id==='setup')updateQStats()}
+function countQuestions(){
+let total=0,byCat={};
+CAT_KEYS.forEach(c=>{byCat[c]=0;for(let d=1;d<=5;d++){let n=(QUESTIONS[c][d]||[]).length;byCat[c]+=n;total+=n}});
+return{total,byCat};
+}
+function playerColor(i){return['#e94560','#3498db','#2ecc71','#f39c12','#9b59b6','#1abc9c','#e67e22','#e74c3c'][i%8]}
+
+// ===== SETUP =====
+function initCatPicker(){
+let h='';CAT_KEYS.forEach(k=>{h+=`<label><input type="checkbox" value="${k}" checked> ${CAT_NAMES[k]}</label>`});
+$('catPicker').innerHTML=h;
+}
+function getSelectedCats(){
+let boxes=$('catPicker').querySelectorAll('input[type="checkbox"]');
+let sel=[];boxes.forEach(b=>{if(b.checked)sel.push(b.value)});return sel;
+}
+function updatePlayerInputs(){
+let n=parseInt($('numPlayers').value)||2;n=Math.max(1,Math.min(8,n));
+let h='';for(let i=0;i<n;i++)h+=`<input type="text" placeholder="Player ${i+1}" id="p${i}" value="${escHtml(G.players[i]||'')}">`;
+$('playerInputs').innerHTML=h;
+}
+function updateQStats(){
+let c=countQuestions();
+$('qStats').innerHTML=`<span>Total: ${c.total} questions</span>`+
+CAT_KEYS.map(k=>`<span>${CAT_NAMES[k]}: ${c.byCat[k]}</span>`).join('');
+}
+$('numPlayers').addEventListener('input',updatePlayerInputs);
+$('themeSelect').addEventListener('change',e=>document.body.dataset.theme=e.target.value);
+$('soundToggle').addEventListener('change',e=>{G.sound=e.target.value==='on';$('soundBtn').innerHTML=G.sound?'&#128264;':'&#128263;'});
+initCatPicker();updatePlayerInputs();updateQStats();
+
+function getDiffForRow(r,dMin,dMax,weight){
+let t=r/4;
+if(weight==='lean-easy')t=Math.pow(t,1.5);
+else if(weight==='lean-hard')t=Math.pow(t,0.67);
+return Math.round(dMin+t*(dMax-dMin));
+}
+
+function startGame(){
+let n=Math.max(1,Math.min(8,parseInt($('numPlayers').value)||2));
+let sel=getSelectedCats();
+if(sel.length<2){toast('Pick at least 2 categories for a game');return}
+G.players=[];G.scores={};G.streaks={};G.bestStreaks={};G.answeredBy={};
+G.usedQuestions=new Set();G.undoStack=[];G.currentPlayerIdx=0;G.round=1;
+G.selectedCats=sel;G.paused=false;G.splashActive=false;_gameEnded=false;G._preQ=null;
+// Reset Final Jeopardy state from any previous game
+if(G.fjTimer){clearInterval(G.fjTimer);G.fjTimer=null}
+G.fjQuestion=null;G.fjWagers={};G.fjJudgeIdx=0;G.fjQualified=[];G.fjRevealed=false;G.fjTimerStart=0;G.fjTimerStartVal=60;
+G.diffMin=parseInt($('diffMin').value);G.diffMax=parseInt($('diffMax').value);
+G.diffWeight=$('diffWeight').value;
+if(G.diffMin>G.diffMax){let t=G.diffMin;G.diffMin=G.diffMax;G.diffMax=t}
+if(G.diffMin===G.diffMax)toast('All questions will be '+DIFF_NAMES[G.diffMin]+' difficulty');
+for(let i=0;i<n;i++){let el=$('p'+i);let name=el?el.value.trim():'';if(!name)name=`Player ${i+1}`;
+let base=name,c=2;while(G.players.includes(name)){name=base+' ('+c+')';c++}
+G.players.push(name);G.scores[name]=0;G.streaks[name]=0;G.bestStreaks[name]=0}
+G.timerMax=Math.max(10,Math.min(120,parseInt($('timerSec').value)||30));
+_roundTransition=false;
+// Clear any stale timeouts from a previous game
+if(G._splashTimeout){clearTimeout(G._splashTimeout);G._splashTimeout=null}
+if(G._roundCompleteTimeout){clearTimeout(G._roundCompleteTimeout);G._roundCompleteTimeout=null}
+if(G._autoCloseTimeout){clearTimeout(G._autoCloseTimeout);G._autoCloseTimeout=null}
+if(G._roundTransTimeout){clearTimeout(G._roundTransTimeout);G._roundTransTimeout=null}
+$('ddSplash').classList.remove('active');$('roundSplash').classList.remove('active');G.splashActive=false;
+if(_confettiTimer){clearTimeout(_confettiTimer);_confettiTimer=null;$('confettiBox').innerHTML=''}
+buildBoard(1);
+showScreen('board');
+$('roundLabel').textContent='ROUND 1';
+document.documentElement.style.setProperty('--board-cols',G.selectedCats.length);
+renderBoard();renderScores();renderProgress();
+sfx('fanfare');
+}
+
+function buildBoard(multiplier){
+G.board=[];G.usedCells=0;
+let pts=POINTS.map(p=>p*multiplier);
+G.selectedCats.forEach(cat=>{
+let col=[];
+for(let r=0;r<5;r++){
+let diff=getDiffForRow(r,G.diffMin,G.diffMax,G.diffWeight);
+diff=Math.max(1,Math.min(5,diff));
+let pool=QUESTIONS[cat][diff];
+let actualDiff=diff;
+if(!pool||!pool.length){for(let offset=1;offset<=4;offset++){for(let sign of[1,-1]){let altD=diff+(offset*sign);if(altD>=1&&altD<=5){pool=QUESTIONS[cat][altD];if(pool&&pool.length){actualDiff=altD;break}}}if(pool&&pool.length)break}}
+if(!pool||!pool.length){col.push({cat,q:'(No question available)',a:'N/A',ex:null,points:pts[r],used:false,diff});continue}
+// Find an unused question; deterministic filter then random pick
+let q,found=false,pickedDiff=actualDiff;
+let pickFromPool=function(p,d){
+let unused=p.filter(qa=>!G.usedQuestions.has(cat+'|'+qa[0]));
+if(unused.length){q=unused[Math.floor(Math.random()*unused.length)];pickedDiff=d;return true}
+return false;
+};
+found=pickFromPool(pool,actualDiff);
+if(!found){
+for(let offset=1;offset<=4&&!found;offset++){
+for(let sign of[1,-1]){
+let altD=diff+(offset*sign);
+if(altD>=1&&altD<=5&&QUESTIONS[cat][altD]&&QUESTIONS[cat][altD].length){
+found=pickFromPool(QUESTIONS[cat][altD],altD);if(found)break;
+}
+}
+}
+if(!found){q=pool[Math.floor(Math.random()*pool.length)];pickedDiff=actualDiff} // allow duplicate as last resort
+}
+G.usedQuestions.add(cat+'|'+q[0]);
+col.push({cat,q:q[0],a:q[1],ex:q[2]||null,points:pts[r],used:false,diff:pickedDiff});
+}
+G.board.push(col);
+});
+G.totalCells=G.selectedCats.length*5;
+// Place daily doubles (only on cells with valid questions)
+let numDD=multiplier===1?1:2;
+G.ddCells=[];
+let totalSlots=G.totalCells;
+let validSlots=[];
+for(let ci=0;ci<G.board.length;ci++){for(let ri=0;ri<5;ri++){if(G.board[ci][ri].a!=='N/A')validSlots.push(ci*5+ri)}}
+let ddAttempts=0;
+while(G.ddCells.length<numDD&&ddAttempts<100&&validSlots.length>G.ddCells.length){
+let pick=validSlots[Math.floor(Math.random()*validSlots.length)];
+if(!G.ddCells.includes(pick))G.ddCells.push(pick);
+ddAttempts++;
+}
+}
+
+function renderBoard(){
+let h='';
+G.selectedCats.forEach(k=>h+=`<div class="cat-header">${CAT_NAMES[k]}</div>`);
+for(let r=0;r<5;r++){
+G.selectedCats.forEach((k,c)=>{
+let cell=G.board[c][r];
+let cls='cell';
+if(cell.used)cls+=' used';
+let border='';
+let key=c+','+r;
+if(cell.used&&G.answeredBy[key]!==undefined){
+cls+=' answered-border';
+border=`border-bottom:4px solid ${playerColor(G.answeredBy[key])}`;
+}
+h+=`<div class="${cls}" style="${border}" onclick="selectCell(${c},${r})" role="button" aria-label="${CAT_NAMES[k]} for $${cell.points}">$${cell.points}</div>`;
+});
+}
+$('boardGrid').innerHTML=h;
+}
+
+function renderScores(){
+let h='';
+G.players.forEach((p,i)=>{
+let active=i===G.currentPlayerIdx?' active-turn':'';
+let streak=G.streaks[p]>=3?`<span class="streak-badge" aria-label="Streak ${G.streaks[p]}">&#128293;${G.streaks[p]}</span>`:'';
+h+=`<div class="score-chip${active}" id="sc${i}" style="border-left:3px solid ${playerColor(i)}">${escHtml(p)}: ${fmtScore(G.scores[p])}${streak}</div>`;
+});
+$('scoreBoard').innerHTML=h;
+}
+function flashScore(idx,up){
+let el=$('sc'+idx);if(!el)return;
+el.classList.remove('score-flash-up','score-flash-down');
+void el.offsetWidth;
+el.classList.add(up?'score-flash-up':'score-flash-down');
+}
+function renderProgress(){
+let pct=G.totalCells?Math.round((G.usedCells/G.totalCells)*100):0;
+$('boardProgress').innerHTML=`${G.usedCells}/${G.totalCells} questions <span class="bar"><span class="fill" style="width:${pct}%"></span></span>`;
+}
+
+// ===== QUESTION FLOW =====
+function selectCell(c,r){
+if(G.paused||G.splashActive||!$('board').classList.contains('active'))return;
+let cell=G.board[c][r];
+if(cell.used)return;
+if(cell.a==='N/A'){
+G.undoStack.push({scores:{...G.scores},streaks:{...G.streaks},bestStreaks:{...G.bestStreaks},answeredBy:{...G.answeredBy},playerIdx:G.currentPlayerIdx,c,r});
+cell.used=true;G.usedCells++;renderBoard();renderProgress();toast('No question available for this slot');if(G.usedCells>=G.totalCells)G._roundCompleteTimeout=setTimeout(()=>{G._roundCompleteTimeout=null;roundComplete()},500);return}
+cell.used=true;G.usedCells++;
+G.currentQ={cell,c,r};
+G.wrongBuzzers=[];
+G.isDD=false;
+G._preQ={scores:{...G.scores},streaks:{...G.streaks},bestStreaks:{...G.bestStreaks},answeredBy:{...G.answeredBy},playerIdx:G.currentPlayerIdx,c,r};
+let idx=c*5+r;
+if(G.ddCells.includes(idx)){
+G.isDD=true;
+sfx('dd');
+G.splashActive=true;
+$('ddSplash').classList.add('active');
+G._splashTimeout=setTimeout(()=>{G._splashTimeout=null;$('ddSplash').classList.remove('active');G.splashActive=false;showQuestion(cell,true)},1500);
+}else{
+sfx('select');
+showQuestion(cell,false);
+}
+}
+
+function showQuestion(cell,isDD){
+$('qCategory').innerHTML=CAT_NAMES[cell.cat]+' - $'+cell.points+' <span class="diff-badge diff-'+cell.diff+'">'+DIFF_NAMES[cell.diff]+'</span>';
+$('qText').textContent=cell.q;
+$('qAnswer').style.display='none';
+$('qAnswer').textContent=cell.a;
+$('qExplanation').style.display='none';
+$('qExplanation').textContent=cell.ex||'';
+$('resultBtns').style.display='none';
+$('revealBtn').style.display='inline-block';
+$('closeModal').style.display='none';
+G.buzzedPlayer=null;
+if(isDD&&G.players.length>0){
+$('ddWager').style.display='block';
+let sel=$('ddPlayer');sel.innerHTML='';
+// Default to current player
+G.players.forEach((p,i)=>{let o=document.createElement('option');o.value=i;o.textContent=p;if(i===G.currentPlayerIdx)o.selected=true;sel.appendChild(o)});
+sel.onchange=updateDDMax;
+updateDDMax();
+$('buzzArea').innerHTML='';
+$('timerFill').style.width='100%';
+}else{
+$('ddWager').style.display='none';
+renderBuzzBtns();
+startTimer();
+}
+$('questionModal').classList.add('active');
+$('questionModal').querySelector('.modal').focus();
+}
+
+function updateDDMax(){
+let sel=$('ddPlayer');
+let ddPIdx=parseInt(sel.value)||0;
+let playerScore=Math.max(0,G.scores[G.players[ddPIdx]]);
+let cell=G.currentQ?G.currentQ.cell:null;
+let cellPts=cell?cell.points:1000;
+let maxW=Math.max(playerScore,cellPts);
+$('wagerInput').max=maxW;
+$('wagerInput').value=Math.max(5,Math.min(cellPts,maxW));
+$('ddWagerHint').textContent='(min $5, max '+fmtScore(maxW)+')';
+}
+
+function submitWager(){
+let ddPlayerIdx=parseInt($('ddPlayer').value)||0;
+let playerScore=Math.max(0,G.scores[G.players[ddPlayerIdx]]);
+let cell=G.currentQ?G.currentQ.cell:null;
+let cellPts=cell?cell.points:1000;
+let maxW=Math.max(playerScore,cellPts);
+G.ddWager=Math.max(5,Math.min(maxW,parseInt($('wagerInput').value)||5));
+$('ddWager').style.display='none';
+G.buzzedPlayer=ddPlayerIdx;
+$('buzzArea').innerHTML=`<div style="font-size:1.2em;color:var(--gold);padding:8px">${escHtml(G.players[ddPlayerIdx])} wagered ${fmtScore(G.ddWager)}</div>`;
+startTimer();
+}
+
+function renderBuzzBtns(){
+let h='';
+G.players.forEach((p,i)=>{
+let wronged=G.wrongBuzzers.includes(i);
+h+=`<button class="buzz-btn${wronged?' wrong-buzz':''}" style="background:${playerColor(i)}" onclick="buzzIn(${i})" role="button" aria-label="Buzz in for ${escHtml(p)}">${escHtml(p)}</button>`;
+});
+$('buzzArea').innerHTML=h;
+}
+
+function buzzIn(i){
+if(G.buzzedPlayer!==null||G.wrongBuzzers.includes(i)||G.paused||$('qAnswer').style.display!=='none'||G.timerVal<=0)return;
+G.buzzedPlayer=i;
+stopTimer();
+sfx('tick');
+let btns=document.querySelectorAll('.buzz-btn');
+if(btns[i])btns[i].classList.add('buzzed');
+$('revealBtn').style.display='inline-block';
+}
+
+function revealAnswer(){
+if(!$('questionModal').classList.contains('active'))return;
+$('qAnswer').style.display='block';
+let cell=G.currentQ?G.currentQ.cell:null;
+if(cell&&cell.ex){$('qExplanation').style.display='block'}
+$('revealBtn').style.display='none';
+$('resultBtns').style.display=G.buzzedPlayer!==null?'flex':'none';
+$('closeModal').style.display='inline-block';
+stopTimer();
+}
+
+let _markingAnswer=false;
+function markAnswer(correct){
+if(_markingAnswer)return;
+if(G.buzzedPlayer===null){closeQuestion();return}
+_markingAnswer=true;
+let pIdx=G.buzzedPlayer;
+let p=G.players[pIdx];
+let pts=G.isDD?G.ddWager:G.currentQ.cell.points;
+let c=G.currentQ.c,r=G.currentQ.r;
+if(correct){
+G.scores[p]+=pts;
+G.streaks[p]++;
+if(G.streaks[p]>G.bestStreaks[p])G.bestStreaks[p]=G.streaks[p];
+G.answeredBy[c+','+r]=pIdx;
+G.currentPlayerIdx=pIdx; // correct answerer picks next
+flashScore(pIdx,true);
+sfx('correct');
+renderScores();
+closeQuestion();
+}else{
+G.scores[p]-=pts;
+G.streaks[p]=0;
+flashScore(pIdx,false);
+sfx('wrong');
+renderScores();
+G.wrongBuzzers.push(G.buzzedPlayer);
+G.buzzedPlayer=null;
+if(G.wrongBuzzers.length>=G.players.length||G.isDD){
+// advance turn round-robin
+G.currentPlayerIdx=(G.currentPlayerIdx+1)%G.players.length;
+renderScores();
+_markingAnswer=false;
+if($('qAnswer').style.display==='none'){revealAnswer();G._autoCloseTimeout=setTimeout(()=>{G._autoCloseTimeout=null;closeQuestion()},3000)}
+else closeQuestion();
+}else{
+_markingAnswer=false;
+$('qAnswer').style.display='none';
+$('qExplanation').style.display='none';
+$('revealBtn').style.display='inline-block';
+$('resultBtns').style.display='none';
+$('closeModal').style.display='none';
+renderBuzzBtns();
+if(G.timerVal>0)startTimer(true);else revealAnswer();
+}
+}
+}
+
+function closeQuestion(){
+_markingAnswer=false;
+if(!$('questionModal').classList.contains('active'))return;
+$('questionModal').classList.remove('active');
+stopTimer();
+if(G._autoCloseTimeout){clearTimeout(G._autoCloseTimeout);G._autoCloseTimeout=null}
+if(G._preQ)G.undoStack.push(G._preQ);
+G._preQ=null;
+G.ddWager=0;G.isDD=false;
+renderBoard();renderProgress();
+if(G.usedCells>=G.totalCells)G._roundCompleteTimeout=setTimeout(()=>{G._roundCompleteTimeout=null;roundComplete()},500);
+}
+
+// ===== UNDO =====
+function doUndo(){
+if(G.splashActive)return; // prevent undo during DD/round splash
+let a=G.undoStack.pop();if(!a)return;
+// Cancel pending round transition if we're undoing the last question
+if(G._roundCompleteTimeout){clearTimeout(G._roundCompleteTimeout);G._roundCompleteTimeout=null}
+G.scores={...a.scores};
+G.streaks={...a.streaks};
+G.bestStreaks={...a.bestStreaks};
+G.currentPlayerIdx=a.playerIdx;
+let cell=G.board[a.c][a.r];
+cell.used=false;G.usedCells--;
+// Don't delete from usedQuestions - question is still assigned to this board cell
+G.answeredBy={...a.answeredBy};
+renderBoard();renderScores();renderProgress();
+toast('Undo applied');
+}
+
+// ===== TIMER =====
+function startTimer(resume){
+stopTimer();
+if(!resume)G.timerVal=G.timerMax;
+G.timerStart=Date.now();G.timerStartVal=G.timerVal;
+$('timerFill').style.width=Math.max(0,(G.timerVal/G.timerMax)*100)+'%';
+let lastTick=-1;
+G.timer=setInterval(()=>{
+if(G.paused)return;
+G.timerVal=Math.max(0,G.timerStartVal-(Date.now()-G.timerStart)/1000);
+let pct=(G.timerVal/G.timerMax)*100;
+$('timerFill').style.width=pct+'%';
+let sec=Math.ceil(G.timerVal);
+if(sec<=5&&sec>0&&sec!==lastTick){lastTick=sec;sfx('tick');$('timerAnnounce').textContent=sec+' seconds'}
+if(G.timerVal<=0){stopTimer();sfx('buzzer');revealAnswer()}
+},100);
+}
+function stopTimer(){if(G.timer){clearInterval(G.timer);G.timer=null;if(!G.paused)G.timerVal=Math.max(0,G.timerStartVal-(Date.now()-G.timerStart)/1000)}}
+
+// ===== PAUSE =====
+function togglePause(){
+if(!$('board').classList.contains('active')&&!$('questionModal').classList.contains('active')&&!$('finalJep').classList.contains('active'))return;
+G.paused=!G.paused;
+if(G.paused){$('pauseOverlay').classList.add('active')}
+else{
+$('pauseOverlay').classList.remove('active');
+// Reset timer references on unpause so no time is lost
+if(G.timer){G.timerStart=Date.now();G.timerStartVal=G.timerVal}
+if(G.fjTimer){G.fjTimerStart=Date.now();G.fjTimerStartVal=G.fjTimerVal}
+}
+}
+
+// ===== ROUND MANAGEMENT =====
+let _roundTransition=false;
+function roundComplete(){
+if(_roundTransition)return;
+_roundTransition=true;
+if(G.round===1){startDoubleJeopardy()}
+else if(G.round===2){startFinalJeopardy()}
+G._roundTransTimeout=setTimeout(()=>{G._roundTransTimeout=null;_roundTransition=false},3000);
+}
+
+function startDoubleJeopardy(){
+G.round=2;
+$('roundSplashText').textContent='DOUBLE JEOPARDY!';
+$('roundSplash').classList.add('active');
+G.splashActive=true;
+sfx('fanfare');
+G._splashTimeout=setTimeout(()=>{
+G._splashTimeout=null;
+$('roundSplash').classList.remove('active');G.splashActive=false;
+G.undoStack=[];
+buildBoard(2);
+$('roundLabel').textContent='ROUND 2';
+renderBoard();renderScores();renderProgress();
+},2500);
+}
+
+function startFinalJeopardy(){
+G.round=3;
+// Find qualified players (score > 0)
+G.fjQualified=G.players.filter(p=>G.scores[p]>0);
+if(G.fjQualified.length===0){endGame();return}
+// Pick a random FJ question
+let cats=G.selectedCats;
+let cat=cats[Math.floor(Math.random()*cats.length)];
+let pool=[];
+for(let d=1;d<=5;d++){if(QUESTIONS[cat][d]&&QUESTIONS[cat][d].length)pool=pool.concat(QUESTIONS[cat][d].map(qa=>({qa,cat})))}
+// Filter out already-used questions
+let unused=pool.filter(item=>!G.usedQuestions.has(item.cat+'|'+item.qa[0]));
+if(!unused.length)unused=pool; // fall back to all if all used
+if(!unused.length){endGame();return}
+let picked=unused[Math.floor(Math.random()*unused.length)];
+let q=picked.qa;
+G.fjQuestion={cat,q:q[0],a:q[1],ex:q[2]||null};
+G.fjWagers={};G.fjJudgeIdx=0;G.fjRevealed=false;
+// Show FJ screen
+showScreen('finalJep');
+$('fjCatLabel').textContent='Category: '+CAT_NAMES[cat];
+$('fjCatLabel2').textContent='Category: '+CAT_NAMES[cat];
+// Wager phase
+let wh='';
+G.fjQualified.forEach((p,i)=>{
+let sc=G.scores[p];
+let minW=Math.max(1,Math.min(5,sc));
+wh+=`<div class="fj-wager-row"><span>${escHtml(p)} (${fmtScore(sc)})</span><input type="number" id="fjw_${i}" min="${minW}" max="${sc}" value="${minW}"></div>`;
+});
+$('fjWagerInputs').innerHTML=wh;
+$('fjWagerPhase').classList.add('active');
+$('fjQuestionPhase').classList.remove('active');
+$('fjJudgePhase').classList.remove('active');
+sfx('fanfare');
+}
+
+function fjLockWagers(){
+G.fjQualified.forEach((p,i)=>{
+let inp=document.getElementById('fjw_'+i);
+let sc=G.scores[p];
+let minW=Math.max(1,Math.min(5,sc));
+let raw=inp?parseInt(inp.value):NaN;let w=Number.isNaN(raw)?minW:raw;
+G.fjWagers[p]=Math.max(minW,Math.min(sc,w));
+});
+$('fjWagerPhase').classList.remove('active');
+$('fjQuestionPhase').classList.add('active');
+$('fjQText').textContent=G.fjQuestion.q;
+$('fjAnswer').style.display='none';
+$('fjAnswer').textContent=G.fjQuestion.a;
+$('fjRevealBtn').style.display='inline-block';
+// Start FJ timer
+let fjTimerMax=60;
+G.fjTimerVal=fjTimerMax;
+$('fjTimerFill').style.width='100%';
+$('fjTimeLeft').textContent=fjTimerMax+'s';
+G.fjTimerStart=Date.now();G.fjTimerStartVal=G.fjTimerVal;G.fjTimerMax=fjTimerMax;
+G.fjTimer=setInterval(()=>{
+if(G.paused)return;
+G.fjTimerVal=Math.max(0,G.fjTimerStartVal-(Date.now()-G.fjTimerStart)/1000);
+$('fjTimerFill').style.width=(G.fjTimerVal/G.fjTimerMax)*100+'%';
+$('fjTimeLeft').textContent=Math.ceil(G.fjTimerVal)+'s';
+if(G.fjTimerVal<=0){clearInterval(G.fjTimer);G.fjTimer=null;fjReveal()}
+},100);
+}
+
+function fjReveal(){
+if(G.fjRevealed)return;
+G.fjRevealed=true;
+if(G.fjTimer){clearInterval(G.fjTimer);G.fjTimer=null}
+$('fjAnswer').style.display='block';
+$('fjRevealBtn').style.display='none';
+$('fjTimeLeft').textContent='';
+// Move to judge phase
+setTimeout(()=>{
+$('fjQuestionPhase').classList.remove('active');
+$('fjJudgePhase').classList.add('active');
+G.fjJudgeIdx=0;
+fjJudgeNext();
+},1500);
+}
+
+function fjJudgeNext(){
+_fjJudging=false;
+if(G.fjJudgeIdx>=G.fjQualified.length){
+// All judged, end game
+setTimeout(()=>endGame(),500);
+return;
+}
+let p=G.fjQualified[G.fjJudgeIdx];
+let w=G.fjWagers[p];
+$('fjJudgeArea').innerHTML=`<div style="margin-bottom:12px;padding:8px;background:var(--card);border-radius:var(--radius);font-size:.9em">${fjScoreSummary()}</div>
+<h3>${escHtml(p)} wagered ${fmtScore(w)}</h3>
+<p style="color:var(--text2)">Did they answer correctly?</p>
+<div class="btn-row" style="justify-content:center;margin-top:12px">
+<button class="btn-correct" onclick="fjJudge(true)">&#10004; Correct (+${fmtScore(w)})</button>
+<button class="btn-wrong" onclick="fjJudge(false)">&#10008; Wrong (-${fmtScore(w)})</button>
+</div>`;
+}
+
+let _fjJudging=false;
+function fjJudge(correct){
+if(_fjJudging)return;_fjJudging=true;
+let p=G.fjQualified[G.fjJudgeIdx];
+let w=G.fjWagers[p];
+if(correct){G.scores[p]+=w;sfx('correct')}
+else{G.scores[p]-=w;sfx('wrong')}
+renderScores();
+G.fjJudgeIdx++;
+fjJudgeNext();
+}
+function fjScoreSummary(){
+return G.fjQualified.map(p=>`<span style="margin:0 8px">${escHtml(p)}: ${fmtScore(G.scores[p])}</span>`).join('');
+}
+
+// ===== END / RESULTS =====
+let _gameEnded=false;
+function confirmEndGame(){
+if(G.usedCells===0){
+if(!confirm('No questions answered yet. End game anyway?'))return;
+}else if(G.usedCells<G.totalCells){
+if(!confirm('End game early? Current scores will be final.'))return;
+}
+endGame();
+}
+function endGame(){
+if(_gameEnded)return;
+_gameEnded=true;
+stopTimer();
+if(G.fjTimer){clearInterval(G.fjTimer);G.fjTimer=null}
+// Clear any active splashes and pending timeouts
+if(G._splashTimeout){clearTimeout(G._splashTimeout);G._splashTimeout=null}
+if(G._roundCompleteTimeout){clearTimeout(G._roundCompleteTimeout);G._roundCompleteTimeout=null}
+if(G._autoCloseTimeout){clearTimeout(G._autoCloseTimeout);G._autoCloseTimeout=null}
+if(G._roundTransTimeout){clearTimeout(G._roundTransTimeout);G._roundTransTimeout=null}
+$('ddSplash').classList.remove('active');$('roundSplash').classList.remove('active');
+$('pauseOverlay').classList.remove('active');
+G.splashActive=false;G.paused=false;_roundTransition=false;
+$('questionModal').classList.remove('active');
+let sorted=G.players.slice().sort((a,b)=>G.scores[b]-G.scores[a]);
+let h='';sorted.forEach((p,i)=>{
+let medal=i===0?'&#127942; ':i===1?'&#129352; ':i===2?'&#129353; ':'';
+h+=`<div class="result-row"><span>${medal}<span class="rank">#${i+1}</span> ${escHtml(p)}</span><span>${fmtScore(G.scores[p])}</span></div>`;
+});
+$('resultsList').innerHTML=h;
+showScreen('results');
+sfx('fanfare');
+saveLB();
+if(sorted.length>0)spawnConfetti();
+}
+
+// ===== CONFETTI =====
+let _confettiTimer;
+function spawnConfetti(){
+if(_confettiTimer)clearTimeout(_confettiTimer);
+let box=$('confettiBox');box.innerHTML='';
+let colors=['#e94560','#ffd700','#2ecc71','#3498db','#f39c12','#9b59b6'];
+for(let i=0;i<60;i++){
+let d=document.createElement('div');
+d.className='confetti-piece';
+d.style.left=Math.random()*100+'%';
+d.style.background=colors[Math.floor(Math.random()*colors.length)];
+d.style.animationDelay=Math.random()*2+'s';
+d.style.animationDuration=(2+Math.random()*2)+'s';
+d.style.width=(6+Math.random()*8)+'px';
+d.style.height=(6+Math.random()*8)+'px';
+d.style.borderRadius=Math.random()>0.5?'50%':'0';
+box.appendChild(d);
+}
+_confettiTimer=setTimeout(()=>{box.innerHTML='';_confettiTimer=null},5000);
+}
+
+// ===== LEADERBOARD =====
+function loadLB(){try{return JSON.parse(localStorage.getItem('aa_jeopardy_lb'))||[]}catch(e){return[]}}
+function saveLB(){
+if(G.usedCells===0)return;
+let lb=loadLB();
+let sorted=G.players.slice().sort((a,b)=>G.scores[b]-G.scores[a]);
+let topScore=sorted.length?G.scores[sorted[0]]:0;
+let tiedWinners=sorted.filter(p=>G.scores[p]===topScore);
+let isTie=tiedWinners.length>1;
+let winnerName=isTie?tiedWinners.join(' & '):sorted[0]||'';
+lb.push({date:new Date().toISOString().slice(0,10),players:G.players.map(p=>({name:p,score:G.scores[p]})),winner:winnerName,tie:isTie});
+if(lb.length>50)lb=lb.slice(-50);
+localStorage.setItem('aa_jeopardy_lb',JSON.stringify(lb));
+}
+function openLeaderboard(){
+$('lbOverlay').classList.add('active');renderLB();
+}
+function closeLeaderboard(){$('lbOverlay').classList.remove('active')}
+function clearLeaderboard(){if(confirm('Clear all leaderboard data?')){localStorage.removeItem('aa_jeopardy_lb');renderLB();toast('Leaderboard cleared')}}
+function renderLB(){
+let lb=loadLB();
+if(!lb.length){$('lbContent').innerHTML='<p style="color:var(--text2);text-align:center">No games recorded yet.</p>';return}
+let h='<table class="qb-table"><thead><tr><th>Date</th><th>Winner</th><th>Score</th><th>Players</th></tr></thead><tbody>';
+lb.slice().reverse().forEach(g=>{
+let winner=g.winner||'N/A';
+let wScore=g.players.find(p=>p.name===winner);
+let displayWinner=g.tie?winner+' (tie)':winner;
+h+=`<tr><td>${g.date}</td><td style="color:var(--gold)">${escHtml(displayWinner)}</td><td>${wScore?fmtScore(wScore.score):'-'}</td><td>${g.players.length}</td></tr>`;
+});
+h+='</tbody></table>';
+$('lbContent').innerHTML=h;
+}
+
+// ===== PRACTICE MODE =====
+let practiceState={questions:[],idx:0,total:0,correct:0,wrong:0,streak:0,bestStreak:0,revealed:false};
+
+function startPractice(){
+let sel=getSelectedCats();
+if(sel.length<1){toast('Pick at least 1 category');return}
+let dMin=parseInt($('diffMin').value),dMax=parseInt($('diffMax').value);
+if(dMin>dMax){let t=dMin;dMin=dMax;dMax=t}
+let qs=[];
+sel.forEach(cat=>{
+for(let d=dMin;d<=dMax;d++){
+(QUESTIONS[cat][d]||[]).forEach(qa=>{qs.push({cat,diff:d,q:qa[0],a:qa[1],ex:qa[2]||null})});
+}
+});
+// Shuffle
+for(let i=qs.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]]}
+if(!qs.length){toast('No questions match your filters');return}
+practiceState={questions:qs,idx:0,total:0,correct:0,wrong:0,streak:0,bestStreak:0,revealed:false};
+$('practiceOverlay').classList.add('active');
+renderPracticeCard();
+}
+function closePractice(){$('practiceOverlay').classList.remove('active')}
+function renderPracticeCard(){
+let ps=practiceState;
+if(ps.idx>=ps.questions.length){
+// Reshuffle
+for(let i=ps.questions.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[ps.questions[i],ps.questions[j]]=[ps.questions[j],ps.questions[i]]}
+ps.idx=0;
+toast('All questions reviewed! Reshuffled deck.');
+}
+let q=ps.questions[ps.idx];
+ps.revealed=false;
+$('practiceCatLabel').innerHTML=CAT_NAMES[q.cat]+' <span class="diff-badge diff-'+q.diff+'">'+DIFF_NAMES[q.diff]+'</span>';
+$('practiceQ').textContent=q.q;
+$('practiceA').style.display='none';
+$('practiceA').textContent=q.a;
+$('practiceButtons').innerHTML='<button onclick="practiceReveal()" id="practiceRevealBtn">Reveal Answer</button>';
+renderPracticeStats();
+}
+function practiceReveal(){
+practiceState.revealed=true;
+$('practiceA').style.display='block';
+let q=practiceState.questions[practiceState.idx];
+let exBtn=q.ex?`<p style="color:var(--text2);font-style:italic;margin-top:8px">${escHtml(q.ex)}</p>`:'';
+$('practiceButtons').innerHTML=`${exBtn}<div class="btn-row" style="justify-content:center;margin-top:12px">
+<button class="btn-correct" onclick="practiceGrade(true)">&#10004; Got It</button>
+<button class="btn-wrong" onclick="practiceGrade(false)">&#10008; Missed</button>
+<button onclick="practiceNext()" style="background:var(--card)">Skip / Next</button></div>`;
+}
+function practiceGrade(correct){
+let ps=practiceState;ps.total++;
+if(correct){ps.correct++;ps.streak++;if(ps.streak>ps.bestStreak)ps.bestStreak=ps.streak}
+else{ps.wrong++;ps.streak=0}
+practiceNext();
+}
+function practiceNext(){practiceState.idx++;renderPracticeCard()}
+function renderPracticeStats(){
+let ps=practiceState;
+$('practiceStats').innerHTML=`<span>Total: ${ps.total}</span><span style="color:var(--correct)">Correct: ${ps.correct}</span><span style="color:var(--wrong)">Wrong: ${ps.wrong}</span><span>Streak: ${ps.streak}</span><span>Best: ${ps.bestStreak}</span>`;
+}
+
+// ===== QUESTION EDITOR =====
+function openEditor(cat,diff,idx){
+if(cat!==undefined){
+qeEditRef={cat,diff,idx};
+$('qeTitle').textContent='Edit Question';
+let qa=QUESTIONS[cat][diff][idx];
+$('qeCat').value=cat;$('qeDiff').value=diff;
+$('qeQuestion').value=qa[0];$('qeAnswer').value=qa[1];$('qeExplanation').value=qa[2]||'';
+}else{
+qeEditRef=null;
+$('qeTitle').textContent='Add Question';
+$('qeQuestion').value='';$('qeAnswer').value='';$('qeExplanation').value='';
+}
+$('qeOverlay').classList.add('active');
+}
+function closeEditor(){$('qeOverlay').classList.remove('active');qeEditRef=null}
+function qeSave(){
+let cat=$('qeCat').value,diff=parseInt($('qeDiff').value);
+let q=$('qeQuestion').value.trim(),a=$('qeAnswer').value.trim();
+let ex=$('qeExplanation').value.trim();
+if(!q||!a){toast('Question and answer are required');return}
+let entry=ex?[q,a,ex]:[q,a];
+if(!QUESTIONS[cat])QUESTIONS[cat]={};
+if(!QUESTIONS[cat][diff])QUESTIONS[cat][diff]=[];
+if(qeEditRef){
+// If cat/diff changed, remove from old and add to new
+if(qeEditRef.cat===cat&&qeEditRef.diff===diff){
+QUESTIONS[cat][diff][qeEditRef.idx]=entry;
+}else{
+QUESTIONS[qeEditRef.cat][qeEditRef.diff].splice(qeEditRef.idx,1);
+QUESTIONS[cat][diff].push(entry);
+}
+toast('Question updated');saveQuestions();
+}else{
+QUESTIONS[cat][diff].push(entry);
+toast('Question added');saveQuestions();
+}
+updateQStats();
+closeEditor();
+if($('qbOverlay').classList.contains('active'))renderQuestionBrowser();
+}
+let _qeDeleting=false;
+function qeDelete(cat,diff,idx){
+if(_qeDeleting)return;
+if(!QUESTIONS[cat]||!QUESTIONS[cat][diff]||idx>=QUESTIONS[cat][diff].length)return;
+if(!confirm('Delete this question?'))return;
+_qeDeleting=true;
+QUESTIONS[cat][diff].splice(idx,1);
+updateQStats();
+renderQuestionBrowser();
+toast('Question deleted');saveQuestions();
+_qeDeleting=false;
+}
+
+// ===== IMPORT / EXPORT =====
+function importPlayers(){$('pImport').click()}
+function handlePlayerImport(e){
+let f=e.target.files[0];if(!f)return;
+let r=new FileReader();
+r.onload=function(ev){
+try{
+let data;
+if(f.name.endsWith('.json'))data=JSON.parse(ev.target.result);
+else data=ev.target.result.split(/\n/).map(s=>s.trim().replace(/^"|"$/g,'')).filter(Boolean);
+if(Array.isArray(data)){
+$('numPlayers').value=Math.min(8,data.length);
+G.players=data.slice(0,8);
+updatePlayerInputs();
+G.players.forEach((n,i)=>{let el=$('p'+i);if(el)el.value=n});
+toast(`Imported ${G.players.length} players`);
+}
+}catch(err){toast('Invalid file format')}
+};
+r.readAsText(f);e.target.value='';
+}
+
+function importQuestions(e){
+let f=e.target.files[0];if(!f)return;
+let r=new FileReader();
+r.onload=function(ev){
+try{
+let data=JSON.parse(ev.target.result);
+let added=0,skipped=0;
+for(let cat of CAT_KEYS){
+if(data[cat]){for(let d=1;d<=5;d++){
+if(data[cat][d]&&Array.isArray(data[cat][d])){
+let existing=new Set((QUESTIONS[cat][d]||[]).map(qa=>qa[0]));
+data[cat][d].forEach(qa=>{
+if(!Array.isArray(qa)||qa.length<2||typeof qa[0]!=='string'||typeof qa[1]!=='string'){skipped++;return}
+if(existing.has(qa[0])){skipped++}
+else{if(!QUESTIONS[cat][d])QUESTIONS[cat][d]=[];QUESTIONS[cat][d].push(qa);existing.add(qa[0]);added++}
+});
+}
+}}
+}
+updateQStats();saveQuestions();toast(`Imported ${added} questions`+(skipped?`, ${skipped} duplicates skipped`:''));
+}catch(err){toast('Invalid JSON format')}
+};
+r.readAsText(f);e.target.value='';
+}
+
+function downloadBlob(blob,filename){
+let a=document.createElement('a');let url=URL.createObjectURL(blob);
+a.href=url;a.download=filename;document.body.appendChild(a);
+try{a.click()}finally{document.body.removeChild(a)}
+setTimeout(()=>URL.revokeObjectURL(url),1000);
+}
+function exportResults(){
+let data={date:new Date().toISOString(),players:G.players.map(p=>({name:p,score:G.scores[p]}))};
+data.players.sort((a,b)=>b.score-a.score);
+downloadBlob(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}),
+`aa-jeopardy-results-${new Date().toISOString().slice(0,10)}.json`);
+}
+function exportQuestionPool(){
+downloadBlob(new Blob([JSON.stringify(QUESTIONS,null,2)],{type:'application/json'}),'aa-jeopardy-question-pool.json');
+toast('Question pool exported');
+}
+
+// ===== QUESTION BROWSER =====
+function openQuestionBrowser(){
+$('qbOverlay').classList.add('active');
+$('qbCatFilter').value='all';$('qbDiffFilter').value='0';$('qbSearch').value='';
+qbAnswersVisible=false;renderQuestionBrowser();
+}
+function closeQuestionBrowser(){clearTimeout(_qbTimer);$('qbOverlay').classList.remove('active')}
+
+function renderQuestionBrowser(){
+let catF=$('qbCatFilter').value;
+let diffF=parseInt($('qbDiffFilter').value);
+let search=$('qbSearch').value.toLowerCase().trim();
+let rows=[];
+let cats=catF==='all'?CAT_KEYS:[catF];
+cats.forEach(cat=>{
+for(let d=1;d<=5;d++){
+if(diffF&&d!==diffF)continue;
+(QUESTIONS[cat][d]||[]).forEach((qa,qi)=>{
+if(search&&!qa[0].toLowerCase().includes(search)&&!qa[1].toLowerCase().includes(search)&&!(qa[2]&&qa[2].toLowerCase().includes(search)))return;
+rows.push({cat,diff:d,q:qa[0],a:qa[1],idx:qi});
+});
+}
+});
+$('qbCount').textContent=`Showing ${rows.length} of ${countQuestions().total} questions`;
+let h='';
+rows.forEach((r,i)=>{
+let answerCls=qbAnswersVisible?'qb-answer':'qb-answer hidden';
+h+=`<tr>
+<td>${i+1}</td>
+<td><span class="cat-badge cat-${r.cat}">${CAT_NAMES[r.cat]}</span></td>
+<td><span class="diff-badge diff-${r.diff}">${DIFF_NAMES[r.diff]}</span></td>
+<td>${escHtml(r.q)}</td>
+<td><span class="${answerCls}" onclick="this.classList.toggle('hidden')">${escHtml(r.a)}</span></td>
+<td><button style="padding:4px 8px;font-size:.8em" onclick="openEditor('${r.cat}',${r.diff},${r.idx})">&#9998;</button>
+<button style="padding:4px 8px;font-size:.8em;background:var(--wrong)" onclick="qeDelete('${r.cat}',${r.diff},${r.idx})">&#128465;</button></td>
+</tr>`;
+});
+$('qbBody').innerHTML=h||'<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--text2)">No questions match</td></tr>';
+}
+
+function toggleAllAnswers(){
+qbAnswersVisible=!qbAnswersVisible;
+document.querySelectorAll('.qb-answer').forEach(el=>{
+if(qbAnswersVisible)el.classList.remove('hidden');else el.classList.add('hidden');
+});
+}
+
+$('qbCatFilter').addEventListener('change',renderQuestionBrowser);
+$('qbDiffFilter').addEventListener('change',renderQuestionBrowser);
+let _qbTimer;$('qbSearch').addEventListener('input',()=>{clearTimeout(_qbTimer);_qbTimer=setTimeout(renderQuestionBrowser,200)});
+
+// ===== UTILITIES =====
+function toggleFullscreen(){
+if(!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});
+else document.exitFullscreen();
+}
+function changeTheme(){
+let themes=['dark','light','high-contrast'];
+let cur=document.body.dataset.theme;
+let next=themes[(themes.indexOf(cur)+1)%themes.length];
+document.body.dataset.theme=next;$('themeSelect').value=next;toast('Theme: '+next);
+}
+function toggleSound(){
+G.sound=!G.sound;$('soundToggle').value=G.sound?'on':'off';
+$('soundBtn').innerHTML=G.sound?'&#128264;':'&#128263;';toast('Sound '+(G.sound?'on':'off'));
+}
+
+// ===== KEYBOARD SHORTCUTS =====
+document.addEventListener('keydown',e=>{
+let tag=document.activeElement?.tagName;
+let isInput=tag==='INPUT'||tag==='TEXTAREA'||tag==='SELECT';
+if(e.key==='F11'){e.preventDefault();toggleFullscreen();return}
+if(e.key==='Enter'&&isInput){
+let ddWagerFocused=document.activeElement&&document.activeElement.id==='wagerInput';
+let fjWagerFocused=document.activeElement&&document.activeElement.id&&document.activeElement.id.startsWith('fjw_');
+if(ddWagerFocused){e.preventDefault();submitWager();return}
+if(fjWagerFocused){e.preventDefault();fjLockWagers();return}
+}
+if(isInput)return;
+if(e.ctrlKey||e.altKey||e.metaKey)return;
+let modal=$('questionModal').classList.contains('active');
+let qb=$('qbOverlay').classList.contains('active');
+
+if(e.key==='Escape'){
+if($('pauseOverlay').classList.contains('active')){togglePause();return}
+if(qb){closeQuestionBrowser();return}
+if($('qeOverlay').classList.contains('active')){closeEditor();return}
+if($('lbOverlay').classList.contains('active')){closeLeaderboard();return}
+if($('practiceOverlay').classList.contains('active')){closePractice();return}
+if(modal){
+closeQuestion();
+return;
+}
+}
+if(e.key.toLowerCase()==='p'&&($('board').classList.contains('active')||modal||$('finalJep').classList.contains('active'))){togglePause();return}
+if(G.paused)return;
+if(e.key.toLowerCase()==='u'&&$('board').classList.contains('active')&&!modal&&!G.splashActive){doUndo();return}
+let ddWagerOpen=modal&&$('ddWager').style.display!=='none';
+if(e.key>='1'&&e.key<='8'){
+let i=parseInt(e.key)-1;
+if(i<G.players.length&&modal&&!ddWagerOpen){buzzIn(i);return}
+}
+if(e.key===' '&&modal&&!ddWagerOpen){e.preventDefault();if($('qAnswer').style.display==='none')revealAnswer();return}
+if(e.key.toLowerCase()==='c'&&modal&&$('resultBtns').style.display==='flex'){markAnswer(true);return}
+if(e.key.toLowerCase()==='x'&&modal&&$('resultBtns').style.display==='flex'){markAnswer(false);return}
+// Practice mode keyboard shortcuts
+let practice=$('practiceOverlay').classList.contains('active');
+if(practice){
+if(e.key===' '){e.preventDefault();if(!practiceState.revealed)practiceReveal();return}
+if(e.key.toLowerCase()==='c'&&practiceState.revealed){practiceGrade(true);return}
+if(e.key.toLowerCase()==='x'&&practiceState.revealed){practiceGrade(false);return}
+if(e.key.toLowerCase()==='n'&&practiceState.revealed){practiceNext();return}
+}
+});
+</script>
+</body>
+</html>
