@@ -1265,7 +1265,7 @@ G.buzzedPlayer=null;
 if(G.wrongBuzzers.length>=G.players.length||G.isDD){
 // advance turn round-robin
 G.currentPlayerIdx=(G.currentPlayerIdx+1)%G.players.length;
-renderScores();
+renderScores();renderBuzzBtns();
 _markingAnswer=false;
 if($('qAnswer').style.display==='none'){revealAnswer();G._autoCloseTimeout=setTimeout(()=>{G._autoCloseTimeout=null;closeQuestion()},3000)}
 else closeQuestion();
@@ -1408,6 +1408,8 @@ sfx('fanfare');
 }
 
 function fjLockWagers(){
+if(!$('fjWagerPhase').classList.contains('active'))return;
+if(G.fjTimer){clearInterval(G.fjTimer);G.fjTimer=null}
 G.fjQualified.forEach((p,i)=>{
 let inp=document.getElementById('fjw_'+i);
 let sc=G.scores[p];
@@ -1567,7 +1569,7 @@ if(!lb.length){$('lbContent').innerHTML='<p style="color:var(--text2);text-align
 let h='<table class="qb-table"><thead><tr><th>Date</th><th>Winner</th><th>Score</th><th>Players</th></tr></thead><tbody>';
 lb.slice().reverse().forEach(g=>{
 let winner=g.winner||'N/A';
-let wScore=g.players.find(p=>p.name===winner);
+let wScore=g.tie?g.players.reduce((max,p)=>(!max||p.score>max.score)?p:max,null):g.players.find(p=>p.name===winner);
 let displayWinner=g.tie?winner+' (tie)':winner;
 h+=`<tr><td>${g.date}</td><td style="color:var(--gold)">${escHtml(displayWinner)}</td><td>${wScore?fmtScore(wScore.score):'-'}</td><td>${g.players.length}</td></tr>`;
 });
