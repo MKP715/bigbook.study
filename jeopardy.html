@@ -114,6 +114,7 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 #confettiBox{position:fixed;inset:0;pointer-events:none;z-index:310;overflow:hidden}
 .confetti-piece{position:absolute;width:10px;height:10px;top:-20px;animation:confettiFall 3s ease-in forwards}
 @keyframes confettiFall{0%{opacity:1;transform:translateY(0) rotate(0deg)}100%{opacity:0;transform:translateY(100vh) rotate(720deg)}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:0.01ms!important;animation-iteration-count:1!important;transition-duration:0.01ms!important}.confetti-piece{display:none}}
 .overlay-panel{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:300;overflow-y:auto;padding:20px}
 .overlay-panel.active{display:block}
 .overlay-inner{max-width:700px;margin:0 auto;background:var(--bg2);border-radius:12px;padding:24px}
@@ -265,7 +266,7 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 <div class="round-splash" id="roundSplash" role="alert" aria-live="assertive"><span id="roundSplashText">DOUBLE JEOPARDY!</span></div>
 <div class="pause-overlay" id="pauseOverlay">PAUSED<button onclick="togglePause()" style="font-size:.4em">Resume</button></div>
 
-<div id="practiceOverlay" class="overlay-panel">
+<div id="practiceOverlay" class="overlay-panel" role="dialog" aria-modal="true" aria-label="Practice Mode">
 <div class="overlay-inner" style="max-width:650px">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
 <h2>Practice Mode</h2>
@@ -287,7 +288,7 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 </div>
 </div>
 
-<div class="qb-overlay" id="qbOverlay">
+<div class="qb-overlay" id="qbOverlay" role="dialog" aria-modal="true" aria-label="Question Pool">
 <div class="qb-container">
 <div class="qb-header">
 <h2>&#128218; Question Pool</h2>
@@ -309,7 +310,7 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 </div>
 </div>
 
-<div id="qeOverlay" class="overlay-panel">
+<div id="qeOverlay" class="overlay-panel" role="dialog" aria-modal="true" aria-label="Question Editor">
 <div class="overlay-inner">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
 <h2 id="qeTitle">Add Question</h2>
@@ -332,7 +333,7 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 </div>
 </div>
 
-<div id="lbOverlay" class="overlay-panel">
+<div id="lbOverlay" class="overlay-panel" role="dialog" aria-modal="true" aria-label="Leaderboard">
 <div class="overlay-inner">
 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
 <h2>&#127942; Leaderboard</h2>
@@ -1009,7 +1010,7 @@ function startGame(){
 if(_startingGame)return;_startingGame=true;setTimeout(()=>{_startingGame=false},500);
 let n=Math.max(1,Math.min(8,parseInt($('numPlayers').value)||2));
 let sel=getSelectedCats();
-if(sel.length<2){toast('Pick at least 2 categories for a game');return}
+if(sel.length<2){toast('Pick at least 2 categories for a game');_startingGame=false;return}
 G.players=[];G.scores={};G.streaks={};G.bestStreaks={};G.answeredBy={};
 G.usedQuestions=new Set();G.undoStack=[];G.currentPlayerIdx=0;G.round=1;
 G.selectedCats=sel;G.paused=false;G.splashActive=false;_gameEnded=false;G._preQ=null;
@@ -1207,7 +1208,10 @@ let playerScore=Math.max(0,G.scores[G.players[ddPlayerIdx]]);
 let cell=G.currentQ?G.currentQ.cell:null;
 let cellPts=cell?cell.points:1000;
 let maxW=Math.max(playerScore,cellPts);
-G.ddWager=Math.max(5,Math.min(maxW,parseInt($('wagerInput').value)||5));
+let rawWager=parseInt($('wagerInput').value);
+if(isNaN(rawWager)||rawWager<5){toast('Minimum wager is $5');return}
+if(rawWager>maxW){toast('Maximum wager is '+fmtScore(maxW));return}
+G.ddWager=Math.max(5,Math.min(maxW,rawWager));
 $('ddWager').style.display='none';
 G.buzzedPlayer=ddPlayerIdx;
 $('buzzArea').innerHTML=`<div style="font-size:1.2em;color:var(--gold);padding:8px">${escHtml(G.players[ddPlayerIdx])} wagered ${fmtScore(G.ddWager)}</div>`;
@@ -1274,8 +1278,7 @@ renderScores();
 G.wrongBuzzers.push(G.buzzedPlayer);
 G.buzzedPlayer=null;
 if(G.wrongBuzzers.length>=G.players.length||G.isDD){
-// advance turn round-robin
-G.currentPlayerIdx=(G.currentPlayerIdx+1)%G.players.length;
+// keep current player's turn (nobody answered correctly)
 renderScores();if(!G.isDD)renderBuzzBtns();
 _markingAnswer=false;
 if($('qAnswer').style.display==='none'){revealAnswer();G._autoCloseTimeout=setTimeout(()=>{G._autoCloseTimeout=null;closeQuestion()},3000)}
@@ -1341,7 +1344,7 @@ let pct=(G.timerVal/G.timerMax)*100;
 $('timerFill').style.width=pct+'%';
 let sec=Math.ceil(G.timerVal);
 if(sec<=5&&sec>0&&sec!==lastTick){lastTick=sec;sfx('tick');$('timerAnnounce').textContent=sec+' seconds'}
-if(G.timerVal<=0){stopTimer();sfx('buzzer');revealAnswer()}
+if(G.timerVal<=0){stopTimer();sfx('buzzer');$('timerAnnounce').textContent='Time is up';revealAnswer()}
 },100);
 }
 function stopTimer(){if(G.timer&&G.timer!=='paused'){clearInterval(G.timer);G.timerVal=Math.max(0,G.timerStartVal-(Date.now()-G.timerStart)/1000)}G.timer=null}
