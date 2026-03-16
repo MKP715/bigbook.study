@@ -135,8 +135,8 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 <label for="numPlayers">Number of Players (1-8)</label>
 <input type="number" id="numPlayers" min="1" max="8" value="2">
 <div id="playerInputs" class="player-list"></div>
-<label>Categories (pick at least 2 for game, 1 for practice)</label>
-<div class="cat-picker" id="catPicker"></div>
+<label id="catPickerLabel">Categories (pick at least 2 for game, 1 for practice)</label>
+<div class="cat-picker" id="catPicker" role="group" aria-labelledby="catPickerLabel"></div>
 <label id="diffRangeLabel">Difficulty Range</label>
 <div style="display:flex;gap:10px">
 <select id="diffMin" aria-label="Minimum difficulty"><option value="1">Easy</option><option value="2">Medium-Easy</option><option value="3">Medium</option><option value="4">Medium-Hard</option><option value="5">Hard</option></select>
@@ -242,9 +242,9 @@ input,select,textarea{padding:10px;border-radius:var(--radius);border:2px solid 
 <div class="question-text" id="qText"></div>
 <div class="timer-bar" role="timer" aria-live="off"><div class="fill" id="timerFill"></div></div><span class="sr-only" id="timerAnnounce" aria-live="assertive"></span>
 <div class="dd-wager" id="ddWager" style="display:none">
-<label>Player:</label>
+<label for="ddPlayer">Player:</label>
 <select id="ddPlayer" style="width:auto;margin:0 8px"></select>
-<label>Wager: $</label>
+<label for="wagerInput">Wager: $</label>
 <input type="number" id="wagerInput" min="5" value="5" style="width:120px">
 <span id="ddWagerHint" style="color:var(--text2);font-size:.8em"></span>
 <button onclick="submitWager()">Lock Wager</button>
@@ -1004,7 +1004,9 @@ else if(weight==='lean-hard')t=Math.pow(t,0.67);
 return Math.round(dMin+t*(dMax-dMin));
 }
 
+let _startingGame=false;
 function startGame(){
+if(_startingGame)return;_startingGame=true;setTimeout(()=>{_startingGame=false},500);
 let n=Math.max(1,Math.min(8,parseInt($('numPlayers').value)||2));
 let sel=getSelectedCats();
 if(sel.length<2){toast('Pick at least 2 categories for a game');return}
@@ -1106,7 +1108,7 @@ if(cell.used&&G.answeredBy[key]!==undefined){
 cls+=' answered-border';
 border=`border-bottom:4px solid ${playerColor(G.answeredBy[key])}`;
 }
-h+=`<div class="${cls}" style="${border}" onclick="selectCell(${c},${r})" role="button" aria-label="${CAT_NAMES[k]} for $${cell.points}">$${cell.points}</div>`;
+h+=`<div class="${cls}" style="${border}" onclick="selectCell(${c},${r})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();selectCell(${c},${r})}" tabindex="${cell.used?-1:0}" role="button" aria-label="${CAT_NAMES[k]} for $${cell.points}">$${cell.points}</div>`;
 });
 }
 $('boardGrid').innerHTML=h;
@@ -1296,6 +1298,7 @@ _markingAnswer=false;
 if(!$('questionModal').classList.contains('active'))return;
 $('questionModal').classList.remove('active');
 stopTimer();
+$('timerAnnounce').textContent='';
 // Return focus to the board for keyboard accessibility
 let board=$('boardGrid');if(board)board.focus();
 if(G._autoCloseTimeout){clearTimeout(G._autoCloseTimeout);G._autoCloseTimeout=null}
@@ -1576,6 +1579,7 @@ _confettiTimer=setTimeout(()=>{box.innerHTML='';_confettiTimer=null},5000);
 function loadLB(){try{return JSON.parse(localStorage.getItem('aa_jeopardy_lb'))||[]}catch(e){return[]}}
 function saveLB(){
 if(G.usedCells===0)return;
+try{
 let lb=loadLB();
 let sorted=G.players.slice().sort((a,b)=>G.scores[b]-G.scores[a]);
 let topScore=sorted.length?G.scores[sorted[0]]:0;
@@ -1585,6 +1589,7 @@ let winnerName=isTie?tiedWinners.join(' & '):sorted[0]||'';
 lb.push({date:new Date().toISOString().slice(0,10),players:G.players.map(p=>({name:p,score:G.scores[p]})),winner:winnerName,tie:isTie});
 if(lb.length>50)lb=lb.slice(-50);
 localStorage.setItem('aa_jeopardy_lb',JSON.stringify(lb));
+}catch(e){}
 }
 function openLeaderboard(){
 $('lbOverlay').classList.add('active');renderLB();
@@ -1691,8 +1696,8 @@ let entry=ex?[q,a,ex]:[q,a];
 if(!QUESTIONS[cat])QUESTIONS[cat]={};
 if(!QUESTIONS[cat][diff])QUESTIONS[cat][diff]=[];
 // Warn if duplicate question text exists in same category/difficulty
-let isNew=!qeEditRef||(qeEditRef.cat!==cat||qeEditRef.diff!==diff);
-if(isNew&&(QUESTIONS[cat][diff]||[]).some(qa=>qa[0]===q)){if(!confirm('A question with this exact text already exists in this category/difficulty. Add anyway?'))return}
+let hasDupe=(QUESTIONS[cat][diff]||[]).some((qa,i)=>qa[0]===q&&!(qeEditRef&&qeEditRef.cat===cat&&qeEditRef.diff===diff&&qeEditRef.idx===i));
+if(hasDupe){if(!confirm('A question with this exact text already exists in this category/difficulty. Add anyway?'))return}
 if(qeEditRef){
 // If cat/diff changed, remove from old and add to new
 if(qeEditRef.cat===cat&&qeEditRef.diff===diff){
