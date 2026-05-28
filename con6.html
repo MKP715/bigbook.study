@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AA Concept VI: Delegation in Action</title>
+    <title>AA Concept VI: Detailed Interactive Study Guide</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
@@ -23,17 +23,17 @@
                     },
                     colors: {
                         brand: {
-                            50: '#f0f4f8',
-                            100: '#dbe3f0',
-                            200: '#bccbe2',
-                            300: '#90abcd',
-                            400: '#6487b3',
-                            500: '#466897',
-                            600: '#36517a',
-                            700: '#2d4265',
-                            800: '#263753',
-                            900: '#233046',
-                            950: '#171e2e',
+                            50: '#f0f6ff',
+                            100: '#e0edff',
+                            200: '#bcd7ff',
+                            300: '#82b4ff',
+                            400: '#4089ff',
+                            500: '#105eff',
+                            600: '#0042d6',
+                            700: '#0033ab',
+                            800: '#062c87',
+                            900: '#0b266b',
+                            950: '#061440',
                         }
                     }
                 }
@@ -42,47 +42,55 @@
     </script>
     <style>
         .custom-scroll::-webkit-scrollbar {
-            width: 6px;
+            width: 8px;
+            height: 8px;
         }
         .custom-scroll::-webkit-scrollbar-track {
             background: rgba(0,0,0,0.05);
         }
         .custom-scroll::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.2);
+            background: rgba(16, 94, 255, 0.2);
             border-radius: 4px;
+        }
+        .custom-scroll::-webkit-scrollbar-thumb:hover {
+            background: rgba(16, 94, 255, 0.4);
         }
         .glass {
             background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(12px);
         }
         .dark .glass {
-            background: rgba(23, 30, 46, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(6, 20, 64, 0.85);
+            backdrop-filter: blur(12px);
+        }
+        .glow-active {
+            filter: drop-shadow(0 0 8px rgba(16, 94, 255, 0.6));
+            transition: all 0.3s ease;
         }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans transition-colors duration-200 dark:bg-brand-950 dark:text-slate-100 min-h-screen">
+<body class="bg-slate-50 text-slate-800 font-sans transition-colors duration-200 dark:bg-slate-950 dark:text-slate-100 min-h-screen">
 
     <nav class="sticky top-0 z-50 border-b border-slate-200 dark:border-brand-900 glass transition-all">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-16">
                 <div class="flex items-center space-x-3">
-                    <div class="bg-brand-600 dark:bg-brand-500 text-white p-2 rounded-lg flex items-center justify-center shadow-md">
-                        <i class="fa-solid fa-circle-nodes text-lg"></i>
+                    <div class="bg-brand-600 dark:bg-brand-500 text-white p-2.5 rounded-xl flex items-center justify-center shadow-md">
+                        <i class="fa-solid fa-sitemap text-lg"></i>
                     </div>
                     <div>
-                        <span class="text-lg font-bold bg-gradient-to-r from-brand-700 to-indigo-600 dark:from-brand-300 dark:to-indigo-400 bg-clip-text text-transparent">Concept VI Guide</span>
-                        <span class="hidden sm:inline-block ml-2 text-xs uppercase px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900 text-brand-800 dark:text-brand-300 font-semibold tracking-wider">Service Manual</span>
+                        <span class="text-lg font-extrabold bg-gradient-to-r from-brand-700 to-indigo-600 dark:from-brand-300 dark:to-indigo-400 bg-clip-text text-transparent">Concept VI Masterclass</span>
+                        <span class="hidden md:inline-block ml-2 text-[10px] uppercase px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-900/60 text-brand-800 dark:text-brand-300 font-bold tracking-wider">Historical Study Edition</span>
                     </div>
                 </div>
-                <div class="flex items-center space-x-4">
-                    <button id="themeToggle" class="p-2.5 rounded-lg bg-slate-100 dark:bg-brand-900 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-brand-800 transition" aria-label="Toggle Dark Mode">
+                <div class="flex items-center space-x-3">
+                    <button id="themeToggle" class="p-2.5 rounded-lg bg-slate-100 dark:bg-brand-900/60 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-brand-800/80 transition" aria-label="Toggle Dark Mode">
                         <i class="fa-solid fa-moon dark:hidden"></i>
                         <i class="fa-solid fa-sun hidden dark:inline"></i>
                     </button>
-                    <a href="#assessment" class="hidden md:inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg font-medium transition shadow-md hover:shadow-lg">
+                    <a href="#assessment" class="hidden sm:inline-flex items-center space-x-2 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-lg font-semibold text-sm transition shadow-md hover:shadow-lg">
                         <i class="fa-solid fa-clipboard-check"></i>
-                        <span>Self-Assessment</span>
+                        <span>Checklist Quiz</span>
                     </a>
                 </div>
             </div>
@@ -90,308 +98,434 @@
     </nav>
 
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
-        <!-- Hero Section -->
-        <header class="relative rounded-3xl bg-gradient-to-br from-brand-900 via-brand-800 to-indigo-950 text-white overflow-hidden shadow-2xl py-12 px-6 sm:px-12 lg:px-16">
-            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px]"></div>
-            <div class="relative z-10 max-w-3xl">
-                <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-semibold uppercase tracking-wider mb-4 border border-brand-500/30">
-                    <i class="fa-solid fa-shield-halved"></i>
-                    <span>Checks & Balances</span>
+        <header class="relative rounded-3xl bg-gradient-to-br from-brand-950 via-slate-900 to-indigo-950 text-white overflow-hidden shadow-2xl py-12 px-6 sm:px-12 lg:px-16">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]"></div>
+            <div class="relative z-10 max-w-4xl space-y-4">
+                <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-bold uppercase tracking-wider border border-brand-500/30">
+                    <i class="fa-solid fa-gavel"></i>
+                    <span>Prudent Delegation & Trust</span>
                 </span>
-                <h1 class="text-4xl sm:text-5xl font-black tracking-tight mb-4">
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-tight">
                     AA Concept VI <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-indigo-300">Delegation in Action</span>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-brand-300 to-blue-400">Delegation in Action</span>
                 </h1>
-                <p class="text-lg text-brand-100 mb-8 leading-relaxed">
-                    How Alcoholics Anonymous balances the democratic voice of its groups with the realistic, daily legal and financial operations required to protect our global fellowship.
+                <p class="text-base sm:text-lg text-slate-300 max-w-3xl leading-relaxed">
+                    How Alcoholics Anonymous balances ultimate democratic authority with the realistic, operational, legal, and financial freedoms required to protect and advance our global fellowship in the absence of the Conference itself.
                 </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#officialText" class="px-5 py-3 rounded-xl bg-white text-brand-900 font-semibold hover:bg-brand-50 transition shadow-lg flex items-center space-x-2">
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <a href="#officialText" class="px-5 py-3 rounded-xl bg-white text-brand-950 font-bold hover:bg-slate-100 transition shadow-lg flex items-center space-x-2">
                         <i class="fa-solid fa-book-open"></i>
-                        <span>Read Official Text</span>
+                        <span>Read Texts & Citations</span>
                     </a>
-                    <a href="#analogy" class="px-5 py-3 rounded-xl bg-brand-700 hover:bg-brand-600 border border-brand-600 text-white font-semibold transition flex items-center space-x-2">
-                        <i class="fa-solid fa-house-chimney"></i>
-                        <span>See Home Group Link</span>
+                    <a href="#structure" class="px-5 py-3 rounded-xl bg-brand-600/30 hover:bg-brand-600/50 border border-brand-500/40 text-white font-bold transition flex items-center space-x-2">
+                        <i class="fa-solid fa-sitemap"></i>
+                        <span>Inverted Pyramid</span>
+                    </a>
+                    <a href="#corporate-form" class="px-5 py-3 rounded-xl bg-indigo-600/30 hover:bg-indigo-600/50 border border-indigo-500/40 text-white font-bold transition flex items-center space-x-2">
+                        <i class="fa-solid fa-building-columns"></i>
+                        <span>Corporate Analogy</span>
                     </a>
                 </div>
             </div>
         </header>
 
-        <!-- Section 1: Official Text & Explanation -->
         <section id="officialText" class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-            <div class="lg:col-span-7 bg-white dark:bg-brand-900 border border-slate-200 dark:border-brand-800 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col justify-between">
+            <div class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm flex flex-col justify-between space-y-6">
                 <div>
                     <div class="flex items-center space-x-3 mb-6">
-                        <div class="w-10 h-10 rounded-xl bg-brand-100 dark:bg-brand-800 text-brand-600 dark:text-brand-300 flex items-center justify-center">
+                        <div class="w-10 h-10 rounded-xl bg-brand-100 dark:bg-brand-900/60 text-brand-600 dark:text-brand-400 flex items-center justify-center">
                             <i class="fa-solid fa-quote-left text-lg"></i>
                         </div>
-                        <h2 class="text-xl sm:text-2xl font-bold">The Official Text</h2>
+                        <h2 class="text-xl sm:text-2xl font-bold">The Official Citations</h2>
                     </div>
-                    <blockquote class="border-l-4 border-brand-500 pl-4 py-2 text-slate-600 dark:text-slate-300 italic text-base sm:text-lg leading-relaxed mb-6">
-                        "On behalf of A.A. as a whole, our General Service Conference has the principal responsibility for the maintenance of our world services, and it traditionally has the final decision respecting large matters of general policy and finance. But the Conference also recognizes that the chief initiative and the active responsibility in most of these matters should be exercised primarily by the Trustee members of the Conference when they act among themselves as the General Service Board of Alcoholics Anonymous."
-                    </blockquote>
-                    <p class="text-sm text-slate-500 dark:text-slate-400">
-                        — <em>The Twelve Concepts for World Service</em>, authored by Bill W. in 1962.
-                    </p>
+
+                    <div class="space-y-6">
+                        <div class="p-4 bg-slate-50 dark:bg-slate-950/40 border-l-4 border-brand-600 rounded-r-xl">
+                            <span class="text-xs font-bold uppercase text-brand-600 dark:text-brand-400 tracking-wider block">Service Manual Pg. C19</span>
+                            <blockquote class="text-slate-600 dark:text-slate-300 italic text-sm sm:text-base leading-relaxed mt-2">
+                                "On behalf of A.A. as a whole, our General Service Conference has the principal responsibility for the maintenance of our world services, and it traditionally has the final decision respecting large matters of general policy and finance. But the Conference also recognizes that the chief initiative and the active responsibility in most of these matters should be exercised primarily by the Trustee members of the Conference when they act among themselves as the General Service Board of Alcoholics Anonymous."
+                            </blockquote>
+                        </div>
+
+                        <div class="p-4 bg-slate-50 dark:bg-slate-950/40 border-l-4 border-emerald-500 rounded-r-xl">
+                            <span class="text-xs font-bold uppercase text-emerald-600 dark:text-emerald-400 tracking-wider block">The 12 Concepts Illustrated</span>
+                            <blockquote class="text-slate-600 dark:text-slate-300 italic text-sm sm:text-base leading-relaxed mt-2">
+                                "We have seen that the 'final responsibility and ultimate authority' for A.A.'s service activities rest with the A.A. groups (Concept I), but to carry out this responsibility they must delegate to the Conference (Concept II). The Conference, in turn, must delegate administrative authority to the General Service Board of Trustees. Again, it is helpful if you are familiar with both the Conference Charter and the Bylaws of the General Service Board to understand this relationship and the freedom of action that the trustees must have."
+                            </blockquote>
+                        </div>
+                    </div>
                 </div>
-                <div class="mt-8 border-t border-slate-100 dark:border-brand-800 pt-6">
-                    <h3 class="font-bold mb-3 text-slate-800 dark:text-slate-200 flex items-center space-x-2">
-                        <i class="fa-solid fa-lightbulb text-brand-500"></i>
-                        <span>The Ultimate Breakdown</span>
-                    </h3>
-                    <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                        Concept VI establishes the vital operational boundary in AA. While the Conference acts as the "stockholders" representing the groups, the Trustees of the General Service Board act as the "directors," holding the real capability and legal duty to execute day-to-day decisions.
+
+                <div class="border-t border-slate-100 dark:border-slate-800 pt-6">
+                    <span class="text-xs font-extrabold uppercase text-slate-400 tracking-widest block mb-2">Key takeaway</span>
+                    <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                        Concept VI establishes that just as groups delegate active authority to the Conference, the Conference delegates liberal administrative authority to the General Service Board, allowing the Trustees to act freely and decisively when the annual Conference is not in session.
                     </p>
                 </div>
             </div>
 
-            <!-- Historical context & Scale problem -->
-            <div class="lg:col-span-5 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-brand-900 dark:to-slate-900 border border-slate-200 dark:border-brand-800 rounded-2xl p-6 sm:p-8 flex flex-col justify-between">
+            <div class="lg:col-span-5 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-950 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col justify-between space-y-6">
                 <div class="space-y-6">
                     <h2 class="text-xl sm:text-2xl font-bold flex items-center space-x-3">
-                        <i class="fa-solid fa-scale-balanced text-brand-600 dark:text-brand-400"></i>
-                        <span>Why This is Necessary</span>
+                        <i class="fa-solid fa-users-gear text-brand-600 dark:text-brand-400"></i>
+                        <span>The Trustees & Core Papers</span>
                     </h2>
                     
-                    <div class="space-y-4">
-                        <div class="flex items-start space-x-3">
-                            <div class="text-brand-600 dark:text-brand-400 mt-1">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm">The Problem of Scale</h3>
-                                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                                    The General Service Conference consists of over 90 delegates who meet only once a year for a single week. It is physically impossible for them to sign office leases, negotiate distribution agreements, or run day-to-day staff operations.
-                                </p>
-                            </div>
-                        </div>
-
-                        <div class="flex items-start space-x-3">
-                            <div class="text-brand-600 dark:text-brand-400 mt-1">
-                                <i class="fa-solid fa-gears"></i>
-                            </div>
-                            <div>
-                                <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm">The Operational Solution</h3>
-                                <p class="text-xs text-slate-600 dark:text-slate-400 mt-1 leading-relaxed">
-                                    By delegating direct execution and legal accountability to the General Service Board, the fellowship is preserved, legal liabilities are isolated, and the routine tasks are handled safely 365 days a year.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white/60 dark:bg-brand-950/40 p-4 rounded-xl border border-slate-300/50 dark:border-brand-800/50 mt-6">
-                    <span class="text-xs font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-widest block mb-1">Key Dynamic</span>
-                    <p class="text-xs italic text-slate-600 dark:text-slate-300">
-                        "If the Conference micromanages the Board, the system freezes. If the Board ignores the Conference, they betray the groups. Balance is everything."
+                    <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                        The General Service Board (G.S.B.) coordinates world services using a unique blend of professional and recovering leadership.
                     </p>
+
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3 bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                            <div class="text-brand-600 dark:text-brand-400 mt-1">
+                                <i class="fa-solid fa-user-doctor text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm">Class A Trustees (Nonalcoholic)</h3>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                                    Nonalcoholic professionals (law, finance, public relations, medicine). They carry no stigma, face no anonymity barriers at the public level, and supply objective leadership.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start space-x-3 bg-white dark:bg-slate-900 p-3.5 rounded-xl border border-slate-200 dark:border-slate-800">
+                            <div class="text-emerald-600 dark:text-emerald-400 mt-1">
+                                <i class="fa-solid fa-user-large text-lg"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-200 text-sm">Class B Trustees (Alcoholic)</h3>
+                                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">
+                                    Alcoholic members with deep experience in local recovery and service structure. They carry the spiritual heart of the AA program into board deliberations.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-brand-50 dark:bg-brand-950/40 p-3.5 rounded-xl border border-brand-200/50 dark:border-brand-900/60 text-xs text-brand-950 dark:text-brand-200 space-y-2">
+                    <p class="font-semibold flex items-center space-x-1.5">
+                        <i class="fa-solid fa-file-pdf"></i>
+                        <span>Official Illustrated Pamphlet:</span>
+                    </p>
+                    <p class="text-[11px] leading-relaxed opacity-90">
+                        Refer verbatim to the official Conference-approved literature pamphlet <strong class="text-brand-700 dark:text-brand-300">p-8_0223.pdf</strong>.
+                    </p>
+                    <a href="https://aaws.widen.net/content/f7g3peqmwu/pdf/p-8_twelve_concepts_illustrated_online.pdf" target="_blank" class="inline-flex items-center space-x-1.5 text-brand-600 hover:text-brand-700 dark:text-brand-400 dark:hover:text-brand-300 text-[11px] font-extrabold underline transition">
+                        <span>Access p-8_0223.pdf Online</span>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[9px]"></i>
+                    </a>
                 </div>
             </div>
         </section>
 
-        <!-- Section 2: Key Terms Demystified -->
-        <section id="keyTerms" class="space-y-6">
-            <div class="text-center max-w-2xl mx-auto space-y-2">
-                <h2 class="text-2xl sm:text-3xl font-black">Demystifying the Key Terms</h2>
-                <p class="text-slate-600 dark:text-slate-400 text-sm">Translating corporate-sounding legal terms into clear and operational plain English.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Term 1: Chief Initiative -->
-                <div class="bg-white dark:bg-brand-900 border border-slate-200 dark:border-brand-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden transition-all duration-300 hover:shadow-md group">
-                    <div class="absolute top-0 left-0 w-2 h-full bg-brand-500"></div>
-                    <div class="flex items-start justify-between">
-                        <div class="space-y-4">
-                            <span class="inline-block px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-800 text-brand-700 dark:text-brand-300 text-xs font-bold uppercase tracking-wider">
-                                Corporate Term 1
-                            </span>
-                            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
-                                Chief Initiative
-                            </h3>
-                            <div class="space-y-3 pt-2">
-                                <div class="bg-slate-50 dark:bg-brand-950 p-4 rounded-xl border border-slate-100 dark:border-brand-800/60">
-                                    <span class="text-xs font-bold uppercase text-slate-400 block mb-1">In Plain English</span>
-                                    <p class="text-base text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">
-                                        "The duty to step forward, speak up, and propose solutions first."
-                                    </p>
-                                </div>
-                                <div class="text-sm text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
-                                    <p>
-                                        Trustees shouldn't sit idly waiting for the annual General Service Conference to dictate instructions. 
-                                    </p>
-                                    <p class="font-medium text-slate-800 dark:text-slate-200">How they practice this:</p>
-                                    <ul class="list-disc list-inside space-y-1 text-xs">
-                                        <li>Identifying drops in contributions and drafting structural budgets.</li>
-                                        <li>Spotting service gaps (e.g., modernizing digital literature delivery).</li>
-                                        <li>Drafting operational proposals to submit back to the Conference for approval.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="text-5xl opacity-10 dark:opacity-5 text-brand-900 dark:text-white font-black">01</span>
+        <section class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-6">
+            <div class="max-w-4xl mx-auto space-y-6">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-100 dark:bg-indigo-950/60 text-indigo-600 dark:text-indigo-400 flex items-center justify-center">
+                        <i class="fa-solid fa-feather text-lg"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-xl sm:text-2xl font-bold">Historical Context: Bill W.'s Original 1962 Writings</h2>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 uppercase tracking-wider font-semibold">Reprinted from the April 1972 AA Grapevine Essay</p>
                     </div>
                 </div>
 
-                <!-- Term 2: Active Responsibility -->
-                <div class="bg-white dark:bg-brand-900 border border-slate-200 dark:border-brand-800 rounded-2xl p-6 sm:p-8 relative overflow-hidden transition-all duration-300 hover:shadow-md group">
-                    <div class="absolute top-0 left-0 w-2 h-full bg-indigo-500"></div>
-                    <div class="flex items-start justify-between">
-                        <div class="space-y-4">
-                            <span class="inline-block px-3 py-1 rounded-full bg-indigo-50 dark:bg-brand-800 text-indigo-700 dark:text-indigo-300 text-xs font-bold uppercase tracking-wider">
-                                Corporate Term 2
-                            </span>
-                            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
-                                Active Responsibility
-                            </h3>
-                            <div class="space-y-3 pt-2">
-                                <div class="bg-slate-50 dark:bg-brand-950 p-4 rounded-xl border border-slate-100 dark:border-brand-800/60">
-                                    <span class="text-xs font-bold uppercase text-slate-400 block mb-1">In Plain English</span>
-                                    <p class="text-base text-slate-800 dark:text-slate-200 font-semibold leading-relaxed">
-                                        "The duty to execute the actual work and be directly accountable for its outcome."
-                                    </p>
-                                </div>
-                                <div class="text-sm text-slate-600 dark:text-slate-300 space-y-2 leading-relaxed">
-                                    <p>
-                                        Trustees hold the executive, fiscal, and legal accountability. They cannot deflect real-world failures back to the groups.
-                                    </p>
-                                    <p class="font-medium text-slate-800 dark:text-slate-200">How they practice this:</p>
-                                    <ul class="list-disc list-inside space-y-1 text-xs">
-                                        <li>Signing legally-binding corporate leases for global offices.</li>
-                                        <li>Overseeing AA publications and employing office staff.</li>
-                                        <li>Taking the legal and moral blame if a project goes over budget or hits a crisis.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <span class="text-5xl opacity-10 dark:opacity-5 text-indigo-900 dark:text-white font-black">02</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Policy vs. Execution Card -->
-            <div class="bg-slate-100 dark:bg-brand-900 rounded-2xl p-6 border border-slate-200 dark:border-brand-800">
-                <h4 class="font-bold text-lg mb-4 text-center">Policy vs. Execution: The Essential Boundary</h4>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white dark:bg-brand-950 p-4 rounded-xl border border-slate-200 dark:border-brand-800">
-                        <h5 class="font-semibold text-brand-600 dark:text-brand-400 text-sm mb-2 flex items-center space-x-2">
-                            <i class="fa-solid fa-compass"></i>
-                            <span>General Policy (The Conference's Job)</span>
-                        </h5>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Decides <strong>what</strong> AA as a whole stands for. Establishes the spiritual direction, votes on broad budgets, and approves major changes to foundational literature.
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                    <div class="space-y-4">
+                        <h3 class="font-black text-slate-900 dark:text-white text-base">The "Point of Safe Return" Principle</h3>
+                        <p>
+                            Bill W. noted that our world service relationships are based on a vast amount of hard-won experience. He explicitly stated that we must put these relationships into writing so that we are not tempted into hasty, unwise amendments due to a temporary lack of understanding. 
+                        </p>
+                        <p class="border-l-2 border-indigo-500 pl-3 italic text-xs text-slate-500 dark:text-slate-400">
+                            "Even if we do some day make changes that happen to work out poorly, then the experience of the past will not have been lost. These articles can then be relied upon as a point of safe return."
+                        </p>
+                        <h3 class="font-black text-slate-900 dark:text-white text-base pt-2">No "Freezing" Into Rigid Patterns</h3>
+                        <p>
+                            Bill recognized that future generations would uncover flaws or confront new conditions requiring major refinements. Thus, he insisted the Conference Charter remain readily amendable, warning against freezing our administrative design into a rigid, unyielding mold.
                         </p>
                     </div>
-                    <div class="bg-white dark:bg-brand-950 p-4 rounded-xl border border-slate-200 dark:border-brand-800">
-                        <h5 class="font-semibold text-indigo-600 dark:text-indigo-400 text-sm mb-2 flex items-center space-x-2">
-                            <i class="fa-solid fa-route"></i>
-                            <span>Executive Action (The Trustees' Job)</span>
-                        </h5>
-                        <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                            Decides <strong>how</strong> to execute those policies safely, within budget, and under compliance. Handles the daily, gritty administration needed to keep AA running globally.
+                    
+                    <div class="space-y-4">
+                        <h3 class="font-black text-slate-900 dark:text-white text-base">The 1960 Historical Financial Scale</h3>
+                        <p>
+                            To understand why Bill insisted the G.S.B. function like a corporate board, consider the historical size of the operations. In 1960, the combined gross receipts of <strong>A.A. World Services, Inc.</strong> and the <strong>A.A. Grapevine, Inc.</strong> were already approaching <strong>$500,000 annually</strong> (nearly half a million dollars).
                         </p>
+                        <p>
+                            The G.S.B. was also responsible for investing and protecting the substantial **Reserve Fund**. Managing such an operation required highly specialized skills:
+                        </p>
+                        <ul class="space-y-2 text-xs bg-slate-50 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-100 dark:border-slate-800">
+                            <li class="flex items-center space-x-2">
+                                <i class="fa-solid fa-circle-check text-brand-600"></i>
+                                <span>Specific professional & legal skills.</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <i class="fa-solid fa-circle-check text-brand-600"></i>
+                                <span>Advanced investment and financial planning.</span>
+                            </li>
+                            <li class="flex items-center space-x-2">
+                                <i class="fa-solid fa-circle-check text-brand-600"></i>
+                                <span>Coordination of 5 (now 7) G.S.B. standing committees.</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 3: The Inverted Pyramid Visualization -->
-        <section id="structure" class="bg-white dark:bg-brand-900 border border-slate-200 dark:border-brand-800 rounded-2xl p-6 sm:p-8 shadow-sm">
-            <div class="max-w-3xl mx-auto space-y-8">
+        <section id="structure" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm">
+            <div class="max-w-4xl mx-auto space-y-8">
                 <div class="text-center space-y-2">
                     <h2 class="text-2xl sm:text-3xl font-black">The Inverted Pyramid of AA</h2>
-                    <p class="text-slate-600 dark:text-slate-400 text-sm">
-                        Power in AA flows from the bottom up. At the top sit the groups, holding absolute authority; at the bottom, the GSB executes operations on their behalf.
+                    <p class="text-slate-500 dark:text-slate-400 text-sm max-w-2xl mx-auto">
+                        We have resolved text visibility bugs by utilizing responsive HTML blocks within our interactive pyramid layout. Click or hover on a level to explore the delegation channel.
                     </p>
                 </div>
 
-                <!-- SVG Diagram representing Inverted Pyramid structure -->
-                <div class="w-full flex justify-center py-4 bg-slate-50 dark:bg-brand-950 rounded-2xl p-4 sm:p-8 border border-slate-100 dark:border-brand-800/80">
-                    <svg viewBox="0 0 800 500" class="w-full max-w-2xl h-auto" xmlns="http://www.w3.org/2000/svg">
-                        <!-- Group Level -->
-                        <polygon points="50,40 750,40 680,140 120,140" fill="#4f46e5" opacity="0.9" rx="10"/>
-                        <text x="400" y="85" font-family="Inter, sans-serif" font-weight="bold" font-size="18" fill="#ffffff" text-anchor="middle">YOUR HOME GROUP</text>
-                        <text x="400" y="110" font-family="Inter, sans-serif" font-size="12" fill="#e0e7ff" text-anchor="middle">The Ultimate Authority & Spiritual Voice (Contributions & GSRs)</text>
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <!-- SVG Pyramid Visual (Leverages HTML ForeignObject to completely fix text-clipping/overflow) -->
+                    <div class="lg:col-span-7 flex justify-center py-4 bg-slate-50 dark:bg-slate-950 rounded-2xl p-4 border border-slate-100 dark:border-slate-850">
+                        <svg viewBox="0 0 800 600" class="w-full max-w-xl h-auto" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Background Grid Elements -->
+                            <g stroke="#3b82f6" stroke-width="0.5" stroke-opacity="0.1" fill="none">
+                                <line x1="100" y1="0" x2="100" y2="600"/>
+                                <line x1="200" y1="0" x2="200" y2="600"/>
+                                <line x1="300" y1="0" x2="300" y2="600"/>
+                                <line x1="400" y1="0" x2="400" y2="600"/>
+                                <line x1="500" y1="0" x2="500" y2="600"/>
+                                <line x1="600" y1="0" x2="600" y2="600"/>
+                                <line x1="700" y1="0" x2="700" y2="600"/>
+                            </g>
 
-                        <!-- Connector Lines -->
-                        <line x1="400" y1="140" x2="400" y2="180" stroke="#818cf8" stroke-width="2" stroke-dasharray="4,4"/>
-                        <polygon points="395,180 405,180 400,185" fill="#818cf8"/>
+                            <!-- Level 1: THE GROUPS -->
+                            <g class="cursor-pointer" onclick="selectPyramidNode(1)">
+                                <polygon id="poly1" points="20,10 780,10 700,110 100,110" fill="#1e1b4b" stroke="#4f46e5" stroke-width="3" class="transition-all duration-300 hover:opacity-90"/>
+                                <foreignObject x="110" y="20" width="580" height="85">
+                                    <div class="flex flex-col justify-center items-center h-full text-white text-center p-2">
+                                        <p class="font-extrabold text-sm sm:text-base tracking-wide uppercase">1. THE HOME GROUPS</p>
+                                        <p class="text-[10px] sm:text-xs text-slate-300 font-semibold mt-0.5 leading-tight">Ultimate Spiritual Authority & Founders of AA World Services</p>
+                                    </div>
+                                </foreignObject>
+                            </g>
 
-                        <!-- District/Area Level -->
-                        <polygon points="140,185 660,185 600,270 200,270" fill="#4338ca" opacity="0.9"/>
-                        <text x="400" y="220" font-family="Inter, sans-serif" font-weight="bold" font-size="16" fill="#ffffff" text-anchor="middle">DISTRICT & AREA ASSEMBLY</text>
-                        <text x="400" y="242" font-family="Inter, sans-serif" font-size="11" fill="#e0e7ff" text-anchor="middle">GSRs gather locally and elect Area Delegates to attend the Conference</text>
+                            <!-- Connector Line 1 -->
+                            <line x1="400" y1="110" x2="400" y2="125" stroke="#4f46e5" stroke-width="4" stroke-dasharray="3,3"/>
+                            <polygon points="394,125 406,125 400,132" fill="#4f46e5"/>
 
-                        <!-- Connector Lines -->
-                        <line x1="400" y1="270" x2="400" y2="310" stroke="#818cf8" stroke-width="2" stroke-dasharray="4,4"/>
-                        <polygon points="395,310 405,310 400,315" fill="#818cf8"/>
+                            <!-- Level 2: DISTRICTS / AREAS -->
+                            <g class="cursor-pointer" onclick="selectPyramidNode(2)">
+                                <polygon id="poly2" points="110,125 690,125 620,225 180,225" fill="#312e81" stroke="#6366f1" stroke-width="3" class="transition-all duration-300 hover:opacity-90"/>
+                                <foreignObject x="190" y="135" width="420" height="80">
+                                    <div class="flex flex-col justify-center items-center h-full text-white text-center p-2">
+                                        <p class="font-extrabold text-sm sm:text-base tracking-wide uppercase">2. DISTRICTS & AREAS</p>
+                                        <p class="text-[10px] sm:text-xs text-slate-200 font-medium mt-0.5 leading-tight">GSRs Elect DCMs, Area Assemblies, and Delegates</p>
+                                    </div>
+                                </foreignObject>
+                            </g>
 
-                        <!-- Conference Level -->
-                        <polygon points="220,315 580,315 530,390 270,390" fill="#312e81" opacity="0.9"/>
-                        <text x="400" y="345" font-family="Inter, sans-serif" font-weight="bold" font-size="14" fill="#ffffff" text-anchor="middle">GENERAL SERVICE CONFERENCE</text>
-                        <text x="400" y="365" font-family="Inter, sans-serif" font-size="11" fill="#e0e7ff" text-anchor="middle">Delegates set broad global guidelines & make final big policy votes</text>
+                            <!-- Connector Line 2 -->
+                            <line x1="400" y1="225" x2="400" y2="240" stroke="#6366f1" stroke-width="4" stroke-dasharray="3,3"/>
+                            <polygon points="394,240 406,240 400,247" fill="#6366f1"/>
 
-                        <!-- Connector Lines -->
-                        <line x1="400" y1="390" x2="400" y2="425" stroke="#818cf8" stroke-width="2" stroke-dasharray="4,4"/>
-                        <polygon points="395,425 405,425 400,430" fill="#818cf8"/>
+                            <!-- Level 3: GENERAL SERVICE CONFERENCE -->
+                            <g class="cursor-pointer" onclick="selectPyramidNode(3)">
+                                <polygon id="poly3" points="190,240 610,240 550,340 250,340" fill="#4338ca" stroke="#818cf8" stroke-width="3" class="transition-all duration-300 hover:opacity-90"/>
+                                <foreignObject x="260" y="250" width="280" height="80">
+                                    <div class="flex flex-col justify-center items-center h-full text-white text-center p-2">
+                                        <p class="font-bold text-xs sm:text-sm tracking-wide uppercase">3. GENERAL SERVICE CONFERENCE</p>
+                                        <p class="text-[9px] sm:text-[11px] text-slate-200 font-medium mt-0.5 leading-tight">Spiritual Voice and Policy-Maker for AA as a Whole</p>
+                                    </div>
+                                </foreignObject>
+                            </g>
 
-                        <!-- GSB Level -->
-                        <polygon points="285,430 515,430 460,490 340,490" fill="#1e1b4b" opacity="1"/>
-                        <text x="400" y="455" font-family="Inter, sans-serif" font-weight="bold" font-size="12" fill="#ffffff" text-anchor="middle">GENERAL SERVICE BOARD (TRUSTEES)</text>
-                        <text x="400" y="475" font-family="Inter, sans-serif" font-size="9" fill="#e0e7ff" text-anchor="middle">Day-to-day legal, operational, and financial execution</text>
-                    </svg>
+                            <!-- Connector Line 3 -->
+                            <line x1="400" y1="340" x2="400" y2="355" stroke="#818cf8" stroke-width="4" stroke-dasharray="3,3"/>
+                            <polygon points="394,355 406,355 400,362" fill="#818cf8"/>
+
+                            <!-- Level 4: GENERAL SERVICE BOARD (TRUSTEES) -->
+                            <g class="cursor-pointer" onclick="selectPyramidNode(4)">
+                                <polygon id="poly4" points="250,355 550,355 500,455 300,455" fill="#4f46e5" stroke="#a5b4fc" stroke-width="3" class="transition-all duration-300 hover:opacity-90"/>
+                                <foreignObject x="305" y="365" width="190" height="80">
+                                    <div class="flex flex-col justify-center items-center h-full text-white text-center p-2">
+                                        <p class="font-bold text-xs sm:text-xs tracking-wide uppercase">4. SERVICE BOARD (TRUSTEES)</p>
+                                        <p class="text-[9px] sm:text-[10px] text-slate-100 font-medium mt-0.5 leading-tight">Legal, Fiscal, & Operational Caretakers</p>
+                                    </div>
+                                </foreignObject>
+                            </g>
+
+                            <!-- Connector Line 4 -->
+                            <line x1="400" y1="455" x2="400" y2="470" stroke="#a5b4fc" stroke-width="3" stroke-dasharray="2,2"/>
+                            <polygon points="394,470 406,470 400,477" fill="#a5b4fc"/>
+
+                            <!-- Level 5: SUBSIDIARIES (AAWS & GRAPEVINE) -->
+                            <g class="cursor-pointer" onclick="selectPyramidNode(5)">
+                                <polygon id="poly5" points="310,470 490,470 450,580 350,580" fill="#105eff" stroke="#ffffff" stroke-width="2" class="transition-all duration-300 hover:opacity-90"/>
+                                <foreignObject x="345" y="480" width="110" height="90">
+                                    <div class="flex flex-col justify-center items-center h-full text-white text-center p-2">
+                                        <p class="font-black text-[10px] sm:text-xs tracking-wide uppercase">5. OPERATIONS</p>
+                                        <p class="text-[8px] sm:text-[9px] text-brand-100 font-medium mt-0.5 leading-tight">AAWS, GSO Publishing & AA Grapevine, Inc.</p>
+                                    </div>
+                                </foreignObject>
+                            </g>
+                        </svg>
+                    </div>
+
+                    <!-- Dynamic Information Panel for Selected Level -->
+                    <div class="lg:col-span-5 flex flex-col justify-between min-h-[380px] bg-slate-50 dark:bg-slate-900/40 p-6 rounded-2xl border border-slate-200 dark:border-slate-800">
+                        <div id="pyramid-content" class="space-y-4">
+                            <!-- Injected by JavaScript -->
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
 
-        <!-- Section 4: Home Group Analogy Tool -->
-        <section id="analogy" class="bg-gradient-to-br from-indigo-500 via-brand-600 to-brand-800 text-white rounded-3xl p-6 sm:p-10 shadow-xl overflow-hidden relative">
-            <div class="absolute inset-0 opacity-5 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:24px_24px]"></div>
+        <section id="corporate-form" class="bg-gradient-to-br from-indigo-950 via-slate-900 to-brand-950 text-white rounded-3xl p-6 sm:p-10 shadow-xl overflow-hidden relative">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
+            
+            <div class="relative z-10 space-y-8">
+                <div class="text-center max-w-3xl mx-auto space-y-2">
+                    <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-brand-500/20 text-brand-300 text-xs font-bold uppercase tracking-wider border border-brand-500/30">
+                        <i class="fa-solid fa-industry"></i>
+                        <span>The Ultimate Analogy</span>
+                    </span>
+                    <h2 class="text-3xl sm:text-4xl font-black tracking-tight">The Corporate Model vs. Institutions</h2>
+                    <p class="text-slate-300 text-sm max-w-xl mx-auto">
+                        Bill W. deliberately chose the corporate vehicle instead of the governmental or institutional structure because of its superior agility.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-brand-500/20 text-brand-300 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-users"></i>
+                        </div>
+                        <h4 class="font-black text-slate-100">Stockholders</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            The collective **A.A. Groups** act as the ultimate owners and stockholders of the entire world service structure, representing ultimate voice.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-indigo-500/20 text-indigo-300 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-id-card-clip"></i>
+                        </div>
+                        <h4 class="font-black text-slate-100">Proxy Holders</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            The **Area Delegates** represent the groups as proxy-holders at the Annual Meeting (the General Service Conference), setting policy.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-briefcase"></i>
+                        </div>
+                        <h4 class="font-black text-slate-100">Holding Company</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            The **General Service Board** functions as a holding company, composed of trustees who have full legal power to manage funds.
+                        </p>
+                    </div>
+
+                    <div class="bg-white/5 border border-white/10 p-5 rounded-2xl space-y-3">
+                        <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-300 flex items-center justify-center text-xl">
+                            <i class="fa-solid fa-puzzle-piece"></i>
+                        </div>
+                        <h4 class="font-black text-slate-100">Active Subsidiaries</h4>
+                        <p class="text-xs text-slate-300 leading-relaxed">
+                            **A.A.W.S.** and **A.A. Grapevine** operate as active subsidiary corporations, processing publishing and coordination tasks independently.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="p-4 rounded-xl bg-white/5 border border-white/10 text-xs text-slate-300 max-w-4xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+                    <p class="leading-relaxed">
+                        <i class="fa-solid fa-triangle-exclamation text-amber-400 mr-2"></i>
+                        <strong>Why did we avoid the government model?</strong> Bill wrote that administrative freedom in a business structure outperforms top-heavy government bureaucracy. The GSB requires large executive powers to remain functional and fast-moving.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div class="p-6 sm:p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+                <span class="inline-block text-[10px] font-extrabold px-2 py-0.5 rounded bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 tracking-wider uppercase">Deep Dive Terminology</span>
+                <h3 class="text-2xl font-black text-slate-900 dark:text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-bolt text-brand-600"></i>
+                    <span>Chief Initiative</span>
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    <strong>Chief Initiative</strong> represents the proactive mandate of the GSB. Because the Conference meets only once per year, the Trustees are expected to seek out problems and plan business solutions without waiting for an annual directive.
+                </p>
+                <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl text-xs space-y-2 border border-slate-100 dark:border-slate-800">
+                    <p class="font-bold text-slate-700 dark:text-slate-300">How this works in world service:</p>
+                    <ul class="list-disc list-inside space-y-1 text-slate-500">
+                        <li>Tracking multi-million dollar cash flows to address shortfalls.</li>
+                        <li>Proposing technical and operational updates to the General Service Office.</li>
+                        <li>Researching literature distribution issues before delegates arrive.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="p-6 sm:p-8 bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 space-y-4">
+                <span class="inline-block text-[10px] font-extrabold px-2 py-0.5 rounded bg-indigo-100 dark:bg-indigo-950/60 text-indigo-700 dark:text-indigo-300 tracking-wider uppercase">Deep Dive Terminology</span>
+                <h3 class="text-2xl font-black text-slate-900 dark:text-white flex items-center space-x-2">
+                    <i class="fa-solid fa-shield-halved text-indigo-500"></i>
+                    <span>Active Responsibility</span>
+                </h3>
+                <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+                    <strong>Active Responsibility</strong> denotes executive execution and legal accountability. If a corporate or administrative action fails, the G.S.B. holds the primary liability, shielding the individual delegates.
+                </p>
+                <div class="bg-slate-50 dark:bg-slate-950 p-4 rounded-xl text-xs space-y-2 border border-slate-100 dark:border-slate-800">
+                    <p class="font-bold text-slate-700 dark:text-slate-300">The Trustees' functional liabilities:</p>
+                    <ul class="list-disc list-inside space-y-1 text-slate-500">
+                        <li>Signing office leases and legal publishing contracts.</li>
+                        <li>Managing GSO employees and administering payroll.</li>
+                        <li>Safeguarding our reserve funds and managing tax compliance.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="analogy" class="bg-gradient-to-br from-brand-700 via-brand-900 to-indigo-950 text-white rounded-3xl p-6 sm:p-10 shadow-xl overflow-hidden relative">
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:20px_20px]"></div>
             
             <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
                 <div class="lg:col-span-5 space-y-4">
-                    <span class="inline-flex items-center space-x-1 px-3 py-1 rounded-full bg-white/20 text-brand-100 text-xs font-semibold uppercase tracking-wider">
-                        <i class="fa-solid fa-users"></i>
-                        <span>Down to Earth Analogy</span>
+                    <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-white/10 border border-white/20 text-brand-200 text-xs font-bold uppercase tracking-wider">
+                        <i class="fa-solid fa-umbrella-beach"></i>
+                        <span>Home Group Analogy</span>
                     </span>
-                    <h2 class="text-3xl font-black tracking-tight">The Picnic Analogy</h2>
-                    <p class="text-indigo-100 text-sm leading-relaxed">
-                        To bring Concept VI down to earth, we can compare World Services to how your local home group organizes a simple summer picnic. Use the interactive step simulator to see how the duties map perfectly.
+                    <h2 class="text-3xl sm:text-4xl font-black tracking-tight leading-tight">The Summer Picnic Analogy</h2>
+                    <p class="text-slate-300 text-xs sm:text-sm leading-relaxed">
+                        To simplify corporate world structures, we look at how a single Home Group sets up a summer picnic. Use this simulator to map how high-level authority translates into boots-on-the-ground execution.
                     </p>
-                    <div class="hidden lg:block pt-6">
-                        <i class="fa-solid fa-arrow-right text-3xl animate-pulse text-indigo-300"></i>
-                    </div>
                 </div>
 
-                <!-- Interactive Simulator Component -->
-                <div class="lg:col-span-7 bg-white dark:bg-brand-900 text-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-2xl space-y-6">
-                    <!-- Tabs indicating steps -->
-                    <div class="flex border-b border-slate-200 dark:border-brand-800 text-xs sm:text-sm font-semibold overflow-x-auto pb-1 gap-2 custom-scroll">
-                        <button onclick="switchTab(0)" class="tab-btn px-4 py-2 text-brand-600 border-b-2 border-brand-600 dark:text-brand-400 dark:border-brand-400 font-bold whitespace-nowrap focus:outline-none">
-                            1. The Vote (Policy)
+                <!-- Analogy Interactive Terminal -->
+                <div class="lg:col-span-7 bg-white dark:bg-slate-900 text-slate-800 dark:text-slate-100 rounded-2xl p-6 shadow-2xl space-y-6">
+                    <div class="flex border-b border-slate-200 dark:border-slate-800 text-xs sm:text-sm font-bold overflow-x-auto pb-1 gap-2 custom-scroll">
+                        <button onclick="switchAnalogyTab(0)" class="analogy-tab-btn px-4 py-2 text-brand-600 border-b-2 border-brand-600 dark:text-brand-400 dark:border-brand-400 whitespace-nowrap focus:outline-none">
+                            1. Group Conscience (Policy)
                         </button>
-                        <button onclick="switchTab(1)" class="tab-btn px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 whitespace-nowrap focus:outline-none">
-                            2. Initiative (Planning)
+                        <button onclick="switchAnalogyTab(1)" class="analogy-tab-btn px-4 py-2 text-slate-400 hover:text-slate-600 dark:text-slate-500 whitespace-nowrap focus:outline-none">
+                            2. Committee Steps (Initiative)
                         </button>
-                        <button onclick="switchTab(2)" class="tab-btn px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 whitespace-nowrap focus:outline-none">
-                            3. Responsibility (Execution)
+                        <button onclick="switchAnalogyTab(2)" class="analogy-tab-btn px-4 py-2 text-slate-400 hover:text-slate-600 dark:text-slate-500 whitespace-nowrap focus:outline-none">
+                            3. Execution (Responsibility)
                         </button>
                     </div>
 
-                    <!-- Step Contents -->
-                    <div id="step-content" class="min-h-[160px] flex flex-col justify-between">
-                        <!-- Dynamic contents will be injected by JavaScript -->
+                    <div id="analogy-content" class="min-h-[160px] flex flex-col justify-between">
+                        <!-- Content Injected Dynamically -->
                     </div>
 
-                    <!-- Step Controls -->
-                    <div class="flex items-center justify-between border-t border-slate-100 dark:border-brand-800 pt-4 text-xs sm:text-sm">
-                        <button onclick="prevStep()" id="prevBtn" class="px-4 py-2 rounded-lg bg-slate-100 dark:bg-brand-800 hover:bg-slate-200 dark:hover:bg-brand-700 font-semibold transition flex items-center space-x-2">
+                    <div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-4 text-xs sm:text-sm">
+                        <button onclick="prevAnalogyStep()" id="prevAnalogyBtn" class="px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 transition font-bold flex items-center space-x-2">
                             <i class="fa-solid fa-arrow-left"></i>
-                            <span>Prev</span>
+                            <span>Back</span>
                         </button>
-                        <span id="stepCounter" class="text-slate-500 dark:text-slate-400 font-medium">Step 1 of 3</span>
-                        <button onclick="nextStep()" id="nextBtn" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white font-semibold transition flex items-center space-x-2">
-                            <span>Next</span>
+                        <span id="analogyCounter" class="text-slate-500 dark:text-slate-400 font-bold">Step 1 of 3</span>
+                        <button onclick="nextAnalogyStep()" id="nextAnalogyBtn" class="px-4 py-2 rounded-lg bg-brand-600 hover:bg-brand-700 text-white transition font-bold flex items-center space-x-2">
+                            <span>Next Step</span>
                             <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
@@ -399,136 +533,134 @@
             </div>
         </section>
 
-        <!-- Section 5: Group Health Self-Assessment -->
-        <section id="assessment" class="bg-white dark:bg-brand-900 border border-slate-200 dark:border-brand-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
-            <div class="text-center max-w-2xl mx-auto space-y-2">
-                <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 text-xs font-semibold uppercase tracking-wider border border-emerald-200 dark:border-emerald-800/40">
-                    <i class="fa-solid fa-circle-check"></i>
-                    <span>Group Health</span>
+        <section id="assessment" class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 shadow-sm space-y-8">
+            <div class="text-center max-w-3xl mx-auto space-y-2">
+                <span class="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase border border-emerald-200 dark:border-emerald-800/40">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Service Checklist Evaluation</span>
                 </span>
                 <h2 class="text-2xl sm:text-3xl font-black">Concept VI Self-Assessment</h2>
-                <p class="text-slate-600 dark:text-slate-400 text-sm">
-                    How well does your home group balance general group conscience with trusting delegation? Answer these questions to assess your local service alignment.
+                <p class="text-slate-500 dark:text-slate-400 text-sm">
+                    Answer these direct questions derived from the Twelve Concepts Checklist to assess your group’s operational alignment with prudent delegation.
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
-                <!-- Interactive Quiz Form -->
-                <div class="space-y-6">
-                    <form id="quizForm" class="space-y-6">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+                <!-- Interactive Checklist Form -->
+                <div class="lg:col-span-7 space-y-6">
+                    <form id="checklistQuiz" class="space-y-6">
                         <!-- Question 1 -->
-                        <div class="space-y-3">
+                        <div class="space-y-3 bg-slate-50 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-100 dark:border-slate-850">
                             <label class="font-bold text-sm text-slate-800 dark:text-slate-200 block">
-                                1. When your group appoints a picnic, party, or setup committee, what is your group's usual style?
+                                1. How familiar are you and your home group with how G.S.B. Class A and Class B trustees serve A.A.?
                             </label>
-                            <div class="space-y-2">
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q1" value="0" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">We vote on almost everything—like which brand of napkins or juice box flavors to buy.</span>
+                            <div class="space-y-2 pt-1">
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq1" value="0" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">We don't know the difference between Class A and B trustees.</span>
                                 </label>
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q1" value="1" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">We give them a budget and guidelines, then let them plan and buy supplies freely.</span>
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq1" value="1" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">We understand Class A are nonalcoholic and Class B are alcoholic, and appreciate their unique service roles.</span>
                                 </label>
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q1" value="2" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">We set no budgets or limits and only find out what they did after they run out of money.</span>
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq1" value="2" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">We know they exist but often debate or micro-examine their actions without trust.</span>
                                 </label>
                             </div>
                         </div>
 
                         <!-- Question 2 -->
-                        <div class="space-y-3">
+                        <div class="space-y-3 bg-slate-50 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-100 dark:border-slate-850">
                             <label class="font-bold text-sm text-slate-800 dark:text-slate-200 block">
-                                2. If an officer or committee makes a mistake (e.g., forgets to rent a park permit on time), how does the group business meeting handle it?
+                                2. Are you clear about the real-world application of the terms "Chief Initiative" and "Active Responsibility"?
                             </label>
-                            <div class="space-y-2">
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q2" value="0" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">We scold them in the meeting, micromanage their future tasks, or make them feel untrusted.</span>
+                            <div class="space-y-2 pt-1">
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq2" value="0" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">They sound like commercial, corporate terms that shouldn't apply to a spiritual society.</span>
                                 </label>
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q2" value="1" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">We acknowledge they had Active Responsibility, help them fix it, and trust them to continue.</span>
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq2" value="1" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">Yes. We understand Trustees have the duty to propose ideas (Initiative) and execute corporate actions (Responsibility).</span>
                                 </label>
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q2" value="2" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">No one notices, no one helps, and there is no accountability or report back at all.</span>
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq2" value="2" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">We want our trusted servants to carry out tasks, but only after voting on every detail.</span>
                                 </label>
                             </div>
                         </div>
 
                         <!-- Question 3 -->
-                        <div class="space-y-3">
+                        <div class="space-y-3 bg-slate-50 dark:bg-slate-950/40 p-4 rounded-xl border border-slate-100 dark:border-slate-850">
                             <label class="font-bold text-sm text-slate-800 dark:text-slate-200 block">
-                                3. How does your GSR share details about global AA issues during business meetings?
+                                3. Can your home group identify a direct operational link from its local service table to global world services?
                             </label>
-                            <div class="space-y-2">
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q3" value="0" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">We tell the GSR to vote "No" to everything or try to micromanage global AA's daily spending from our business table.</span>
+                            <div class="space-y-2 pt-1">
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq3" value="0" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">No, we feel completely separated from G.S.O. and the New York office.</span>
                                 </label>
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q3" value="1" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">We focus on voting for general policy guidelines, while recognizing the Board must work out local logistics.</span>
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq3" value="1" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">Yes. Through our GSR, District, Area Assembly, and regional delegate, our voice directly guides the Trustees.</span>
                                 </label>
-                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-brand-800 hover:bg-slate-50 dark:hover:bg-brand-950/60 transition cursor-pointer">
-                                    <input type="radio" name="q3" value="2" class="text-brand-600 focus:ring-brand-500">
-                                    <span class="text-xs text-slate-600 dark:text-slate-300">Our group does not elect a GSR and we completely disconnect from the broader AA service structure.</span>
+                                <label class="flex items-center space-x-3 p-3 rounded-lg border border-slate-200 dark:border-slate-800 hover:bg-white dark:hover:bg-slate-900 transition cursor-pointer">
+                                    <input type="radio" name="cq3" value="2" class="text-brand-600 focus:ring-brand-500">
+                                    <span class="text-xs text-slate-600 dark:text-slate-300">We have a GSR, but we rarely hear world service reports or discuss budget requests.</span>
                                 </label>
                             </div>
                         </div>
 
-                        <button type="button" onclick="calculateResult()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2">
+                        <button type="button" onclick="evaluateChecklistScore()" class="w-full bg-brand-600 hover:bg-brand-700 text-white font-extrabold py-3.5 px-4 rounded-xl shadow-md transition flex items-center justify-center space-x-2">
                             <i class="fa-solid fa-calculator"></i>
-                            <span>Calculate Results</span>
+                            <span>Analyze Group Alignment</span>
                         </button>
                     </form>
                 </div>
 
-                <!-- Results display card -->
-                <div class="bg-slate-50 dark:bg-brand-950 border border-slate-200 dark:border-brand-800 rounded-2xl p-6 sm:p-8 flex flex-col justify-between" id="quizResultPlaceholder">
-                    <div class="text-center py-12 space-y-4">
+                <div class="lg:col-span-5 bg-slate-50 dark:bg-slate-950/40 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 flex flex-col justify-between" id="quizStatusWrapper">
+                    <div class="text-center py-12 space-y-4 my-auto">
                         <div class="text-slate-300 dark:text-slate-700 text-6xl">
-                            <i class="fa-solid fa-clipboard-question"></i>
+                            <i class="fa-solid fa-clipboard-question animate-bounce"></i>
                         </div>
-                        <h3 class="font-bold text-lg text-slate-700 dark:text-slate-300">Awaiting Your Answers</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                            Fill out the three questions on the left and click "Calculate Results" to receive an analysis on your group's application of Concept VI.
+                        <h3 class="font-extrabold text-lg text-slate-700 dark:text-slate-300">Ready for Assessment</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+                            Answer the 3 checklist questions to the left, then click "Analyze Group Alignment" to calculate your group's alignment score.
                         </p>
                     </div>
                 </div>
 
-                <!-- Real Results Dynamic Card (Hidden by default) -->
-                <div class="bg-white dark:bg-brand-900 border border-slate-200 dark:border-brand-800 rounded-2xl p-6 sm:p-8 flex-col justify-between hidden" id="quizRealResult">
+                <!-- Results Output Block (Hidden Initially) -->
+                <div class="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 sm:p-8 flex-col justify-between hidden" id="quizActiveResults">
                     <div class="space-y-6">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-xl bg-brand-100 dark:bg-brand-800 text-brand-600 dark:text-brand-300 flex items-center justify-center font-bold text-lg" id="resultScore">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-14 h-14 rounded-2xl bg-brand-600 text-white flex items-center justify-center font-black text-xl shadow-md" id="resultPercentage">
                                 0%
                             </div>
                             <div>
-                                <h3 class="font-bold text-lg text-slate-900 dark:text-white" id="resultHeadline">Result Headline</h3>
-                                <p class="text-xs text-slate-500 dark:text-slate-400">Concept VI alignment rating</p>
+                                <h3 class="font-black text-lg text-slate-900 dark:text-white" id="resultHeadline">Calculating...</h3>
+                                <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Concept VI Alignment Rating</p>
                             </div>
                         </div>
 
-                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-brand-950 border border-slate-100 dark:border-brand-800">
-                            <h4 class="font-bold text-xs uppercase text-slate-400 mb-1">Our Recommendation</h4>
-                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" id="resultDesc">
-                                Explanation content will go here...
+                        <div class="p-4 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800/60">
+                            <h4 class="font-extrabold text-xs uppercase text-brand-600 dark:text-brand-400 mb-1">Our Recommendation</h4>
+                            <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed" id="resultAnalysisText">
+                                Detailed insights will appear here...
                             </p>
                         </div>
 
                         <div class="space-y-2">
-                            <h4 class="font-bold text-xs uppercase text-slate-400">The Spiritual Principle of Concept VI</h4>
-                            <p class="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
-                                <strong>Trust & Humility:</strong> We learn that holding authority means having the humility to delegate. Letting go of micromanagement and trusting our servants lets them serve with dignity and grace.
+                            <h4 class="font-extrabold text-xs uppercase text-slate-400">The Spiritual Essence of Concept VI</h4>
+                            <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed">
+                                <strong>Trust and Freedom:</strong> This concept warns against micromanagement. We select qualified trusted servants, equip them with adequate boundaries, and then trust them to serve with autonomy. If they fail, we replace them; but while they serve, we grant them structural support.
                             </p>
                         </div>
                     </div>
 
-                    <button type="button" onclick="resetQuiz()" class="mt-6 text-xs text-brand-600 dark:text-brand-400 font-bold hover:underline text-left block">
-                        <i class="fa-solid fa-rotate-left mr-1"></i> Reset Assessment
+                    <button type="button" onclick="reassessQuiz()" class="mt-6 text-xs text-brand-600 dark:text-brand-400 font-extrabold hover:underline text-left block">
+                        <i class="fa-solid fa-rotate-left mr-1"></i> Restart Checklist Evaluation
                     </button>
                 </div>
             </div>
@@ -539,209 +671,267 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
                 <div class="space-y-3">
-                    <div class="flex items-center space-x-2 text-white font-bold">
-                        <i class="fa-solid fa-circle-nodes text-brand-400"></i>
+                    <div class="flex items-center space-x-2 text-white font-black">
+                        <i class="fa-solid fa-sitemap text-brand-500"></i>
                         <span>Concept VI Guide</span>
                     </div>
                     <p class="text-xs text-slate-500 leading-relaxed">
-                        An interactive study resource exploring Alcoholics Anonymous Concept VI, supporting unity, healthy delegation, and group service.
+                        An educational interactive companion mapping out AA’s service structure. Based upon Conference-approved service literature.
                     </p>
                 </div>
                 <div></div>
                 <div class="space-y-3 text-left md:text-right">
                     <p class="text-xs text-slate-500">
-                        Based upon "The Twelve Concepts for World Service" by Bill W. 
+                        Designed to assist GSRs, DCMs, Area Delegates, and interested AA members.
                     </p>
-                    <p class="text-xs text-slate-600">
-                        Created to assist GSRs, Area Delegates, and Group Service committees.
+                    <p class="text-[11px] text-slate-600">
+                        All quotes and structural diagrams are derived from "The Twelve Concepts for World Service" by Bill W. and the official service handbook <strong class="text-slate-400">p-8_0223.pdf</strong>.
                     </p>
                 </div>
             </div>
-            <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-600">
+            <div class="border-t border-slate-800 pt-8 flex flex-col sm:flex-row items-center justify-between text-[11px] text-slate-600">
                 <p>&copy; 2026 Alcoholics Anonymous Concept Study Guide. Developed for global fellowship service.</p>
                 <div class="flex space-x-4 mt-4 sm:mt-0">
-                    <a href="#" class="hover:text-slate-400 transition">Concepts Study</a>
-                    <a href="#" class="hover:text-slate-400 transition">Service Manual</a>
-                    <a href="#" class="hover:text-slate-400 transition font-bold text-brand-400">Inverted Pyramid</a>
+                    <a href="#officialText" class="hover:text-slate-400 transition">Twelve Concepts</a>
+                    <a href="#structure" class="hover:text-slate-400 transition">Inverted Pyramid</a>
+                    <a href="#analogy" class="hover:text-slate-400 transition">Picnic Analogy</a>
                 </div>
             </div>
         </div>
     </footer>
 
     <script>
-        // Theme Toggle Logic
+        // Theme Toggle Functionality
         const themeToggle = document.getElementById('themeToggle');
         themeToggle.addEventListener('click', () => {
             document.documentElement.classList.toggle('dark');
         });
 
-        // Tab Picnic Analogy Simulator Logic
-        const stepData = [
+        // Interactive Redesigned Pyramid Node Information Engine
+        const pyramidData = {
+            1: {
+                title: "1. The Home Groups",
+                sub: "The Ultimate Authority & Financial Foundation",
+                desc: "As established in Concept I, final responsibility and ultimate authority for A.A. world services always reside in the collective conscience of our whole Fellowship. The groups fund services via Seventh Tradition contributions and elect GSRs to convey their spiritual voice.",
+                checklist: "Are your home group members aware that they sit at the top of the pyramid, holding the final authority over G.S.B. finance and policy?"
+            },
+            2: {
+                title: "2. Districts & Area Assemblies",
+                sub: "Local Coordination & Representative Election",
+                desc: "Because hundreds of thousands of autonomous groups cannot manage world service directly, they delegate their active guidance to local Districts and Area Assemblies. GSRs meet regularly to elect Area Delegates who carry the regional voice to the Conference.",
+                checklist: "Does your group regularly support your GSR to attend Area Assemblies, or is your table disconnected from the broader structure?"
+            },
+            3: {
+                title: "3. General Service Conference",
+                sub: "The Actual Voice and Effective Conscience of AA",
+                desc: "Meets every April for six days. Composed of 93 Area Delegates, G.S.B. Trustees, and staff members of G.S.O. and Grapevine. It acts as proxy-holders for the group conscience, formulating major policy outlines and approving large-scale budgets.",
+                checklist: "Does your group study the annual Conference final report to see how your delegate voted on key issues?"
+            },
+            4: {
+                title: "4. General Service Board (Trustees)",
+                sub: "Day-to-Day Legal and Operational Directors",
+                desc: "A structural 'holding company' composed of Class A (nonalcoholic professionals) and Class B (alcoholic servants) trustees. Granted operational freedom and legal responsibility by the Conference to act as the primary planners, caretakers of traditions, and managers of investments.",
+                checklist: "Do you understand why the GSB needs large powers to sign leases, negotiate publishing rights, and protect AA's reserve fund?"
+            },
+            5: {
+                title: "5. Active Operations (AAWS & Grapevine)",
+                sub: "Separately Incorporated Subsidiary Services",
+                desc: "AA World Services, Inc. (book publishing and General Service Office) and AA Grapevine, Inc. (monthly magazine publishing). Each corporation possesses its own bylaws, administrators, capital, and offices. Managed by the Trustees who act as sole stockholders.",
+                checklist: "Are you familiar with how daily business tasks are separated from policy-making to prevent organizational paralysis?"
+            }
+        };
+
+        function selectPyramidNode(level) {
+            // Update highlight visual styles on SVG
+            for (let i = 1; i <= 5; i++) {
+                const poly = document.getElementById(`poly${i}`);
+                if (i === level) {
+                    poly.setAttribute('stroke-width', '6');
+                    poly.setAttribute('stroke', '#105eff');
+                } else {
+                    poly.setAttribute('stroke-width', '3');
+                    poly.setAttribute('stroke', i === 1 ? '#4f46e5' : i === 2 ? '#6366f1' : i === 3 ? '#818cf8' : i === 4 ? '#a5b4fc' : '#ffffff');
+                }
+            }
+
+            // Update details sidebar panel
+            const data = pyramidData[level];
+            const contentPanel = document.getElementById('pyramid-content');
+            contentPanel.innerHTML = `
+                <div class="space-y-4 animate-fadeIn">
+                    <span class="inline-block text-[10px] font-extrabold px-2.5 py-1 rounded bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 tracking-wider uppercase">Level ${level} Analysis</span>
+                    <h3 class="text-xl font-black text-slate-900 dark:text-white">${data.title}</h3>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-wider">${data.sub}</p>
+                    <p class="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">${data.desc}</p>
+                    <div class="p-3 bg-brand-50/50 dark:bg-brand-950/20 border border-brand-100 dark:border-brand-900/40 rounded-lg">
+                        <p class="text-xs font-bold text-slate-700 dark:text-brand-200">Checklist Assessment:</p>
+                        <p class="text-[11px] text-slate-500 dark:text-slate-400 leading-relaxed mt-1 italic">"${data.checklist}"</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize Pyramid with Level 1 on load
+        window.onload = function() {
+            selectPyramidNode(1);
+            renderAnalogyStep(0);
+        };
+
+        const analogySteps = [
             {
-                title: "1. The Business Meeting Vote (Policy Setting)",
-                icon: "fa-solid fa-gavel text-brand-500",
-                desc: "Your Home Group votes: <em>'We want to host a summer picnic and we authorize a budget of $200.'</em> This is exactly like the General Service Conference setting a broad global guidelines. The group decides <strong>what</strong> to do.",
-                bullet1: "The group does not dictate which specific park path to walk, or vote on individual hot dog buns.",
-                bullet2: "Authority rests entirely with the group conscience."
+                title: "1. The Business Meeting Vote (General Policy)",
+                icon: "fa-solid fa-gavel text-brand-600 dark:text-brand-400",
+                desc: "Your Home Group meets and votes: <em>'We want to host a summer picnic at the county park and we authorize a budget of $200.'</em> This is exactly like the General Service Conference setting broad global policy guidelines.",
+                local: "The group does not vote on napkin brands, nor does it decide which grocery store to visit.",
+                service: "Authority rests entirely with the home group conscience."
             },
             {
-                title: "2. The Picnic Committee's Initiative (Proposals & Plans)",
+                title: "2. The Picnic Committee's Initiative (Chief Initiative)",
                 icon: "fa-solid fa-wand-magic-sparkles text-amber-500",
-                desc: "Your appointed picnic committee does not wait around for instructions. They step forward using <strong>Chief Initiative</strong> to find the best park location, check rental availability, and draft supply sheets.",
-                bullet1: "They map options out first and bring proposals back when necessary.",
-                bullet2: "Initiative belongs to those appointed to do the work, preventing meeting paralysis."
+                desc: "The appointed picnic committee steps up. They do not wait for the group to vote on every detail. They exercise <strong>Chief Initiative</strong> to scout park pavilions, check schedules, and make purchase lists.",
+                local: "The committee researches options first and brings solutions forward.",
+                service: "Delegated servants look ahead and act before being explicitly directed."
             },
             {
-                title: "3. The Execution & Accountability (Doing the Work)",
+                title: "3. Execution and Accountability (Active Responsibility)",
                 icon: "fa-solid fa-basket-shopping text-emerald-500",
-                desc: "The committee buys the groceries, secures the park permit, and brews the coffee on picnic morning. They hold <strong>Active Responsibility</strong>. If the keys are lost, they work to fix it themselves.",
-                bullet1: "If the picnic is successful, the group benefits.",
-                bullet2: "If the committee goes $100 over budget, they present a financial report and explain what happened."
+                desc: "On picnic morning, the committee rents the pavilion, buys groceries, and sets up coffee pots. They hold <strong>Active Responsibility</strong>. If an extension cord is missing, they buy one. If they go over budget, they present a report to explain why.",
+                local: "If the picnic succeeds, the fellowship benefits. If it fails, the committee takes responsibility.",
+                service: "The Board of Trustees acts as directors, managing corporate liabilities and accounting back to the groups."
             }
         ];
 
-        let currentTab = 0;
+        let currentAnalogyTab = 0;
 
-        function renderTab(index) {
-            const container = document.getElementById('step-content');
-            const data = stepData[index];
-            
+        function renderAnalogyStep(index) {
+            const container = document.getElementById('analogy-content');
+            const data = analogySteps[index];
+
             container.innerHTML = `
                 <div class="space-y-4">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-brand-800 flex items-center justify-center text-lg">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-lg">
                             <i class="${data.icon}"></i>
                         </div>
                         <h4 class="font-bold text-slate-800 dark:text-white text-base sm:text-lg">${data.title}</h4>
                     </div>
                     <p class="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed">${data.desc}</p>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                        <div class="bg-slate-50 dark:bg-brand-950 p-3 rounded-lg border border-slate-100 dark:border-brand-800 text-xs text-slate-600 dark:text-slate-400">
-                            <strong>Local Reality:</strong> ${data.bullet1}
+                        <div class="bg-slate-50 dark:bg-slate-950 p-3 rounded-lg border border-slate-100 dark:border-slate-800/60 text-[11px] text-slate-600 dark:text-slate-400">
+                            <strong>Local Reality:</strong> ${data.local}
                         </div>
-                        <div class="bg-slate-50 dark:bg-brand-950 p-3 rounded-lg border border-slate-100 dark:border-brand-800 text-xs text-slate-600 dark:text-slate-400">
-                            <strong>Service Parallel:</strong> ${data.bullet2}
+                        <div class="bg-slate-50 dark:bg-slate-950 p-3 rounded-lg border border-slate-100 dark:border-slate-800/60 text-[11px] text-slate-600 dark:text-slate-400">
+                            <strong>Service Parallel:</strong> ${data.service}
                         </div>
                     </div>
                 </div>
             `;
 
-            // Update Tab button active state
-            const tabBtns = document.querySelectorAll('.tab-btn');
-            tabBtns.forEach((btn, i) => {
+            // Adjust Tab button highlight styling
+            const tabs = document.querySelectorAll('.analogy-tab-btn');
+            tabs.forEach((tab, i) => {
                 if (i === index) {
-                    btn.className = "tab-btn px-4 py-2 text-brand-600 border-b-2 border-brand-600 dark:text-brand-400 dark:border-brand-400 font-bold whitespace-nowrap focus:outline-none";
+                    tab.className = "analogy-tab-btn px-4 py-2 text-brand-600 border-b-2 border-brand-600 dark:text-brand-400 dark:border-brand-400 font-bold whitespace-nowrap focus:outline-none";
                 } else {
-                    btn.className = "tab-btn px-4 py-2 text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 whitespace-nowrap focus:outline-none";
+                    tab.className = "analogy-tab-btn px-4 py-2 text-slate-400 hover:text-slate-600 dark:text-slate-500 whitespace-nowrap focus:outline-none";
                 }
             });
 
-            // Handle Back/Next states
-            document.getElementById('prevBtn').disabled = (index === 0);
-            document.getElementById('prevBtn').style.opacity = (index === 0) ? '0.5' : '1';
-            document.getElementById('nextBtn').disabled = (index === stepData.length - 1);
-            document.getElementById('nextBtn').style.opacity = (index === stepData.length - 1) ? '0.5' : '1';
-            
-            document.getElementById('stepCounter').innerText = `Step ${index + 1} of ${stepData.length}`;
+            // Adjust buttons status
+            document.getElementById('prevAnalogyBtn').disabled = (index === 0);
+            document.getElementById('prevAnalogyBtn').style.opacity = (index === 0) ? '0.4' : '1';
+            document.getElementById('nextAnalogyBtn').disabled = (index === analogySteps.length - 1);
+            document.getElementById('nextAnalogyBtn').style.opacity = (index === analogySteps.length - 1) ? '0.4' : '1';
+
+            document.getElementById('analogyCounter').innerText = `Step ${index + 1} of ${analogySteps.length}`;
         }
 
-        function switchTab(index) {
-            currentTab = index;
-            renderTab(currentTab);
+        function switchAnalogyTab(index) {
+            currentAnalogyTab = index;
+            renderAnalogyStep(index);
         }
 
-        function nextStep() {
-            if (currentTab < stepData.length - 1) {
-                currentTab++;
-                renderTab(currentTab);
+        function nextAnalogyStep() {
+            if (currentAnalogyTab < analogySteps.length - 1) {
+                currentAnalogyTab++;
+                renderAnalogyStep(currentAnalogyTab);
             }
         }
 
-        function prevStep() {
-            if (currentTab > 0) {
-                currentTab--;
-                renderTab(currentTab);
+        function prevAnalogyStep() {
+            if (currentAnalogyTab > 0) {
+                currentAnalogyTab--;
+                renderAnalogyStep(currentAnalogyTab);
             }
         }
 
-        // Initialize Tab
-        renderTab(0);
-
-        // Self-Assessment Calculator Logic
-        function calculateResult() {
-            const form = document.getElementById('quizForm');
-            const q1 = form.elements['q1'] ? form.elements['q1'].value : null;
-            const q2 = form.elements['q2'] ? form.elements['q2'].value : null;
-            const q3 = form.elements['q3'] ? form.elements['q3'].value : null;
+        function evaluateChecklistScore() {
+            const form = document.getElementById('checklistQuiz');
+            const q1 = form.elements['cq1'] ? form.elements['cq1'].value : null;
+            const q2 = form.elements['cq2'] ? form.elements['cq2'].value : null;
+            const q3 = form.elements['cq3'] ? form.elements['cq3'].value : null;
 
             if (q1 === null || q2 === null || q3 === null) {
-                // Show standard warning (Do not use system alert() as mandated)
-                const placeholder = document.getElementById('quizResultPlaceholder');
-                placeholder.innerHTML = `
+                const statusBlock = document.getElementById('quizStatusWrapper');
+                statusBlock.innerHTML = `
                     <div class="text-center py-12 space-y-4 text-rose-500">
                         <div class="text-6xl">
-                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            <i class="fa-solid fa-circle-exclamation animate-bounce"></i>
                         </div>
-                        <h3 class="font-bold text-lg">Incomplete Answers</h3>
-                        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                            Please select an option for all three questions before calculating your score.
+                        <h3 class="font-extrabold text-lg">Incomplete Checklist</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+                            Please pick an answer for each of the three checklist questions on the left to analyze alignment.
                         </p>
                     </div>
                 `;
                 return;
             }
 
-            // Calculation Logic
-            // Optimal answer = "1" (Score 10 each). Alternative answers either micromanaging ("0") or negligent/detached ("2").
-            let correctAnswers = 0;
-            if (q1 === "1") correctAnswers++;
-            if (q2 === "1") correctAnswers++;
-            if (q3 === "1") correctAnswers++;
+            let score = 0;
+            if (q1 === "1") score++;
+            if (q2 === "1") score++;
+            if (q3 === "1") score++;
 
-            const percentage = Math.round((correctAnswers / 3) * 100);
+            const pct = Math.round((score / 3) * 100);
+            let heading = "";
+            let recommendText = "";
 
-            let headline = "";
-            let description = "";
-
-            if (percentage === 100) {
-                headline = "Healthy Delegation Aligned!";
-                description = "Fantastic! Your group practices excellent balanced service structure. You delegate both 'Chief Initiative' and 'Active Responsibility' clearly, giving trust while expecting reasonable accountability. This is Bill W.'s vision for a harmonious service entity.";
-            } else if (percentage === 67) {
-                headline = "Moderately Aligned";
-                description = "Your group holds a good understanding of delegation, but some micromanagement or confusion might slip in. Focus on trusting committee members more, and avoid debating minor physical details (napkins, coffee brands) during group conscience meetings.";
+            if (pct === 100) {
+                heading = "Excellent Concept VI Alignment!";
+                recommendText = "Outstanding! Your group understands GSB delegation, the differences between Class A & B trustees, and the direct link connecting your coffee table to New York operations. You represent a strong, healthily aligned service group.";
+            } else if (pct === 67) {
+                heading = "Prudent Service Alignment";
+                recommendText = "Your group is generally aligned, but some service areas need minor refinement. Ensure your GSR is actively reporting back from Area Assemblies, and revisit the difference between Class A (nonalcoholic) and Class B (alcoholic) trustees.";
             } else {
-                headline = "Adjustment Recommended";
-                description = "Your group might be struggling with service structure. Either there is micromanagement (overstepping committee work) or complete disconnection (no active GSR or oversight reports). We recommend studying Concept VI together in your next business meeting to balance trust and operational accountability.";
+                heading = "Structure Evaluation Recommended";
+                recommendText = "Your group might be struggling with service delegation or feeling disconnected from world services. Consider scheduling a study night to review Concept VI, GSB trustee configurations, and the direct representative link.";
             }
 
-            // Transition UI displays
-            document.getElementById('quizResultPlaceholder').classList.add('hidden');
-            const realResult = document.getElementById('quizRealResult');
-            realResult.classList.remove('hidden');
-            realResult.classList.add('flex');
+            document.getElementById('quizStatusWrapper').classList.add('hidden');
+            const resultsCard = document.getElementById('quizActiveResults');
+            resultsCard.classList.remove('hidden');
+            resultsCard.classList.add('flex');
 
-            document.getElementById('resultScore').innerText = `${percentage}%`;
-            document.getElementById('resultHeadline').innerText = headline;
-            document.getElementById('resultDesc').innerHTML = description;
+            document.getElementById('resultPercentage').innerText = `${pct}%`;
+            document.getElementById('resultHeadline').innerText = heading;
+            document.getElementById('resultAnalysisText').innerHTML = recommendText;
         }
 
-        function resetQuiz() {
-            document.getElementById('quizForm').reset();
+        function reassessQuiz() {
+            document.getElementById('checklistQuiz').reset();
+            document.getElementById('quizActiveResults').classList.add('hidden');
+            document.getElementById('quizActiveResults').classList.remove('flex');
             
-            // Revert display cards
-            document.getElementById('quizRealResult').classList.add('hidden');
-            document.getElementById('quizRealResult').classList.remove('flex');
-            
-            const placeholder = document.getElementById('quizResultPlaceholder');
-            placeholder.classList.remove('hidden');
-            placeholder.innerHTML = `
-                <div class="text-center py-12 space-y-4">
+            const statusBlock = document.getElementById('quizStatusWrapper');
+            statusBlock.classList.remove('hidden');
+            statusBlock.innerHTML = `
+                <div class="text-center py-12 space-y-4 my-auto">
                     <div class="text-slate-300 dark:text-slate-700 text-6xl">
-                        <i class="fa-solid fa-clipboard-question"></i>
+                        <i class="fa-solid fa-clipboard-question animate-bounce"></i>
                     </div>
-                    <h3 class="font-bold text-lg text-slate-700 dark:text-slate-300">Awaiting Your Answers</h3>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto">
-                        Fill out the three questions on the left and click "Calculate Results" to receive an analysis on your group's application of Concept VI.
+                    <h3 class="font-extrabold text-lg text-slate-700 dark:text-slate-300">Ready for Assessment</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 max-w-sm mx-auto leading-relaxed">
+                        Answer the 3 checklist questions to the left, then click "Analyze Group Alignment" to calculate your group's alignment score.
                     </p>
                 </div>
             `;
