@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Don't Die Before Your Funeral - Interactive Recovery Guide</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Patrick+Hand&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Apply saved dark/theme BEFORE paint to avoid a flash -->
+  <script>
+    (function () {
+      try {
+        var d = localStorage.getItem('aa_dark');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (d === '1' || (d === null && prefersDark)) document.documentElement.classList.add('dark');
+      } catch (e) {}
+    })();
+  </script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            journal: ['"Patrick Hand"', '"Caveat"', 'cursive'],
+            serif: ['"Playfair Display"', 'serif'],
+          },
+          colors: {
+            journalPaper: '#faf6eb',
+            journalBlue: '#1e40af',
+            journalRed: '#b91c1c',
+            journalGreen: '#15803d',
+            journalPurple: '#6b21a8',
+            journalDark: '#262626',
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    .scroll-anchor { scroll-margin-top: 7rem; }
+
+    /* Ruled paper background lines for Journal Mode */
+    .ruled-paper {
+      background-color: #faf6eb;
+      background-image: linear-gradient(#e5e0d1 1px, transparent 1px);
+      background-size: 100% 2rem;
+      position: relative;
+    }
+    .ruled-paper::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 40px;
+      width: 2px;
+      height: 100%;
+      background-color: rgba(239, 68, 68, 0.4);
+    }
+    @media (max-width: 640px) {
+      .ruled-paper::before { left: 20px; }
+    }
+
+    /* ---- DARK MODE COVERAGE FOR THE TRANSCRIBED REFLECTION ----
+       Centralized, high-specificity overrides so the transcribed reflection
+       stays readable in dark mode without touching every element. */
+    .dark .ruled-paper {
+      background-color: #1c1917;
+      background-image: linear-gradient(#3f3a33 1px, transparent 1px);
+    }
+    .dark .ruled-paper::before { background-color: rgba(248, 113, 113, 0.28); }
+
+    .dark #reflection-content { color: #e7e5e4; }
+    .dark #reflection-content .text-stone-900,
+    .dark #reflection-content .text-stone-800,
+    .dark #reflection-content .text-stone-700,
+    .dark #reflection-content .text-stone-600 { color: #e7e5e4; }
+    .dark #reflection-content .text-stone-500 { color: #a8a29e; }
+    .dark #reflection-content .text-journalBlue { color: #93c5fd; }
+    .dark #reflection-content .text-journalRed { color: #fca5a5; }
+    .dark #reflection-content .text-journalGreen { color: #86efac; }
+    .dark #reflection-content .text-journalPurple { color: #d8b4fe; }
+    .dark #reflection-content .border-journalBlue { border-color: #3b82f6; }
+    .dark #reflection-content .border-journalRed { border-color: #ef4444; }
+    .dark #reflection-content .border-stone-300,
+    .dark #reflection-content .border-stone-400 { border-color: #57534e; }
+    .dark #reflection-content .bg-amber-100\/70 { background-color: rgba(120, 53, 15, 0.35); }
+    .dark #reflection-content .bg-rose-50\/40 { background-color: rgba(127, 29, 29, 0.28); }
+    .dark #reflection-content .bg-blue-50\/30 { background-color: rgba(30, 58, 138, 0.28); }
+    .dark #reflection-content .bg-emerald-50\/30 { background-color: rgba(6, 78, 59, 0.28); }
+    .dark #reflection-content .bg-purple-50\/30 { background-color: rgba(88, 28, 135, 0.28); }
+    .dark #reflection-content .bg-stone-100\/80 { background-color: rgba(41, 37, 36, 0.6); }
+    .dark #reflection-content .bg-stone-200\/50 { background-color: rgba(68, 64, 60, 0.5); }
+    .dark #reflection-content .bg-blue-50\/20 { background-color: rgba(30, 58, 138, 0.2); }
+    .dark #reflection-content .bg-blue-100\/80 { background-color: rgba(30, 58, 138, 0.42); }
+
+    .transition-all-300 { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+    ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 4px; }
+
+    #breath-circle { transition: transform 4s cubic-bezier(0.4,0,0.2,1), opacity 4s ease; }
+
+    /* Disclosure (deep dive) animation */
+    details.deep > summary { list-style: none; cursor: pointer; }
+    details.deep > summary::-webkit-details-marker { display: none; }
+    details.deep[open] > summary .chev { transform: rotate(180deg); }
+    .chev { transition: transform 0.25s ease; }
+
+    @media print {
+      header, main, footer, #read-progress, #to-top, #toast-wrap, #mobile-nav { display: none !important; }
+      #print-view { display: block !important; }
+    }
+  </style>
+</head>
+<body class="bg-stone-100 dark:bg-stone-950 text-stone-900 dark:text-stone-100 font-sans min-h-screen transition-colors duration-300 antialiased selection:bg-amber-200">
+
+  <!-- READING PROGRESS BAR -->
+  <div id="read-progress-track" class="fixed top-0 left-0 right-0 h-1 bg-transparent z-50 print:hidden">
+    <div id="read-progress" class="h-full w-0 bg-gradient-to-r from-rose-500 via-amber-500 to-emerald-500 transition-[width] duration-150"></div>
+  </div>
+
+  <!-- TOP HEADER / MODE SWITCHER NAV -->
+  <header class="bg-white/90 dark:bg-stone-950/90 backdrop-blur border-b border-stone-200 dark:border-stone-800 sticky top-0 z-40 px-4 py-3 transition-colors duration-300 print:hidden">
+    <div class="max-w-[1900px] mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div class="flex flex-wrap items-center gap-x-3 gap-y-1">
+        <a href="index.html" class="text-sm font-medium text-stone-500 dark:text-stone-400 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors whitespace-nowrap">&larr; Back to BigBook.Study</a>
+        <span class="text-rose-600 dark:text-rose-500 text-2xl">❤️</span>
+        <div>
+          <h1 class="font-extrabold text-sm tracking-widest text-stone-500 uppercase">Interactive Companion</h1>
+          <p class="font-serif italic text-xs text-stone-400">A.A. Spiritual Awakening Guide</p>
+        </div>
+      </div>
+
+      <div class="flex flex-wrap gap-2 items-center text-xs justify-center">
+        <button onclick="toggleDarkMode()" id="btn-dark-toggle" aria-pressed="false" class="px-3 py-2 rounded-lg bg-stone-100 dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-800 transition-all-300 flex items-center gap-1.5 font-semibold" title="Toggle Dark/Light theme">
+          🌓 <span>Light / Dark</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- TABLE OF CONTENTS / JUMP NAV -->
+    <nav class="max-w-[1900px] mx-auto mt-2 overflow-x-auto" aria-label="Section navigation">
+      <ul class="flex gap-1.5 text-[11px] font-semibold whitespace-nowrap py-1">
+        <li><button onclick="scrollToId('top')" class="px-2.5 py-1 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-amber-100 dark:hover:bg-amber-950/40 text-stone-600 dark:text-stone-300 transition-colors">Core Realization</button></li>
+        <li><button onclick="scrollToId('sec-rooms')" class="px-2.5 py-1 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-amber-100 dark:hover:bg-amber-950/40 text-stone-600 dark:text-stone-300 transition-colors">Three Rooms</button></li>
+        <li><button onclick="scrollToId('sec-toolkit')" class="px-2.5 py-1 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-amber-100 dark:hover:bg-amber-950/40 text-stone-600 dark:text-stone-300 transition-colors">The Toolkit</button></li>
+        <li><button onclick="scrollToId('sec-promises')" class="px-2.5 py-1 rounded-full bg-stone-100 dark:bg-stone-900 hover:bg-amber-100 dark:hover:bg-amber-950/40 text-stone-600 dark:text-stone-300 transition-colors">The Promise</button></li>
+        <li><button onclick="scrollToId('sec-assess')" class="px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950/40 hover:bg-indigo-200 dark:hover:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 transition-colors">Self-Assessment</button></li>
+        <li><button onclick="scrollToId('sec-workspace')" class="px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950/40 hover:bg-indigo-200 dark:hover:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 transition-colors">My Workspace</button></li>
+        <li><button onclick="scrollToId('sec-matrix')" class="px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950/40 hover:bg-indigo-200 dark:hover:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 transition-colors">Steps × Rooms</button></li>
+        <li><button onclick="scrollToId('sec-daily')" class="px-2.5 py-1 rounded-full bg-indigo-100 dark:bg-indigo-950/40 hover:bg-indigo-200 dark:hover:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 transition-colors">Daily Review</button></li>
+        <li><button onclick="scrollToId('sec-awakening')" class="px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/40 hover:bg-amber-200 dark:hover:bg-amber-900/40 text-amber-800 dark:text-amber-300 transition-colors">The Awakening</button></li>
+        <li><button onclick="scrollToId('sec-citations')" class="px-2.5 py-1 rounded-full bg-amber-100 dark:bg-amber-950/40 hover:bg-amber-200 dark:hover:bg-amber-900/40 text-amber-800 dark:text-amber-300 transition-colors">Citations</button></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- MAIN APP CONTAINER -->
+  <main id="top" class="max-w-[1900px] mx-auto px-4 sm:px-6 lg:px-10 py-8 md:py-12 scroll-anchor">
+
+    <!-- HERO QUOTE WRAPPER -->
+    <div class="text-center mb-10 max-w-2xl mx-auto px-4">
+      <div class="inline-block px-3 py-1 bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">
+        The Core Realization
+      </div>
+      <p class="text-stone-500 dark:text-stone-400 text-sm italic font-serif">
+        "The bottle was never the disease. It was the symptom of a soul falling asleep."
+      </p>
+    </div>
+
+    <!-- MAIN TWO-COLUMN RESPONSIVE LAYOUT -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+      <!-- LEFT: THE TRANSCRIBED REFLECTION (faithful transcription) -->
+      <section id="reflection-panel" class="lg:col-span-7 bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 overflow-hidden transition-all-300">
+        <div id="reflection-content" class="p-5 sm:p-8 md:p-10 ruled-paper text-journalDark font-journal text-lg tracking-wide leading-relaxed">
+          <div class="pl-5 sm:pl-8 relative">
+
+            <!-- MAIN HEADER -->
+            <div class="text-center mb-8 border-b-2 border-dashed border-stone-400 pb-6">
+              <h1 class="text-4xl sm:text-5xl md:text-6xl font-black uppercase text-stone-900 tracking-tight leading-none mb-4 transform -rotate-1 select-none">
+                Don't Die Before<br>Your Funeral
+              </h1>
+              <p class="text-2xl sm:text-3xl font-bold text-journalBlue mt-2 select-none">
+                “We were reborn.” <span class="text-stone-500 font-normal text-lg sm:text-xl block sm:inline">— Big Book, Page 63</span>
+              </p>
+            </div>
+
+            <!-- THREE WORDS SECTION -->
+            <div class="mb-8 space-y-2 text-xl sm:text-2xl">
+              <p class="font-bold uppercase tracking-widest text-stone-600">Three words. Easy to read past.</p>
+              <p class="text-stone-700">Not rehabilitated. <span class="underline font-bold decoration-journalRed decoration-2">Not</span> repaired. Not improved.</p>
+              <p class="text-3xl sm:text-4xl font-extrabold text-journalBlue uppercase tracking-wider inline-block border-b-4 border-journalBlue pb-1 rotate-1">
+                Reborn.
+              </p>
+            </div>
+
+            <!-- DRINKING AS A SOLUTION -->
+            <div class="mb-10 text-xl sm:text-2xl leading-snug">
+              <p class="mb-4">Because drinking was never the actual problem.</p>
+              <p class="bg-amber-100/70 p-3 rounded-lg border-l-4 border-amber-400 italic">
+                Alcohol was the solution we reached for once something had already started dying inside us.
+              </p>
+            </div>
+
+            <!-- PAGE 52 RED BOX -->
+            <div class="mb-10 border-2 border-journalRed rounded-xl p-4 sm:p-6 bg-rose-50/40 relative shadow-sm rotate-[-0.5deg]">
+              <div class="absolute -top-4 left-6 bg-journalRed text-white px-3 py-0.5 text-xs font-bold rounded uppercase tracking-wider shadow">Page 52</div>
+              <p class="text-journalRed font-bold text-lg sm:text-xl uppercase tracking-wider mb-2">Tells us what that looked like:</p>
+              <p class="text-lg sm:text-xl text-stone-800 leading-relaxed font-semibold uppercase">
+                "Trouble with personal relationships. Couldn't control our emotions. Prey to misery and depression. Couldn't make a living. A feeling of uselessness. Full of fear. Unhappy. Couldn't be of real help to anyone."
+              </p>
+            </div>
+
+            <!-- TRANSITION TEXT -->
+            <div class="mb-10 space-y-4 text-xl sm:text-2xl">
+              <p class="font-bold text-journalRed text-2xl sm:text-3xl transform -rotate-1">
+                That's not a drinking problem. That's a soul going to sleep.
+              </p>
+              <p class="text-stone-700">
+                And here's the part we miss — those bedevilments don't stay in one place. They show up exactly where <strong class="text-journalBlue underline">Page 19</strong> says we have to practice these principles:
+              </p>
+              <p class="text-2xl font-black uppercase text-center text-stone-900 bg-stone-200/50 p-2 rounded">
+                In our home, our occupation, our affairs.
+              </p>
+            </div>
+
+            <!-- THREE ROOMS GRID -->
+            <div id="sec-rooms" class="scroll-anchor grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-5 mb-10">
+
+              <div id="roomcard-home" role="button" tabindex="0" aria-label="Focus the Home room" onclick="focusRoom('home')" onkeydown="actKey(event)" class="border-2 border-journalBlue bg-blue-50/30 rounded-xl p-4 cursor-pointer hover:bg-blue-50/60 transition-all-300 relative group focus-visible:ring-4 focus-visible:ring-indigo-500 focus:outline-none">
+                <div class="absolute top-2 right-2 opacity-10 group-hover:opacity-30 transition-opacity">
+                  <svg class="w-12 h-12 text-journalBlue" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/></svg>
+                </div>
+                <div class="flex items-center gap-2 mb-3 border-b-2 border-journalBlue/20 pb-2">
+                  <span class="text-2xl text-journalBlue">🏠</span>
+                  <h3 class="text-lg sm:text-xl font-bold uppercase tracking-tight text-journalBlue">Home</h3>
+                </div>
+                <ul class="space-y-3 text-lg leading-snug text-stone-800">
+                  <li class="border-b border-dashed border-stone-300 pb-2">The patience we show strangers all day disappears at the kitchen table.</li>
+                  <li class="border-b border-dashed border-stone-300 pb-2">We control instead of connect.</li>
+                  <li class="font-bold text-journalBlue">We numb out instead of showing up.</li>
+                </ul>
+              </div>
+
+              <div id="roomcard-occupation" role="button" tabindex="0" aria-label="Focus the Occupation room" onclick="focusRoom('occupation')" onkeydown="actKey(event)" class="border-2 border-journalGreen bg-emerald-50/30 rounded-xl p-4 cursor-pointer hover:bg-emerald-50/60 transition-all-300 relative group focus-visible:ring-4 focus-visible:ring-indigo-500 focus:outline-none">
+                <div class="absolute top-2 right-2 opacity-10 group-hover:opacity-30 transition-opacity">
+                  <svg class="w-12 h-12 text-journalGreen" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
+                <div class="flex items-center gap-2 mb-3 border-b-2 border-journalGreen/20 pb-2">
+                  <span class="text-2xl text-journalGreen">💼</span>
+                  <h3 class="text-lg sm:text-xl font-bold uppercase tracking-tight text-journalGreen">Occupation</h3>
+                </div>
+                <ul class="space-y-3 text-lg leading-snug text-stone-800">
+                  <li class="border-b border-dashed border-stone-300 pb-2">Fear of being found out.</li>
+                  <li class="border-b border-dashed border-stone-300 pb-2">Resentment toward a boss that poisons every Monday.</li>
+                  <li class="font-bold text-journalGreen">Workaholism — just another anesthetic with a respectable name.</li>
+                </ul>
+              </div>
+
+              <div id="roomcard-affairs" role="button" tabindex="0" aria-label="Focus the Affairs room" onclick="focusRoom('affairs')" onkeydown="actKey(event)" class="border-2 border-journalPurple bg-purple-50/30 rounded-xl p-4 cursor-pointer hover:bg-purple-50/60 transition-all-300 relative group focus-visible:ring-4 focus-visible:ring-indigo-500 focus:outline-none">
+                <div class="absolute top-2 right-2 opacity-10 group-hover:opacity-30 transition-opacity">
+                  <svg class="w-12 h-12 text-journalPurple" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+                </div>
+                <div class="flex items-center gap-2 mb-3 border-b-2 border-journalPurple/20 pb-2">
+                  <span class="text-2xl text-journalPurple">📋</span>
+                  <h3 class="text-lg sm:text-xl font-bold uppercase tracking-tight text-journalPurple">Affairs</h3>
+                </div>
+                <ul class="space-y-3 text-lg leading-snug text-stone-800">
+                  <li class="border-b border-dashed border-stone-300 pb-2">Cutting corners because no one's watching.</li>
+                  <li class="border-b border-dashed border-stone-300 pb-2">Letting an obligation slide.</li>
+                  <li class="font-bold text-journalPurple">A half-truth because the whole truth costs something.</li>
+                </ul>
+              </div>
+
+            </div>
+
+            <!-- THE SAME TOOLKIT IN ALL THREE -->
+            <div id="sec-toolkit" class="scroll-anchor mb-10 bg-stone-100/80 p-5 rounded-xl border-l-4 border-stone-700">
+              <h4 class="text-2xl font-bold text-stone-900 uppercase tracking-wide mb-1">Same disease. Three different rooms.</h4>
+              <p class="text-xl font-bold text-stone-600 mb-4">The cure is the same toolkit in all three:</p>
+
+              <ul class="space-y-4 text-lg sm:text-xl text-stone-800">
+                <li role="button" tabindex="0" aria-label="Steps 4 and 5" onclick="focusStep('4-5')" onkeydown="actKey(event)" class="cursor-pointer hover:bg-stone-200/50 p-2 rounded transition-all-300 flex items-start gap-2 group focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">
+                  <span class="font-bold text-journalRed border-b-2 border-journalRed group-hover:scale-105 transition-transform shrink-0">4 &amp; 5 —</span>
+                  <span>Tell the truth about — what's actually driving the behavior in that room.</span>
+                </li>
+                <li role="button" tabindex="0" aria-label="Steps 6 and 7" onclick="focusStep('6-7')" onkeydown="actKey(event)" class="cursor-pointer hover:bg-stone-200/50 p-2 rounded transition-all-300 flex items-start gap-2 group focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">
+                  <span class="font-bold text-journalRed border-b-2 border-journalRed group-hover:scale-105 transition-transform shrink-0">6 &amp; 7 —</span>
+                  <span>Let go of the specific defect poisoning it.</span>
+                </li>
+                <li role="button" tabindex="0" aria-label="Steps 8 and 9" onclick="focusStep('8-9')" onkeydown="actKey(event)" class="cursor-pointer hover:bg-stone-200/50 p-2 rounded transition-all-300 flex items-start gap-2 group focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">
+                  <span class="font-bold text-journalRed border-b-2 border-journalRed group-hover:scale-105 transition-transform shrink-0">8 &amp; 9 —</span>
+                  <span>Clean up the wreckage there, by name.</span>
+                </li>
+                <li role="button" tabindex="0" aria-label="Steps 10 and 11" onclick="focusStep('10-11')" onkeydown="actKey(event)" class="cursor-pointer hover:bg-stone-200/50 p-2 rounded transition-all-300 flex items-start gap-2 group focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">
+                  <span class="font-bold text-journalRed border-b-2 border-journalRed group-hover:scale-105 transition-transform shrink-0">10 &amp; 11 —</span>
+                  <span>Stay conscious so it doesn't creep back in.</span>
+                </li>
+                <li role="button" tabindex="0" aria-label="Step 12" onclick="focusStep('12')" onkeydown="actKey(event)" class="cursor-pointer hover:bg-stone-200/50 p-2 rounded transition-all-300 flex items-start gap-2 group focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">
+                  <span class="font-bold text-journalRed border-b-2 border-journalRed group-hover:scale-105 transition-transform shrink-0">12 —</span>
+                  <span>Carry it into all three, because a spiritual experience that doesn't reach the kitchen table or the job or the contract isn't a spiritual experience. <strong class="underline decoration-journalRed">It's just a feeling.</strong></span>
+                </li>
+              </ul>
+            </div>
+
+            <!-- WHAT "WE WERE REBORN" MEANS -->
+            <div class="mb-10 text-xl sm:text-2xl">
+              <p class="font-bold">This is what <span class="text-journalBlue font-black text-2xl sm:text-3xl">“WE WERE REBORN”</span> actually means.</p>
+              <p class="text-stone-700 italic mt-1">Not a lightning bolt. A soul coming back to life, room by room.</p>
+            </div>
+
+            <!-- PAGE 100 BLUE BOX -->
+            <div id="sec-promises" class="scroll-anchor mb-10 border-2 border-journalBlue rounded-xl p-5 sm:p-6 bg-blue-50/20 relative shadow-sm rotate-[0.5deg]">
+              <div class="absolute -top-4 left-6 bg-journalBlue text-white px-3 py-0.5 text-xs font-bold rounded uppercase tracking-wider shadow">Page 100</div>
+              <p class="text-journalBlue font-bold text-lg sm:text-xl uppercase tracking-wider mb-2">And here's the promise — the part that only makes sense looking backward:</p>
+              <blockquote class="text-xl italic text-stone-800 leading-relaxed font-semibold">
+                “We will see how our experience can benefit others... We will not regret the past nor wish to shut the door on it... We will know peace... We will suddenly realize that God is doing for us what we could not do for ourselves.”
+              </blockquote>
+              <p class="mt-3 text-xs sm:text-sm not-italic normal-case font-normal tracking-normal text-stone-500 dark:text-stone-400">
+                * These are the <strong>Ninth Step Promises</strong>. In the Big Book they appear on <strong>pp.&nbsp;83&ndash;84</strong> ("Into Action") — the "Page&nbsp;100" marking on the original is a mismark; page&nbsp;100 falls in "Working With Others."
+              </p>
+            </div>
+
+            <!-- NONE OF IT LOOKS LIKE REBIRTH -->
+            <div class="mb-10 text-xl sm:text-2xl space-y-4">
+              <p>None of it looks like rebirth while you're in it. The hard inventory. The amends that felt like humiliation. The honest Tuesday instead of the easy lie.</p>
+              <p class="font-bold text-journalRed">It just feels like work.</p>
+              <p class="bg-blue-100/80 text-journalBlue p-4 rounded-lg font-bold border-l-4 border-journalBlue">
+                It's only looking back that we see it: The things that came to us weren't random.
+              </p>
+            </div>
+
+            <!-- BOTTOM HIGHLIGHTS -->
+            <div class="mb-12 space-y-6">
+              <div class="text-2xl sm:text-3xl font-black text-stone-900 border-t-2 border-stone-400 pt-6">
+                THE BOTTLE WAS NEVER THE DISEASE. IT WAS THE SYMPTOM OF A SOUL FALLING ASLEEP.
+              </div>
+              <div class="text-2xl sm:text-3xl font-black text-journalRed italic leading-snug uppercase tracking-tight">
+                THE STEPS, WORKED IN THE ACTUAL ROOMS OF OUR LIVES — NOT JUST IN OUR HEADS — ARE HOW WE WAKE BACK UP.
+              </div>
+            </div>
+
+            <!-- FOOTER SIGNATURE -->
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-center border-t-2 border-dashed border-stone-400 pt-6 pb-2">
+              <p class="text-2xl sm:text-3xl font-bold uppercase tracking-wider text-stone-800 select-none">Don't Die Before Your Funeral.</p>
+              <div class="flex items-center gap-2 text-2xl font-bold text-rose-600">
+                ❤️ <span class="text-stone-800 font-black">A.A.</span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- RIGHT: INTERACTIVE SYSTEM -->
+      <section class="lg:col-span-5 space-y-6">
+        <!-- REBORN PROGRESS METER -->
+        <div class="bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 p-6 transition-all-300">
+          <div class="flex items-center justify-between mb-1">
+            <h3 class="font-bold text-stone-900 dark:text-white flex items-center gap-2">🌅 Reborn — room by room</h3>
+            <span id="reborn-stage" class="text-xs font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-300">Asleep</span>
+          </div>
+          <p class="text-xs text-stone-500 mb-3">A soul coming back to life — your reflections and worked steps wake it up.</p>
+          <div class="h-3 rounded-full bg-stone-100 dark:bg-stone-800 overflow-hidden">
+            <div id="reborn-bar" class="h-full w-0 rounded-full bg-gradient-to-r from-rose-500 via-amber-400 to-emerald-500 transition-all duration-700"></div>
+          </div>
+          <div class="flex justify-between items-center mt-2">
+            <span class="text-[11px] text-stone-400">Overall awakening</span>
+            <span id="reborn-pct" class="text-sm font-bold text-stone-700 dark:text-stone-200">0%</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mt-4 text-center">
+            <div class="rounded-lg p-2 bg-blue-50/60 dark:bg-blue-950/20">
+              <div id="ember-home" class="text-2xl" style="opacity:0.25">🏠</div>
+              <div class="text-[10px] font-bold uppercase tracking-wide text-journalBlue dark:text-blue-300">Home</div>
+              <div id="ember-pct-home" class="text-[10px] text-stone-500">0%</div>
+            </div>
+            <div class="rounded-lg p-2 bg-emerald-50/60 dark:bg-emerald-950/20">
+              <div id="ember-occupation" class="text-2xl" style="opacity:0.25">💼</div>
+              <div class="text-[10px] font-bold uppercase tracking-wide text-journalGreen dark:text-emerald-300">Occupation</div>
+              <div id="ember-pct-occupation" class="text-[10px] text-stone-500">0%</div>
+            </div>
+            <div class="rounded-lg p-2 bg-purple-50/60 dark:bg-purple-950/20">
+              <div id="ember-affairs" class="text-2xl" style="opacity:0.25">📋</div>
+              <div class="text-[10px] font-bold uppercase tracking-wide text-journalPurple dark:text-purple-300">Affairs</div>
+              <div id="ember-pct-affairs" class="text-[10px] text-stone-500">0%</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- INTERACTIVE FOCUS / HELP DECK -->
+        <div id="interactive-help" aria-live="polite" class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900/50 p-4 rounded-2xl shadow-sm">
+          <h4 class="font-bold text-amber-900 dark:text-amber-400 text-xs uppercase tracking-widest mb-1" id="interactive-help-title">✨ Interactive Toolkit Focus</h4>
+          <p class="text-stone-700 dark:text-stone-300 text-sm leading-relaxed" id="interactive-help-desc">
+            Tap any room card, step in the toolkit, or a cell in the Steps × Rooms grid on the page to surface focused guidance right here.
+          </p>
+        </div>
+
+        <!-- BREATHING / STAY CONSCIOUS TRACKER -->
+        <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-2xl p-6 shadow-xl relative overflow-hidden">
+          <div class="absolute -right-10 -bottom-10 w-40 h-40 bg-indigo-500/10 rounded-full blur-2xl"></div>
+          <div class="relative z-10">
+            <div class="flex justify-between items-start mb-4">
+              <div>
+                <span class="text-indigo-300 text-xs font-bold uppercase tracking-wider">Step 11 Integration</span>
+                <h3 class="text-xl font-bold">Stay Conscious — Box Breathing</h3>
+              </div>
+              <span id="breath-count" class="px-2 py-1 bg-white/10 text-white/80 rounded text-[10px] font-mono">0 breaths today</span>
+            </div>
+            <div class="flex items-center gap-5 my-5 bg-white/5 p-4 rounded-xl border border-white/10">
+              <div class="relative w-20 h-20 flex items-center justify-center shrink-0">
+                <div id="breath-circle" class="absolute w-12 h-12 bg-indigo-500 rounded-full"></div>
+                <div class="relative z-10 text-xs font-bold text-white tracking-widest text-center" id="breath-text" aria-live="polite">Inhale</div>
+              </div>
+              <div>
+                <p class="text-sm text-indigo-200 italic" id="breath-hint">“A soul coming back to life, room by room.”</p>
+                <span class="text-xs text-white/50 block mt-1">4-4-4-4 — focus your mind before entering your daily rooms.</span>
+              </div>
+            </div>
+            <div class="flex justify-between items-center">
+              <button type="button" onclick="toggleBreath()" id="btn-breath-toggle" class="text-xs font-bold px-3 py-1.5 bg-white/15 hover:bg-white/25 rounded-lg transition-colors">Pause</button>
+              <span class="text-xs text-indigo-300">Cycle <span id="breath-cycles" class="font-bold text-white">0</span> this session</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SELF-ASSESSMENT -->
+        <div id="sec-assess" class="scroll-anchor bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 overflow-hidden transition-all-300">
+          <div class="bg-stone-50 dark:bg-stone-950 px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+            <h2 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">🔦 Where is your soul asleep?</h2>
+            <p class="text-xs text-stone-500">Check what's true. We'll route you to the right room and steps.</p>
+          </div>
+          <div class="p-6 space-y-3">
+            <div id="assess-list" class="space-y-2"></div>
+            <button type="button" onclick="runAssessment()" class="w-full text-sm font-bold px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors">Show my rooms →</button>
+            <div id="assess-result" class="hidden space-y-2 pt-1"></div>
+          </div>
+        </div>
+
+        <!-- WORKSPACE -->
+        <div id="sec-workspace" class="scroll-anchor bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 overflow-hidden transition-all-300">
+          <div class="bg-stone-50 dark:bg-stone-950 px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center flex-wrap gap-2">
+            <div>
+              <h2 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">📂 Personal Practice Workspace</h2>
+              <p class="text-xs text-stone-500">Practice these principles in your actual rooms.</p>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <button type="button" onclick="exportData()" class="text-xs px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 dark:hover:bg-stone-700 rounded transition-all-300" title="Download your worksheet as a JSON backup">⬇ Export</button>
+              <button type="button" onclick="copyData()" class="text-xs px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 dark:hover:bg-stone-700 rounded transition-all-300" title="Copy your worksheet to the clipboard">⧉ Copy</button>
+              <label class="text-xs px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-stone-300 dark:hover:bg-stone-700 rounded transition-all-300 cursor-pointer" title="Restore from a JSON backup">⬆ Import<input type="file" accept="application/json,.json" class="hidden" onchange="importData(event)"></label>
+              <button type="button" onclick="window.print()" class="text-xs px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white rounded transition-all-300">🖨 Print</button>
+              <button type="button" onclick="softClear()" class="text-xs px-2.5 py-1 bg-stone-200 dark:bg-stone-800 hover:bg-rose-100 dark:hover:bg-rose-950/40 hover:text-rose-700 dark:hover:text-rose-400 rounded transition-all-300">Clear</button>
+            </div>
+          </div>
+
+          <div class="p-6 space-y-6">
+            <!-- ROOM 1 -->
+            <div class="space-y-3 p-4 bg-blue-50/50 dark:bg-blue-950/20 rounded-xl border border-blue-100 dark:border-blue-900/50">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">🏠</span>
+                  <label for="room-home" class="font-bold text-sm text-journalBlue dark:text-blue-300 uppercase tracking-wider">My Kitchen Table (Home)</label>
+                </div>
+                <span class="text-[10px] bg-blue-100 dark:bg-blue-950 px-2 py-0.5 text-journalBlue dark:text-blue-300 rounded font-mono">Control vs Connect</span>
+              </div>
+              <textarea id="room-home" rows="2" placeholder="Where do I lose patience, control instead of connect, or numb out?" class="w-full text-sm p-3 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-950 text-stone-900 dark:text-white placeholder-stone-400 focus:ring-2 focus:ring-blue-500 focus:outline-none transition-all-300" oninput="saveReflection('home', this.value)"></textarea>
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                <span class="text-xs text-stone-500 self-center mr-1">Steps Active:</span>
+                <button type="button" onclick="toggleStepTag('home', '4-5')" id="tag-home-4-5" aria-pressed="false" data-label="4&5" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-blue-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">4&5</button>
+                <button type="button" onclick="toggleStepTag('home', '6-7')" id="tag-home-6-7" aria-pressed="false" data-label="6&7" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-blue-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">6&7</button>
+                <button type="button" onclick="toggleStepTag('home', '8-9')" id="tag-home-8-9" aria-pressed="false" data-label="8&9" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-blue-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">8&9</button>
+                <button type="button" onclick="toggleStepTag('home', '10-11')" id="tag-home-10-11" aria-pressed="false" data-label="10&11" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-blue-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">10&11</button>
+                <button type="button" onclick="toggleStepTag('home', '12')" id="tag-home-12" aria-pressed="false" data-label="12" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-blue-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">12</button>
+              </div>
+              <details class="deep text-xs">
+                <summary class="flex items-center gap-1 text-journalBlue dark:text-blue-300 font-semibold select-none">Deep dive &amp; prompts <span class="chev">▾</span></summary>
+                <div id="deep-home" class="mt-2 space-y-2 text-stone-600 dark:text-stone-300"></div>
+              </details>
+            </div>
+
+            <!-- ROOM 2 -->
+            <div class="space-y-3 p-4 bg-emerald-50/50 dark:bg-emerald-950/20 rounded-xl border border-emerald-100 dark:border-emerald-900/50">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">💼</span>
+                  <label for="room-occupation" class="font-bold text-sm text-journalGreen dark:text-emerald-300 uppercase tracking-wider">My Occupation (Job/Labor)</label>
+                </div>
+                <span class="text-[10px] bg-emerald-100 dark:bg-emerald-950 px-2 py-0.5 text-journalGreen dark:text-emerald-300 rounded font-mono">Workaholism &amp; Fear</span>
+              </div>
+              <textarea id="room-occupation" rows="2" placeholder="Where do I suffer from fear of being found out, workplace resentment, or respectably named workaholism?" class="w-full text-sm p-3 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-950 text-stone-900 dark:text-white placeholder-stone-400 focus:ring-2 focus:ring-emerald-500 focus:outline-none transition-all-300" oninput="saveReflection('occupation', this.value)"></textarea>
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                <span class="text-xs text-stone-500 self-center mr-1">Steps Active:</span>
+                <button type="button" onclick="toggleStepTag('occupation', '4-5')" id="tag-occupation-4-5" aria-pressed="false" data-label="4&5" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-emerald-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">4&5</button>
+                <button type="button" onclick="toggleStepTag('occupation', '6-7')" id="tag-occupation-6-7" aria-pressed="false" data-label="6&7" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-emerald-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">6&7</button>
+                <button type="button" onclick="toggleStepTag('occupation', '8-9')" id="tag-occupation-8-9" aria-pressed="false" data-label="8&9" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-emerald-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">8&9</button>
+                <button type="button" onclick="toggleStepTag('occupation', '10-11')" id="tag-occupation-10-11" aria-pressed="false" data-label="10&11" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-emerald-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">10&11</button>
+                <button type="button" onclick="toggleStepTag('occupation', '12')" id="tag-occupation-12" aria-pressed="false" data-label="12" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-emerald-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">12</button>
+              </div>
+              <details class="deep text-xs">
+                <summary class="flex items-center gap-1 text-journalGreen dark:text-emerald-300 font-semibold select-none">Deep dive &amp; prompts <span class="chev">▾</span></summary>
+                <div id="deep-occupation" class="mt-2 space-y-2 text-stone-600 dark:text-stone-300"></div>
+              </details>
+            </div>
+
+            <!-- ROOM 3 -->
+            <div class="space-y-3 p-4 bg-purple-50/50 dark:bg-purple-950/20 rounded-xl border border-purple-100 dark:border-purple-900/50">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                  <span class="text-lg">📋</span>
+                  <label for="room-affairs" class="font-bold text-sm text-journalPurple dark:text-purple-300 uppercase tracking-wider">My Affairs (Contracts/Honesty)</label>
+                </div>
+                <span class="text-[10px] bg-purple-100 dark:bg-purple-950 px-2 py-0.5 text-journalPurple dark:text-purple-300 rounded font-mono">Half-Truths &amp; Corners</span>
+              </div>
+              <textarea id="room-affairs" rows="2" placeholder="Where am I cutting corners because nobody's looking, sliding on obligations, or writing off half-truths?" class="w-full text-sm p-3 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-950 text-stone-900 dark:text-white placeholder-stone-400 focus:ring-2 focus:ring-purple-500 focus:outline-none transition-all-300" oninput="saveReflection('affairs', this.value)"></textarea>
+              <div class="flex flex-wrap gap-1.5 pt-1">
+                <span class="text-xs text-stone-500 self-center mr-1">Steps Active:</span>
+                <button type="button" onclick="toggleStepTag('affairs', '4-5')" id="tag-affairs-4-5" aria-pressed="false" data-label="4&5" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-purple-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">4&5</button>
+                <button type="button" onclick="toggleStepTag('affairs', '6-7')" id="tag-affairs-6-7" aria-pressed="false" data-label="6&7" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-purple-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">6&7</button>
+                <button type="button" onclick="toggleStepTag('affairs', '8-9')" id="tag-affairs-8-9" aria-pressed="false" data-label="8&9" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-purple-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">8&9</button>
+                <button type="button" onclick="toggleStepTag('affairs', '10-11')" id="tag-affairs-10-11" aria-pressed="false" data-label="10&11" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-purple-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">10&11</button>
+                <button type="button" onclick="toggleStepTag('affairs', '12')" id="tag-affairs-12" aria-pressed="false" data-label="12" class="tag-btn text-[10px] px-2 py-0.5 rounded border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-purple-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">12</button>
+              </div>
+              <details class="deep text-xs">
+                <summary class="flex items-center gap-1 text-journalPurple dark:text-purple-300 font-semibold select-none">Deep dive &amp; prompts <span class="chev">▾</span></summary>
+                <div id="deep-affairs" class="mt-2 space-y-2 text-stone-600 dark:text-stone-300"></div>
+              </details>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEPS × ROOMS MATRIX -->
+        <div id="sec-matrix" class="scroll-anchor bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 overflow-hidden transition-all-300">
+          <div class="bg-stone-50 dark:bg-stone-950 px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+            <h2 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">🧩 The Toolkit in Every Room</h2>
+            <p class="text-xs text-stone-500">Same cure, three rooms. Tap a cell for what each step looks like there.</p>
+          </div>
+          <div class="p-4 sm:p-6 overflow-x-auto">
+            <div id="matrix-grid" class="min-w-[320px]"></div>
+          </div>
+        </div>
+
+        <!-- DAILY STEP 10 REVIEW -->
+        <div id="sec-daily" class="scroll-anchor bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 overflow-hidden transition-all-300">
+          <div class="bg-stone-50 dark:bg-stone-950 px-6 py-4 border-b border-stone-200 dark:border-stone-800 flex justify-between items-center flex-wrap gap-2">
+            <div>
+              <h2 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">🌙 Nightly Spot-Check (Steps 10 &amp; 11)</h2>
+              <p class="text-xs text-stone-500">"Continue to watch for selfishness, dishonesty, resentment, and fear." — p.&nbsp;84; nightly review, p.&nbsp;86</p>
+            </div>
+            <div class="text-right">
+              <div id="daily-streak-num" class="text-xl font-black text-emerald-600 dark:text-emerald-400 leading-none">0</div>
+              <div class="text-[10px] text-stone-500 uppercase tracking-wide">day streak</div>
+            </div>
+          </div>
+          <div class="p-6 space-y-4">
+            <div>
+              <p class="text-xs text-stone-500 mb-2">Where did it show up today? (tap any that apply)</p>
+              <div id="daily-chips" class="flex flex-wrap gap-1.5"></div>
+            </div>
+            <textarea id="daily-note" rows="2" placeholder="One honest line about today — what I owe, where I was selfish, fearful, or dishonest." class="w-full text-sm p-3 rounded-lg border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-950 text-stone-900 dark:text-white placeholder-stone-400 focus:ring-2 focus:ring-indigo-500 focus:outline-none transition-all-300"></textarea>
+            <button type="button" onclick="saveDaily()" class="w-full text-sm font-bold px-3 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-colors">Log today's review</button>
+            <div>
+              <p class="text-[10px] text-stone-500 uppercase tracking-wide mb-1">Last 14 days</p>
+              <div id="daily-streak" class="flex gap-1"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </div>
+
+    <!-- EXPANDED: THE SPIRITUAL AWAKENING -->
+    <section id="sec-awakening" class="scroll-anchor mt-14 md:mt-20">
+      <div class="text-center max-w-3xl mx-auto mb-10">
+        <div class="inline-block px-3 py-1 bg-indigo-100 dark:bg-indigo-950/40 text-indigo-700 dark:text-indigo-300 text-xs font-bold rounded-full mb-3 uppercase tracking-wider">The Full Picture</div>
+        <h2 class="text-3xl sm:text-4xl md:text-5xl font-black text-stone-900 dark:text-white tracking-tight">The Spiritual Awakening</h2>
+        <p class="mt-2 text-sm text-stone-400 dark:text-stone-500 italic font-serif">How a soul wakes back up — room by room — straight from the Big Book.</p>
+        <p id="awakening-intro" class="mt-5 text-stone-600 dark:text-stone-300 leading-relaxed text-left sm:text-center"></p>
+      </div>
+
+      <div id="awakening-movements" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
+
+      <div id="awakening-def" class="mt-10"></div>
+
+      <p id="awakening-closing" class="mt-10 max-w-3xl mx-auto text-center text-lg sm:text-xl font-serif italic text-stone-700 dark:text-stone-200 leading-relaxed"></p>
+
+      <!-- THE ORIGINAL HANDWRITTEN REFLECTION -->
+      <figure class="mt-12 max-w-2xl mx-auto">
+        <div class="bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 overflow-hidden">
+          <div class="bg-stone-50 dark:bg-stone-950 px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+            <h3 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">✍️ The original handwritten reflection</h3>
+            <p class="text-xs text-stone-500">The source transcribed and expanded throughout this guide.</p>
+          </div>
+          <a href="sa.jpeg" target="_blank" rel="noopener" title="Open full size in a new tab">
+            <img src="sa.jpeg" alt="Don't Die Before Your Funeral — the original handwritten A.A. reflection" loading="lazy" class="w-full h-auto block bg-[#faf6eb]">
+          </a>
+        </div>
+        <figcaption class="text-center text-xs text-stone-400 mt-2">Tap the image to open it full size.</figcaption>
+      </figure>
+
+      <!-- BIG BOOK REFERENCE MAP -->
+      <div id="sec-citations" class="scroll-anchor mt-14 bg-white dark:bg-stone-900 rounded-2xl shadow-xl border border-stone-200 dark:border-stone-800 overflow-hidden">
+        <div class="bg-stone-50 dark:bg-stone-950 px-6 py-4 border-b border-stone-200 dark:border-stone-800">
+          <h3 class="font-bold text-stone-900 dark:text-white text-lg flex items-center gap-2">📖 Big Book Reference Map</h3>
+          <p class="text-xs text-stone-500">Every citation on this page, verified against the text. The main text (pp.&nbsp;1&ndash;164) is identically paginated across the 2nd&ndash;4th editions; Appendix&nbsp;II pages are the 4th edition (3rd edition: pp.&nbsp;569&ndash;570).</p>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="text-left text-[11px] uppercase tracking-wider text-stone-400 border-b border-stone-200 dark:border-stone-800">
+                <th class="px-4 py-2 font-bold">Concept / Passage</th>
+                <th class="px-4 py-2 font-bold">Page</th>
+                <th class="px-4 py-2 font-bold hidden sm:table-cell">Chapter</th>
+              </tr>
+            </thead>
+            <tbody id="citation-map"></tbody>
+          </table>
+        </div>
+        <p class="px-6 py-3 text-[11px] text-stone-400 border-t border-stone-100 dark:border-stone-800">
+          Source: <em>Alcoholics Anonymous</em> ("The Big Book"), Alcoholics Anonymous World Services. Citations cross-checked against the public full text and the official A.A. PDFs.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- FLOATING: BACK TO TOP -->
+  <button id="to-top" onclick="scrollToId('top')" aria-label="Back to top" class="fixed bottom-5 right-5 z-40 w-11 h-11 rounded-full bg-stone-900 dark:bg-white text-white dark:text-stone-900 shadow-lg flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 print:hidden">
+    ↑
+  </button>
+
+  <!-- TOAST CONTAINER -->
+  <div id="toast-wrap" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-50 flex flex-col items-center gap-2 print:hidden"></div>
+
+  <!-- PRINT-ONLY VIEW -->
+  <div id="print-view" class="hidden print:block p-8 bg-white text-black font-sans">
+    <div class="text-center mb-6">
+      <h1 class="text-3xl font-extrabold uppercase tracking-tight">Don't Die Before Your Funeral</h1>
+      <p class="text-sm italic">My Active Personal Steps Recovery Worksheet</p>
+    </div>
+    <div class="space-y-6 mt-8">
+      <div class="border-b pb-4">
+        <h2 class="text-lg font-bold uppercase text-blue-800">🏠 Home &amp; Relationships Reflection</h2>
+        <p class="mt-2 text-sm italic text-gray-500">The patience we show strangers all day disappears at the kitchen table...</p>
+        <div class="mt-3 p-3 bg-gray-50 rounded border text-sm" id="print-home-text">No reflections recorded yet.</div>
+        <div class="mt-2 text-xs text-gray-500" id="print-home-steps">Steps applied: None</div>
+      </div>
+      <div class="border-b pb-4">
+        <h2 class="text-lg font-bold uppercase text-green-800">💼 Occupation &amp; Workplace Reflection</h2>
+        <p class="mt-2 text-sm italic text-gray-500">Fear of being found out, resentments, and respectable workaholism...</p>
+        <div class="mt-3 p-3 bg-gray-50 rounded border text-sm" id="print-occupation-text">No reflections recorded yet.</div>
+        <div class="mt-2 text-xs text-gray-500" id="print-occupation-steps">Steps applied: None</div>
+      </div>
+      <div class="border-b pb-4">
+        <h2 class="text-lg font-bold uppercase text-purple-800">📋 Affairs &amp; Honesty Reflection</h2>
+        <p class="mt-2 text-sm italic text-gray-500">Cutting corners, sliding obligations, half-truths costing something...</p>
+        <div class="mt-3 p-3 bg-gray-50 rounded border text-sm" id="print-affairs-text">No reflections recorded yet.</div>
+        <div class="mt-2 text-xs text-gray-500" id="print-affairs-steps">Steps applied: None</div>
+      </div>
+    </div>
+    <div class="mt-12 text-center text-xs text-gray-400 border-t pt-4">
+      "The steps, worked in the actual rooms of our lives — not just in our heads — are how we wake back up."
+    </div>
+  </div>
+
+  <footer class="mt-16 border-t border-stone-200 dark:border-stone-800 py-8 bg-white dark:bg-stone-950 transition-colors duration-300 print:hidden">
+    <div class="max-w-[1900px] mx-auto px-4 text-center space-y-4">
+      <p class="text-xs text-stone-400 dark:text-stone-500">
+        This immersive representation contains the exact transcription of the original A.A. handwritten reflection.
+      </p>
+      <p class="text-xs text-stone-500">
+        Designed for personal self-appraisal, spiritual grounding, and active steps application. Reflections are stored only in your own browser.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    /* ===================== STATE & CONSTANTS ===================== */
+    const $ = id => document.getElementById(id);
+    const STEP_PAIRS = ['4-5', '6-7', '8-9', '10-11', '12'];
+    const ROOMS = [
+      { key: 'home', label: 'Home', emoji: '🏠', color: '#1e40af' },
+      { key: 'occupation', label: 'Occupation', emoji: '💼', color: '#15803d' },
+      { key: 'affairs', label: 'Affairs', emoji: '📋', color: '#6b21a8' },
+    ];
+
+    function defaultProgress() {
+      return {
+        home: { reflection: '', steps: [] },
+        occupation: { reflection: '', steps: [] },
+        affairs: { reflection: '', steps: [] }
+      };
+    }
+    let userProgress = defaultProgress();
+    let dailyLog = {};   // { 'YYYY-MM-DD': { flags:[], note:'' } }
+    let breathLog = {};  // { 'YYYY-MM-DD': count }
+
+    /* ===================== CONTENT DATA ===================== */
+    const stepTips = {
+      '4-5': { title: '🔍 Truth Finding (4 & 5)', desc: "Tell the raw truth about what's actually driving the behavior in that room. Fear? Self-reliance? Pride? Get it onto paper, then say it out loud to another person. Big Book: Step 4 inventory pp.64–71 (\"Resentment is the 'number one' offender,\" p.64); Step 5 result, p.75." },
+      '6-7': { title: '🌊 Letting Go (6 & 7)', desc: "Become willing to change. Name the defect — anger, control, evasion — poisoning the atmosphere, and ask for it to be removed. Big Book: p.76, including the Seventh Step Prayer (\"I am now willing that you should have all of me, good and bad\")." },
+      '8-9': { title: '🛠️ Clearing Wreckage (8 & 9)', desc: "Go back and fix what you broke, by name. Make direct amends to the kitchen table, the boss, or the contract partner — except when doing so would injure them or others. Big Book: pp.76–83 (the Ninth Step Promises follow, pp.83–84)." },
+      '10-11': { title: '🧠 Staying Conscious (10 & 11)', desc: "Watch daily for selfishness, dishonesty, resentment, and fear; ask at once to have them removed. Review the day at night, plan it in the morning, pray and meditate. Big Book: Step 10, p.84; Step 11, pp.85–88 (nightly review, p.86)." },
+      '12': { title: '🌟 Living the Experience (12)', desc: "Carry it into all three rooms. A spiritual experience that never reaches the job or the home is just a feeling, not a transformation. Big Book: Step 12, p.60 — \"Having had a spiritual awakening… practice these principles in all our affairs.\"" }
+    };
+    // Per-step-pair page citation, surfaced in the Steps × Rooms matrix
+    const STEP_PAGES = { '4-5': 'pp.64–75', '6-7': 'p.76', '8-9': 'pp.76–84', '10-11': 'p.84; p.86', '12': 'p.60' };
+
+    const roomDeep = {
+      home: {
+        defects: ['Impatience', 'Control', 'Withdrawal'],
+        prompts: [
+          'Who at home gets only my leftover patience?',
+          'Where did I choose control over connection this week?',
+          'When do I numb out instead of showing up?'
+        ],
+        cite: 'Big Book: selfishness as the root, p.62; "practice these principles in all our affairs," p.60.'
+      },
+      occupation: {
+        defects: ['Fear of exposure', 'Resentment', 'Pride'],
+        prompts: [
+          "What am I afraid they'll find out?",
+          'Which resentment poisons my Mondays?',
+          'Where is my "hard work" actually an anesthetic?'
+        ],
+        cite: 'Big Book: resentment the "number one" offender, p.64; the fear inventory, pp.67–68.'
+      },
+      affairs: {
+        defects: ['Dishonesty', 'Avoidance', 'Self-interest'],
+        prompts: [
+          "What corner am I cutting because no one's watching?",
+          'Which obligation am I letting slide?',
+          'Where do I tell a half-truth because the whole truth costs something?'
+        ],
+        cite: 'Big Book: amends, Steps 8 & 9, pp.76–83; the daily watch, p.84.'
+      }
+    };
+
+    // 3 rooms × 5 step-pairs: short keyword + full guidance
+    const matrixData = {
+      home: {
+        '4-5': { kw: 'Name it', full: 'Name it: the patience you spend on strangers and withhold from the people at your own table.' },
+        '6-7': { kw: 'Drop control', full: 'The defect here is usually control. Ask for it to be lifted before you walk in the door.' },
+        '8-9': { kw: 'Show up', full: 'Amends at home are made in changed behavior, not speeches. Show up — consistently, by name.' },
+        '10-11': { kw: 'Check nightly', full: 'Each night: where did I choose control over connection today? Make it right tomorrow.' },
+        '12': { kw: 'Reach the table', full: "If the awakening doesn't reach the kitchen table, it hasn't reached you yet." }
+      },
+      occupation: {
+        '4-5': { kw: 'Tell the fear', full: 'Tell the truth about the fear of being found out and the resentment that poisons every Monday.' },
+        '6-7': { kw: 'Drop the pride', full: 'Let go of the pride that calls workaholism a virtue and an anesthetic respectable.' },
+        '8-9': { kw: 'Fix corners', full: 'Clean up what you cut corners on at work — quietly, concretely, by name.' },
+        '10-11': { kw: 'Watch resentment', full: 'Watch for resentment building toward a boss or a task before it runs the whole week.' },
+        '12': { kw: 'Carry to work', full: 'Carry it to the job: the anesthetic with a respectable name has to go too.' }
+      },
+      affairs: {
+        '4-5': { kw: 'Face half-truths', full: 'Tell the truth about the half-truths — the convenient ones that cost you nothing yet.' },
+        '6-7': { kw: 'Drop the hiding', full: "Let go of the dishonesty that hides behind 'no one's watching.'" },
+        '8-9': { kw: 'Make it good', full: 'Make the obligation good. Finish what you let slide, by name.' },
+        '10-11': { kw: 'Catch the cut', full: "Notice the corner you're tempted to cut today — before you cut it." },
+        '12': { kw: 'Reach the contract', full: 'A spiritual experience that skips the contract is just a feeling.' }
+      }
+    };
+
+    const SYMPTOMS = [
+      { text: "I'm patient with strangers all day, then snap at the people at home.", room: 'home', steps: ['4-5', '6-7'] },
+      { text: 'I control the people closest to me instead of connecting.', room: 'home', steps: ['6-7'] },
+      { text: 'I numb out at home instead of showing up.', room: 'home', steps: ['10-11', '12'] },
+      { text: 'My calm in public disappears at my own kitchen table.', room: 'home', steps: ['4-5', '10-11'] },
+      { text: "I'm afraid of being found out at work.", room: 'occupation', steps: ['4-5'] },
+      { text: 'Resentment toward a boss poisons every Monday.', room: 'occupation', steps: ['4-5', '6-7'] },
+      { text: 'I overwork — an anesthetic with a respectable name.', room: 'occupation', steps: ['6-7', '10-11'] },
+      { text: 'I feel useless, full of fear, or unable to make a living.', room: 'occupation', steps: ['4-5', '8-9'] },
+      { text: "I cut corners because no one's watching.", room: 'affairs', steps: ['4-5', '8-9'] },
+      { text: 'I let an obligation slide.', room: 'affairs', steps: ['8-9'] },
+      { text: 'I tell half-truths because the whole truth costs something.', room: 'affairs', steps: ['4-5', '6-7'] },
+      { text: 'I take the easy lie over the honest Tuesday.', room: 'affairs', steps: ['8-9', '12'] }
+    ];
+
+    const DAILY_PROMPTS = ['Resentful', 'Selfish', 'Fearful', 'Dishonest', 'Owe an apology'];
+
+    /* ===================== HELPERS ===================== */
+    function dateKey(d) { return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10); }
+    function todayKey() { return dateKey(new Date()); }
+    function actKey(e) { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); e.currentTarget.click(); } }
+    function scrollToId(id) { const el = $(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+
+    function toast(message, actionLabel, actionFn, ms) {
+      const wrap = $('toast-wrap');
+      const el = document.createElement('div');
+      el.className = 'flex items-center gap-3 bg-stone-900 text-white text-sm px-4 py-2.5 rounded-xl shadow-lg border border-white/10';
+      const span = document.createElement('span'); span.textContent = message; el.appendChild(span);
+      if (actionLabel) {
+        const btn = document.createElement('button');
+        btn.type = 'button'; btn.textContent = actionLabel;
+        btn.className = 'font-bold text-amber-300 hover:text-amber-200';
+        btn.onclick = () => { if (actionFn) actionFn(); el.remove(); };
+        el.appendChild(btn);
+      }
+      wrap.appendChild(el);
+      setTimeout(() => el.remove(), ms || 5000);
+    }
+
+    /* ===================== PERSISTENCE ===================== */
+    function loadAll() {
+      // Reflections (shape-safe merge)
+      try {
+        const parsed = JSON.parse(localStorage.getItem('aa_reflection_progress') || '{}') || {};
+        ROOMS.forEach(({ key }) => {
+          const p = parsed[key] && typeof parsed[key] === 'object' ? parsed[key] : {};
+          userProgress[key] = {
+            reflection: typeof p.reflection === 'string' ? p.reflection : '',
+            steps: Array.isArray(p.steps) ? p.steps.filter(s => STEP_PAIRS.includes(s)) : []
+          };
+        });
+      } catch (e) { console.error('Reflection restore failed:', e); userProgress = defaultProgress(); }
+
+      try { dailyLog = JSON.parse(localStorage.getItem('aa_daily_log') || '{}') || {}; } catch (e) { dailyLog = {}; }
+      try { breathLog = JSON.parse(localStorage.getItem('aa_breath_log') || '{}') || {}; } catch (e) { breathLog = {}; }
+
+      // Populate UI from reflections
+      ROOMS.forEach(({ key }) => {
+        const ta = $('room-' + key);
+        if (ta) ta.value = userProgress[key].reflection;
+        userProgress[key].steps.forEach(s => updateStepTagUI(key, s, true));
+      });
+    }
+
+    function saveProgress() {
+      try { localStorage.setItem('aa_reflection_progress', JSON.stringify(userProgress)); } catch (e) {}
+      updatePrintVersion();
+      renderProgressMeter();
+    }
+
+    /* ===================== THEME ===================== */
+    function toggleDarkMode() {
+      const isDark = document.documentElement.classList.toggle('dark');
+      try { localStorage.setItem('aa_dark', isDark ? '1' : '0'); } catch (e) {}
+      $('btn-dark-toggle').setAttribute('aria-pressed', isDark ? 'true' : 'false');
+    }
+
+    /* ===================== REFLECTIONS & STEP TAGS ===================== */
+    function saveReflection(room, value) {
+      userProgress[room].reflection = value;
+      saveProgress();
+    }
+
+    function toggleStepTag(room, step) {
+      const idx = userProgress[room].steps.indexOf(step);
+      if (idx > -1) { userProgress[room].steps.splice(idx, 1); updateStepTagUI(room, step, false); }
+      else { userProgress[room].steps.push(step); updateStepTagUI(room, step, true); }
+      saveProgress();
+    }
+
+    function updateStepTagUI(room, step, isActive) {
+      const btn = $('tag-' + room + '-' + step);
+      if (!btn) return;
+      const label = btn.dataset.label || step;
+      btn.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+      btn.textContent = (isActive ? '✓ ' : '') + label;
+      if (isActive) {
+        btn.classList.remove('text-stone-500', 'border-stone-300', 'dark:border-stone-700');
+        btn.classList.add('bg-indigo-600', 'text-white', 'border-indigo-600', 'font-bold');
+      } else {
+        btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600', 'font-bold');
+        btn.classList.add('text-stone-500', 'border-stone-300', 'dark:border-stone-700');
+      }
+    }
+
+    /* ===================== FOCUS (rooms / steps) ===================== */
+    function clearRoomRings() {
+      ['home', 'occupation', 'affairs'].forEach(r => $('roomcard-' + r).classList.remove('ring-4', 'ring-indigo-500'));
+    }
+
+    function setHelp(title, desc) {
+      $('interactive-help-title').textContent = title;
+      $('interactive-help-desc').textContent = desc;
+    }
+
+    function focusRoom(room) {
+      clearRoomRings();
+      $('roomcard-' + room).classList.add('ring-4', 'ring-indigo-500');
+      const blurbs = {
+        home: ['🏡 Kitchen Table Reality Check', "Home is your immediate circle. Reflect on where you shift from connection to control — patient with strangers, sharp with family. Write the honest self-assessment below and flag Steps 4 & 5 to start moving toward connection."],
+        occupation: ['💼 Occupation Check-in', 'The job or labor. Are you hiding a fear of being found out behind respectable workaholism? Does resentment poison your Mondays? Name it below and find where amends or a new step belong.'],
+        affairs: ['📋 Affairs & Honesty', "Your private deals, side projects, and silent habits. Where do you trade the whole truth because 'it costs something'? Notice where obligations slide when nobody is looking — this is where Steps 10 & 11 keep you accountable."]
+      };
+      setHelp(blurbs[room][0], blurbs[room][1]);
+      const ta = $('room-' + room);
+      if (ta) { ta.focus({ preventScroll: true }); ta.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    }
+
+    function focusStep(stepKey) {
+      const t = stepTips[stepKey];
+      if (t) { setHelp(t.title, t.desc); $('interactive-help').scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    }
+
+    function showMatrix(room, step) {
+      const r = ROOMS.find(x => x.key === room);
+      const cell = matrixData[room][step];
+      setHelp(`${r.emoji} ${r.label} · Steps ${step.replace('-', ' & ')}`, cell.full + '  (Big Book ' + STEP_PAGES[step] + ')');
+      $('interactive-help').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    /* ===================== PROGRESS METER ===================== */
+    function roomScore(r) {
+      const p = userProgress[r];
+      return (p.reflection.trim() ? 0.4 : 0) + (p.steps.length / 5) * 0.6;
+    }
+    function renderProgressMeter() {
+      let total = 0;
+      ROOMS.forEach(({ key }) => {
+        const s = roomScore(key);
+        total += s;
+        const ember = $('ember-' + key);
+        if (ember) ember.style.opacity = (0.25 + s * 0.75).toFixed(2);
+        const lbl = $('ember-pct-' + key);
+        if (lbl) lbl.textContent = Math.round(s * 100) + '%';
+      });
+      const pct = Math.round((total / 3) * 100);
+      $('reborn-bar').style.width = pct + '%';
+      $('reborn-pct').textContent = pct + '%';
+      let stage = 'Asleep';
+      if (pct >= 100) stage = 'Reborn ✨';
+      else if (pct >= 75) stage = 'Almost reborn';
+      else if (pct >= 35) stage = 'Waking';
+      else if (pct > 0) stage = 'Stirring';
+      $('reborn-stage').textContent = stage;
+    }
+
+    /* ===================== MATRIX (3×5) ===================== */
+    function buildMatrix() {
+      const wrap = $('matrix-grid');
+      if (!wrap) return;
+      let html = '<div class="grid gap-1 text-[11px]" style="grid-template-columns:auto repeat(5,minmax(0,1fr))">';
+      html += '<div></div>';
+      STEP_PAIRS.forEach(s => {
+        html += `<div class="text-center font-bold text-stone-500 dark:text-stone-400 pb-1">${s.replace('-', '&')}</div>`;
+      });
+      ROOMS.forEach(({ key, label, emoji, color }) => {
+        html += `<div class="font-bold py-2 pr-1 flex items-center gap-1" style="color:${color}">${emoji}<span class="hidden sm:inline">${label}</span></div>`;
+        STEP_PAIRS.forEach(s => {
+          const cell = matrixData[key][s];
+          html += `<button type="button" onclick="showMatrix('${key}','${s}')" class="text-left leading-tight rounded p-1.5 bg-stone-50 dark:bg-stone-800 hover:bg-stone-100 dark:hover:bg-stone-700 border border-stone-200 dark:border-stone-700 focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none transition-colors" style="border-left:3px solid ${color}" aria-label="${label}, steps ${s}: ${cell.kw}">${cell.kw}</button>`;
+        });
+      });
+      html += '</div>';
+      wrap.innerHTML = html;
+    }
+
+    /* ===================== DEEP DIVES ===================== */
+    function buildDeepDives() {
+      ROOMS.forEach(({ key }) => {
+        const box = $('deep-' + key);
+        if (!box) return;
+        const d = roomDeep[key];
+        let html = `<p><span class="font-bold">Common defects:</span> ${d.defects.join(' · ')}</p>`;
+        html += '<p class="font-bold mt-1">Prompts (tap to use):</p><ul class="space-y-1">';
+        d.prompts.forEach(p => {
+          const safe = p.replace(/'/g, '&#39;').replace(/"/g, '&quot;');
+          html += `<li><button type="button" onclick="usePrompt('${key}', this.dataset.p)" data-p="${safe}" class="text-left w-full hover:underline text-stone-700 dark:text-stone-300 focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none rounded">• ${p}</button></li>`;
+        });
+        html += '</ul>';
+        if (d.cite) html += `<p class="mt-2 text-[11px] text-stone-400">${d.cite}</p>`;
+        box.innerHTML = html;
+      });
+    }
+
+    function usePrompt(room, text) {
+      const ta = $('room-' + room);
+      if (!ta) return;
+      const cur = ta.value.replace(/\s*$/, '');
+      ta.value = (cur ? cur + '\n' : '') + '• ' + text + ' ';
+      ta.focus();
+      saveReflection(room, ta.value);
+    }
+
+    /* ===================== SELF-ASSESSMENT ===================== */
+    function buildAssessment() {
+      const list = $('assess-list');
+      if (!list) return;
+      list.innerHTML = SYMPTOMS.map((s, i) =>
+        `<label class="flex items-start gap-2 text-sm text-stone-700 dark:text-stone-300 cursor-pointer">
+           <input type="checkbox" class="assess-cb mt-0.5 accent-indigo-600" data-idx="${i}">
+           <span>${s.text}</span>
+         </label>`
+      ).join('');
+    }
+
+    function runAssessment() {
+      const counts = { home: 0, occupation: 0, affairs: 0 };
+      const stepsByRoom = { home: new Set(), occupation: new Set(), affairs: new Set() };
+      const textsByRoom = { home: [], occupation: [], affairs: [] };
+      let any = false;
+      document.querySelectorAll('.assess-cb:checked').forEach(cb => {
+        any = true;
+        const s = SYMPTOMS[+cb.dataset.idx];
+        counts[s.room]++;
+        s.steps.forEach(st => stepsByRoom[s.room].add(st));
+        textsByRoom[s.room].push(s.text);
+      });
+      const result = $('assess-result');
+      result.classList.remove('hidden');
+      if (!any) { result.innerHTML = '<p class="text-xs text-stone-500">Check at least one above, then press the button.</p>'; return; }
+
+      const maxCount = Math.max(counts.home, counts.occupation, counts.affairs);
+      let html = '';
+      ROOMS.forEach(({ key, label, color }) => {
+        const c = counts[key];
+        const w = maxCount ? Math.round((c / maxCount) * 100) : 0;
+        html += `<div>
+            <div class="flex justify-between text-[11px] mb-0.5"><span class="font-semibold" style="color:${color}">${label}</span><span class="text-stone-500">${c}</span></div>
+            <div class="h-2 rounded-full bg-stone-100 dark:bg-stone-800 overflow-hidden"><div class="h-full rounded-full transition-all duration-500" style="width:${w}%;background:${color}"></div></div>
+          </div>`;
+      });
+
+      // Top room: highest count (ties resolved by ROOMS order)
+      let top = ROOMS[0].key, best = -1;
+      ROOMS.forEach(({ key }) => { if (counts[key] > best) { best = counts[key]; top = key; } });
+      const topLabel = ROOMS.find(r => r.key === top).label;
+      html += `<p class="text-xs text-stone-600 dark:text-stone-300 pt-1">Your soul is most asleep in <strong>${topLabel}</strong>. I've opened it below with the matching steps flagged.</p>`;
+      result.innerHTML = html;
+
+      // Activate mapped steps + prefill that room's textarea (if empty)
+      stepsByRoom[top].forEach(st => { if (!userProgress[top].steps.includes(st)) toggleStepTag(top, st); });
+      const ta = $('room-' + top);
+      if (ta && !ta.value.trim()) {
+        ta.value = textsByRoom[top].map(t => '• ' + t).join('\n');
+        saveReflection(top, ta.value);
+      }
+      clearRoomRings();
+      $('roomcard-' + top).classList.add('ring-4', 'ring-indigo-500');
+      if (ta) ta.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    /* ===================== DAILY STEP 10 REVIEW ===================== */
+    function buildDailyChips() {
+      const wrap = $('daily-chips');
+      if (!wrap) return;
+      wrap.innerHTML = DAILY_PROMPTS.map(p =>
+        `<button type="button" data-flag="${p}" onclick="toggleChip(this)" aria-pressed="false" class="daily-chip text-xs px-2.5 py-1 rounded-full border border-stone-300 dark:border-stone-700 text-stone-500 hover:border-indigo-500 transition-colors focus-visible:ring-2 focus-visible:ring-indigo-500 focus:outline-none">${p}?</button>`
+      ).join('');
+    }
+    function toggleChip(btn) {
+      const on = btn.getAttribute('aria-pressed') !== 'true';
+      btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      btn.classList.toggle('bg-indigo-600', on);
+      btn.classList.toggle('text-white', on);
+      btn.classList.toggle('border-indigo-600', on);
+      btn.classList.toggle('text-stone-500', !on);
+    }
+    function loadTodayDaily() {
+      const entry = dailyLog[todayKey()];
+      if (!entry) return;
+      $('daily-note').value = entry.note || '';
+      document.querySelectorAll('.daily-chip').forEach(btn => {
+        if ((entry.flags || []).includes(btn.dataset.flag)) toggleChip(btn);
+      });
+    }
+    function saveDaily() {
+      const flags = [];
+      document.querySelectorAll('.daily-chip[aria-pressed="true"]').forEach(b => flags.push(b.dataset.flag));
+      dailyLog[todayKey()] = { flags: flags, note: $('daily-note').value };
+      try { localStorage.setItem('aa_daily_log', JSON.stringify(dailyLog)); } catch (e) {}
+      renderStreak();
+      toast('Tonight’s review logged. Stay conscious.', null, null, 3000);
+    }
+    function currentStreak() {
+      let streak = 0;
+      const d = new Date();
+      // If today isn't logged yet, the streak still stands up to yesterday.
+      if (!dailyLog[dateKey(d)]) d.setDate(d.getDate() - 1);
+      for (let guard = 0; guard < 4000; guard++) {
+        const k = dateKey(d);
+        if (dailyLog[k]) { streak++; d.setDate(d.getDate() - 1); }
+        else break;
+      }
+      return streak;
+    }
+    function renderStreak() {
+      $('daily-streak-num').textContent = currentStreak();
+      const strip = $('daily-streak');
+      let html = '';
+      const d = new Date();
+      d.setDate(d.getDate() - 13);
+      for (let i = 0; i < 14; i++) {
+        const k = dateKey(d);
+        const filled = !!dailyLog[k];
+        html += `<div title="${k}" class="w-4 h-4 rounded-sm ${filled ? 'bg-emerald-500' : 'bg-stone-200 dark:bg-stone-800'}"></div>`;
+        d.setDate(d.getDate() + 1);
+      }
+      strip.innerHTML = html;
+    }
+
+    /* ===================== BREATHING ===================== */
+    const BREATH_PHASES = [
+      { text: 'Inhale', hint: 'Fill up with honest intention…', scale: 1.6 },
+      { text: 'Hold', hint: 'Let the truth settle in your mind…', scale: 1.6 },
+      { text: 'Exhale', hint: 'Release the control and fear…', scale: 1.0 },
+      { text: 'Rest', hint: 'Stand present in this moment.', scale: 1.0 }
+    ];
+    const BREATH_MS = 4000;
+    let breathState = { running: false, idx: 0, cycles: 0, timer: null };
+
+    function breathStep() {
+      const p = BREATH_PHASES[breathState.idx];
+      const c = $('breath-circle');
+      if (c) { c.style.transform = 'scale(' + p.scale + ')'; c.style.opacity = p.scale > 1 ? '1' : '0.65'; }
+      $('breath-text').textContent = p.text;
+      $('breath-hint').textContent = '“' + p.hint + '”';
+      breathState.timer = setTimeout(() => {
+        breathState.idx = (breathState.idx + 1) % BREATH_PHASES.length;
+        if (breathState.idx === 0) { breathState.cycles++; logBreath(); renderBreathCount(); }
+        if (breathState.running) breathStep();
+      }, BREATH_MS);
+    }
+    function startBreathing() {
+      if (breathState.running) return;
+      breathState.running = true;
+      $('btn-breath-toggle').textContent = 'Pause';
+      breathStep();
+    }
+    function toggleBreath() {
+      if (breathState.running) {
+        breathState.running = false;
+        clearTimeout(breathState.timer);
+        $('btn-breath-toggle').textContent = 'Resume';
+      } else { startBreathing(); }
+    }
+    // Pause the breathing chain in background tabs so counts don't accrue unseen.
+    document.addEventListener('visibilitychange', function () {
+      if (document.hidden) { clearTimeout(breathState.timer); }
+      else if (breathState.running) { breathStep(); }
+    });
+    function logBreath() {
+      const k = todayKey();
+      breathLog[k] = (breathLog[k] || 0) + 1;
+      try { localStorage.setItem('aa_breath_log', JSON.stringify(breathLog)); } catch (e) {}
+    }
+    function renderBreathCount() {
+      $('breath-count').textContent = (breathLog[todayKey()] || 0) + ' breaths today';
+      $('breath-cycles').textContent = breathState.cycles;
+    }
+
+    /* ===================== EXPORT / IMPORT / CLEAR ===================== */
+    function bundle() {
+      return { version: 1, exportedAt: new Date().toISOString(), progress: userProgress, daily: dailyLog, breath: breathLog };
+    }
+    function exportData() {
+      const blob = new Blob([JSON.stringify(bundle(), null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'reborn-worksheet.json';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      toast('Worksheet downloaded.', null, null, 3000);
+    }
+    function copyData() {
+      const text = JSON.stringify(bundle(), null, 2);
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(() => toast('Copied to clipboard.', null, null, 3000),
+          () => toast('Copy failed — use Export instead.', null, null, 4000));
+      } else { toast('Clipboard unavailable — use Export instead.', null, null, 4000); }
+    }
+    function importData(event) {
+      const file = event.target.files && event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        try {
+          const data = JSON.parse(reader.result);
+          const p = data.progress || data; // tolerate raw progress objects too
+          ROOMS.forEach(({ key }) => {
+            const r = p[key] && typeof p[key] === 'object' ? p[key] : {};
+            userProgress[key] = {
+              reflection: typeof r.reflection === 'string' ? r.reflection : '',
+              steps: Array.isArray(r.steps) ? r.steps.filter(s => STEP_PAIRS.includes(s)) : []
+            };
+          });
+          if (data.daily && typeof data.daily === 'object') {
+            const clean = {};
+            Object.keys(data.daily).forEach(k => {
+              const v = data.daily[k];
+              if (v && typeof v === 'object') clean[k] = { flags: Array.isArray(v.flags) ? v.flags : [], note: typeof v.note === 'string' ? v.note : '' };
+            });
+            dailyLog = clean;
+          }
+          if (data.breath && typeof data.breath === 'object') {
+            const clean = {};
+            Object.keys(data.breath).forEach(k => { if (typeof data.breath[k] === 'number' && data.breath[k] >= 0) clean[k] = data.breath[k]; });
+            breathLog = clean;
+          }
+          refreshAllFromState();
+          try { localStorage.setItem('aa_daily_log', JSON.stringify(dailyLog)); localStorage.setItem('aa_breath_log', JSON.stringify(breathLog)); } catch (e) {}
+          saveProgress();
+          toast('Worksheet imported.', null, null, 3000);
+        } catch (e) { toast('Could not read that file.', null, null, 4000); }
+      };
+      reader.readAsText(file);
+      event.target.value = '';
+    }
+    function refreshAllFromState() {
+      document.querySelectorAll('.tag-btn').forEach(btn => {
+        btn.setAttribute('aria-pressed', 'false');
+        btn.textContent = btn.dataset.label;
+        btn.classList.remove('bg-indigo-600', 'text-white', 'border-indigo-600', 'font-bold');
+        btn.classList.add('text-stone-500', 'border-stone-300', 'dark:border-stone-700');
+      });
+      ROOMS.forEach(({ key }) => {
+        const ta = $('room-' + key);
+        if (ta) ta.value = userProgress[key].reflection;
+        userProgress[key].steps.forEach(s => updateStepTagUI(key, s, true));
+      });
+      renderStreak();
+      renderBreathCount();
+    }
+    function softClear() {
+      const backupProgress = JSON.parse(JSON.stringify(userProgress));
+      userProgress = defaultProgress();
+      refreshAllFromState();
+      clearRoomRings();
+      setHelp('✨ Interactive Toolkit Focus', 'Tap any room card, step in the toolkit, or a cell in the Steps × Rooms grid on the page to surface focused guidance right here.');
+      saveProgress();
+      toast('Workspace cleared.', 'Undo', () => { userProgress = backupProgress; refreshAllFromState(); saveProgress(); }, 7000);
+    }
+
+    /* ===================== PRINT ===================== */
+    function updatePrintVersion() {
+      ROOMS.forEach(({ key }) => {
+        $('print-' + key + '-text').textContent = userProgress[key].reflection || 'No reflections recorded yet.';
+        $('print-' + key + '-steps').textContent = 'Steps applied: ' + (userProgress[key].steps.length ? userProgress[key].steps.join(', ') : 'None');
+      });
+    }
+
+    /* ===================== SCROLL UI ===================== */
+    function setupScroll() {
+      const onScroll = () => {
+        const h = document.documentElement;
+        const max = (h.scrollHeight - h.clientHeight) || 1;
+        $('read-progress').style.width = Math.min(100, (h.scrollTop / max) * 100) + '%';
+        const past = h.scrollTop > 500;
+        const t = $('to-top');
+        t.style.opacity = past ? '1' : '0';
+        t.style.pointerEvents = past ? 'auto' : 'none';
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+    }
+
+    /* ===================== EXPANDED AWAKENING CONTENT ===================== */
+    const AWAKENING = {
+      intro: `This guide's real subject isn't drinking. It's a spiritual awakening — a soul coming back to life, room by room. "We were reborn" is not a slogan; it is a literal description of what the Steps do when you work them in the actual rooms of your life: your Home, your Occupation, your Affairs. What follows walks that awakening from the malady all the way through to carrying it into all our affairs.`,
+      movements: [
+        { title: 'The Malady: A Soul Going to Sleep', page: 'p.52', pullquote: `we couldn't control our emotional natures, we were a prey to misery and depression, we couldn't make a living, we had a feeling of uselessness`, pullquoteCite: 'p.52',
+          body: `Before the bottle, something was already dying. The Big Book lists eight "bedevilments" — the honest portrait of a soul gone numb. Read them slowly and notice they have nothing to do with alcohol: trouble with relationships, no control over our emotional natures, a prey to misery, unable to make a living, useless, afraid, unhappy, unable to help others. That isn't a drinking problem; that's a person asleep at the wheel of his own life. And these don't stay in one place. They show up in the three rooms named throughout this guide: at the kitchen table (Home), at the job (Occupation), and in the quiet places where no one is watching (Affairs). Naming the malady honestly is where waking up begins.` },
+        { title: 'The Root: Selfishness, Self-Centeredness', page: 'p.62', pullquote: `Selfishness—self-centeredness! That, we think, is the root of our troubles.`, pullquoteCite: 'p.62',
+          body: `If the bedevilments are the symptoms, the Big Book names the actual disease underneath in three plain words. Self at the center. Not because we are bad people, but because a frightened self runs everything when the soul falls asleep — driven, the book goes on to say, by a hundred forms of fear, self-seeking, and self-pity. This is the single thread running through all three rooms: the control we exert at Home, the fear of being found out at work, the corner we cut in our Affairs are all the same self protecting itself. Seeing this clearly is a relief, not an accusation. It means there is one root to dig up, and the Steps are the shovel.` },
+        { title: 'The Turning Point: "We Were Reborn"', page: 'p.63', pullquote: `We were reborn.`, pullquoteCite: 'p.63',
+          body: `Here the page turns. After deciding to turn our will and our lives over to a Power greater than ourselves, the book records the result in three words: "We were reborn." Not rehabilitated. Not repaired. Not improved. Reborn. The decision is sealed in the Third Step Prayer — a request to be relieved of the bondage of self so we can begin living for something larger than our own fear. This is the hinge of the whole awakening. It rarely feels like lightning. It feels like a quiet handing-over, after which the same kitchen table, the same job, the same obligations slowly start to feel different because the self at the center of them has finally stepped aside.` },
+        { title: 'Telling the Truth: Inventory (Steps 4 & 5)', page: 'p.64', pullquote: `Resentment is the "number one" offender. It destroys more alcoholics than anything else.`, pullquoteCite: 'p.64',
+          body: `Waking up requires turning on the lights. The Big Book calls resentment the "number one" offender — it destroys more alcoholics than anything else — and has us list, on paper, the people, institutions, and principles we are angry with. Then we add the fear inventory, because fear is the corroding thread woven through everything. This is Step 4: not a guilt trip, but a fearless look at what is actually driving the behavior in each room. The resentment that poisons every Monday at work. The control at Home. The half-truth in our Affairs. Step 5 finishes it: we say it all out loud to another human being. Truth spoken to a witness is what breaks its grip.` },
+        { title: 'Looking the World in the Eye: Confession (Step 5)', page: 'p.75', pullquote: `Once we have taken this step, withholding nothing, we are delighted. We can look the world in the eye.`, pullquoteCite: 'p.75',
+          body: `There is a specific gift on the far side of the Fifth Step, and the book is precise about it. Once we have told the whole truth to another person — withholding nothing — something lifts. The secret-keeping that kept the soul asleep in every room is over. We can look the world in the eye. Notice the words: withholding nothing. A half-confession leaves the self still hiding, still running things. This is the first time many of us feel genuinely awake — not because we are now perfect, but because we are finally fully known by at least one other person, and still accepted. From here the book turns us toward letting go.` },
+        { title: 'Letting Go: Willingness (Steps 6 & 7)', page: 'p.76', pullquote: `My Creator, I am now willing that you should have all of me, good and bad.`, pullquoteCite: 'p.76',
+          body: `Inventory shows us the defects; Steps 6 and 7 are about releasing them. The book asks a quiet, searching question — are we now ready to let God remove all the things we have admitted are objectionable? — and then gives words for it in the Seventh Step Prayer: a willingness to have all of me, good and bad. This is where the awakening gets practical. The control that poisons Home, the pride that calls workaholism a virtue, the dishonesty that hides behind "no one's watching" — these are the specific defects we ask to have lifted, room by room. We don't white-knuckle them away. We become willing, and we ask. Willingness, not perfection, is the whole assignment here.` },
+        { title: 'Repairing the Damage: Amends (Steps 8 & 9)', page: 'pp.76–83', pullquote: `Now we go out to our fellows and repair the damage done in the past.`, pullquoteCite: 'pp.76–83',
+          body: `An awakening that stays inside our heads isn't an awakening. Steps 8 and 9 send us back out to the people we harmed to repair the damage done in the past — by name, in person, going to any lengths. This is the most concrete room-by-room work in the book. At Home, amends are usually made in changed behavior, not speeches. At work, we clean up what we cut corners on, quietly and concretely. In our Affairs, we finish what we let slide. It rarely feels like rebirth while we're doing it — it feels like humiliation, or just like work. But this is exactly how the soul comes back to life: by becoming trustworthy again in the actual places it once went numb.` },
+        { title: 'The Promises: What It Looks Like Backward', page: 'pp.83–84', pullquote: `We will suddenly realize that God is doing for us what we could not do for ourselves.`, pullquoteCite: 'p.84',
+          body: `Then comes the part that only makes sense looking back. The Big Book promises that if we are painstaking about this phase of our development, we will be amazed before we are half way through. We will not regret the past nor wish to shut the door on it. We will comprehend the word serenity and we will know peace. And finally: we will suddenly realize that God is doing for us what we could not do for ourselves. (Worth noting: these Ninth Step Promises live on pages 83 and 84 — not page 100, as the original's blue "Page 100" box mistakenly marks them.) None of the inventory or amends looked like rebirth while we were in it. The Promises are the view from the other side, when we finally see the things that came to us weren't random.` },
+        { title: 'Staying Awake: Daily Practice (Steps 10 & 11)', page: 'p.84; p.86', pullquote: `Continue to watch for selfishness, dishonesty, resentment, and fear. When these crop up, we ask God at once to remove them.`, pullquoteCite: 'p.84',
+          body: `A soul can fall back asleep. Steps 10 and 11 are how we stay conscious so the old self doesn't quietly creep back in. The daily watch is direct: continue to watch for selfishness, dishonesty, resentment, and fear — the same four troublemakers from every room — and the moment they crop up, ask to have them removed. The Big Book then gives a rhythm to the day. At night we constructively review it: were we resentful, selfish, dishonest or afraid? On awakening we think about the twenty-four hours ahead and consider our plans for the day, asking for direction before we walk into our rooms. (That nightly review and morning meditation are part of Step 11, on p.86.) This is what keeps the awakening from becoming a memory.` },
+        { title: 'Into All Our Affairs (Step 12)', page: 'p.60', pullquote: `Having had a spiritual awakening as the result of these steps… practice these principles in all our affairs.`, pullquoteCite: 'p.60',
+          body: `The Twelfth Step names the whole journey: having had a spiritual awakening as the result of these steps, we try to carry this message to others and to practice these principles in all our affairs. That last phrase is this guide's entire point. The awakening has to reach all three rooms — the kitchen table, the job, and the contract — or it isn't an awakening at all. As this guide puts it, a spiritual experience that doesn't reach the actual rooms of our lives is just a feeling. Step 12 is where we stop studying the awakening and start living it: carrying it outward to other people, and inward into every ordinary corner of an ordinary day.` }
+      ],
+      definition: {
+        page: 'Appendix II, pp.567–568 (4th ed.)',
+        body: `So what is a "spiritual awakening"? The Big Book answers plainly in Appendix II. It is, first and last, a personality change sufficient to bring about recovery from alcoholism — and it has shown up among us in many different forms. Most of us did not get the sudden, dramatic kind. The psychologist William James called ours the "educational variety," because they develop slowly over a period of time. That is the whole secret hidden in "Don't die before your funeral": you are not waiting for lightning. You are waking up gradually, room by room, as the Steps quietly remake the self at the center of your home, your work, and your affairs. Awakening here means becoming a different person — not a fixed one, a changed one.`
+      },
+      closing: `This is what "Don't die before your funeral" really asks of us: to wake up while we are still here to live it. Not in a single blinding moment, but gradually — the educational variety — one honest room at a time, until the soul that fell asleep is fully awake again. The bottle was the symptom. The Steps, worked in the actual rooms of our lives, are how we wake back up.`
+    };
+
+    // Per-card application to the three rooms + a concrete practice (same order as AWAKENING.movements)
+    const CARD_DEPTH = [
+      { home: `At the kitchen table the bedevilments look like a short fuse with the people you love most and a flat indifference when they tell you about their day — the warmth you faked for strangers all afternoon is gone by the time you reach your own door.`,
+        occupation: `On the job it's the low-grade dread of being exposed as a fraud, a joyless competence, and the quiet certainty that nothing you produce is ever really useful to anyone.`,
+        affairs: `In your private dealings it's the unreturned message, the bill you keep 'meaning to' handle, the small dishonesty you no longer even notice — the soul going quiet in the places no one audits.`,
+        practice: `Open a note and copy the eight bedevilments (relationships, emotions, misery, can't make a living, uselessness, fear, unhappiness, no help to others); beside each, write the single most recent moment it showed up — name the day and the person, not a generality.` },
+      { home: `The "connection" you crave at home is often control in a kinder mask — you manage the thermostat, the schedule, the conversation, because a frightened self feels safer running the room than being in it.`,
+        occupation: `Wanting to look competent more than wanting to do the work is the same self protecting itself — the job quietly stopped being about the task and became about how you're seen.`,
+        affairs: `The corner you cut when no one's watching isn't laziness; it's self-seeking choosing the easier deal for you over the honest one for them.`,
+        practice: `Take one conflict from the past week and write the same sentence three times, filling the blank each time: 'Underneath, I was protecting my ___ (pride / pocketbook / security / self-esteem).' Notice which word you reach for most — that's your root showing.` },
+      { home: `Turning it over doesn't change who's at the table — it changes who's running it; you can walk into the same kitchen and, for once, ask 'what does this person need from me' instead of 'how do I get my way here.'`,
+        occupation: `Reborn at work means you stop carrying the whole company on your fear — you do the next right task and release the outcome instead of reading every email as a verdict on your worth.`,
+        affairs: `In your affairs the decision lands as relief — you no longer have to be the sole engineer of every result, so an honest answer stops feeling like something you're losing.`,
+        practice: `Read the Third Step Prayer slowly, then write your own one-line version naming the specific bondage you most want relief from today ('relieve me of the need to control dinner conversation' / 'relieve me of needing my boss's approval'). Say it out loud before you enter that room.` },
+      { home: `Your home inventory names the people you resent right where you live — the spouse who 'never listens,' the parent who still gets under your skin — and asks which fear of yours each resentment is really guarding.`,
+        occupation: `At work the inventory drags the resentment that sours every commute into the light: who, exactly, and what part of your security, ambition, or self-esteem you felt they threatened.`,
+        affairs: `In your affairs it's the fear list that does the digging — the obligations you avoid and the half-truths you tell almost always trace back to a specific fear of cost, exposure, or loss.`,
+        practice: `Draw the Big Book's four columns on one page — (1) who/what I resent, (2) the cause, (3) what it affects (self-esteem, security, ambitions, relationships), (4) my part. Fill in just three rows tonight, one from each room; don't fix anything, only tell the truth on paper.` },
+      { home: `The hardest line to read aloud is usually the one about home — the thing you did at the kitchen table that you've never told a soul; saying it to your sponsor is what finally lets you meet your family's eyes without flinching.`,
+        occupation: `Confessing the work item — the lie on the report, the credit you took, the fear you've hidden behind competence — ends the exhausting performance of having it all together.`,
+        affairs: `Read the affairs page exactly as written, withholding nothing — the half-confession that keeps one 'minor' deal back is the self still hiding, and it leaves the soul asleep.`,
+        practice: `Schedule the Fifth Step with one trusted person this week and put a real time on the calendar. Before you go, mark the single item you most hope to skip — and read that one first.` },
+      { home: `The defect to hand over at home is usually control or pride — and willingness here is small and concrete: catching the urge to correct your kid or 'win' the argument, and letting it pass instead.`,
+        occupation: `At work the defect is often the workaholism you've dressed up as dedication; becoming willing means admitting the late nights anesthetize you, and being ready to leave on time even though it feels like exposure.`,
+        affairs: `In your affairs the defect is the dishonesty that hides behind 'no one's watching' — willingness is being ready to let it go before you have a tidy plan for what honesty will cost you.`,
+        practice: `Pick the ONE defect that runs through all three rooms and write it at the top of a page. Underneath, finish: 'If this were gone, I'd be afraid that ___.' Then pray the Seventh Step Prayer naming that exact defect — willingness, not a cure, is all that's asked.` },
+      { home: `Home amends are almost never a speech — they're changed behavior over time: showing up present at the table, doing the thing you always promised, and not sliding back into the old pattern the moment it gets inconvenient.`,
+        occupation: `At work you go to the person by name and make it concrete — return the credit, redo the corner you cut, give the boss the real status — keeping it to your part and not dragging in others' faults.`,
+        affairs: `In your affairs you finish what you let slide and pay what you owe — the unanswered obligation, the debt, the broken commitment — except where reaching out would injure them or a third party.`,
+        practice: `Make your Step 8 list in three columns by room, then choose the single lowest-risk amend you can make in the next 24 hours (a repaid $20, a returned tool, an honest text), and do that one today — momentum, not hardest-first, is the goal.` },
+      { home: `Looking back, the kitchen table you once dreaded becomes the place you're most yourself — you'll notice you no longer brace for conflict the second you walk in, and you won't wish to shut the door on even the hard years.`,
+        occupation: `At work the fear of being found out quietly lifts; you'll catch yourself doing calmly a task that used to spike your dread, and realize a peace you didn't manufacture is doing what willpower never could.`,
+        affairs: `In your affairs you'll find you can answer honestly without rehearsing — the half-truth no longer even tempts you — and that ease is serenity showing up in the most ordinary transactions.`,
+        practice: `Write today's date at the top of a page and describe, in present tense, one room exactly as it is now — the friction, the fear. Seal it as an 'open in 6 months' note (calendar reminder or envelope); the Promises are the view backward, so give yourself something to look back from.` },
+      { home: `The Step 10 spot-check at home is same-day and specific: when you snapped at the table, you say so before bed instead of letting it harden overnight, and you ask the morning what your family actually needs from you today.`,
+        occupation: `At work staying awake means catching resentment or dishonesty the moment it crops up — the snippy reply, the shaded status update — and correcting it that afternoon rather than rehearsing it for a week.`,
+        affairs: `In your affairs it's the small things that test you between reviews: the cash you could pocket, the favor you could quietly skip — owned the same day, before a single cut corner becomes a habit again.`,
+        practice: `Tonight run the four-question review (resentful, selfish, dishonest, afraid?) and write one honest line plus one thing you owe. In the morning, before you open your phone, take two minutes to consider the day ahead and ask for direction into the first room you'll enter.` },
+      { home: `Carrying the message home is the least glamorous and most telling test — patience with the same people, the principles practiced at the table where you're hardest to live with, not just in the meeting room.`,
+        occupation: `At work it means being the person whose word is good and who quietly helps the struggling coworker — practicing these principles on the job, not preaching them, because an awakening that skips Monday isn't real.`,
+        affairs: `In your affairs it means honesty becomes your default in every contract and conversation, and you make yourself available to someone who's where you once were — the message carried, not just held.`,
+        practice: `Name one specific way to carry this into each room this week — home (a concrete act of service), work (one honest or generous move), affairs (reach out to one person who's struggling). Write the three down and do at least one by tomorrow night.` }
+    ];
+
+    const CITATIONS = [
+      { concept: '"We were reborn." (Step 3 outcome)', page: 'p.63', chapter: 'How It Works' },
+      { concept: 'The eight "bedevilments"', page: 'p.52', chapter: 'We Agnostics' },
+      { concept: 'Selfishness — self-centeredness, "the root of our troubles"', page: 'p.62', chapter: 'How It Works' },
+      { concept: 'Third Step decision (p.59) & Third Step Prayer', page: 'p.63', chapter: 'How It Works' },
+      { concept: 'Resentment, the "number one" offender (Step 4)', page: 'p.64', chapter: 'How It Works' },
+      { concept: 'The fear inventory (Step 4)', page: 'pp.67–68', chapter: 'How It Works' },
+      { concept: 'Step 5 — "look the world in the eye"', page: 'p.75', chapter: 'Into Action' },
+      { concept: 'Steps 6 & 7 + the Seventh Step Prayer', page: 'p.76', chapter: 'Into Action' },
+      { concept: 'Steps 8 & 9 — making amends', page: 'pp.76–83', chapter: 'Into Action' },
+      { concept: 'The Ninth Step Promises (original marks p.100 in error)', page: 'pp.83–84', chapter: 'Into Action' },
+      { concept: 'Step 10 — daily watch for the four defects', page: 'p.84', chapter: 'Into Action' },
+      { concept: 'Nightly review: "resentful, selfish, dishonest or afraid?"', page: 'p.86', chapter: 'Into Action' },
+      { concept: 'Step 11 — morning meditation (runs pp.85–88)', page: 'p.86', chapter: 'Into Action' },
+      { concept: 'Step 12 — "spiritual awakening… all our affairs"', page: 'p.60', chapter: 'How It Works' },
+      { concept: '"We have entered the world of the Spirit"', page: 'p.84', chapter: 'Into Action' },
+      { concept: '"The Realm of Spirit is broad, roomy, all inclusive"', page: 'p.46', chapter: 'We Agnostics' },
+      { concept: '"Personality change sufficient to bring about recovery"', page: 'pp.567–568', chapter: 'Appendix II' },
+      { concept: 'The "educational variety" / William James', page: 'p.567', chapter: 'Appendix II' },
+      { concept: '"Contempt prior to investigation" (attrib. H. Spencer)', page: 'p.568', chapter: 'Appendix II' }
+    ];
+
+    function renderAwakening() {
+      $('awakening-intro').textContent = AWAKENING.intro;
+      $('awakening-movements').innerHTML = AWAKENING.movements.map((m, i) => {
+        const d = CARD_DEPTH[i] || {};
+        return `
+        <article class="bg-white dark:bg-stone-900 rounded-2xl border border-stone-200 dark:border-stone-800 shadow-sm p-6 sm:p-7 flex flex-col">
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-sm font-black text-indigo-400/80">${String(i + 1).padStart(2, '0')}</span>
+            <span class="text-[10px] font-bold uppercase tracking-wider bg-amber-100 dark:bg-amber-950/40 text-amber-800 dark:text-amber-300 px-2 py-0.5 rounded-full">${m.page}</span>
+          </div>
+          <h3 class="font-bold text-stone-900 dark:text-white mb-2 leading-snug">${m.title}</h3>
+          <p class="text-sm text-stone-600 dark:text-stone-300 leading-relaxed">${m.body}</p>
+          <blockquote class="mt-3 pl-3 border-l-2 border-indigo-400 text-sm italic text-stone-700 dark:text-stone-200">"${m.pullquote}" <span class="not-italic text-[10px] font-bold text-stone-400 whitespace-nowrap">— ${m.pullquoteCite}</span></blockquote>
+          <div class="mt-4 pt-4 border-t border-stone-100 dark:border-stone-800">
+            <p class="text-[10px] font-bold uppercase tracking-widest text-stone-400 mb-2">In your three rooms</p>
+            <div class="space-y-2">
+              <p class="text-xs leading-snug"><strong class="text-journalBlue dark:text-blue-300">🏠 Home — </strong><span class="text-stone-600 dark:text-stone-300">${d.home || ''}</span></p>
+              <p class="text-xs leading-snug"><strong class="text-journalGreen dark:text-emerald-300">💼 Occupation — </strong><span class="text-stone-600 dark:text-stone-300">${d.occupation || ''}</span></p>
+              <p class="text-xs leading-snug"><strong class="text-journalPurple dark:text-purple-300">📋 Affairs — </strong><span class="text-stone-600 dark:text-stone-300">${d.affairs || ''}</span></p>
+            </div>
+          </div>
+          <div class="mt-3 rounded-lg bg-indigo-50 dark:bg-indigo-950/30 border border-indigo-100 dark:border-indigo-900/40 px-3 py-2">
+            <span class="text-[10px] font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300">✦ Your move</span>
+            <p class="text-xs text-stone-700 dark:text-stone-300 mt-0.5 leading-snug">${d.practice || ''}</p>
+          </div>
+        </article>`;
+      }).join('');
+      $('awakening-def').innerHTML = `
+        <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-2xl p-6 sm:p-8 shadow-xl max-w-4xl mx-auto">
+          <span class="text-indigo-300 text-xs font-bold uppercase tracking-wider">${AWAKENING.definition.page}</span>
+          <h3 class="text-xl sm:text-2xl font-bold mt-1 mb-3">What "spiritual awakening" actually means</h3>
+          <p class="text-indigo-100 leading-relaxed text-sm sm:text-base">${AWAKENING.definition.body}</p>
+        </div>`;
+      $('awakening-closing').textContent = AWAKENING.closing;
+    }
+
+    function renderCitations() {
+      $('citation-map').innerHTML = CITATIONS.map((c, i) => `
+        <tr class="${i % 2 ? 'bg-stone-50/60 dark:bg-stone-950/30' : ''} border-b border-stone-100 dark:border-stone-800">
+          <td class="px-4 py-2 text-stone-800 dark:text-stone-200">${c.concept}</td>
+          <td class="px-4 py-2 font-bold text-indigo-600 dark:text-indigo-400 whitespace-nowrap">${c.page}</td>
+          <td class="px-4 py-2 text-stone-500 whitespace-nowrap hidden sm:table-cell">${c.chapter}</td>
+        </tr>`).join('');
+    }
+
+    /* ===================== INIT ===================== */
+    window.addEventListener('DOMContentLoaded', function () {
+      // Sync dark toggle aria from the class applied pre-paint
+      $('btn-dark-toggle').setAttribute('aria-pressed', document.documentElement.classList.contains('dark') ? 'true' : 'false');
+
+      loadAll();
+      buildMatrix();
+      buildDeepDives();
+      buildAssessment();
+      renderAwakening();
+      renderCitations();
+      buildDailyChips();
+      loadTodayDaily();
+      renderStreak();
+      renderBreathCount();
+      renderProgressMeter();
+      updatePrintVersion();
+      setupScroll();
+      startBreathing();
+    });
+  </script>
+
+</body>
+</html>
