@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Month 7 &middot; Humility &mdash; The 36 Principles Cross-Connection</title>
+
+<!-- ============================================================= -->
+<!--  Open-source stack:                                            -->
+<!--   - reveal.js 4.6.1 (MIT) via jsDelivr CDN                     -->
+<!--   - Google Fonts: Spectral + Inter (Open Font License)        -->
+<!--  Everything authored here lives in this single HTML file.      -->
+<!-- ============================================================= -->
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reset.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.css">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Spectral:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+
+<style>
+  /* ============================ THEME ============================ */
+  :root{
+    --teal-900:#134e4a; --teal-800:#115e59; --teal-700:#0f766e; --teal-600:#0d9488;
+    --teal-500:#14b8a6; --teal-200:#99f6e4; --teal-100:#ccfbf1; --teal-50:#f0fdfa;
+    --blue-800:#1e40af;  --blue-600:#2563eb;  --blue-300:#93c5fd; --blue-50:#eff6ff;
+    --amber-800:#92400e; --amber-600:#d97706; --amber-300:#fcd34d; --amber-50:#fffbeb;
+    --purple-800:#6b21a8;--purple-600:#9333ea;--purple-300:#d8b4fe;--purple-50:#faf5ff;
+    --ink:#1f2937; --ink-soft:#4b5563; --ink-faint:#6b7280;
+    --paper:#fcfcf9; --paper-2:#ffffff; --line:#e5e7eb;
+    --green-800:#166534; --green-50:#f0fdf4; --red-700:#b91c1c; --red-50:#fef2f2;
+  }
+
+  .reveal{
+    font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;
+    font-size:30px; color:var(--ink);
+    background:
+      radial-gradient(1200px 600px at 80% -10%, #e6fffb 0%, rgba(230,255,251,0) 60%),
+      radial-gradient(1000px 600px at -10% 110%, #f3f7ff 0%, rgba(243,247,255,0) 60%),
+      var(--paper);
+  }
+  .reveal .slides{ text-align:left; }
+  .reveal section{ height:100%; }
+
+  .reveal h1,.reveal h2,.reveal h3,.reveal h4{
+    font-family:'Spectral',Georgia,serif; color:var(--teal-800);
+    font-weight:600; line-height:1.12; letter-spacing:.2px; text-transform:none; margin:0 0 .4em;
+  }
+  .reveal h1{ font-size:1.95em; }
+  .reveal h2{ font-size:1.5em; }
+  .reveal h3{ font-size:1.15em; }
+  .reveal p{ line-height:1.45; margin:0 0 .65em; color:var(--ink-soft); }
+  .reveal strong{ color:var(--ink); font-weight:600; }
+  .reveal em{ color:var(--teal-700); }
+  .reveal a{ color:var(--teal-700); }
+  .reveal ul,.reveal ol{ margin:0 0 .4em 1.1em; }
+  .reveal li{ margin:.32em 0; line-height:1.4; color:var(--ink-soft); }
+  .reveal .small{ font-size:.74em; }
+  .reveal .smaller{ font-size:.62em; }
+  .reveal .muted{ color:var(--ink-soft); }
+
+  /* progress + controls colors */
+  .reveal .progress{ color:var(--teal-600); height:5px; }
+  .reveal .controls{ color:var(--teal-600); }
+  .reveal .slide-number{ background:rgba(15,118,110,.10); color:var(--teal-800); font-family:'Inter'; }
+
+  /* ============================ COMPONENTS ============================ */
+  .kicker{
+    font-family:'Inter'; font-weight:600; letter-spacing:.18em; text-transform:uppercase;
+    font-size:.5em; color:var(--teal-700); margin:0 0 .5em;
+  }
+  .badge{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:1.6em; height:1.6em; border-radius:999px; background:var(--teal-600);
+    color:#fff; font-weight:700; font-family:'Inter'; font-size:.9em;
+  }
+  .lead{ font-size:1.05em; color:var(--ink-soft); }
+
+  blockquote.q{
+    border:0; box-shadow:none; background:transparent; width:auto; margin:.2em 0 .4em;
+    font-family:'Spectral'; font-style:italic; font-size:1.15em; line-height:1.35;
+    color:var(--ink); padding-left:.7em; border-left:5px solid var(--teal-400,#2dd4bf);
+  }
+  blockquote.q .src{ display:block; font-style:normal; font-family:'Inter'; font-size:.5em;
+    color:var(--ink-soft); margin-top:.55em; letter-spacing:.02em; }
+
+  /* colored "legacy" cards */
+  .cards{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:.7em; margin:.4em 0; }
+  .card{
+    background:var(--paper-2); border:1px solid var(--line); border-radius:14px;
+    padding:.7em .8em; border-top:5px solid var(--teal-500);
+    box-shadow:0 1px 3px rgba(15,23,42,.05);
+  }
+  .card .tag{ font-family:'Inter'; font-weight:700; font-size:.55em; letter-spacing:.1em;
+    text-transform:uppercase; margin-bottom:.25em; }
+  .card h4{ font-size:.92em; margin:.05em 0 .3em; color:var(--ink); font-family:'Spectral'; }
+  .card p{ font-size:.62em; line-height:1.4; margin:0; }
+
+  .card.step{ border-top-color:var(--blue-600); }
+  .card.step .tag{ color:var(--blue-800); }
+  .card.trad{ border-top-color:var(--amber-600); }
+  .card.trad .tag{ color:var(--amber-800); }
+  .card.conc{ border-top-color:var(--purple-600); }
+  .card.conc .tag{ color:var(--purple-800); }
+
+  /* generic panel */
+  .panel{
+    background:var(--teal-50); border:1px solid var(--teal-200); border-radius:16px;
+    padding:.8em 1em; margin:.3em 0;
+  }
+  .panel.white{ background:var(--paper-2); border-color:var(--line); }
+  .panel.green{ background:var(--green-50); border-color:#bbf7d0; }
+  .panel.warn{ background:var(--red-50); border-color:#fecaca; }
+  .panel.gold{ background:var(--amber-50); border-color:#fde68a; }
+  .panel.blue{ background:var(--blue-50); border-color:#bfdbfe; }
+  .panel.purple{ background:var(--purple-50); border-color:#e9d5ff; }
+
+  .pill{ display:inline-block; font-size:.5em; font-weight:600; font-family:'Inter';
+    padding:.18em .6em; border-radius:999px; background:var(--teal-100); color:var(--teal-800);
+    letter-spacing:.04em; }
+  .pill.step{ background:var(--blue-50); color:var(--blue-800); }
+  .pill.trad{ background:var(--amber-50); color:var(--amber-800); }
+  .pill.conc{ background:var(--purple-50); color:var(--purple-800); }
+
+  .ref{ font-size:.46em; font-weight:600; font-family:'Inter'; color:var(--teal-700);
+    background:var(--teal-50); border:1px solid var(--teal-200); border-radius:6px;
+    padding:.1em .45em; vertical-align:middle; white-space:nowrap; }
+
+  /* comparison table */
+  .reveal table.matrix{ font-size:.6em; border-collapse:separate; border-spacing:0; width:100%; margin:.2em 0; }
+  .reveal table.matrix th,.reveal table.matrix td{ padding:.55em .6em; border-bottom:1px solid var(--teal-100); text-align:left; vertical-align:top; line-height:1.3; }
+  .reveal table.matrix thead th{ background:var(--teal-50); border-bottom:2px solid var(--teal-200); font-family:'Inter'; font-weight:700; }
+  .reveal table.matrix thead th:nth-child(1){ color:var(--teal-800); }
+  .reveal table.matrix thead th:nth-child(2){ color:var(--blue-800); }
+  .reveal table.matrix thead th:nth-child(3){ color:var(--amber-800); }
+  .reveal table.matrix thead th:nth-child(4){ color:var(--purple-800); }
+  .reveal table.matrix td:first-child,.reveal table.matrix th:first-child{ font-weight:600; color:var(--ink); }
+
+  .two-col{ display:grid; grid-template-columns:1fr 1fr; gap:1em; align-items:start; }
+  .center{ text-align:center; }
+  .v-center{ display:flex; flex-direction:column; justify-content:center; height:100%; }
+
+  /* title slide */
+  .title-wrap{ height:100%; display:flex; flex-direction:column; justify-content:center; }
+  .title-wrap .big-badge{
+    width:1.8em; height:1.8em; font-size:1.4em; margin-bottom:.4em;
+    box-shadow:0 6px 24px rgba(13,148,136,.35);
+  }
+  .title-wrap h1{ font-size:2.5em; margin-bottom:.18em; }
+  .triad{ font-family:'Inter'; font-weight:600; color:var(--ink-soft); letter-spacing:.04em; }
+  .triad .dot{ color:var(--teal-600); padding:0 .35em; }
+
+  .ribbon{ display:flex; gap:.5em; flex-wrap:wrap; margin-top:.2em; }
+  .ribbon .pill{ font-size:.58em; }
+
+  .footer-note{ position:absolute; bottom:14px; left:24px; font-size:.42em; color:var(--ink-faint); font-family:'Inter'; }
+
+  /* fragment helper for definitions */
+  .deflist dt{ font-weight:600; color:var(--ink); font-family:'Inter'; font-size:.8em; margin-top:.5em; }
+  .deflist dd{ margin:.1em 0 0 0; font-size:.8em; color:var(--ink-soft); }
+
+  /* arrow flow */
+  .flow{ display:flex; align-items:stretch; gap:.5em; }
+  .flow .node{ flex:1; text-align:center; border-radius:12px; padding:.6em .4em; font-size:.62em; line-height:1.3; }
+  .flow .arrow{ display:flex; align-items:center; color:var(--teal-700); font-size:1.4em; }
+  .flow .node.s{ background:var(--blue-50); border:1px solid #bfdbfe; }
+  .flow .node.t{ background:var(--amber-50); border:1px solid #fde68a; }
+  .flow .node.c{ background:var(--purple-50); border:1px solid #e9d5ff; }
+
+  .reveal .print-pdf .footer-note{ display:none; }
+</style>
+</head>
+<body>
+<div class="reveal">
+  <div class="slides">
+
+  <!-- ===================== 1 · TITLE ===================== -->
+  <section data-auto-animate>
+    <div class="title-wrap">
+      <span class="badge big-badge">7</span>
+      <p class="kicker">The 36 Principles &middot; A Cross-Connection Study</p>
+      <h1>Humility</h1>
+      <p class="triad" style="font-size:1.15em;">Step 7 <span class="dot">&bull;</span> Tradition 7 <span class="dot">&bull;</span> Concept 7</p>
+      <p class="lead" style="margin-top:.5em;">Month 7 &mdash; weaving Recovery, Unity, and Service into a single fabric.</p>
+      <div class="ribbon">
+        <span class="pill step">Individual &middot; Recovery</span>
+        <span class="pill trad">Group &middot; Unity</span>
+        <span class="pill conc">Service &middot; World Affairs</span>
+      </div>
+    </div>
+    <p class="footer-note">bigbook.study &middot; The 36 Principles &middot; Month 7</p>
+    <aside class="notes">Welcome &mdash; introduce the month, the shared principle of Humility, and that we read the Step, Tradition, and Concept of the same number together. See remarks file, Slide 1.</aside>
+  </section>
+
+  <!-- ===================== 2 · THESIS QUOTE ===================== -->
+  <section data-auto-animate>
+    <div class="v-center">
+      <p class="kicker">The Shared Principle</p>
+      <blockquote class="q" style="font-size:1.7em; border-left-width:7px;">
+        &ldquo;A.A. at every level chooses willing cooperation over coercion, humility over power.&rdquo;
+        <span class="src">&mdash; The thread that runs through Step 7, Tradition 7, and Concept 7</span>
+      </blockquote>
+    </div>
+    <aside class="notes">This one sentence is the whole month. Read it slowly. Everything that follows is an unpacking of this. See remarks, Slide 2.</aside>
+  </section>
+
+  <!-- ===================== 3 · THE THREE PRINCIPLES ===================== -->
+  <section>
+    <p class="kicker">What We Study This Month</p>
+    <h2>The Three Principles</h2>
+    <div class="cards">
+      <div class="card step fragment fade-up">
+        <div class="tag">Step 7 &middot; Individual</div>
+        <h4>Humility before God</h4>
+        <p>&ldquo;Humbly asked Him to remove our shortcomings.&rdquo;</p>
+      </div>
+      <div class="card trad fragment fade-up">
+        <div class="tag">Tradition 7 &middot; Group</div>
+        <h4>Self-Supporting</h4>
+        <p>&ldquo;Every A.A. group ought to be fully self-supporting, declining outside contributions.&rdquo;</p>
+      </div>
+      <div class="card conc fragment fade-up">
+        <div class="tag">Concept 7 &middot; Service</div>
+        <h4>The Charter</h4>
+        <p>The Charter and Bylaws of the Conference empower the trustees to conduct world service affairs.</p>
+      </div>
+    </div>
+    <p class="small fragment" style="margin-top:.5em;">Same number, three levels &mdash; the <em>individual</em>, the <em>group</em>, and the <em>service structure</em> &mdash; one shared spiritual principle.</p>
+    <aside class="notes">Walk the three cards left to right. Note they share the number 7 and the same underlying principle. Don't over-explain yet &mdash; we go deep on each next. See remarks, Slide 3.</aside>
+  </section>
+
+  <!-- ===================== 4 · WHAT HUMILITY IS ===================== -->
+  <section>
+    <p class="kicker">Defining the Word</p>
+    <h2>Humility Is Not Humiliation</h2>
+    <div class="two-col">
+      <div class="panel warn">
+        <p class="small" style="margin:0 0 .3em;"><strong>What it is <em>not</em></strong></p>
+        <ul class="small" style="margin:0 0 0 1em;">
+          <li>Humiliation or self-abasement</li>
+          <li>Thinking poorly of oneself</li>
+          <li>Weakness or groveling</li>
+        </ul>
+      </div>
+      <div class="panel green">
+        <p class="small" style="margin:0 0 .3em;"><strong>What it <em>is</em> (12&amp;12)</strong></p>
+        <blockquote class="q" style="font-size:.92em; margin:.1em 0;">
+          &ldquo;A clear recognition of what and who we really are, followed by a sincere attempt to become what we could be.&rdquo;
+          <span class="src">&mdash; 12&amp;12, on Step 7</span>
+        </blockquote>
+      </div>
+    </div>
+    <p class="small center fragment" style="margin-top:.6em;"><strong>The result at every level:</strong> freedom from the trap of self-sufficiency, self-importance, and the illusion that power is the answer.</p>
+    <aside class="notes">Humility is the most misunderstood word in recovery. Clear the misconception first, then give the 12&amp;12 definition. See remarks, Slide 4.</aside>
+  </section>
+
+  <!-- ===================== 5 · SHORT / LONG FORM ===================== -->
+  <section>
+    <p class="kicker">The Shared Principle &middot; Humility</p>
+    <div class="panel white" style="border:2px solid var(--teal-200);">
+      <p class="pill">Short Form</p>
+      <blockquote class="q" style="font-size:1.2em; margin:.25em 0 .7em;">
+        &ldquo;We ask rather than demand, cooperate rather than compel, and pay our own way.&rdquo;
+      </blockquote>
+      <p class="small"><strong>Long form &mdash; the same act at three levels:</strong> Step 7 approaches the Higher Power as a <em>supplicant, not a commander</em>. Tradition 7 is humility before the world &mdash; <em>&ldquo;we will pay our own way; we will not accept the strings that come with outside money.&rdquo;</em> Concept 7 is institutional humility &mdash; a Charter that relies on <em>voluntary compliance, not legal compulsion</em>; a service structure that refuses to accumulate power.</p>
+    </div>
+    <p class="smaller muted fragment">Note: the shared principle, short form, and long form reflect a personal understanding of how the three legacies connect. They are not official A.A. language. The Steps, Traditions, and Concepts are A.A.&rsquo;s; the connections drawn between them are the author&rsquo;s own.</p>
+    <aside class="notes">Read the short form aloud, then unpack the three clauses. End by reading the disclaimer so the room knows what's official and what's interpretation. See remarks, Slide 5.</aside>
+  </section>
+
+  <!-- ===================== 6 · THE STEP ===================== -->
+  <section>
+    <p class="kicker"><span class="pill step">Individual &middot; Recovery</span></p>
+    <h2 style="color:var(--blue-800);">The Step &mdash; Humility before God <span class="ref">12&amp;12 pp.70&ndash;76</span></h2>
+    <p class="small">Step 7 humbly asks God to remove my shortcomings. The key word is <strong>&ldquo;humbly.&rdquo;</strong> It means asking for help rather than demanding results &mdash; recognizing I cannot remove my own shortcomings through willpower alone.</p>
+    <blockquote class="q" style="border-left-color:var(--blue-300); font-size:1.0em;">
+      &ldquo;My Creator, I am now willing that you should have all of me, good and bad. I pray that you now remove from me every single defect of character which stands in the way of my usefulness to you and my fellows. Grant me strength, as I go out from here, to do your bidding. Amen.&rdquo;
+      <span class="src">&mdash; Big Book p.76, the Seventh Step Prayer</span>
+    </blockquote>
+    <aside class="notes">The Step level: humility before God. The whole 12&amp;12 chapter on Step 7 is really about humility. Read the prayer. See remarks, Slide 6.</aside>
+  </section>
+
+  <!-- ===================== 7 · THE TRADITION ===================== -->
+  <section>
+    <p class="kicker"><span class="pill trad">Group &middot; Unity</span></p>
+    <h2 style="color:var(--amber-800);">The Tradition &mdash; Self-Supporting <span class="ref">12&amp;12 pp.160&ndash;165</span></h2>
+    <p class="small">Humility applied to the group&rsquo;s finances. <strong>This is not about poverty &mdash; it is about freedom.</strong> Early A.A. learned the hard way that money brings strings, and strings compromise independence. By declining outside money, the group humbly says: <em>we will pay our own way.</em></p>
+    <blockquote class="q" style="border-left-color:var(--amber-300); font-size:1.0em;">
+      &ldquo;The A.A. groups themselves ought to be fully self-supporting, declining outside contributions&hellip; Nothing can so surely destroy our spiritual heritage as futile disputes over property, money, and authority.&rdquo;
+      <span class="src">&mdash; 12&amp;12 pp.160&ndash;161</span>
+    </blockquote>
+    <aside class="notes">The Group level: humility before the world. Stress "freedom, not poverty." Money brings strings. See remarks, Slide 7.</aside>
+  </section>
+
+  <!-- ===================== 8 · THE CONCEPT ===================== -->
+  <section>
+    <p class="kicker"><span class="pill conc">Service &middot; World Affairs</span></p>
+    <h2 style="color:var(--purple-800);">The Concept &mdash; The Charter</h2>
+    <p class="small">Concept 7 describes the Conference Charter and Bylaws &mdash; but the key insight is that the Charter relies on <strong>voluntary compliance, not legal compulsion.</strong> The Conference is a &ldquo;creature of the Fellowship.&rdquo; It has no power to compel any group to do anything. Its authority rests entirely on moral persuasion and the trust of the groups.</p>
+    <blockquote class="q" style="border-left-color:var(--purple-300); font-size:1.0em;">
+      &ldquo;The Conference Charter is not a legal document; it is more in the nature of a traditional agreement&hellip; Its real force lies not in law but in the voluntary compliance of A.A.&rsquo;s membership.&rdquo;
+      <span class="src">&mdash; Concept VII (paraphrased)</span>
+    </blockquote>
+    <aside class="notes">The Service level: institutional humility. An organization that could compel compliance chooses not to. Authority is moral, not legal. See remarks, Slide 8.</aside>
+  </section>
+
+  <!-- ===================== 9 · MATRIX ===================== -->
+  <section>
+    <p class="kicker">How Humility Operates at Every Level</p>
+    <h2>One Principle, Three Dimensions</h2>
+    <table class="matrix">
+      <thead>
+        <tr><th>Dimension</th><th>Individual (Step)</th><th>Group (Tradition)</th><th>Service (Concept)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>What humility looks like</td><td>Asking God, not demanding</td><td>Declining outside money</td><td>Moral authority, not legal</td></tr>
+        <tr><td>What it rejects</td><td>Self-sufficiency, ego</td><td>Dependence on outsiders</td><td>Coercion, compulsion</td></tr>
+        <tr><td>The paradox</td><td>Admitting weakness gives strength</td><td>Declining money gives freedom</td><td>No enforcement gives credibility</td></tr>
+        <tr><td>What threatens it</td><td>Pride, self-will</td><td>Accepting large donations</td><td>Accumulating power</td></tr>
+        <tr><td>The spiritual act</td><td>Humbly asking for help</td><td>Humbly paying our own way</td><td>Humbly operating by consent</td></tr>
+      </tbody>
+    </table>
+    <aside class="notes">This is the anchor slide. Read down the "paradox" row especially &mdash; each level contains a counter-intuitive truth. See remarks, Slide 9.</aside>
+  </section>
+
+  <!-- ===================== 10 · CROSS-CONNECTION ===================== -->
+  <section>
+    <p class="kicker">The Cross-Connection</p>
+    <h2>Humility Is the Thread</h2>
+    <div class="flow" style="margin:.3em 0 .7em;">
+      <div class="node s"><strong>I</strong> humbly ask God</div>
+      <div class="arrow">&rarr;</div>
+      <div class="node t">The <strong>group</strong> humbly declines outside money</div>
+      <div class="arrow">&rarr;</div>
+      <div class="node c">The <strong>Conference</strong> humbly relies on moral authority</div>
+    </div>
+    <div class="panel">
+      <p class="small">The world runs on <strong>power, money, and legal authority.</strong> A.A. deliberately rejects all three in favor of something quieter: <em>humility, self-support, and voluntary cooperation.</em></p>
+      <p class="small" style="margin:0;">Step 7: ask rather than demand. Tradition 7: pay our own way rather than accept strings. Concept 7: rely on consent rather than compulsion.</p>
+    </div>
+    <p class="center fragment" style="font-family:'Spectral'; font-style:italic; color:var(--teal-800); font-size:1.05em; margin-top:.5em;">This is perhaps the most counter-cultural principle in all of A.A.</p>
+    <aside class="notes">Tie it together: same act, three levels. The world says grab power; A.A. chooses humility. See remarks, Slide 10.</aside>
+  </section>
+
+  <!-- ===================== 11 · HISTORICAL CONTEXT ===================== -->
+  <section>
+    <p class="kicker">Historical Context</p>
+    <h2>The $10,000 Bequest</h2>
+    <div class="two-col">
+      <div>
+        <p class="small">In A.A.&rsquo;s early years, the Fellowship received a bequest of <strong>$10,000</strong> from a grateful member. Bill W. and the trustees debated: <em>A.A. needs money &mdash; accept it gratefully?</em> Or <em>large bequests set a dangerous precedent?</em></p>
+        <p class="small">The decision &mdash; to <strong>limit individual bequests</strong> and <strong>cap the size of A.A.&rsquo;s reserve</strong> &mdash; was an act of institutional humility that became the foundation of Tradition 7.</p>
+      </div>
+      <div class="panel gold">
+        <p class="small" style="margin:0;"><strong>The same humility, three places:</strong> I decline to rely on my own willpower and ask God (Step 7). A.A. declines outside wealth and asks its own members (Tradition 7). The Conference declines legal enforcement and operates by consent (Concept 7).</p>
+      </div>
+    </div>
+    <aside class="notes">Tell the bequest story like a story. It is the concrete origin of Tradition 7 and shows institutional humility in action. See remarks, Slide 11.</aside>
+  </section>
+
+  <!-- ===================== 12 · PERSONAL UNDERSTANDING ===================== -->
+  <section>
+    <div class="v-center">
+      <p class="kicker">Personal Understanding</p>
+      <blockquote class="q" style="font-size:1.15em;">
+        &ldquo;Humility was the word I misunderstood the longest. I thought it meant groveling, self-deprecation, thinking I was worthless. The 12&amp;12 taught me otherwise: humility is a clear recognition of what and who I really am.&rdquo;
+      </blockquote>
+      <p class="small">When I humbly ask God (Step 7), my group declines outside contributions (Tradition 7), and the Conference relies on moral authority (Concept 7) &mdash; each is simply <strong>acknowledging reality.</strong> Humility is not weakness. It is the most practical and powerful spiritual principle I know.</p>
+    </div>
+    <aside class="notes">This is a personal-share slide. Deliver it from the heart &mdash; or invite a member to share their own experience of misunderstanding humility. See remarks, Slide 12.</aside>
+  </section>
+
+  <!-- ===================== 13 · BALANCE BREAKS ===================== -->
+  <section>
+    <p class="kicker">What Happens When the Balance Breaks</p>
+    <h2>Humility Strong at One Level, Weak at Others</h2>
+    <div class="cards">
+      <div class="card step fragment fade-up">
+        <div class="tag">Strong Step, Weak Tradition</div>
+        <p>I pray daily &mdash; but the group takes large outside donations or leans on a wealthy member. Personal humility coexists with institutional pride; the group is compromised and beholden to its donors.</p>
+      </div>
+      <div class="card trad fragment fade-up">
+        <div class="tag">Strong Tradition, Weak Step</div>
+        <p>The group is fully self-supporting &mdash; but members never practiced Step 7. Financial humility masks an arrogance of spirit that newcomers can feel.</p>
+      </div>
+      <div class="card conc fragment fade-up">
+        <div class="tag">Strong Step &amp; Tradition, Weak Concept</div>
+        <p>Personal and group humility are strong &mdash; but the service structure tries to <em>compel</em> through mandates and threats. Groups disengage; the structure loses credibility.</p>
+      </div>
+    </div>
+    <p class="small center fragment" style="margin-top:.4em;">Humility has to be lived at <strong>all three levels at once</strong> &mdash; weakness anywhere undermines the whole.</p>
+    <aside class="notes">The "failure modes" slide. Each card is a real-world imbalance. Good place to pause for nods of recognition. See remarks, Slide 13.</aside>
+  </section>
+
+  <!-- ===================== 14 · MEDITATION ===================== -->
+  <section>
+    <div class="v-center">
+      <p class="kicker">Meditation for This Month</p>
+      <div class="panel purple">
+        <blockquote class="q" style="border-left-color:var(--purple-300); font-size:1.0em; margin:.1em 0;">
+          &ldquo;God, I come to You humbly &mdash; not because I am worthless, but because I am not God. I cannot remove my own shortcomings, and I stop pretending I can. I ask for Your help. May my group approach its finances with the same humility &mdash; paying its own way, declining what comes with strings, trusting that self-support is a form of spiritual health. And may our service structure always choose persuasion over power, consent over compulsion, and moral authority over legal force. Humility is not thinking less of myself &mdash; it is thinking of myself less. Help me practice that today, in my recovery, in my group, and in my service.&rdquo;
+          <span class="src">&mdash; A meditation on Humility at every level</span>
+        </blockquote>
+      </div>
+    </div>
+    <aside class="notes">Slow the room down. Consider reading this as a shared moment of quiet. See remarks, Slide 14.</aside>
+  </section>
+
+  <!-- ===================== 15 · DISCUSSION ===================== -->
+  <section>
+    <p class="kicker">For Group Discussion</p>
+    <h2>Three Questions</h2>
+    <ol style="font-size:.92em;">
+      <li class="fragment"><strong>Daily life:</strong> What does humility look like for me right now? Am I asking for help &mdash; or still trying to fix everything myself?</li>
+      <li class="fragment"><strong>Our group:</strong> Are we fully self-supporting? Do we grasp what Tradition 7 asks <em>beyond passing the basket</em> &mdash; contributions to district, area, and GSO?</li>
+      <li class="fragment"><strong>Our service:</strong> Do I know the difference between legal and moral authority? Where does Concept 7&rsquo;s voluntary cooperation show up in my service work?</li>
+    </ol>
+    <aside class="notes">Open the floor. Reveal one question at a time; let discussion breathe between them. See remarks, Slide 15.</aside>
+  </section>
+
+  <!-- ===================== 16 · MEETING FORMAT + PRACTICE ===================== -->
+  <section>
+    <p class="kicker">Putting It to Work</p>
+    <h2>Meeting Format &amp; This Month&rsquo;s Practice</h2>
+    <div class="two-col">
+      <div class="panel">
+        <p class="small" style="margin:0 0 .3em;"><strong>Meeting format</strong></p>
+        <ul class="smaller" style="margin:0 0 0 1em;">
+          <li><strong>Readings:</strong> Step 7 (12&amp;12 pp.70&ndash;76); Tradition 7 (12&amp;12 pp.160&ndash;165); Concept 7 short form.</li>
+          <li><strong>Chair&rsquo;s lead:</strong> Share on humility in practice &mdash; how has choosing cooperation over coercion produced better results?</li>
+          <li><strong>Closing:</strong> &ldquo;The world says take all the power you can get. A.A. says humility works better.&rdquo;</li>
+        </ul>
+      </div>
+      <div class="panel green">
+        <p class="small" style="margin:0 0 .3em;"><strong>Concrete actions this month</strong></p>
+        <ul class="smaller" style="margin:0 0 0 1em;">
+          <li>Say the Seventh Step Prayer daily; notice how asking for help changes you toward others.</li>
+          <li>Review the group&rsquo;s finances: self-supporting? Giving beyond rent to district, area, GSO?</li>
+          <li>In service: are you compelling cooperation &mdash; or modeling service that attracts?</li>
+          <li>Journal: where am I substituting power for humility?</li>
+        </ul>
+      </div>
+    </div>
+    <aside class="notes">Practical close. Point people to specific readings and the four concrete actions. See remarks, Slide 16.</aside>
+  </section>
+
+  <!-- ===================== 17 · CLOSING ===================== -->
+  <section data-auto-animate>
+    <div class="v-center center">
+      <span class="badge big-badge" style="margin:0 auto .5em; width:1.7em; height:1.7em; font-size:1.3em;">7</span>
+      <blockquote class="q" style="border:0; padding:0; font-size:1.7em; text-align:center;">
+        &ldquo;The world says take all the power you can get.<br>A.A. says <em>humility</em> works better.&rdquo;
+      </blockquote>
+      <p class="lead" style="margin-top:.6em;">Humility is not thinking less of yourself &mdash; it is thinking of yourself less.</p>
+      <p class="small muted" style="margin-top:1em;">Month 7 &middot; Step 7 &middot; Tradition 7 &middot; Concept 7 &mdash; <em>Humility / Voluntary Cooperation</em></p>
+    </div>
+    <p class="footer-note">bigbook.study &middot; The 36 Principles &middot; Thank you</p>
+    <aside class="notes">Land the closing line. Thank the group, announce next month (Month 8: Stewardship). See remarks, Slide 17.</aside>
+  </section>
+
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@4.6.1/plugin/notes/notes.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    transitionSpeed: 'default',
+    backgroundTransition: 'fade',
+    controls: true,
+    progress: true,
+    center: false,
+    width: 1280,
+    height: 720,
+    margin: 0.06,
+    minScale: 0.2,
+    maxScale: 1.6,
+    plugins: [ RevealNotes ]
+  });
+</script>
+</body>
+</html>
