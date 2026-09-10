@@ -1804,20 +1804,12 @@ function render(n) {
      Only the plain-language explanations appear here; the Traditions
      themselves are printed once each, in sections 1 and 2 above. */
   var s3 = sectionShell(++i, "plbb", SRC.plbb.label, SRC.plbb.cite);
-  s3.body.appendChild(el("p", "compare-note",
-    "The Plain Language Big Book prints each Tradition beside a plain-language " +
-    "explanation. Both explanations are below — the Traditions themselves are in " +
-    "sections 1 and 2 above."));
   s3.body.appendChild(explainBlock("Explaining the Short Form", t.plbbShort, "plbbS:0"));
   s3.body.appendChild(explainBlock("Explaining the Long Form", t.plbbLong, "plbbL:0"));
   view.appendChild(s3.sec);
 
   /* ---- 4. synopsis: the 12 & 12's own contents-page précis ---- */
   var s4 = sectionShell(++i, "syn", SRC.syn.label, SRC.syn.cite);
-  s4.body.appendChild(el("p", "compare-note",
-    "The contents pages of the Twelve Steps and Twelve Traditions print this " +
-    "précis beneath each Tradition — A.A.’s own summary of the essay in " +
-    "section 8 below."));
   var p4 = el("div", "prose");
   p4.appendChild(markable(el("p", null, t.syn), "syn:0"));
   s4.body.appendChild(p4);
@@ -1883,10 +1875,6 @@ function render(n) {
 
   /* ---- 9. A.A. Tradition — How It Developed (P-17) ---- */
   var s5a = sectionShell(++i, "p17", SRC.p17.label, SRC.p17.cite);
-  s5a.body.appendChild(el("p", "compare-note",
-    "The Twelve Points to Assure Our Future, as Bill W. first published them in " +
-    "the A.A. Grapevine in 1946 — the wording the Long Form grew out of."));
-
   if (t.p17Same) {
     /* The 1946 point survives unchanged into today's Long Form, so there is
        nothing new to print: say so and point at section 2 instead. */
