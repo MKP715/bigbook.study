@@ -211,6 +211,23 @@ a{color:var(--accent);text-underline-offset:2px}
 .menu-btn{display:none}
 @media (max-width:980px){.menu-btn{display:inline-flex}}
 
+/* the way back to the rest of the site, where every BigBook.Study page has it */
+.home-link{
+  display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;height:38px;
+  padding:0 10px 0 7px;border-radius:var(--radius-sm);color:var(--ink-soft);
+  font-size:.8rem;font-weight:600;text-decoration:none;white-space:nowrap;
+  border:1px solid var(--rule);
+}
+.home-link:hover{background:var(--bg-inset);color:var(--ink)}
+.home-link svg{width:17px;height:17px;flex:0 0 auto;display:block;fill:none;
+  stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+
+/* Two buttons earn nothing on a phone: the column already fills the screen,
+   so there is no width to change, and a touch screen has no keyboard for the
+   shortcuts. Dropping them lets the tools share the title's row. */
+@media (max-width:768px){#widthBtn{display:none}}
+@media (hover:none) and (pointer:coarse){#keysBtn{display:none}}
+
 /* --- global search box --------------------------------------------------- */
 .gsearch{position:relative;max-width:520px;margin:0 auto}
 .gsearch svg{
@@ -250,11 +267,23 @@ a{color:var(--accent);text-underline-offset:2px}
    keeps every sticky offset (section headers, find bar, results) correct. */
 @media (max-width:700px){
   .bar{flex-wrap:wrap}
-  .brand{flex:1 1 auto;min-width:0}
+  /* a zero basis lets the title give way to the tools instead of pushing
+     them onto a row of their own */
+  .brand{flex:1 1 0;min-width:0}
   .brand b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block}
   .bar-grow{order:3;flex:1 0 100%;width:100%}
   .gsearch{max-width:none}
   .gsearch kbd{display:none}
+  .home-link{width:38px;padding:0;justify-content:center}
+  .home-link .home-txt{display:none}
+}
+/* too narrow for the title as well: the ring stays, and still goes home */
+@media (max-width:480px){.brand b{display:none}}
+/* the smallest phones: a little tighter, so the tools still fit on one row */
+@media (max-width:340px){
+  .bar{gap:6px}
+  .bar-tools{gap:2px}
+  .icon-btn,.home-link{width:34px;height:34px}
 }
 
 /* --- body layout --------------------------------------------------------- */
@@ -553,6 +582,7 @@ a{color:var(--accent);text-underline-offset:2px}
 .pager .dir{font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-faint)}
 .pager .ttl{font-size:.86rem;font-weight:600;line-height:1.3}
 .pager a.next{text-align:right}
+.pager.also{margin-top:10px}
 @media (max-width:520px){.pager{flex-direction:column}.pager a.next{text-align:left}}
 
 /* --- find-in-tradition bar ----------------------------------------------- */
@@ -1210,7 +1240,7 @@ mark.user:hover{background:var(--hl-edge)}
   /* --- nothing interactive survives to paper --- */
   .bar,.side,.scrim,.scrim2,.findbar,.results,.dict,.sel-tools,.toast,.pager,
   .skip,.sec-toggle .chev,.cl-tools,.speak-btn,.gv-speak,.readbar,.voice-panel,.keys,
-  .resume,.notes-tools,.notes-hint,.notes-count{display:none!important}
+  .resume,.notes-tools,.notes-hint,.notes-count,.home-link{display:none!important}
 
   html,body{background:#fff;color:#000}
   .app,.body{display:block}
@@ -1302,6 +1332,11 @@ mark.user:hover{background:var(--hl-edge)}
       <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
     </button>
 
+    <a class="home-link" href="index.html" aria-label="Back to BigBook.Study" title="Back to BigBook.Study">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>
+      <span class="home-txt">BigBook.Study</span>
+    </a>
+
     <button type="button" class="brand" id="homeBtn" title="Twelve at a Glance">
       <svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true" focusable="false"><circle cx="21.80" cy="5.95" r="2.4"/><circle cx="26.05" cy="10.20" r="2.4"/><circle cx="27.60" cy="16.00" r="2.4"/><circle cx="26.05" cy="21.80" r="2.4"/><circle cx="21.80" cy="26.05" r="2.4"/><circle cx="16.00" cy="27.60" r="2.4"/><circle cx="10.20" cy="26.05" r="2.4"/><circle cx="5.95" cy="21.80" r="2.4"/><circle cx="4.40" cy="16.00" r="2.4"/><circle cx="5.95" cy="10.20" r="2.4"/><circle cx="10.20" cy="5.95" r="2.4"/><circle cx="16.00" cy="4.40" r="2.4"/></svg>
       <b>Twelve Traditions</b>
@@ -1355,6 +1390,15 @@ mark.user:hover{background:var(--hl-edge)}
       <ul class="tnav" id="tnav"></ul>
       <h2>On this page</h2>
       <ul class="jump" id="jump"></ul>
+      <h2>BigBook.Study</h2>
+      <ul class="jump" id="siteNav">
+        <li><a href="index.html">&larr; Big Book &amp; Twelve and Twelve</a></li>
+        <li><a href="legacies.html">Legacies Study Guide</a></li>
+        <li><a href="lexicon.html">Recovery Lexicon</a></li>
+        <li><a href="conscience.html">Group Conscience Guide</a></li>
+        <li><a href="jeopardy.html">AA Jeopardy</a></li>
+        <li><a href="sa.html">Spiritual Awakening</a></li>
+      </ul>
       <p class="side-foot" id="sideFoot"></p>
     </nav>
 
@@ -2514,6 +2558,17 @@ function render(n) {
   if (n > 1) pager.appendChild(pagerLink(n - 1, "prev", "Previous"));
   if (n < 12) pager.appendChild(pagerLink(n + 1, "next", "Next"));
   view.appendChild(pager);
+
+  /* the same Tradition in the site's Three Legacies guide, which opens
+     straight to it from #tradN */
+  var also = el("nav", "pager also");
+  also.setAttribute("aria-label", "Elsewhere on BigBook.Study");
+  var la = el("a");
+  la.href = "legacies.html#trad" + n;
+  la.appendChild(el("span", "dir", "Also on BigBook.Study"));
+  la.appendChild(el("span", "ttl", "Tradition " + t.ord + " in the Three Legacies Study Guide"));
+  also.appendChild(la);
+  view.appendChild(also);
 
   speech.paint();
   buildJump();
